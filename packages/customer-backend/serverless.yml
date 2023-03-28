@@ -1,0 +1,390 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: hyfn-customer
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  profile: default
+  region: eu-south-1
+  # region: us-east-1
+
+  # you can overwrite defaults here
+  stage: dev
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'
+      allowedHeaders:
+        - Content-Type
+
+      allowedMethods:
+        - POST
+      # allowCredentials: true
+      exposedResponseHeaders:
+        - Special-Response-Header
+      maxAge: 6000 # In seconds
+  environment:
+    kmsKeyARN:
+      Fn::ImportValue: !Sub '${self:custom.hyfnResources}-${sls:stage}-paymentSecretKeyARN'
+#  region: us-east-1
+
+# you can add statements to the Lambda function's IAM Role here
+#  iam:
+#    role:
+#      statements:
+#        - Effect: "Allow"
+#          Action:
+#            - "s3:ListBucket"
+#          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#        - Effect: "Allow"
+#          Action:
+#            - "s3:PutObject"
+#          Resource:
+#            Fn::Join:
+#              - ""
+#              - - "arn:aws:s3:::"
+#                - "Ref" : "ServerlessDeploymentBucket"
+#                - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+
+custom:
+  hyfnResources: hyfn-resources
+  webpack:
+    webpackConfig: './webpack.config.js' # Name of webpack configuration file
+    includeModules: true # Node modules configuration for packaging
+    packager: 'yarn' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignor
+    webpackIncludeModules:
+      forceExclude:
+        - aws-sdk
+  # serverless-offline:
+  #   httpPort: 4000
+  #   websocketPort: 4001
+  #   lambdaPort: 4002
+
+plugins:
+  # - serverless-esbuild
+  # - serverless-plugin-typescript
+  - serverless-webpack
+  - serverless-dotenv-plugin
+  # - serverless-offline
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules/**'
+    - 'node_modules/node-fetch/**'
+
+#package:
+#  patterns:
+#    - '!exclude-me.js'
+#    - '!exclude-me-dir/**'
+#    - include-me.js
+#    - include-me-dir/**
+
+functions:
+  getStoreFronts:
+    handler: .build/lambdas/getStoreFronts/getStoreFronts.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getStoreFronts
+  cancelTransaction:
+    handler: .build/lambdas/cancelTransaction/cancelTransaction.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/cancelTransaction
+
+  confirmPickup:
+    handler: .build/lambdas/confirmPickup/confirmPickup.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/confirmPickup
+  acceptProposal:
+    handler: .build/lambdas/acceptProposal/acceptProposal.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/acceptProposal
+  getCustomerData:
+    handler: .build/lambdas/getCustomerData/getCustomerData.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getCustomerData
+  createOrder:
+    handler: .build/lambdas/createOrder/createOrder.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/createOrder
+  setOrderAsDelivered:
+    handler: .build/lambdas/setOrderAsDelivered/setOrderAsDelivered.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/setOrderAsDelivered
+
+  refreshOrderDocument:
+    handler: .build/lambdas/refreshOrderDocument/refreshOrderDocument.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/refreshOrderDocument
+
+  setProductAsNotFound:
+    handler: .build/lambdas/setProductAsNotFound/setProductAsNotFound.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/setProductAsNotFound
+
+  setProductAsPickedUp:
+    handler: .build/lambdas/setProductAsPickedUp/setProductAsPickedUp.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/setProductAsPickedUp
+
+  createOrderData:
+    handler: .build/lambdas/createOrderData/createOrderData.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/createOrderData
+
+  getProduct:
+    handler: .build/lambdas/getProduct/getProduct.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getProduct
+  payServiceFee:
+    handler: .build/lambdas/payServiceFee/payServiceFee.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/payServiceFee
+
+  getStoreFront:
+    handler: .build/lambdas/getStoreFront/getStoreFront.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getStoreFront
+
+  getActiveOrders:
+    handler: .build/lambdas/getActiveOrders/getActiveOrders.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getActiveOrders
+  getOrderHistory:
+    handler: .build/lambdas/getOrderHistory/getOrderHistory.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getOrderHistory
+  getCollectionProducts:
+    handler: .build/lambdas/getCollectionProducts/getCollectionProducts.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getCollectionproducts
+
+  refreshBalance:
+    handler: .build/lambdas/refreshBalance/refreshBalance.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/refreshBalance
+
+  getDriverInfo:
+    handler: .build/lambdas/getDriverInfo/getDriverInfo.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getDriverInfo
+
+  createManagementLocalCardTransaction:
+    handler: .build/lambdas/PayManagementWithLcoalCard/createManagementLocalCardTransaction/createManagementLocalCardTransaction.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/createManagementLocalCardTransaction
+  validateManagmentLocalCardTransaction:
+    handler: .build/lambdas/PayManagementWithLcoalCard/validateManagmentLocalCardTransaction/validateManagmentLocalCardTransaction.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/validateManagmentLocalCardTransaction
+
+  createLocalCardTransaction:
+    handler: .build/lambdas/payWithLocalCard/createLocalCardTransaction/createLocalCardTransaction.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/createLocalCardTransaction
+  createServiceFeeCardTransaction:
+    handler: .build/lambdas/payWithLocalCard/createServiceFeeCardTransaction/createServiceFeeCardTransaction.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/createServiceFeeCardTransaction
+  cancelOrder:
+    handler: .build/lambdas/cancelOrder/cancelOrder.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/cancelOrder
+  reportOrder:
+    handler: .build/lambdas/reportOrder/reportOrder.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/reportOrder
+
+  createStoreLocalCardTransaction:
+    handler: .build/lambdas/payStoreWithLocalCard/createStoreLocalCardTransaction/createStoreLocalCardTransaction.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/createStoreLocalCardTransaction
+    environment:
+      kmsKeyARN:
+        Fn::ImportValue: !Sub '${self:custom.hyfnResources}-${sls:stage}-paymentSecretKeyARN'
+  validateStoreLocalCardTransaction:
+    handler: .build/lambdas/payStoreWithLocalCard/validateStoreLocalCardTransaction/validateStoreLocalCardTransaction.handler
+    timeout: 299
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/validateStoreLocalCardTransaction
+    environment:
+      kmsKeyARN:
+        Fn::ImportValue: !Sub '${self:custom.hyfnResources}-${sls:stage}-paymentSecretKeyARN'
+  getTransactionsList:
+    handler: .build/lambdas/payWithLocalCard/getTransactionsList/getTransactionsList.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getTransactionsList
+  validateLocalCardTransaction:
+    handler: .build/lambdas/payWithLocalCard/validateLocalCardTransaction/validateLocalCardTransaction.handler
+    timeout: 299
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/validateLocalCardTransaction
+
+  createUserDocument:
+    handler: .build/lambdas/createUserDocument/createUserDocument.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/createUserDocument
+
+  getTransactions:
+    handler: .build/lambdas/getTransactions/getTransactions.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/getTransactions
+
+  updateUserDocument:
+    handler: .build/lambdas/updateUserDocument/updateUserDocument.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/updateUserDocument
+  updateAddresses:
+    handler: .build/lambdas/updateAddresses/updateAddresses.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /customer/updateAddresses
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - httpApi:
+#          path: /users/create
+#          method: get
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+#      - alb:
+#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
+#          priority: 1
+#          conditions:
+#            host: example.com
+#            path: /hello
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"

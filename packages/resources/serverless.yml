@@ -1,0 +1,501 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: hyfn-resources
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: "3"
+
+params:
+  default:
+    EnvironmentName: ${sls:stage}
+    VpcCIDR: 10.192.0.0/16
+    PublicSubnet1CIDR: 10.192.10.0/24
+    PublicSubnet2CIDR: 10.192.11.0/24
+    PrivateSubnet1CIDR: 10.192.20.0/24
+    PrivateSubnet2CIDR: 10.192.21.0/24
+    NatEIPID1: eipalloc-00a3cc78ff39dd6e6
+    NatEIPID2: eipalloc-0423f72f6a3e55012
+  # Values for the "prod" stage
+  production:
+    my-parameter: foo
+  # Values for the "dev" stage
+  development:
+    my-parameter: bar
+  staging:
+    my-parameter: bar
+
+resources:
+  Resources:
+    ###########################
+
+    #   Description:  This template deploys a VPC, with a pair of public and private subnets spread
+    # across two Availability Zones. It deploys an internet gateway, with a default
+    # route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
+    # and default routes for them in the private subnets.
+
+    # VPC:
+    #   Type: AWS::EC2::VPC
+    #   Properties:
+    #     CidrBlock: ${param:VpcCIDR}
+    #     EnableDnsSupport: true
+    #     EnableDnsHostnames: true
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName}
+
+    # InternetGateway:
+    #   Type: AWS::EC2::InternetGateway
+    #   Properties:
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName}
+
+    # InternetGatewayAttachment:
+    #   Type: AWS::EC2::VPCGatewayAttachment
+    #   Properties:
+    #     InternetGatewayId: !Ref InternetGateway
+    #     VpcId: !Ref VPC
+
+    # PublicSubnet1:
+    #   Type: AWS::EC2::Subnet
+    #   Properties:
+    #     VpcId: !Ref VPC
+    #     AvailabilityZone: !Select [0, !GetAZs ""]
+    #     CidrBlock: ${param:PublicSubnet1CIDR}
+    #     MapPublicIpOnLaunch: true
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName} Public Subnet (AZ1)
+
+    # PublicSubnet2:
+    #   Type: AWS::EC2::Subnet
+    #   Properties:
+    #     VpcId: !Ref VPC
+    #     AvailabilityZone: !Select [1, !GetAZs ""]
+    #     CidrBlock: ${param:PublicSubnet2CIDR}
+    #     MapPublicIpOnLaunch: true
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName} Public Subnet (AZ2)
+
+    # PrivateSubnet1:
+    #   Type: AWS::EC2::Subnet
+    #   Properties:
+    #     VpcId: !Ref VPC
+    #     AvailabilityZone: !Select [0, !GetAZs ""]
+    #     CidrBlock: ${param:PrivateSubnet1CIDR}
+    #     MapPublicIpOnLaunch: false
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName} Private Subnet (AZ1)
+
+    # PrivateSubnet2:
+    #   Type: AWS::EC2::Subnet
+    #   Properties:
+    #     VpcId: !Ref VPC
+    #     AvailabilityZone: !Select [1, !GetAZs ""]
+    #     CidrBlock: ${param:PrivateSubnet2CIDR}
+    #     MapPublicIpOnLaunch: false
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName} Private Subnet (AZ2)
+
+    # # NatGateway1EIP:
+    # #   Type: AWS::EC2::EIP
+    # #   DependsOn: InternetGatewayAttachment
+    # #   Properties:
+    # #     Domain: vpc
+
+    # # NatGateway2EIP:
+    # #   Type: AWS::EC2::EIP
+    # #   DependsOn: InternetGatewayAttachment
+    # #   Properties:
+    # #     Domain: vpc
+
+    # NatGateway1:
+    #   Type: AWS::EC2::NatGateway
+    #   Properties:
+    #     AllocationId: ${param:NatEIPID1}
+    #     SubnetId: !Ref PublicSubnet1
+
+    # NatGateway2:
+    #   Type: AWS::EC2::NatGateway
+    #   Properties:
+    #     AllocationId: ${param:NatEIPID2}
+    #     SubnetId: !Ref PublicSubnet2
+
+    # PublicRouteTable:
+    #   Type: AWS::EC2::RouteTable
+    #   Properties:
+    #     VpcId: !Ref VPC
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName} Public Routes
+
+    # DefaultPublicRoute:
+    #   Type: AWS::EC2::Route
+    #   DependsOn: InternetGatewayAttachment
+    #   Properties:
+    #     RouteTableId: !Ref PublicRouteTable
+    #     DestinationCidrBlock: 0.0.0.0/0
+    #     GatewayId: !Ref InternetGateway
+
+    # PublicSubnet1RouteTableAssociation:
+    #   Type: AWS::EC2::SubnetRouteTableAssociation
+    #   Properties:
+    #     RouteTableId: !Ref PublicRouteTable
+    #     SubnetId: !Ref PublicSubnet1
+
+    # PublicSubnet2RouteTableAssociation:
+    #   Type: AWS::EC2::SubnetRouteTableAssociation
+    #   Properties:
+    #     RouteTableId: !Ref PublicRouteTable
+    #     SubnetId: !Ref PublicSubnet2
+
+    # PrivateRouteTable1:
+    #   Type: AWS::EC2::RouteTable
+    #   Properties:
+    #     VpcId: !Ref VPC
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName} Private Routes (AZ1)
+
+    # DefaultPrivateRoute1:
+    #   Type: AWS::EC2::Route
+    #   Properties:
+    #     RouteTableId: !Ref PrivateRouteTable1
+    #     DestinationCidrBlock: 0.0.0.0/0
+    #     NatGatewayId: !Ref NatGateway1
+
+    # PrivateSubnet1RouteTableAssociation:
+    #   Type: AWS::EC2::SubnetRouteTableAssociation
+    #   Properties:
+    #     RouteTableId: !Ref PrivateRouteTable1
+    #     SubnetId: !Ref PrivateSubnet1
+
+    # PrivateRouteTable2:
+    #   Type: AWS::EC2::RouteTable
+    #   Properties:
+    #     VpcId: !Ref VPC
+    #     Tags:
+    #       - Key: Name
+    #         Value: ${param:EnvironmentName} Private Routes (AZ2)
+
+    # DefaultPrivateRoute2:
+    #   Type: AWS::EC2::Route
+    #   Properties:
+    #     RouteTableId: !Ref PrivateRouteTable2
+    #     DestinationCidrBlock: 0.0.0.0/0
+    #     NatGatewayId: !Ref NatGateway2
+
+    # PrivateSubnet2RouteTableAssociation:
+    #   Type: AWS::EC2::SubnetRouteTableAssociation
+    #   Properties:
+    #     RouteTableId: !Ref PrivateRouteTable2
+    #     SubnetId: !Ref PrivateSubnet2
+
+    # NoIngressSecurityGroup:
+    #   Type: AWS::EC2::SecurityGroup
+    #   Properties:
+    #     GroupName: "no-ingress-sg"
+    #     GroupDescription: "Security group with no ingress rule"
+    #     VpcId: !Ref VPC
+
+    ###########################
+
+    # HyfnDriverAppBucket:
+    #   Type: AWS::S3::Bucket
+    #   Properties:
+    #     BucketName: hyfn-driver-app-${sls:stage}
+    #     AccessControl: PublicRead
+    #     WebsiteConfiguration:
+    #       IndexDocument: index.html
+    #       ErrorDocument: index.html
+    # HyfnDriverAppBucketPolicyStaging:
+    #   Type: AWS::S3::BucketPolicy
+    #   Properties:
+    #     Bucket:
+    #       Ref: HyfnDriverAppBucket
+    #     PolicyDocument:
+    #       Statement:
+    #         - Sid: PublicreadGetObject
+    #           Effect: Allow
+    #           Principal: "*"
+    #           Action:
+    #             - s3:GetObject
+    #           Resource: !Join
+    #             - ""
+    #             - - !GetAtt HyfnDriverAppBucket.Arn
+    #               - "/*"
+    # HyfnDriverAppCloudFrontDistribution:
+    #   Type: AWS::CloudFront::Distribution
+    #   Properties:
+    #     DistributionConfig:
+    #       Origins:
+    #         - DomainName: !GetAtt HyfnDriverAppBucket.DomainName
+    #           Id: HyfnDriverApp${sls:stage}
+    #           CustomOriginConfig:
+    #             HTTPPort: 80
+    #             HTTPSPort: 443
+    #             OriginProtocolPolicy: https-only
+    #       Enabled: true
+    #       DefaultRootObject: index.html
+    #       CustomErrorResponses:
+    #         - ErrorCode: 404
+    #           ResponseCode: 200
+    #           ResponsePagePath: /index.html
+    #       DefaultCacheBehavior:
+    #         AllowedMethods:
+    #           - DELETE
+    #           - GET
+    #           - HEAD
+    #           - OPTIONS
+    #           - PATCH
+    #           - POST
+    #           - PUT
+    #         TargetOriginId: HyfnDriverApp${sls:stage}
+    #         ForwardedValues:
+    #           QueryString: "false"
+    #           Cookies:
+    #             Forward: none
+    #         ViewerProtocolPolicy: redirect-to-https
+    #       ViewerCertificate:
+    #         CloudFrontDefaultCertificate: true
+
+    hyfnImagesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: hyfn-delivery-${sls:stage}
+        AccessControl: PublicRead
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - HEAD
+              AllowedOrigins:
+                - "*"
+              AllowedHeaders:
+                - "*"
+    S3AccessPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: hyfnImagesBucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Action:
+                - "s3:GetObject"
+                - "s3:PutObject"
+              Resource: arn:aws:s3:::hyfn-delivery-${sls:stage}/*
+              Principal: "*"
+
+    paymentSecretsKey:
+      Type: "AWS::KMS::Key"
+      Properties:
+        Description: An example symmetric encryption KMS key
+        EnableKeyRotation: true
+        PendingWindowInDays: 7
+        KeyPolicy:
+          Version: "2012-10-17"
+
+          Statement:
+            - Sid: "EnableServerlessPermissions"
+              Effect: Allow
+              Principal:
+                AWS: "*"
+              Action: "kms:*"
+              Resource: "*"
+            - Sid: "EnableIAMUserPermissions"
+              Effect: Allow
+              # Principal:
+              #   AWS: 'arn:aws:iam::591040685800:user/Administrator'
+              Principal:
+                AWS: !Sub "arn:aws:iam::${AWS::AccountId}:user/Administrator"
+              Action: "kms:*"
+              Resource: "*"
+
+            - Sid: EnableFunctionsUse
+              Effect: Allow
+              Principal:
+                AWS: !Sub "arn:aws:iam::${AWS::AccountId}:user/serverless-user"
+              Action:
+                - "kms:DescribeKey"
+                - "kms:Encrypt"
+                - "kms:Decrypt"
+                - "kms:ReEncrypt*"
+                - "kms:GenerateDataKey"
+                - "kms:GenerateDataKeyWithoutPlaintext"
+              Resource: "*"
+  Outputs:
+    PaymentSecretKeyARN:
+      Description: "payment kms key arn"
+      Value: !GetAtt paymentSecretsKey.Arn
+      Export:
+        Name: !Sub ${AWS::StackName}-paymentSecretKeyARN
+    ImagesBucketName:
+      Description: "app images bucket name"
+      Value: !Ref hyfnImagesBucket
+      Export:
+        Name: !Sub ${AWS::StackName}-ImagesBucketName
+provider:
+  name: aws
+  runtime: nodejs16.x
+  profile: default
+
+  region: eu-south-1
+  # you can overwrite defaults here
+  stage: development
+
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:PutObject"
+          Resource: !GetAtt hyfnImagesBucket.Arn
+        - Effect: Allow
+          Action:
+            - "kms:DescribeKey"
+            - "kms:Encrypt"
+            - "kms:Decrypt"
+            - "kms:ReEncrypt*"
+            - "kms:GenerateDataKey"
+            - "kms:GenerateDataKeyWithoutPlaintext"
+          Resource: !GetAtt paymentSecretsKey.Arn
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        #- https://store.hyfn.xyz
+        - "*"
+      allowedHeaders:
+        - Content-Type
+
+      allowedMethods:
+        - POST
+      # allowCredentials: true
+      exposedResponseHeaders:
+        - Special-Response-Header
+      maxAge: 6000 # In seconds
+
+plugins:
+  # - serverless-webpack
+  - serverless-dotenv-plugin
+  # - serverless-offline
+  # - serverless-esbuild
+
+package:
+  individually: true
+
+custom:
+  webpack:
+    keepOutputDirectory: true
+
+# functions:
+#   deployHyfnDriverApp:
+#     handler: lambdas/deployHyfnDriverApp.handler
+#     timeout: 200
+#     url:
+#       cors:
+#         allowedOrigins:
+#           - "*"
+
+#         allowedHeaders:
+#           - Content-Type
+#           - Authorization
+#         allowedMethods:
+#           - POST
+#   addNewCountry:
+#     handler: lambdas/addNewCountry.handler
+#     timeout: 200
+#   createProductLibraryIndexes:
+#     handler: lambdas/createProductLibraryIndexes.handler
+#     timeout: 200
+#   createGeneralDataIndexes:
+#     handler: lambdas/createGeneralDataIndexes.handler
+#     timeout: 200
+# you can add packaging information here
+#package:
+#  patterns:
+#    - '!exclude-me.js'
+#    - '!exclude-me-dir/**'
+#    - include-me.js
+#    - include-me-dir/**
+
+#    events:
+#     - http:
+#        path: delete-Product
+#       method: POST
+#      cors: false
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - httpApi:
+#          path: /users/create
+#          method: get
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+#      - alb:
+#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
+#          priority: 1
+#          conditions:
+#            host: example.com
+#            path: /hello
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
+

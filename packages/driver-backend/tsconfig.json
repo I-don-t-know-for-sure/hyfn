@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "strictNullChecks": false,
+    "disableSourceOfProjectReferenceRedirect": true,
+    "sourceMap": false,
+    "allowJs": true,
+    "strict": false,
+    "target": "es5",
+    "baseUrl": "./",
+    "rootDir": "./",
+    "outDir": ".build",
+    "moduleResolution": "node",
+    "lib": ["es2015"],
+
+    "composite": true,
+
+    "skipLibCheck": true
+  },
+  // "references": [
+  //   { "path": "../hyfn-types" }
+  // ],
+
+  "include": ["./lambdas/**/*", "./serverless.ts"],
+  "exclude": ["./node_modules"]
+}

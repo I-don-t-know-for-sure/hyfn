@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    // "strictNullChecks": true,
+    "sourceMap": false,
+    "allowJs": true,
+    // "strict": true,
+    "target": "es5",
+    "baseUrl": "./",
+    "rootDir": "./",
+"declaration": false,
+    "outDir": ".build",
+    "moduleResolution": "node",
+    "lib": ["es2015"],
+   
+
+    // "paths": {
+    //     "hyfn-types": ["../hyfn-types"]
+    //   },
+    // "paths": {
+    //     "hyfn-types-prod": ["./lambdas/common/src"]
+    //   },
+      "skipLibCheck": true,
+      
+
+      
+    },
+    // "references": [
+    //   { "path": "../hyfn-types" },
+
+    // ],
+
+"include": [
+  "./lambdas/**/*", 
+  // "serverlessss.ts", 
+ 
+],
+  "exclude": ["./node_modules",]
+}

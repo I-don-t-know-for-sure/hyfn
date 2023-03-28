@@ -1,0 +1,3 @@
+yarn rollup
+
+npm publish

@@ -1,0 +1,536 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: hyfn-store
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  profile: default
+
+  region: eu-south-1
+  # you can overwrite defaults here
+  stage: development
+
+  iam:
+    role:
+      statements:
+        #   - Effect: 'Allow'
+        #     Action:
+        #       - 's3:PutObject'
+        #     Resource: !GetAtt hyfnImagesBucket.Arn
+        - Effect: Allow
+          Action:
+            - 'kms:DescribeKey'
+            - 'kms:Encrypt'
+            - 'kms:Decrypt'
+            - 'kms:ReEncrypt*'
+            - 'kms:GenerateDataKey'
+            - 'kms:GenerateDataKeyWithoutPlaintext'
+          Resource: !ImportValue hyfn-resources-${sls:stage}-paymentSecretKeyARN
+        - Effect: Allow
+          Action:
+            - 'sns:SetSMSAttributes'
+            - 'sns:Publish'
+          Resource: '*'
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        #- https://store.hyfn.xyz
+        - '*'
+      allowedHeaders:
+        - Content-Type
+
+      allowedMethods:
+        - POST
+      # allowCredentials: true
+      exposedResponseHeaders:
+        - Special-Response-Header
+      maxAge: 6000 # In seconds
+  environment:
+    kmsKeyARN:
+      Fn::ImportValue: !Sub '${self:custom.hyfnResources}-${sls:stage}-paymentSecretKeyARN'
+
+# you can add statements to the Lambda function's IAM Role here
+#  iam:
+#    role:
+#      statements:
+#        - Effect: "Allow"
+#          Action:
+#            - "s3:ListBucket"
+#          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#        - Effect: "Allow"
+#          Action:
+#            - "s3:PutObject"
+#          Resource:
+#            Fn::Join:
+#              - ""
+#              - - "arn:aws:s3:::"
+#                - "Ref" : "ServerlessDeploymentBucket"
+#                - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+plugins:
+  - serverless-webpack
+
+  - serverless-dotenv-plugin
+  
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules/**'
+    - 'node_modules/node-fetch/**'
+
+
+custom:
+  hyfnResources: hyfn-resources
+  webpack:
+    webpackConfig: './webpack.config.js' # Name of webpack configuration file
+    includeModules: true # Node modules configuration for packaging
+    # packager: 'yarn' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignor
+    webpackIncludeModules:
+      forceExclude:
+        - aws-sdk
+    # packagerOptions:
+    #   scripts:
+
+
+functions:
+  imageResizeTrigger:
+    handler: .build/lambdas/imageResizeTrigger/imageResizeTrigger.handler
+    timeout: 60
+
+    events:
+      - s3:
+          bucket: hyfn-delivery-${sls:stage}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: initial/
+          existing: true
+  getProductsForStore:
+    handler: .build/lambdas/getProductsForStore/getProductsForStore.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getProductsForStore
+  updateLocalCardSettings:
+    handler: .build/lambdas/updateLocalCardSettings/updateLocalCardSettings.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/updateLocalCardSettings
+  disableLocalCardAPIKeys:
+    handler: .build/lambdas/disableLocalCardAPIKeys/disableLocalCardAPIKeys.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/disableLocalCardAPIKeys
+  setOrderAsAccepted:
+    handler: .build/lambdas/setOrderAsAccepted/setOrderAsAccepted.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/setOrderAsAccepted
+  setOrderAsDelivered:
+    handler: .build/lambdas/setOrderAsDelivered/setOrderAsDelivered.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/setOrderAsDelivered
+  getDriverInfo:
+    handler: .build/lambdas/getDriverInfo/getDriverInfo.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getDriverInfo
+
+  addLocalCardPaymentAPIKey:
+    handler: .build/lambdas/addLocalCardPaymentAPIKey/addLocalCardPaymentAPIKey.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/addLocalCardPaymentAPIKey
+  # deleteLocalCardAPIKey:
+  #   handler: .build/lambdas/deleteLocalCardAPIKey/deleteLocalCardAPIKey.handler
+  #   events:
+  #     - httpApi:
+  #         method: POST
+  #         path: /store/deleteLocalCardAPIKey
+  setOrderAsReady:
+    handler: .build/lambdas/setOrderAsReady/setOrderAsReady.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/setOrderAsReady
+  setOrderAsPreparing:
+    handler: .build/lambdas/setOrderAsPreparing/setOrderAsPreparing.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/setOrderAsPreparing
+
+  # confirmOrder:
+  #   handler: .build/lambdas/confirmOrder/confirmOrder.handler
+  #   events:
+  #     - httpApi:
+  #         method: POST
+  #         path: /store/confirmOrder
+  createLocalCardTransaction:
+    handler: .build/lambdas/payWithLocalCard/createLocalCardTransaction.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/createLocalCardTransaction
+  createLocalCardTransactionForWallet:
+    handler: .build/lambdas/payWithLocalCard/createLocalCardTransactionForWallet.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/createLocalCardTransactionForWallet
+
+  getProductFromBarcode:
+    handler: .build/lambdas/getProductFromBarcode/getProductFromBarcode.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getProductFromBarcode
+
+  createCollectionWithActive:
+    handler: .build/lambdas/createCollectionWithActive/handler.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/createCollection
+  createStoreDocument:
+    handler: .build/lambdas/createStoreDocument/createStoreDocument.handler
+    timeout: 6
+    events:
+      - httpApi:
+          method: POST
+          path: /store/createStoreDocument
+
+  # deleteSadadAPIKey:
+  #   handler: .build/lambdas/deleteSadadAPIKey/deleteSadadAPIKey.handler
+  #   events:
+  #     - httpApi:
+  #         method: POST
+  #         path: /store/deleteSadadKey
+
+  createProduct:
+    handler: .build/lambdas/createProduct/createProduct.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/createProduct
+
+  getTransactionsList:
+    handler: .build/lambdas/payWithLocalCard/getTransactionsList.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getTransactionsList
+
+  validateLocalCardTransaction:
+    handler: .build/lambdas/payWithLocalCard/validateLocalCardTransaction.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/validateLocalCardTransaction
+
+  deleteCollection:
+    handler: .build/lambdas/deleteCollection/deleteCollection.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/deleteCollection
+
+  updateStoreOwnerInfo:
+    handler: .build/lambdas/updateStoreOwnerInfo/updateStoreOwnerInfo.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/updateStoreOwnerInfo
+
+  updateStoreInfo:
+    handler: .build/lambdas/updateStoreInfo/updateStoreInfo.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/updateStoreInfo
+
+  getAllCollections:
+    handler: .build/lambdas/getAllCollections/getAllCollections.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getAllCollections
+
+  getCollection:
+    handler: .build/lambdas/getCollection/getCollection.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getCollection
+
+  getActiveOrders:
+    handler: .build/lambdas/getActiveOrders/getActiveOrders.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getActiveOrders
+
+  updateCollection:
+    handler: .build/lambdas/updateCollection/updateCollection.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/updateCollection
+
+  updateProduct:
+    handler: .build/lambdas/updateProduct/updateProduct.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/updateProduct
+
+  getCollectionsForProduct:
+    handler: .build/lambdas/getCollectionsForProduct/getCollectionsForProduct.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getCollectionsForProduct
+
+  deleteProduct:
+    handler: .build/lambdas/deleteProduct/deleteProduct.handler
+
+    events:
+      - httpApi:
+          method: POST
+          path: /store/deleteProduct
+
+  getProduct:
+    handler: .build/lambdas/getProduct/getProduct.handler
+
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getProduct
+
+  getStoreDocument:
+    handler: .build/lambdas/getStoreDocument/getStoreDocument.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getStoreDocument
+
+  updateProductState:
+    handler: .build/lambdas/updateProductState/updateProductState.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/updateProductState
+
+  openAndCloseStore:
+    handler: .build/lambdas/openAndCloseStore/openAndCloseStore.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/openAndCloseStore
+
+  updatePaymentSettings:
+    handler: .build/lambdas/updatePaymentSettings/updatePaymentSettings.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/updatePaymentSettings
+
+  paySubscription:
+    handler: .build/lambdas/paySubscription/paySubscription.handler
+    url:
+      cors:
+        allowedHeaders:
+          - Content-Type
+
+        allowedMethods:
+          - POST
+
+ 
+
+  getOrderHistory:
+    handler: .build/lambdas/getOrderHistory/getOrderHistory.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getOrderHistory
+
+  generateImageURL:
+    handler: .build/lambdas/generateImageURL/generateImageURL.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/generateImageURL
+
+  rejectOrder:
+    handler: .build/lambdas/rejectOrder/rejectOrder.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/rejectOrder
+  searchProducts:
+    handler: .build/lambdas/searchProducts/searchProducts.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/searchProducts
+  bulkWrite:
+    handler: .build/lambdas/bulkWrite/bulkWrite.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/bulkWrite
+  getCollectionProducts:
+    handler: .build/lambdas/getCollectionProducts/getCollectionProducts.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getCollectionProducts
+  getProductsForCollection:
+    handler: .build/lambdas/getProductsForCollection/getProductsForCollection.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getProductsForCollection
+  bulkUpdate:
+    handler: .build/lambdas/bulkUpdate/bulkUpdate.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/bulkUpdate
+  updateOptions:
+    handler: .build/lambdas/updateOptions/updateOptions.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/updateOptions
+  # downLoadProducts:
+  #   handler: .build/lambdas/downLoadProducts.handler
+  #   url:
+  #     cors:
+  #       allowedHeaders:
+  #         - Content-Type
+
+  #       allowedMethods:
+  #         - POST
+  getProductsForBulkUpdate:
+    handler: .build/lambdas/getProductsForBulkUpdate/getProductsForBulkUpdate.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/getProductsForBulkUpdate
+  duplicateProduct:
+    handler: .build/lambdas/duplicateProduct/duplicateProduct.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /store/duplicateProduct
+  getCollectionStoreFrontProducts:
+    handler: .build/lambdas/getCollectionStoreFrontProducts/getCollectionStoreFrontProducts.handler
+    url:
+      cors:
+        allowedHeaders:
+          - Content-Type
+
+        allowedMethods:
+          - POST
+  
+#    events:
+#     - http:
+#        path: delete-Product
+#       method: POST
+#      cors: false
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - httpApi:
+#          path: /users/create
+#          method: get
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+#      - alb:
+#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
+#          priority: 1
+#          conditions:
+#            host: example.com
+#            path: /hello
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
+
+##################################
+
+# updateStoreOwnerInfo:
+#     handler: .build/lambdas/updateStoreOwnerInfo/updateStoreOwnerInfo.handler
+#     url:
+#       cors:
+#         allowedHeaders:
+#           - Content-Type
+
+#         allowedMethods:
+#           - POST

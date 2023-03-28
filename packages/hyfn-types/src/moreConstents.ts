@@ -1,0 +1,9 @@
+export const ORDER_STATUS_PICKED = "picked up";
+export const TRANSACTION_TYPE_STORE = "store";
+export const TRANSACTION_TYPE_ADMIN = "hyfn";
+export const LOCAL_CARD_TRANSACTION_FLAG_STORE = "store";
+export const LOCAL_CARD_TRANSACTION_FLAG_SERVICE_FEE = "serviceFee";
+export const TRANSACTION_TYPE_DRIVER_MANAGMENT = "driverManagement";
+export const TRANSACTION_TYPE_MANAGMENT = "driverManagement";
+export const LOCAL_CARD_TRANSACTION_FLAG_DRIVER_MANAGEMENT = "management";
+export const LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT = "management";

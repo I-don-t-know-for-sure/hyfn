@@ -1,0 +1,43 @@
+{
+  "name": "payment-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "sst bind --region eu-west-3 --stage development  vite",
+    "preview": "vite preview",
+    "build": "tsc && vite build --outDir dist",
+    "envs": "node ./evn-parameters.js",
+    "deploy": "amplify publish -c",
+    "dev": "sh ./scripts/toDev.sh",
+    "staging": "sh ./scripts/toStaging.sh",
+    "production": "sh ./scripts/toProduction.sh",
+    "lint": "eslint . --ext .js,.ts ./src/*"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@mantine/core": "^5.10.2",
+    "@mantine/hooks": "^5.10.2",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.11",
+    "react": "18.0.0",
+    "react-dom": "^18.0.0",
+    "react-query": "^3.39.3",
+    "react-router": "^6.7.0",
+    "react-router-dom": "^6.7.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2",
+    "@types/react-helmet": "^6.1.6",
+    "@types/react-helmet-async": "^1.0.3",
+    "@vitejs/plugin-react": "^3.1.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
+  }
+}
