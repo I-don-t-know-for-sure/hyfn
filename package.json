@@ -1,0 +1,23 @@
+{
+  "name": "hyfn-org",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "deploy": "sst deploy",
+    "console": "sst console",
+    "start": "sst dev --region eu-west-3 --stage development"
+  },
+  "devDependencies": {
+    "@serverless-stack/resources": "^1.18.4",
+    "@tsconfig/node16": "^1.0.3",
+    "aws-cdk-lib": "2.62.2",
+    "constructs": "10.1.156",
+    "sst": "^2.3.0",
+    "typescript": "^4.9.5"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
