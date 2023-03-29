@@ -1,12 +1,13 @@
 import { StackContext, StaticSite } from "sst/constructs";
-import { getStage } from "./getStage";
-import { frConfig } from "../frEnvVaraibles";
+import { getStage } from "../../stacks/getStage";
+import { frConfig } from "../../frEnvVaraibles";
+import { CfnOutput } from "aws-cdk-lib";
 const localhost = "http://localhost:";
 
 export function paymentApp({ stack }: StackContext) {
   const stage = getStage(stack.stage);
   const site = new StaticSite(stack, "payment-app", {
-    path: "./packages/payment-app",
+    path: stack.stage === "development" ? "./packages/payment-app" : "./",
     buildOutput: "dist",
     buildCommand: "yarn build",
     ...(stack.stage === "production"
@@ -23,6 +24,10 @@ export function paymentApp({ stack }: StackContext) {
       VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
         frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
     },
+  });
+  new CfnOutput(stack, "paymentAppUrl-" + stack.stage, {
+    value: site.url || localhost + "3002",
+    exportName: "paymentAppUrl-" + stack.stage, // export name
   });
   stack.addOutputs({
     managmentSite: site.url || localhost + "3002",

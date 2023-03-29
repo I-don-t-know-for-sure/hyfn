@@ -1,17 +1,30 @@
 import { SSTConfig } from "sst";
 
 import { RemovalPolicy } from "aws-cdk-lib";
-import { orgResources } from "./stacks/resources";
-import { storeBackend, storeFrontend } from "./stacks/storeBackend";
-import { paymentApp } from "./stacks/paymentAppStack";
-import { customerBackend, customerFrontend } from "./stacks/customerStack";
-import { driverBackend, driverFrontend } from "./stacks/driverStack";
-import { libraryBackend, libraryFrontned } from "./stacks/productsLibraryStack";
 import {
-  managementBackend,
-  managementFrontend,
+  authBucketStack,
+  imagesBucketStack,
+  kmsStack,
+} from "./stacks/resources";
+import { paymentApp } from "./packages/payment-app/paymentAppStack";
+import { customerApiStack, customerCognitoStack } from "./stacks/customerStack";
+import { customerApp } from "./packages/delivery-customer/deploymentStack";
+import { driverApiStack, driverCognitoStack } from "./stacks/driverStack";
+import {
+  managementApiStack,
+  managementCognitoStack,
 } from "./stacks/driverManagement";
-import { adminClientStack, adminServerStack } from "./stacks/adminStack";
+import { adminApiStack, adminCognitoStack } from "./stacks/adminStack";
+import {
+  libraryApiStack,
+  libraryCognitoStack,
+} from "./stacks/productsLibraryStack";
+import { storeApiStack, storeCognitoStack } from "./stacks/storeBackend";
+import { driverApp } from "./packages/delivery-driver/deploymentStack";
+import { libraryApp } from "./packages/products-library/deploymentStack";
+import { managementApp } from "./packages/driver-management/deploymentStack";
+import { adminApp } from "./packages/admin/deploymentStack";
+import { storeApp } from "./packages/delivery-merchant/deploymentStack";
 
 export default {
   config(_input) {
@@ -25,20 +38,31 @@ export default {
     app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY);
     // }
     // app.stack(orgResources).stack(storeBackend).stack(storeFrontend);
-    app
-      .stack(orgResources)
+    let currentStack = app
+      .stack(imagesBucketStack)
+      .stack(authBucketStack)
+      .stack(kmsStack)
       .stack(paymentApp)
-      .stack(customerBackend)
-      .stack(customerFrontend)
-      .stack(storeBackend)
-      .stack(storeFrontend)
-      .stack(driverBackend)
-      .stack(driverFrontend)
-      .stack(libraryBackend)
-      .stack(libraryFrontned)
-      .stack(managementBackend)
-      .stack(managementFrontend)
-      .stack(adminServerStack)
-      .stack(adminClientStack);
+      .stack(customerCognitoStack)
+      .stack(customerApiStack);
+    // .stack(storeCognitoStack)
+    // .stack(storeApiStack)
+    // .stack(driverCognitoStack)
+    // .stack(driverApiStack)
+    // .stack(managementCognitoStack)
+    // .stack(managementApiStack)
+    // .stack(adminCognitoStack)
+    // .stack(adminApiStack)
+    // .stack(libraryCognitoStack)
+    // .stack(libraryApiStack);
+
+    if (app.stage === "development") {
+      currentStack.stack(customerApp);
+      // .stack(driverApp)
+      // .stack(libraryApp)
+      // .stack(managementApp)
+      // .stack(adminApp)
+      // .stack(storeApp);
+    }
   },
 } satisfies SSTConfig;

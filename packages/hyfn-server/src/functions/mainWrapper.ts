@@ -21,13 +21,12 @@ export const mainWrapper = async ({
     const client = await getMongoClientWithIAMRole();
 
     const { accessToken, userId } = arg[arg.length - 1];
-    var authenticationResult = {};
+
     if (validateUser) {
-      authenticationResult =
-        (await cognitoAuthentication({
-          accessToken,
-          userId,
-        })) || {};
+      await cognitoAuthentication({
+        accessToken,
+        userId,
+      });
     }
 
     result = await mainFunction({

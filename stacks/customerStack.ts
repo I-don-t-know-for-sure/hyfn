@@ -6,23 +6,33 @@ import {
   StaticSite,
   Cognito,
 } from "sst/constructs";
-import { orgResources } from "./resources";
+
 import * as iam from "aws-cdk-lib/aws-iam";
-import { paymentApp } from "./paymentAppStack";
+// import { paymentApp } from '../packages/payment-app/paymentAppStack';
 import { getStage } from "./getStage";
 import { frConfig } from "../frEnvVaraibles";
 import { config } from "../envVaraibles";
-const pathToLambdas = "packages/customer-backend/lambdas/";
+// import { authBucketStack, imagesBucketStack, kmsStack } from './resources';
+import { CfnOutput, Fn } from "aws-cdk-lib";
+import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
+import { paymentApp } from "../packages/payment-app/paymentAppStack";
+const pathToLambdas = "./packages/customer-backend/lambdas/";
 const localhost = "http://localhost:";
 
-export function customerBackend({ stack }: StackContext) {
-  const { key, s3Bucket } = use(orgResources);
+export function customerApiStack({ stack }: StackContext) {
+  const { s3Bucket } = use(imagesBucketStack);
+  const { key } = use(kmsStack);
+  const { auth } = use(customerCognitoStack);
+
   const stage = getStage(stack.stage);
 
   const defaultFunction = new Function(stack, "customerdefaultFunction", {
     handler:
-      "packages/store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+      "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
   });
+
+  // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
+  // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const api = new Api(stack, "customerBackend", {
     defaults: {
       function: {
@@ -36,7 +46,8 @@ export function customerBackend({ stack }: StackContext) {
           bucketName: s3Bucket.bucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,
-
+          userPoolId: auth.userPoolId,
+          userPoolClientId: auth.userPoolClientId,
           mongoPrivetKey: config[stage].mongoPrivetKey,
           mongoPublicKey: config[stage].mongoPublicKey,
           region: stack.region,
@@ -297,7 +308,10 @@ export function customerBackend({ stack }: StackContext) {
     allowMethods: ["POST"],
     allowHeaders: ["Accept", "Content-Type", "Authorization"],
   });
-
+  new CfnOutput(stack, "customerApiUrl-" + stack.stage, {
+    value: api.url || "",
+    exportName: "customerApiUrl-" + stack.stage, // export name
+  });
   /////////////////////////////////////////////////////////////////////
 
   stack.addOutputs({
@@ -309,11 +323,12 @@ export function customerBackend({ stack }: StackContext) {
   return { api };
 }
 
-export function customerFrontend({ stack }: StackContext) {
-  const { authBucket, s3Bucket } = use(orgResources);
-  const { site: paymentAppSite } = use(paymentApp);
-  const { api } = use(customerBackend);
-  const stage = getStage(stack.stage);
+export function customerCognitoStack({ stack }: StackContext) {
+  const { authBucket } = use(authBucketStack);
+
+  const { site: paymentAppSite } =
+    stack.stage === "development" ? use(paymentApp) : ({} as any);
+
   // Create a Cognito User Pool and Identity Pool
   const auth = new Cognito(stack, "customerAuth", {
     login: ["email"],
@@ -329,6 +344,9 @@ export function customerFrontend({ stack }: StackContext) {
       },
     },
   });
+  // const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
+  // const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
+
   auth.attachPermissionsForAuthUsers(stack, [
     // Allow access to the API
     // api,
@@ -343,46 +361,65 @@ export function customerFrontend({ stack }: StackContext) {
     }),
   ]);
 
-  const site = new StaticSite(stack, "delivery-customer", {
-    path: "./packages/delivery-customer",
-    buildOutput: "dist",
-    buildCommand: "yarn build",
-
-    ...(stack.stage === "production"
-      ? {
-          customDomain: {
-            domainName: "hyfn.xyz",
-            domainAlias: "www.hyfn.xyz",
-            hostedZone: "hyfn.xyz",
-            // isExternalDomain: true,
-          },
-        }
-      : {}),
-    environment: {
-      GENERATE_SOURCEMAP: "false",
-      VITE_APP_BUCKET_URL: `https://${s3Bucket.bucketName}.s3.${stack.region}.amazonaws.com`,
-      VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
-        frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
-      // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
-      VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-      VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-      VITE_APP_COGNITO_REGION: stack.region,
-      VITE_APP_USER_POOL_ID: auth.userPoolId,
-      VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-      VITE_APP_BUCKET: authBucket.bucketName,
-
-      // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
-
-      VITE_APP_BASE_URL: api.url,
-    },
+  new CfnOutput(stack, "customerCognitoIdentityPoolId-" + stack.stage, {
+    value: auth.cognitoIdentityPoolId || "test",
+    exportName: "customerCognitoIdentityPoolId-" + stack.stage, // export name
   });
+  new CfnOutput(stack, "customerCognitoRegion-" + stack.stage, {
+    value: stack.region || "",
+    exportName: "customerCognitoRegion-" + stack.stage, // export name
+  });
+  new CfnOutput(stack, "customerUserPoolId-" + stack.stage, {
+    value: auth.userPoolId || "",
+    exportName: "customerUserPoolId-" + stack.stage, // export name
+  });
+  new CfnOutput(stack, "customerUserPoolClientId-" + stack.stage, {
+    value: auth.userPoolClientId || "",
+    exportName: "customerUserPoolClientId-" + stack.stage, // export name
+  });
+  return {
+    auth,
+  };
+  // const site = new StaticSite(stack, "delivery-customer", {
+  //   path: "./packages/delivery-customer",
+  //   buildOutput: "dist",
+  //   buildCommand: "yarn build",
+
+  //   ...(stack.stage === "production"
+  //     ? {
+  //         customDomain: {
+  //           domainName: "hyfn.xyz",
+  //           domainAlias: "www.hyfn.xyz",
+  //           hostedZone: "hyfn.xyz",
+  //           // isExternalDomain: true,
+  //         },
+  //       }
+  //     : {}),
+  //   environment: {
+  //     GENERATE_SOURCEMAP: "false",
+  //     VITE_APP_BUCKET_URL: `https://${s3Bucket.bucketName}.s3.${stack.region}.amazonaws.com`,
+  //     VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
+  //       frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
+  //     // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
+  //     VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
+  //     VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
+  //     VITE_APP_COGNITO_REGION: stack.region,
+  //     VITE_APP_USER_POOL_ID: auth.userPoolId,
+  //     VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
+  //     VITE_APP_BUCKET: authBucket.bucketName,
+
+  //     // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
+
+  //     VITE_APP_BASE_URL: api.url,
+  //   },
+  // });
   stack.addOutputs({
-    customerSite: site.url || localhost + "3000",
-    VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-    VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-    VITE_APP_COGNITO_REGION: stack.region,
-    VITE_APP_USER_POOL_ID: auth.userPoolId,
-    VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-    VITE_APP_BUCKET: authBucket.bucketName,
+    // customerSite: site.url || localhost + "3000",
+    // VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
+    // VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
+    // VITE_APP_COGNITO_REGION: stack.region,
+    // VITE_APP_USER_POOL_ID: auth.userPoolId,
+    // VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
+    // VITE_APP_BUCKET: authBucketName,
   });
 }

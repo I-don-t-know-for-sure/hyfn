@@ -10,10 +10,11 @@ export const cognitoAuthentication = async ({
   accessToken: string;
   userId: string;
 }) => {
+  console.log("🚀 ~ file: cognitoAuthentication.ts:13 ~ userId:", userId);
   const verifier = CognitoJwtVerifier.create({
-    userPoolId: "<user_pool_id>",
+    userPoolId: process.env.userPoolId || "",
     tokenUse: "access",
-    clientId: "<client_id>",
+    clientId: process.env.userPoolClientId || "",
   });
 
   try {
@@ -22,7 +23,7 @@ export const cognitoAuthentication = async ({
     );
     console.log("Token is valid. Payload:", payload);
   } catch {
-    console.log("Token not valid!");
+    console.log("Token not valid!dchbchfbhbfhbhbdchbdhbchdb");
   }
 };
 
@@ -95,6 +96,6 @@ export const cognitoAuthentication = async ({
 //       "🚀 ~ file: cognitoAuthentication.js:22 ~ cognitoAuthentication ~ error",
 //       error
 //     );
-//     throw new Error(error as any);
+//     // throw new Error(error as any);
 //   }
 // };
