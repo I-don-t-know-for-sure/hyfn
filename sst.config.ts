@@ -7,19 +7,28 @@ import {
   kmsStack,
 } from "./stacks/resources";
 import { paymentApp } from "./packages/payment-app/paymentAppStack";
-import { customerApiStack, customerCognitoStack } from "./stacks/customerStack";
+import {
+  customerApiStack,
+  customerCognitoStack,
+} from "./packages/delivery-customer/customerStack";
 import { customerApp } from "./packages/delivery-customer/deploymentStack";
-import { driverApiStack, driverCognitoStack } from "./stacks/driverStack";
+import {
+  driverApiStack,
+  driverCognitoStack,
+} from "./packages/delivery-driver/driverStack";
 import {
   managementApiStack,
   managementCognitoStack,
-} from "./stacks/driverManagement";
-import { adminApiStack, adminCognitoStack } from "./stacks/adminStack";
+} from "./packages/driver-management/driverManagement";
+import { adminApiStack, adminCognitoStack } from "./packages/admin/adminStack";
 import {
   libraryApiStack,
   libraryCognitoStack,
-} from "./stacks/productsLibraryStack";
-import { storeApiStack, storeCognitoStack } from "./stacks/storeBackend";
+} from "./packages/products-library/productsLibraryStack";
+import {
+  storeApiStack,
+  storeCognitoStack,
+} from "./packages/delivery-merchant/storeBackend";
 import { driverApp } from "./packages/delivery-driver/deploymentStack";
 import { libraryApp } from "./packages/products-library/deploymentStack";
 import { managementApp } from "./packages/driver-management/deploymentStack";
@@ -29,7 +38,7 @@ import { storeApp } from "./packages/delivery-merchant/deploymentStack";
 export default {
   config(_input) {
     return {
-      name: "hyfn-apps",
+      name: "hyfn-org",
       region: "eu-south-1",
     };
   },
@@ -41,10 +50,10 @@ export default {
     let currentStack = app
       .stack(imagesBucketStack)
       .stack(authBucketStack)
-      .stack(kmsStack)
-      .stack(paymentApp)
-      .stack(customerCognitoStack)
-      .stack(customerApiStack);
+      .stack(kmsStack);
+    // .stack(paymentApp)
+    // .stack(customerCognitoStack)
+    // .stack(customerApiStack);
     // .stack(storeCognitoStack)
     // .stack(storeApiStack)
     // .stack(driverCognitoStack)
@@ -57,7 +66,7 @@ export default {
     // .stack(libraryApiStack);
 
     if (app.stage === "development") {
-      currentStack.stack(customerApp);
+      // currentStack.stack(customerApp);
       // .stack(driverApp)
       // .stack(libraryApp)
       // .stack(managementApp)

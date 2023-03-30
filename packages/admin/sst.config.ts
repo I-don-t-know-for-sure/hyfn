@@ -1,8 +1,9 @@
 import { SSTConfig } from "sst";
 
 import { RemovalPolicy } from "aws-cdk-lib";
-import { adminApiStack, adminCognitoStack } from "./adminStack";
+
 import { adminApp } from "./deploymentStack";
+import { adminApiStack, adminCognitoStack } from "./adminStack";
 
 export default {
   config(_input) {

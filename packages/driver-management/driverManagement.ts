@@ -9,39 +9,39 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { getStage } from "./getStage";
-import { frConfig } from "../frEnvVaraibles";
-import { config } from "../envVaraibles";
-// import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
-import { CfnOutput, Fn } from "aws-cdk-lib";
+import { getStage } from "../../stacks/getStage";
+import { frConfig } from "../../frEnvVaraibles";
+import { config } from "../../envVaraibles";
 
-const pathToLambdas = "../../packages/driver-backend/lambdas/";
+import { CfnOutput, Fn } from "aws-cdk-lib";
+const pathToLambdas = "../packages/customer-backend/lambdas/";
 
 const localhost = "http://localhost:";
 
-export function driverApiStack({ stack }: StackContext) {
-  // const { s3Bucket } = use(imagesBucketStack);
-  // const { key } = use(kmsStack);
-  const stage = getStage(stack.stage);
-  const defaultFunction = new Function(stack, "driverdefaultFunction", {
-    handler:
-      "../../packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
-  });
+export function managementApiStack({ stack }: StackContext) {
   const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
   const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
-  const api = new Api(stack, "driverBackend", {
+  const { auth } = use(managementCognitoStack);
+  const stage = getStage(stack.stage);
+  const defaultFunction = new Function(stack, "managementdefaultFunction", {
+    handler:
+      "../Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+  });
+  const api = new Api(stack, "managmentBackend", {
     defaults: {
       function: {
+        timeout: 30,
         role: defaultFunction.role,
         environment: {
           kmsKeyARN: keyArn,
-          //////////////////
+          /////////////////////////////
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,
-
+          userPoolId: auth.userPoolId,
+          userPoolClientId: auth.userPoolClientId,
           mongoPrivetKey: config[stage].mongoPrivetKey,
           mongoPublicKey: config[stage].mongoPublicKey,
           region: stack.region,
@@ -58,34 +58,35 @@ export function driverApiStack({ stack }: StackContext) {
         permissions: [],
       },
     },
+
     routes: {
-      "POST /findOrders": {
-        function: { handler: pathToLambdas + "findOrders/findOrders.handler" },
-      },
-      "POST /getProposals": {
+      "POST /addLocalCardKeys": {
         function: {
-          handler: pathToLambdas + "getProposals/getProposals.handler",
+          handler: pathToLambdas + "addLocalCardKeys/addLocalCardKeys.handler",
         },
       },
-      "POST /createProposal": {
-        function: {
-          handler: pathToLambdas + "createProposal/createProposal.handler",
-        },
-      },
-      "POST /updateProposal": {
-        function: {
-          handler: pathToLambdas + "updateProposal/updateProposal.handler",
-        },
-      },
-      "POST /deleteProposal": {
-        function: {
-          handler: pathToLambdas + "deleteProposal/deleteProposal.handler",
-        },
-      },
-      "POST /setOrderAsDelivered": {
+      "POST /getPaymentRequests": {
         function: {
           handler:
-            pathToLambdas + "setOrderAsDelivered/setOrderAsDelivered.handler",
+            pathToLambdas + "getPaymentRequests/getPaymentRequests.handler",
+        },
+      },
+      "POST /cancelPaymentRequest": {
+        function: {
+          handler:
+            pathToLambdas + "cancelPaymentRequest/cancelPaymentRequest.handler",
+        },
+      },
+      "POST /createPaymentRequest": {
+        function: {
+          handler:
+            pathToLambdas + "createPaymentRequest/createPaymentRequest.handler",
+        },
+      },
+      "POST /DisableLocalCardKeys": {
+        function: {
+          handler:
+            pathToLambdas + "DisableLocalCardKeys/DisableLocalCardKeys.handler",
         },
       },
       "POST /reportOrder": {
@@ -93,89 +94,94 @@ export function driverApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "reportOrder/reportOrder.handler",
         },
       },
-      "POST /leaveOrder": {
-        function: { handler: pathToLambdas + "leaveOrder/leaveOrder.handler" },
-      },
-      "POST /takeOrder": {
-        function: { handler: pathToLambdas + "takeOrder/takeOrder.handler" },
-      },
-      "POST /getActiveOrder": {
+      "POST /searchDriverById": {
         function: {
-          handler: pathToLambdas + "getActiveOrder/getActiveOrder.handler",
+          handler: pathToLambdas + "searchDriverById/searchDriverById.handler",
         },
       },
-      "POST /setOrderAsPickedUp": {
+      "POST /getTrustedDrivers": {
         function: {
           handler:
-            pathToLambdas + "setOrderAsPickedUp/setOrderAsPickedUp.handler",
+            pathToLambdas + "getTrustedDrivers/getTrustedDrivers.handler",
+        },
+      },
+      "POST /getManagement": {
+        function: {
+          handler: pathToLambdas + "getManagement/getManagement.handler",
         },
       },
 
-      "POST /payStore": {
-        function: { handler: pathToLambdas + "payStore/payStore.handler" },
-      },
-      "POST /setDeliveryFeePaid": {
+      "POST /addToManagementDrivers": {
         function: {
           handler:
-            pathToLambdas + "setDeliveryFeePaid/setDeliveryFeePaid.handler",
+            pathToLambdas +
+            "addDriverToManagementDrivers/addDriverToManagementDrivers.handler",
         },
       },
-      "POST /confirmPickup": {
+      "POST /createManagement": {
         function: {
-          handler: pathToLambdas + "confirmPickup/confirmPickup.handler",
+          handler: pathToLambdas + "createManagement/createManagement.handler",
         },
       },
-      "POST /createDriverDocument": {
+      "POST /getActiveOrders": {
         function: {
-          handler:
-            pathToLambdas + "createDriverDocument/createDriverDocument.handler",
+          handler: pathToLambdas + "getActiveOrders/getActiveOrders.handler",
         },
       },
-      "POST /updateDriverDocument": {
+      "POST /getDriverInfo": {
         function: {
-          handler:
-            pathToLambdas + "updateDriverDocument/updateDriverDocument.handler",
+          handler: pathToLambdas + "getDriverInfo/getDriverInfo.handler",
         },
       },
-      "POST /getDriverDocument": {
-        function: {
-          handler:
-            pathToLambdas + "getDriverDocument/getDriverDocument.handler",
-        },
-      },
-
       "POST /getOrderHistory": {
         function: {
           handler: pathToLambdas + "getOrderHistory/getOrderHistory.handler",
         },
       },
-      "POST /generateImageUrl": {
+      "POST /updateDriverBalance": {
         function: {
-          handler: pathToLambdas + "generateImageUrl/generateImageUrl.handler",
+          handler:
+            pathToLambdas + "updateDriverBalance/updateDriverBalance.handler",
         },
       },
-      /**
- * 
- *  "POST /generateImageUrl": {
-        function: {handler: pathToLambdas + 'generateImageUrl/generateImageUrl.handler',}
-        
-        url: {
-          cors: {
-            allowedHeaders: ['Content-Type'],
-            allowedMethods: ['POST'],
-          },
+      "POST /updateManagementInfo": {
+        function: {
+          handler:
+            pathToLambdas + "updateManagementInfo/updateManagementInfo.handler",
         },
       },
-      imageResizeTrigger: {
-        handler: '.build/lambdas/imageResizeTrigger/imageResizeTrigger.handler',
-        url: {
-          cors: {
-            allowedHeaders: ['Content-Type'],
-            allowedMethods: ['POST'],
-          },
+      "POST /removeFromManagementDrivers": {
+        function: {
+          handler:
+            pathToLambdas +
+            "removeDriverFromManagementDrivers/removeDriverFromManagementDrivers.handler",
         },
       },
- */
+      "POST /createLocalCardTransaction": {
+        function: {
+          handler:
+            pathToLambdas +
+            "payWithLocalCard/createLocalCardTransaction.handler",
+        },
+      },
+      "POST /getTransactionsList": {
+        function: {
+          handler:
+            pathToLambdas + "payWithLocalCard/getTransactionsList.handler",
+        },
+      },
+      "POST /validateLocalCardTransaction": {
+        function: {
+          handler:
+            pathToLambdas +
+            "payWithLocalCard/validateLocalCardTransaction.handler",
+        },
+      },
+      "POST /{proxy+}": {
+        function: {
+          handler: pathToLambdas + "getManagement/getManagement.handler",
+        },
+      },
       // "POST /createStoreDocument":
       //   "packages/store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
       // "POST /getStoreDocument":
@@ -193,9 +199,9 @@ export function driverApiStack({ stack }: StackContext) {
     allowMethods: ["POST"],
     allowHeaders: ["Accept", "Content-Type", "Authorization"],
   });
-  new CfnOutput(stack, "driverApiUrl-" + stack.stage, {
+  new CfnOutput(stack, "managementApiUrl-" + stack.stage, {
     value: api.url || "",
-    exportName: "driverApiUrl-" + stack.stage, // export name
+    exportName: "managementApiUrl-" + stack.stage, // export name
   });
   /////////////////////////////////////////////////////////////////////
 
@@ -203,21 +209,21 @@ export function driverApiStack({ stack }: StackContext) {
     ApiEndpoint: api.url,
     apiArn: api.httpApiArn,
     apiFunctionsRoleArn:
-      api.getFunction("POST /getDriverDocument")?.role?.roleArn || "",
+      api.getFunction("POST /removeFromManagementDrivers")?.role?.roleArn || "",
   });
   return {
     api,
   };
 }
 
-export function driverCognitoStack({ stack }: StackContext) {
+export function managementCognitoStack({ stack }: StackContext) {
   const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
 
   // const { site: paymentAppSite } = use(paymentApp);
-  const { api } = use(driverApiStack);
+
   const stage = getStage(stack.stage);
   // Create a Cognito User Pool and Identity Pool
-  const auth = new Cognito(stack, "driverAuth", {
+  const auth = new Cognito(stack, "managementAuth", {
     login: ["email"],
     cdk: {
       userPool: {
@@ -244,32 +250,33 @@ export function driverCognitoStack({ stack }: StackContext) {
     }),
   ]);
 
-  new CfnOutput(stack, "driverCognitoIdentityPoolId-" + stack.stage, {
+  new CfnOutput(stack, "managementCognitoIdentityPoolId-" + stack.stage, {
     value: auth.cognitoIdentityPoolId || "",
-    exportName: "driverCognitoIdentityPoolId-" + stack.stage, // export name
+    exportName: "managementCognitoIdentityPoolId-" + stack.stage, // export name
   });
-  new CfnOutput(stack, "driverCognitoRegion-" + stack.stage, {
+  new CfnOutput(stack, "managementCognitoRegion-" + stack.stage, {
     value: stack.region || "",
-    exportName: "driverCognitoRegion-" + stack.stage, // export name
+    exportName: "managementCognitoRegion-" + stack.stage, // export name
   });
-  new CfnOutput(stack, "driverUserPoolId-" + stack.stage, {
+  new CfnOutput(stack, "managementUserPoolId-" + stack.stage, {
     value: auth.userPoolId || "",
-    exportName: "driverUserPoolId-" + stack.stage, // export name
+    exportName: "managementUserPoolId-" + stack.stage, // export name
   });
-  new CfnOutput(stack, "driverUserPoolClientId-" + stack.stage, {
+  new CfnOutput(stack, "managementUserPoolClientId-" + stack.stage, {
     value: auth.userPoolClientId || "",
-    exportName: "driverUserPoolClientId-" + stack.stage, // export name
+    exportName: "managementUserPoolClientId-" + stack.stage, // export name
   });
 
-  // const site = new StaticSite(stack, "driverApp", {
-  //   path: "./packages/delivery-driver",
+  // const site = new StaticSite(stack, "management_app", {
+  //   path: "./packages/driver-management",
   //   buildOutput: "dist",
   //   buildCommand: "yarn build",
+
   //   ...(stack.stage === "production"
   //     ? {
   //         customDomain: {
-  //           domainName: "driver.hyfn.xyz",
-  //           domainAlias: "www.driver.hyfn.xyz",
+  //           domainName: "management.hyfn.xyz",
+  //           domainAlias: "www.management.hyfn.xyz",
   //           hostedZone: "hyfn.xyz",
   //           // isExternalDomain: true,
   //         },
@@ -290,7 +297,9 @@ export function driverCognitoStack({ stack }: StackContext) {
   //     VITE_APP_BASE_URL: api.url,
   //   },
   // });
+
   stack.addOutputs({
-    // managmentSite: site.url || localhost + "3002",
+    // managmentSite: site.url || localhost + "3001",
   });
+  return { auth };
 }

@@ -1,9 +1,9 @@
 import { SSTConfig } from "sst";
 
 import { RemovalPolicy } from "aws-cdk-lib";
-import { driverApiStack, driverCognitoStack } from "./driverStack";
 
 import { driverApp } from "./deploymentStack";
+import { driverApiStack, driverCognitoStack } from "./driverStack";
 
 export default {
   config(_input) {

@@ -1,8 +1,9 @@
 import { SSTConfig } from "sst";
 
 import { RemovalPolicy } from "aws-cdk-lib";
-import { managementApp } from "./deploymentStack";
-import { managementApiStack, managementCognitoStack } from "./driverManagement";
+
+import { customerApp } from "./deploymentStack";
+import { customerApiStack, customerCognitoStack } from "./customerStack";
 
 export default {
   config(_input) {
@@ -16,9 +17,6 @@ export default {
     app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY);
     // }
     // app.stack(orgResources).stack(storeBackend).stack(storeFrontend);
-    app
-      .stack(managementCognitoStack)
-      .stack(managementApiStack)
-      .stack(managementApp);
+    app.stack(customerCognitoStack).stack(customerApiStack).stack(customerApp);
   },
 } satisfies SSTConfig;

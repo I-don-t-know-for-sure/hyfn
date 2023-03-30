@@ -8,27 +8,28 @@ import {
 } from "sst/constructs";
 
 import * as iam from "aws-cdk-lib/aws-iam";
-import { config } from "../envVaraibles";
+import { config } from "../../envVaraibles";
 
-import { getStage } from "./getStage";
-import { frConfig } from "../frEnvVaraibles";
+import { getStage } from "../../stacks/getStage";
+import { frConfig } from "../../frEnvVaraibles";
 
 import { CfnOutput, Fn } from "aws-cdk-lib";
 
-const pathToLambdas = "../../packages/Store-backend/lambdas/";
+const pathToLambdas = "../Store-backend/lambdas/";
 
 const localhost = "http://localhost:";
 
 export function storeApiStack({ stack }: StackContext) {
   // const { s3Bucket } = use(imagesBucketStack);
   // const { key } = use(kmsStack);
+  const { auth } = use(storeCognitoStack);
   const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
   const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const stage = getStage(stack.stage);
 
   const defaultFunction = new Function(stack, "defaultFunction", {
     handler:
-      "../../packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+      "../Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
   });
 
   const api = new Api(stack, "storeBackend", {
@@ -44,7 +45,8 @@ export function storeApiStack({ stack }: StackContext) {
           bucketName: imagesBucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,
-
+          userPoolId: auth.userPoolId,
+          userPoolClientId: auth.userPoolClientId,
           mongoPrivetKey: config[stage].mongoPrivetKey,
           mongoPublicKey: config[stage].mongoPublicKey,
           region: stack.region,
@@ -366,7 +368,6 @@ export function storeCognitoStack({ stack }: StackContext) {
   // const { site: paymentAppSite } = use(paymentApp);
   const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
   const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
-  const { api } = use(storeApiStack);
 
   const auth = new Cognito(stack, "Auth", {
     login: ["email"],
@@ -446,6 +447,6 @@ export function storeCognitoStack({ stack }: StackContext) {
     VITE_APP_USER_POOL_ID: auth.userPoolId,
     VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
     VITE_APP_BUCKET: authBucketName,
-    VITE_APP_BASE_URL: api.url,
   });
+  return { auth };
 }

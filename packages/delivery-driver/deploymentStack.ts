@@ -1,26 +1,30 @@
-import { Cognito, StackContext, StaticSite } from "sst/constructs";
+import { Cognito, StackContext, StaticSite, use } from "sst/constructs";
 import { getStage } from "../../stacks/getStage";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
+import { driverApiStack, driverCognitoStack } from "./driverStack";
+const localhost = "http://localhost:";
 
 export function driverApp({ stack }: StackContext) {
   const stage = getStage(stack.stage);
-
+  const { api } = use(driverApiStack);
   const s3BucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const paymentAppUrl = Fn.importValue(`paymentAppUrl-${stack.stage}`);
-  const cognitoIdentityPoolId = Fn.importValue(
-    `driverCognitoIdentityPoolId-${stack.stage}`
-  );
-  const cognitoRegion = Fn.importValue(`driverCognitoRegion-${stack.stage}`);
-  const cognitoUserPoolId = Fn.importValue(`driverUserPoolId-${stack.stage}`);
-  const cognitoUserPoolClientId = Fn.importValue(
-    `driverUserPoolClientId-${stack.stage}`
-  );
+  // const cognitoIdentityPoolId = Fn.importValue(
+  //   `driverCognitoIdentityPoolId-${stack.stage}`
+  // );
+  // const cognitoRegion = Fn.importValue(`driverCognitoRegion-${stack.stage}`);
+  // const cognitoUserPoolId = Fn.importValue(`driverUserPoolId-${stack.stage}`);
+  // const cognitoUserPoolClientId = Fn.importValue(
+  //   `driverUserPoolClientId-${stack.stage}`
+  // );
+
+  const { auth } = use(driverCognitoStack);
   const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
-  const url = Fn.importValue(`driverApiUrl-${stack.stage}`);
-  const site = new StaticSite(stack, "delivery-customer", {
-    path: "../../packages/delivery-driver",
+  // const url = Fn.importValue(`driverApiUrl-${stack.stage}`);
+  const site = new StaticSite(stack, "delivery-driver", {
+    path: "./delivery-driver",
     buildOutput: "dist",
     buildCommand: "yarn build",
 
@@ -42,21 +46,21 @@ export function driverApp({ stack }: StackContext) {
         frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
       VITE_APP_PAYMENT_APP_URL: paymentAppUrl,
-      VITE_APP_COGNITO_IDENTITY_POOL_ID: cognitoIdentityPoolId,
+      VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
       VITE_APP_COGNITO_REGION: stack.region,
-      VITE_APP_USER_POOL_ID: cognitoUserPoolId,
-      VITE_APP_USER_POOL_CLIENT_ID: cognitoUserPoolClientId,
+      VITE_APP_USER_POOL_ID: auth.userPoolId,
+      VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
       VITE_APP_BUCKET: authBucketName,
 
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
 
-      VITE_APP_BASE_URL: url,
+      VITE_APP_BASE_URL: api.url,
     },
   });
 
-  new CfnOutput(stack, "customerSiteUrl-" + stack.stage, {
-    value: site.url || "",
-    exportName: "customerSiteUrl-" + stack.stage, // export name
+  new CfnOutput(stack, "driverSiteUrl-" + stack.stage, {
+    value: site.url || localhost + "3009",
+    exportName: "driverSiteUrl-" + stack.stage, // export name
   });
   stack.addOutputs({
     //   customerSite: site.url || localhost + "3000",

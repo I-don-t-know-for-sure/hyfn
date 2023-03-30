@@ -4,12 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "sst bind --region eu-west-3 --stage development  vite",
+    "start": "sst bind --region eu-west-3 --stage bari  vite",
+    "dev": "sst dev --region eu-west-3 --stage bari ",
     "preview": "vite preview",
     "build": "tsc && vite build --outDir dist",
     "envs": "node ./evn-parameters.js",
     "deploy": "amplify publish -c",
-    "dev": "sh ./scripts/toDev.sh",
     "staging": "sh ./scripts/toStaging.sh",
     "production": "sh ./scripts/toProduction.sh",
     "lint": "eslint . --ext .js,.ts ./src/*"

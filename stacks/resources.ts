@@ -27,7 +27,7 @@ export function imagesBucketStack({ stack }: StackContext) {
   s3Bucket.addNotifications(stack, {
     resizeFunction: {
       function:
-        "../../packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",
+        "./packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",
       events: ["object_created_put"],
       filters: [{ prefix: "initial/" }],
     },

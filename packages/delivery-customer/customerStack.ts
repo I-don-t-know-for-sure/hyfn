@@ -9,19 +9,18 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 // import { paymentApp } from '../packages/payment-app/paymentAppStack';
-import { getStage } from "./getStage";
-import { frConfig } from "../frEnvVaraibles";
-import { config } from "../envVaraibles";
+import { getStage } from "../../stacks/getStage";
+import { frConfig } from "../../frEnvVaraibles";
+import { config } from "../../envVaraibles";
 // import { authBucketStack, imagesBucketStack, kmsStack } from './resources';
 import { CfnOutput, Fn } from "aws-cdk-lib";
-import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
-import { paymentApp } from "../packages/payment-app/paymentAppStack";
-const pathToLambdas = "./packages/customer-backend/lambdas/";
+import { imagesBucketStack, kmsStack } from "../../stacks/resources";
+import { paymentApp } from "../payment-app/paymentAppStack";
+const pathToLambdas = "../customer-backend/lambdas/";
 const localhost = "http://localhost:";
 
 export function customerApiStack({ stack }: StackContext) {
-  const { s3Bucket } = use(imagesBucketStack);
-  const { key } = use(kmsStack);
+  // const { key } = use(kmsStack);
   const { auth } = use(customerCognitoStack);
 
   const stage = getStage(stack.stage);
@@ -31,19 +30,23 @@ export function customerApiStack({ stack }: StackContext) {
       "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
   });
 
-  // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
-  // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
+  const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
+  const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
+  // const userPoolId = Fn.importValue(`customerUserPoolId-${stack.stage}`);
+  // const userPoolClientId = Fn.importValue(
+  //   `customerUserPoolClient-${stack.stage}`
+  // );
   const api = new Api(stack, "customerBackend", {
     defaults: {
       function: {
         timeout: 30,
         role: defaultFunction.role,
         environment: {
-          kmsKeyARN: key.keyArn,
+          kmsKeyARN: keyArn,
           // /////////////////
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
-          bucketName: s3Bucket.bucketName,
+          bucketName: imagesBucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,
           userPoolId: auth.userPoolId,
@@ -324,11 +327,6 @@ export function customerApiStack({ stack }: StackContext) {
 }
 
 export function customerCognitoStack({ stack }: StackContext) {
-  const { authBucket } = use(authBucketStack);
-
-  const { site: paymentAppSite } =
-    stack.stage === "development" ? use(paymentApp) : ({} as any);
-
   // Create a Cognito User Pool and Identity Pool
   const auth = new Cognito(stack, "customerAuth", {
     login: ["email"],
@@ -344,7 +342,7 @@ export function customerCognitoStack({ stack }: StackContext) {
       },
     },
   });
-  // const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
+  const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
   // const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
 
   auth.attachPermissionsForAuthUsers(stack, [
@@ -355,8 +353,7 @@ export function customerCognitoStack({ stack }: StackContext) {
       actions: ["s3:*"],
       effect: iam.Effect.ALLOW,
       resources: [
-        authBucket.bucketArn +
-          "/private/${cognito-identity.amazonaws.com:sub}/*",
+        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
       ],
     }),
   ]);

@@ -9,7 +9,7 @@
     "console": "sst console",
     "fetch-envs": "node ./fetch-envs.js && node ./fetch-fr-envs.js",
     "build-ts": "tsc --build ./packages/hyfn-client && tsc --build ./packages/hyfn-types && tsc --build ./packages/hyfn-server",
-    "start": "sst dev --region eu-west-3 --stage development"
+    "start": "sst dev --region eu-west-3"
   },
   "devDependencies": {
     "@serverless-stack/resources": "^1.18.4",
