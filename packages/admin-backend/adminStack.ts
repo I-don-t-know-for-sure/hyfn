@@ -14,7 +14,7 @@ import { getStage } from "../../stacks/getStage";
 import { config } from "../../envVaraibles";
 
 import { CfnOutput, Fn } from "aws-cdk-lib";
-const pathToLambdas = "../../packages/admin-backend/lambdas/";
+const pathToLambdas = "./lambdas/";
 
 const localhost = "http://localhost:";
 export function adminApiStack({ stack }: StackContext) {
@@ -30,7 +30,7 @@ export function adminApiStack({ stack }: StackContext) {
     handler:
       "../Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
   });
-  const api = new Api(stack, "adminBackend", {
+  const api = new Api(stack, "adminApi", {
     defaults: {
       function: {
         role: defaultFunction.role,

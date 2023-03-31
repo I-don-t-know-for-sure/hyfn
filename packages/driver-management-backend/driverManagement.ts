@@ -1,33 +1,25 @@
-import {
-  StackContext,
-  Api,
-  use,
-  Function,
-  StaticSite,
-  Cognito,
-} from "sst/constructs";
+import { StackContext, Api, use, Function, StaticSite, Cognito } from 'sst/constructs';
 
-import * as iam from "aws-cdk-lib/aws-iam";
+import * as iam from 'aws-cdk-lib/aws-iam';
 
-import { getStage } from "../../stacks/getStage";
-import { frConfig } from "../../frEnvVaraibles";
-import { config } from "../../envVaraibles";
+import { getStage } from '../../stacks/getStage';
+import { frConfig } from '../../frEnvVaraibles';
+import { config } from '../../envVaraibles';
 
-import { CfnOutput, Fn } from "aws-cdk-lib";
-const pathToLambdas = "../packages/customer-backend/lambdas/";
+import { CfnOutput, Fn } from 'aws-cdk-lib';
+const pathToLambdas = '../packages/customer-backend/lambdas/';
 
-const localhost = "http://localhost:";
+const localhost = 'http://localhost:';
 
 export function managementApiStack({ stack }: StackContext) {
   const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
   const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const { auth } = use(managementCognitoStack);
   const stage = getStage(stack.stage);
-  const defaultFunction = new Function(stack, "managementdefaultFunction", {
-    handler:
-      "../Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+  const defaultFunction = new Function(stack, 'managementdefaultFunction', {
+    handler: '../Store-backend/lambdas/createStoreDocument/createStoreDocument.handler',
   });
-  const api = new Api(stack, "managmentBackend", {
+  const api = new Api(stack, 'managmentApi', {
     defaults: {
       function: {
         timeout: 30,
@@ -60,126 +52,113 @@ export function managementApiStack({ stack }: StackContext) {
     },
 
     routes: {
-      "POST /addLocalCardKeys": {
+      'POST /addLocalCardKeys': {
         function: {
-          handler: pathToLambdas + "addLocalCardKeys/addLocalCardKeys.handler",
+          handler: pathToLambdas + 'addLocalCardKeys/addLocalCardKeys.handler',
         },
       },
-      "POST /getPaymentRequests": {
+      'POST /getPaymentRequests': {
         function: {
-          handler:
-            pathToLambdas + "getPaymentRequests/getPaymentRequests.handler",
+          handler: pathToLambdas + 'getPaymentRequests/getPaymentRequests.handler',
         },
       },
-      "POST /cancelPaymentRequest": {
+      'POST /cancelPaymentRequest': {
         function: {
-          handler:
-            pathToLambdas + "cancelPaymentRequest/cancelPaymentRequest.handler",
+          handler: pathToLambdas + 'cancelPaymentRequest/cancelPaymentRequest.handler',
         },
       },
-      "POST /createPaymentRequest": {
+      'POST /createPaymentRequest': {
         function: {
-          handler:
-            pathToLambdas + "createPaymentRequest/createPaymentRequest.handler",
+          handler: pathToLambdas + 'createPaymentRequest/createPaymentRequest.handler',
         },
       },
-      "POST /DisableLocalCardKeys": {
+      'POST /DisableLocalCardKeys': {
         function: {
-          handler:
-            pathToLambdas + "DisableLocalCardKeys/DisableLocalCardKeys.handler",
+          handler: pathToLambdas + 'DisableLocalCardKeys/DisableLocalCardKeys.handler',
         },
       },
-      "POST /reportOrder": {
+      'POST /reportOrder': {
         function: {
-          handler: pathToLambdas + "reportOrder/reportOrder.handler",
+          handler: pathToLambdas + 'reportOrder/reportOrder.handler',
         },
       },
-      "POST /searchDriverById": {
+      'POST /searchDriverById': {
         function: {
-          handler: pathToLambdas + "searchDriverById/searchDriverById.handler",
+          handler: pathToLambdas + 'searchDriverById/searchDriverById.handler',
         },
       },
-      "POST /getTrustedDrivers": {
+      'POST /getTrustedDrivers': {
         function: {
-          handler:
-            pathToLambdas + "getTrustedDrivers/getTrustedDrivers.handler",
+          handler: pathToLambdas + 'getTrustedDrivers/getTrustedDrivers.handler',
         },
       },
-      "POST /getManagement": {
+      'POST /getManagement': {
         function: {
-          handler: pathToLambdas + "getManagement/getManagement.handler",
+          handler: pathToLambdas + 'getManagement/getManagement.handler',
         },
       },
 
-      "POST /addToManagementDrivers": {
+      'POST /addToManagementDrivers': {
+        function: {
+          handler:
+            pathToLambdas + 'addDriverToManagementDrivers/addDriverToManagementDrivers.handler',
+        },
+      },
+      'POST /createManagement': {
+        function: {
+          handler: pathToLambdas + 'createManagement/createManagement.handler',
+        },
+      },
+      'POST /getActiveOrders': {
+        function: {
+          handler: pathToLambdas + 'getActiveOrders/getActiveOrders.handler',
+        },
+      },
+      'POST /getDriverInfo': {
+        function: {
+          handler: pathToLambdas + 'getDriverInfo/getDriverInfo.handler',
+        },
+      },
+      'POST /getOrderHistory': {
+        function: {
+          handler: pathToLambdas + 'getOrderHistory/getOrderHistory.handler',
+        },
+      },
+      'POST /updateDriverBalance': {
+        function: {
+          handler: pathToLambdas + 'updateDriverBalance/updateDriverBalance.handler',
+        },
+      },
+      'POST /updateManagementInfo': {
+        function: {
+          handler: pathToLambdas + 'updateManagementInfo/updateManagementInfo.handler',
+        },
+      },
+      'POST /removeFromManagementDrivers': {
         function: {
           handler:
             pathToLambdas +
-            "addDriverToManagementDrivers/addDriverToManagementDrivers.handler",
+            'removeDriverFromManagementDrivers/removeDriverFromManagementDrivers.handler',
         },
       },
-      "POST /createManagement": {
+      'POST /createLocalCardTransaction': {
         function: {
-          handler: pathToLambdas + "createManagement/createManagement.handler",
+          handler: pathToLambdas + 'payWithLocalCard/createLocalCardTransaction.handler',
         },
       },
-      "POST /getActiveOrders": {
+      'POST /getTransactionsList': {
         function: {
-          handler: pathToLambdas + "getActiveOrders/getActiveOrders.handler",
+          handler: pathToLambdas + 'payWithLocalCard/getTransactionsList.handler',
         },
       },
-      "POST /getDriverInfo": {
+      'POST /validateLocalCardTransaction': {
         function: {
-          handler: pathToLambdas + "getDriverInfo/getDriverInfo.handler",
+          handler: pathToLambdas + 'payWithLocalCard/validateLocalCardTransaction.handler',
         },
       },
-      "POST /getOrderHistory": {
+      'POST /{proxy+}': {
         function: {
-          handler: pathToLambdas + "getOrderHistory/getOrderHistory.handler",
-        },
-      },
-      "POST /updateDriverBalance": {
-        function: {
-          handler:
-            pathToLambdas + "updateDriverBalance/updateDriverBalance.handler",
-        },
-      },
-      "POST /updateManagementInfo": {
-        function: {
-          handler:
-            pathToLambdas + "updateManagementInfo/updateManagementInfo.handler",
-        },
-      },
-      "POST /removeFromManagementDrivers": {
-        function: {
-          handler:
-            pathToLambdas +
-            "removeDriverFromManagementDrivers/removeDriverFromManagementDrivers.handler",
-        },
-      },
-      "POST /createLocalCardTransaction": {
-        function: {
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/createLocalCardTransaction.handler",
-        },
-      },
-      "POST /getTransactionsList": {
-        function: {
-          handler:
-            pathToLambdas + "payWithLocalCard/getTransactionsList.handler",
-        },
-      },
-      "POST /validateLocalCardTransaction": {
-        function: {
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/validateLocalCardTransaction.handler",
-        },
-      },
-      "POST /{proxy+}": {
-        function: {
-          handler: pathToLambdas + "getManagement/getManagement.handler",
+          handler: pathToLambdas + 'getManagement/getManagement.handler',
         },
       },
       // "POST /createStoreDocument":
@@ -189,27 +168,26 @@ export function managementApiStack({ stack }: StackContext) {
     },
   });
   const permissions = new iam.PolicyStatement({
-    actions: ["*"],
+    actions: ['*'],
     effect: iam.Effect.ALLOW,
     resources: [`*`],
   });
 
   api.attachPermissions([permissions]);
   api.setCors({
-    allowMethods: ["POST"],
-    allowHeaders: ["Accept", "Content-Type", "Authorization"],
+    allowMethods: ['POST'],
+    allowHeaders: ['Accept', 'Content-Type', 'Authorization'],
   });
-  new CfnOutput(stack, "managementApiUrl-" + stack.stage, {
-    value: api.url || "",
-    exportName: "managementApiUrl-" + stack.stage, // export name
+  new CfnOutput(stack, 'managementApiUrl-' + stack.stage, {
+    value: api.url || '',
+    exportName: 'managementApiUrl-' + stack.stage, // export name
   });
   /////////////////////////////////////////////////////////////////////
 
   stack.addOutputs({
     ApiEndpoint: api.url,
     apiArn: api.httpApiArn,
-    apiFunctionsRoleArn:
-      api.getFunction("POST /removeFromManagementDrivers")?.role?.roleArn || "",
+    apiFunctionsRoleArn: api.getFunction('POST /removeFromManagementDrivers')?.role?.roleArn || '',
   });
   return {
     api,
@@ -223,8 +201,8 @@ export function managementCognitoStack({ stack }: StackContext) {
 
   const stage = getStage(stack.stage);
   // Create a Cognito User Pool and Identity Pool
-  const auth = new Cognito(stack, "managementAuth", {
-    login: ["email"],
+  const auth = new Cognito(stack, 'managementAuth', {
+    login: ['email'],
     cdk: {
       userPool: {
         passwordPolicy: {
@@ -242,29 +220,27 @@ export function managementCognitoStack({ stack }: StackContext) {
     // api,
     // Policy granting access to a specific folder in the bucket
     new iam.PolicyStatement({
-      actions: ["s3:*"],
+      actions: ['s3:*'],
       effect: iam.Effect.ALLOW,
-      resources: [
-        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
-      ],
+      resources: [authBucketArn + '/private/${cognito-identity.amazonaws.com:sub}/*'],
     }),
   ]);
 
-  new CfnOutput(stack, "managementCognitoIdentityPoolId-" + stack.stage, {
-    value: auth.cognitoIdentityPoolId || "",
-    exportName: "managementCognitoIdentityPoolId-" + stack.stage, // export name
+  new CfnOutput(stack, 'managementCognitoIdentityPoolId-' + stack.stage, {
+    value: auth.cognitoIdentityPoolId || '',
+    exportName: 'managementCognitoIdentityPoolId-' + stack.stage, // export name
   });
-  new CfnOutput(stack, "managementCognitoRegion-" + stack.stage, {
-    value: stack.region || "",
-    exportName: "managementCognitoRegion-" + stack.stage, // export name
+  new CfnOutput(stack, 'managementCognitoRegion-' + stack.stage, {
+    value: stack.region || '',
+    exportName: 'managementCognitoRegion-' + stack.stage, // export name
   });
-  new CfnOutput(stack, "managementUserPoolId-" + stack.stage, {
-    value: auth.userPoolId || "",
-    exportName: "managementUserPoolId-" + stack.stage, // export name
+  new CfnOutput(stack, 'managementUserPoolId-' + stack.stage, {
+    value: auth.userPoolId || '',
+    exportName: 'managementUserPoolId-' + stack.stage, // export name
   });
-  new CfnOutput(stack, "managementUserPoolClientId-" + stack.stage, {
-    value: auth.userPoolClientId || "",
-    exportName: "managementUserPoolClientId-" + stack.stage, // export name
+  new CfnOutput(stack, 'managementUserPoolClientId-' + stack.stage, {
+    value: auth.userPoolClientId || '',
+    exportName: 'managementUserPoolClientId-' + stack.stage, // export name
   });
 
   // const site = new StaticSite(stack, "management_app", {

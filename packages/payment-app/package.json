@@ -4,14 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "sst bind --region eu-west-3 --stage development  vite",
     "preview": "vite preview",
     "build": "tsc && vite build --outDir dist",
     "envs": "node ./evn-parameters.js",
-    "deploy": "sst deploy",
-    "dev": "sh ./scripts/toDev.sh",
-    "staging": "sh ./scripts/toStaging.sh",
-    "production": "sh ./scripts/toProduction.sh",
+    "deploy-prod": "sst deploy --stage production",
+    "deploy-staging": "sst deploy --stage staging",
+    "deploy-dev": "sst deploy --region eu-west-3 --stage development",
+    "sst-dev": "sst dev --region eu-west-3 --stage development",
+    "start": "sst bind --region eu-west-3 --stage development  vite",
     "lint": "eslint . --ext .js,.ts ./src/*"
   },
   "dependencies": {

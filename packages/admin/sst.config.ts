@@ -3,12 +3,12 @@ import { SSTConfig } from "sst";
 import { RemovalPolicy } from "aws-cdk-lib";
 
 import { adminApp } from "./deploymentStack";
-import { adminApiStack, adminCognitoStack } from "./adminStack";
+import { adminApiStack, adminCognitoStack } from "../admin-backend/adminStack";
 
 export default {
   config(_input) {
     return {
-      name: "customer-app",
+      name: "admin-client",
       region: "eu-south-1",
     };
   },
@@ -18,6 +18,6 @@ export default {
     app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY);
     // }
     // app.stack(orgResources).stack(storeBackend).stack(storeFrontend);
-    app.stack(adminCognitoStack).stack(adminApiStack).stack(adminApp);
+    app.stack(adminApp);
   },
 } satisfies SSTConfig;

@@ -3,12 +3,11 @@ import { SSTConfig } from "sst";
 import { RemovalPolicy } from "aws-cdk-lib";
 
 import { driverApp } from "./deploymentStack";
-import { driverApiStack, driverCognitoStack } from "./driverStack";
 
 export default {
   config(_input) {
     return {
-      name: "driver-app",
+      name: "driver-client",
       region: "eu-south-1",
     };
   },
@@ -17,6 +16,6 @@ export default {
     app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY);
     // }
     // app.stack(orgResources).stack(storeBackend).stack(storeFrontend);
-    app.stack(driverCognitoStack).stack(driverApiStack).stack(driverApp);
+    app.stack(driverApp);
   },
 } satisfies SSTConfig;

@@ -4,30 +4,37 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
 
-import { customerApiStack, customerCognitoStack } from "./customerStack";
+import {
+  customerApiStack,
+  customerCognitoStack,
+} from "../customer-backend/customerStack";
 const localhost = "http://localhost:";
 
 export function customerApp({ stack }: StackContext) {
   const stage = getStage(stack.stage);
   // const { s3Bucket } = use(imagesBucketStack);
   // const { site: paymentSite } = use(paymentApp);
-  const { auth } = use(customerCognitoStack);
-  const { api } = use(customerApiStack);
+  // const { auth } = use(customerCognitoStack);
+  // const { api } = use(customerApiStack);
   // const { authBucket } = use(authBucketStack);
   const s3BucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const paymentAppUrl = Fn.importValue(`paymentAppUrl-${stack.stage}`);
-  const cognitoIdentityPoolId = auth.cognitoIdentityPoolId;
+  const cognitoIdentityPoolId = Fn.importValue(
+    `customerCognitoIdentityPoolId-${stack.stage}`
+  );
 
-  const cognitoRegion = stack.region;
+  const cognitoUserPoolId = Fn.importValue(
+    `customerCognitoRegion-${stack.stage}`
+  );
 
-  const cognitoUserPoolId = auth.userPoolId;
-
-  const cognitoUserPoolClientId = auth.userPoolClientId;
+  const cognitoUserPoolClientId = Fn.importValue(
+    `customerUserPoolClientId-${stack.stage}`
+  );
   const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
-  const url = api.url;
+  const url = Fn.importValue(`customerApiUrl-${stack.stage}`);
 
-  const site = new StaticSite(stack, "delivery-customer", {
-    path: stack.stage === "development" ? "./packages/delivery-customer" : "./",
+  const site = new StaticSite(stack, "customer-app", {
+    path: "./",
     buildOutput: "dist",
     buildCommand: "yarn build",
 

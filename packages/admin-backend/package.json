@@ -6,7 +6,11 @@
   "scripts": {
     "envs": "node ./fetch-envs.js",
     "createDatabaseUser": "node ./createDatabaseUser.js",
-    "deploy": "yarn build-ts && serverless deploy",
+    "deploy-prod": "sst deploy --stage production",
+    "deploy-staging": "sst deploy --stage staging",
+    "deploy-dev": "sst deploy --region eu-west-3 --stage development",
+    "sst-dev": "sst dev --region eu-west-3 --stage development",
+    "start": "sst bind --region eu-west-3 --stage development  vite",
     "build-ts": "tsc --build ./tsconfig.json"
   },
   "author": "",
@@ -17,7 +21,6 @@
     "axios": "^1.3.3",
     "crypto-js": "^4.1.1",
     "hyfn-server": "^1.0.3",
-
     "mathjs": "^11.5.1",
     "mongodb": "^4.13.0",
     "zod": "^3.20.6"

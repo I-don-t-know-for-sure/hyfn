@@ -1,13 +1,16 @@
 import { SSTConfig } from "sst";
 
 import { RemovalPolicy } from "aws-cdk-lib";
-import { storeApiStack, storeCognitoStack } from "./storeBackend";
+import {
+  storeApiStack,
+  storeCognitoStack,
+} from "../Store-backend/storeBackend";
 import { storeApp } from "./deploymentStack";
 
 export default {
   config(_input) {
     return {
-      name: "hyfn-org",
+      name: "store-client",
       region: "eu-south-1",
     };
   },
@@ -16,6 +19,6 @@ export default {
     app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY);
     // }
     // app.stack(orgResources).stack(storeBackend).stack(storeFrontend);
-    app.stack(storeCognitoStack).stack(storeApiStack).stack(storeApp);
+    app.stack(storeApp);
   },
 } satisfies SSTConfig;

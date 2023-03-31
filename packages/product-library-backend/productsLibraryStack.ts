@@ -29,7 +29,7 @@ export function libraryApiStack({ stack }: StackContext) {
     handler:
       "../Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
   });
-  const api = new Api(stack, "libraryBackend", {
+  const api = new Api(stack, "libraryApi", {
     defaults: {
       function: {
         role: defaultFunction.role,

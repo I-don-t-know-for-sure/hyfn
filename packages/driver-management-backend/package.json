@@ -1,5 +1,5 @@
 {
-  "private":true,
+  "private": true,
   "version": "1.0.0",
   "name": "driver-management-backend",
   "dependencies": {
@@ -12,7 +12,6 @@
     "eslint-plugin-import": "^2.26.0",
     "git-list-updated": "^1.2.1",
     "hyfn-server": "^1.0.3",
-
     "jimp": "^0.16.1",
     "mathjs": "^11.5.1",
     "mongodb": "^4.7.0",
@@ -30,7 +29,11 @@
     "format:check": "prettier --check **/*.{js,jsx,ts,tsx}",
     "format:write": "prettier --write **/*.{js,jsx,ts,tsx}",
     "lint": "eslint '**/*.js' --ignore-pattern node_modules/",
-    "deploy": "yarn build-ts && serverless deploy",
+    "deploy-prod": "sst deploy --stage production",
+    "deploy-staging": "sst deploy --stage staging",
+    "deploy-dev": "sst deploy --region eu-west-3 --stage development",
+    "sst-dev": "sst dev --region eu-west-3 --stage development",
+    "start": "sst bind --region eu-west-3 --stage development  vite",
     "build-ts": "tsc --build ./tsconfig.json"
   },
   "devDependencies": {

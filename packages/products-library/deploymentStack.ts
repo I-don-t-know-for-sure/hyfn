@@ -3,13 +3,13 @@ import { getStage } from "../../stacks/getStage";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
-import { libraryApiStack, libraryCognitoStack } from "./productsLibraryStack";
+
 const localhost = "http://localhost:";
 
 export function libraryApp({ stack }: StackContext) {
   const stage = getStage(stack.stage);
-  const { auth } = use(libraryCognitoStack);
-  const { api } = use(libraryApiStack);
+  // const { auth } = use(libraryCognitoStack);
+  // const { api } = use(libraryApiStack);
   const s3BucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const paymentAppUrl = Fn.importValue(`paymentAppUrl-${stack.stage}`);
   // const cognitoIdentityPoolId = Fn.importValue(
@@ -23,7 +23,7 @@ export function libraryApp({ stack }: StackContext) {
   const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
   // const url = Fn.importValue(`libraryApiUrl-${stack.stage}`);
   const site = new StaticSite(stack, "products-library", {
-    path: "../../packages/products-library",
+    path: "./",
     buildOutput: "dist",
     buildCommand: "yarn build",
 
@@ -45,15 +45,18 @@ export function libraryApp({ stack }: StackContext) {
         frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
       VITE_APP_PAYMENT_APP_URL: paymentAppUrl,
-      VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
+      VITE_APP_COGNITO_IDENTITY_POOL_ID:
+        Fn.importValue(`libraryCognitoIdentityPoolId-${stack.stage}`) || "",
       VITE_APP_COGNITO_REGION: stack.region,
-      VITE_APP_USER_POOL_ID: auth.userPoolId,
-      VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
+      VITE_APP_USER_POOL_ID: Fn.importValue(`libraryUserPoolId-${stack.stage}`),
+      VITE_APP_USER_POOL_CLIENT_ID: Fn.importValue(
+        `libraryUserPoolClientId-${stack.stage}`
+      ),
       VITE_APP_BUCKET: authBucketName,
 
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
 
-      VITE_APP_BASE_URL: api.url,
+      VITE_APP_BASE_URL: Fn.importValue(`libraryApiUrl-${stack.stage}`),
     },
   });
 

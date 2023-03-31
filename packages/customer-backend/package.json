@@ -20,7 +20,12 @@
     "envs": "node ./fetch-envs.js",
     "createDatabaseUser": "node ./createDatabaseUser.js",
     "deploy": "yarn build-ts && serverless deploy",
-    "build-ts": "tsc --build ./tsconfig.json"
+    "build-ts": "tsc --build ./tsconfig.json",
+    "deploy-prod": "sst deploy --stage production",
+    "deploy-staging": "sst deploy --stage staging",
+    "deploy-dev": "sst deploy --region eu-west-3 --stage development",
+    "sst-dev": "sst dev --region eu-west-3 --stage development",
+    "start": "sst bind --region eu-west-3 --stage development  vite"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.27.0",

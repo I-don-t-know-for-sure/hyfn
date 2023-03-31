@@ -3,7 +3,10 @@ import { getStage } from "../../stacks/getStage";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
-import { storeApiStack, storeCognitoStack } from "./storeBackend";
+import {
+  storeApiStack,
+  storeCognitoStack,
+} from "../Store-backend/storeBackend";
 const localhost = "http://localhost:";
 
 export function storeApp({ stack }: StackContext) {
@@ -23,12 +26,12 @@ export function storeApp({ stack }: StackContext) {
   // const cognitoUserPoolClientId = Fn.importValue(
   //   `managemnentUserPoolClientId-${stack.stage}`
   // );
-  const { auth } = use(storeCognitoStack);
+  // const { auth } = use(storeCognitoStack);
   const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
-  const { api } = use(storeApiStack);
+  // const { api } = use(storeApiStack);
 
-  const site = new StaticSite(stack, "delivery-merchant", {
-    path: "../../packages/delivery-merchant",
+  const site = new StaticSite(stack, "store-app", {
+    path: "./",
     buildOutput: "dist",
     buildCommand: "yarn build",
 
@@ -50,15 +53,18 @@ export function storeApp({ stack }: StackContext) {
         frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
       VITE_APP_PAYMENT_APP_URL: paymentAppUrl,
-      VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
+      VITE_APP_COGNITO_IDENTITY_POOL_ID:
+        Fn.importValue(`storeCognitoIdentityPoolId-${stack.stage}`) || "",
       VITE_APP_COGNITO_REGION: stack.region,
-      VITE_APP_USER_POOL_ID: auth.userPoolId,
-      VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
+      VITE_APP_USER_POOL_ID: Fn.importValue(`storeUserPoolId-${stack.stage}`),
+      VITE_APP_USER_POOL_CLIENT_ID: Fn.importValue(
+        `storeUserPoolClientId-${stack.stage}`
+      ),
       VITE_APP_BUCKET: authBucketName,
 
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
 
-      VITE_APP_BASE_URL: api.url,
+      VITE_APP_BASE_URL: Fn.importValue(`storeApiUrl-${stack.stage}`),
     },
   });
 

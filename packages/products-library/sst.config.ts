@@ -2,7 +2,10 @@ import { SSTConfig } from "sst";
 
 import { RemovalPolicy } from "aws-cdk-lib";
 import { libraryApp } from "./deploymentStack";
-import { libraryApiStack, libraryCognitoStack } from "./productsLibraryStack";
+import {
+  libraryApiStack,
+  libraryCognitoStack,
+} from "../product-library-backend/productsLibraryStack";
 
 export default {
   config(_input) {
@@ -16,6 +19,6 @@ export default {
     app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY);
     // }
     // app.stack(orgResources).stack(storeBackend).stack(storeFrontend);
-    app.stack(libraryCognitoStack).stack(libraryApiStack).stack(libraryApp);
+    app.stack(libraryApp);
   },
 } satisfies SSTConfig;

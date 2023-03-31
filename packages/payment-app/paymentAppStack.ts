@@ -7,7 +7,7 @@ const localhost = "http://localhost:";
 export function paymentApp({ stack }: StackContext) {
   const stage = getStage(stack.stage);
   const site = new StaticSite(stack, "payment-app", {
-    path: stack.stage === "development" ? "./packages/payment-app" : "./",
+    path: "./",
     buildOutput: "dist",
     buildCommand: "yarn build",
     ...(stack.stage === "production"

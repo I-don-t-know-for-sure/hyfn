@@ -3,12 +3,15 @@ import { getStage } from "../../stacks/getStage";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
-import { driverApiStack, driverCognitoStack } from "./driverStack";
+import {
+  driverApiStack,
+  driverCognitoStack,
+} from "../driver-backend/driverStack";
 const localhost = "http://localhost:";
 
 export function driverApp({ stack }: StackContext) {
   const stage = getStage(stack.stage);
-  const { api } = use(driverApiStack);
+  // const { api } = use(driverApiStack);
   const s3BucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const paymentAppUrl = Fn.importValue(`paymentAppUrl-${stack.stage}`);
   // const cognitoIdentityPoolId = Fn.importValue(
@@ -20,11 +23,11 @@ export function driverApp({ stack }: StackContext) {
   //   `driverUserPoolClientId-${stack.stage}`
   // );
 
-  const { auth } = use(driverCognitoStack);
+  // const { auth } = use(driverCognitoStack);
   const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
   // const url = Fn.importValue(`driverApiUrl-${stack.stage}`);
-  const site = new StaticSite(stack, "delivery-driver", {
-    path: "./delivery-driver",
+  const site = new StaticSite(stack, "driver-app", {
+    path: "./",
     buildOutput: "dist",
     buildCommand: "yarn build",
 
@@ -46,15 +49,18 @@ export function driverApp({ stack }: StackContext) {
         frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
       VITE_APP_PAYMENT_APP_URL: paymentAppUrl,
-      VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
+      VITE_APP_COGNITO_IDENTITY_POOL_ID:
+        Fn.importValue(`driverCognitoIdentityPoolId-${stack.stage}`) || "",
       VITE_APP_COGNITO_REGION: stack.region,
-      VITE_APP_USER_POOL_ID: auth.userPoolId,
-      VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
+      VITE_APP_USER_POOL_ID: Fn.importValue(`driverUserPoolId-${stack.stage}`),
+      VITE_APP_USER_POOL_CLIENT_ID: Fn.importValue(
+        `driverUserPoolClientId-${stack.stage}`
+      ),
       VITE_APP_BUCKET: authBucketName,
 
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
 
-      VITE_APP_BASE_URL: api.url,
+      VITE_APP_BASE_URL: Fn.importValue(`driverApiUrl-${stack.stage}`),
     },
   });
 

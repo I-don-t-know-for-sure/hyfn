@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generateSchemas": "ts-node ./src/createMongoSchema.ts"
+    "generateSchemas": "ts-node ./src/createMongoSchema.ts",
+    "deploy-prod": "sst deploy --stage production",
+    "deploy-staging": "sst deploy --stage staging",
+    "deploy-dev": "sst deploy --region eu-west-3 --stage development",
+    "sst-dev": "sst dev --region eu-west-3 --stage development",
+    "start": "sst bind --region eu-west-3 --stage development  vite"
   },
   "author": "",
   "license": "ISC",
