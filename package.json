@@ -7,8 +7,9 @@
     "typecheck": "tsc --noEmit",
     "deploy": "sst deploy",
     "console": "sst console",
+    "after-install": "node ./fetch-envs.js && node ./fetch-fr-envs.js && tsc --build ./packages/hyfn-client && tsc --build ./packages/hyfn-types && tsc --build ./packages/hyfn-server ",
     "fetch-envs": "node ./fetch-envs.js && node ./fetch-fr-envs.js",
-    "build-ts": "tsc --build ./packages/hyfn-client && tsc --build ./packages/hyfn-types && tsc --build ./packages/hyfn-server",
+    "build-ts": "tsc --build ./packages/hyfn-client && tsc --build ./packages/hyfn-types && tsc --build ./packages/hyfn-server ",
     "start": "sst dev --region eu-west-3"
   },
   "devDependencies": {

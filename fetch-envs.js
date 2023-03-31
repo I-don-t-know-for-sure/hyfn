@@ -68,6 +68,16 @@ import fs from "fs";
           console.log("Saved!");
         }
       );
+      const envString = Object.entries(result)
+        .map(([stage]) => {
+          return Object.entries(result[stage])
+            .map(([key, value]) => `${stage}${key}=${value}`)
+            .join("\n");
+        })
+        .join("\n");
+
+      // Write the formatted string to the .env file
+      fs.writeFileSync(".env", envString);
       // await after({ env, fs, cp })
       console.log("Build Completed");
     });

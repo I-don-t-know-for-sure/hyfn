@@ -20,4 +20,6 @@ dist
 cdk.*
 frEnvVaraibles.ts
 envVaraibles.ts
+envVaraibles.js
 output.txt
+.env
