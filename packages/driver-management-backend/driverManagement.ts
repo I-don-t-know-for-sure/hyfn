@@ -7,7 +7,7 @@ import { frConfig } from '../../frEnvVaraibles';
 import { config } from '../../envVaraibles';
 
 import { CfnOutput, Fn } from 'aws-cdk-lib';
-const pathToLambdas = '../packages/customer-backend/lambdas/';
+const pathToLambdas = './lambdas/';
 
 const localhost = 'http://localhost:';
 

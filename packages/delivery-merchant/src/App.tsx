@@ -32,8 +32,9 @@ import { useUserCheck } from "hooks/useUserCheck";
 import CreateStore from "pages/CreateStore/CreateStore";
 
 import { Amplify } from "aws-amplify";
-import awsconfig from "./aws-exports";
+
 import Page from "components/Page";
+import { log } from "console";
 
 function App() {
   Amplify.configure({
@@ -60,7 +61,7 @@ function App() {
     "🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_IDENTITY_POOL_ID:",
     import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID
   );
-
+  console.log("process env", import.meta.env);
   return (
     <BrowserRouter>
       <Menu>

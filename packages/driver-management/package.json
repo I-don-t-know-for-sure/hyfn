@@ -11,6 +11,7 @@
     "deploy-staging": "sst deploy --stage staging",
     "deploy-dev": "sst deploy --region eu-west-3 --stage development",
     "sst-dev": "sst dev --region eu-west-3 --stage development",
+    "wrap": "node ../../wrapper.cjs",
     "start": "sst bind --region eu-west-3 --stage development  vite",
     "lint": "eslint . --ext .js,.ts ./src/*"
   },

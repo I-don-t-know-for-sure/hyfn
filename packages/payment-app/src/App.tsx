@@ -8,6 +8,9 @@ import Pay from "./components/Pay";
 
 function App() {
   // usePayWithLocalCard();
+  // usePayWithLocalCard();
+  // usePayWithLocalCard();
+  console.log("jnj");
 
   return (
     <BrowserRouter>

@@ -5,7 +5,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { Amplify } from "aws-amplify";
-import awsconfig from "./aws-exports";
 
 import DriversManagement from "pages/DriversManagement/DriversManagement";
 import SignUp from "pages/SignUp/SignUp";

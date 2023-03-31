@@ -24,6 +24,7 @@ export const cognitoAuthentication = async ({
     console.log("Token is valid. Payload:", payload);
   } catch {
     console.log("Token not valid!dchbchfbhbfhbhbdchbdhbchdb");
+    throw new Error("token not verified");
   }
 };
 

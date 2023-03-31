@@ -26,6 +26,7 @@
     "lint": "eslint '**/*.js' --ignore-pattern node_modules/",
     "deploy-prod": "sst deploy --stage production",
     "deploy-staging": "sst deploy --stage staging",
+    "wrap": "node ../../wrapper.cjs",
     "deploy-dev": "sst deploy --region eu-west-3 --stage development",
     "sst-dev": "sst dev --region eu-west-3 --stage development",
     "start": "sst bind --region eu-west-3 --stage development  vite",

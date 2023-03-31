@@ -9,14 +9,12 @@ export const handler = async (event, ctx, callback) => {
     readConcern: { level: 'local' },
     writeConcern: { w: 'majority' },
   };
-  const mainFunction = async ({ arg, client, session }: MainFunctionProps) => {
+  const mainFunction = async ({ arg, client, session, userId }: MainFunctionProps) => {
     var result;
     const mongo = client;
 
     const storeInfo = arg[0];
-    console.log(process.env);
 
-    console.log(JSON.stringify(storeInfo));
     const storeName = storeInfo.storeName;
     const storeType = storeInfo.storeType.includes('Restaurant')
       ? ['Restaurant']
@@ -25,8 +23,7 @@ export const handler = async (event, ctx, callback) => {
 
     const country = storeInfo.country;
     const city = storeInfo.city;
-    const { id: userId, coords, ...rest } = storeInfo;
-    console.log(coords);
+    const { coords, ...rest } = storeInfo;
 
     // const { accessToken } = arg[arg.length - 1];
     // await mainValidateFunction(client, accessToken, userId);
@@ -43,12 +40,11 @@ export const handler = async (event, ctx, callback) => {
 
     const coordsArray = coords.split(',');
 
-    console.log(JSON.stringify(coordsArray));
     if (Array.isArray(coordsArray)) {
       if (coordsArray.length === 2) {
         const float1 = parseFloat(coordsArray[0]);
         const float2 = parseFloat(coordsArray[1]);
-        console.log(JSON.stringify(coordsArray));
+
         const coords = { type: 'Point', coordinates: [float2, float1] };
 
         const newStoreDoc = await storeFronts.insertOne(
@@ -97,8 +93,6 @@ export const handler = async (event, ctx, callback) => {
         throw new Error('wrong');
       }
     }
-
-    //console.log(JSON.stringify({businessName,businessPhone, businessType,country, city, tags: [], collections: [],  image:''}))
   };
 
   return await mainWrapperWithSession({

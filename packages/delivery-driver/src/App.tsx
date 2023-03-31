@@ -15,7 +15,7 @@ import OrderHistory from "Pages/OrderHistory/OrderHistory";
 import CreateAccount from "Pages/CreateAccount/CreateAccount";
 
 import { Amplify, Auth } from "aws-amplify";
-import awsconfig from "./aws-exports";
+
 import Proposals from "Pages/Proposals/Proposals";
 function App() {
   Amplify.configure({

@@ -20,7 +20,6 @@ function getAllFiles(dirPath, arrayOfFiles) {
 
 // Example usage:
 const files = getAllFiles(pathToDir);
-console.log(files);
 
 const translations = {};
 
@@ -41,7 +40,6 @@ files.forEach((filepath) => {
       }
     }
 
-    console.log(translations);
     fs.writeFileSync("results.json", JSON.stringify(translations, null, 2));
   });
 });

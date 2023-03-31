@@ -11,6 +11,7 @@
     "sst-dev": "sst dev --region eu-west-3 --stage development",
     "start": "sst bind --region eu-west-3 --stage development  vite",
     "build": "tsc && vite build --outDir dist",
+    "wrap": "node ../../wrapper.cjs",
     "envs": "node ./evn-parameters.js",
     "deploy": "amplify publish -c",
     "dev": "sh ./scripts/toDev.sh",

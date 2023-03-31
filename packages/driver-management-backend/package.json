@@ -32,6 +32,7 @@
     "deploy-prod": "sst deploy --stage production",
     "deploy-staging": "sst deploy --stage staging",
     "deploy-dev": "sst deploy --region eu-west-3 --stage development",
+    "wrap": "node ../../wrapper.cjs",
     "sst-dev": "sst dev --region eu-west-3 --stage development",
     "start": "sst bind --region eu-west-3 --stage development  vite",
     "build-ts": "tsc --build ./tsconfig.json"

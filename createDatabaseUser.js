@@ -25,19 +25,15 @@ const getStage = (stage) => {
       console.error(err);
       return;
     }
-    // console.log(data);
+
     return data;
   });
-  // console.log("🚀 ~ file: createDatabaseUser.js:10 ~ data", data);
-  // console.log(data);
+
   const appEnvs = data.split("\n").map((variable) => {
     const varArray = variable.split("=");
     return { [varArray[0]]: varArray[1] };
   });
-  console.log(
-    "🚀 ~ file: createDatabaseUser.js:22 ~ appEnvs ~ appEnvs",
-    appEnvs
-  );
+
   const groupId = appEnvs.find((env) => !!env[`${stage}groupId`])[
     `${stage}groupId`
   ];
@@ -48,29 +44,25 @@ const getStage = (stage) => {
     `${stage}mongoPublicKey`
   ];
   ////////////////////////////
-  console.log("🚀 ~ file: createDatabaseUser.js:45 ~ groupId:", groupId);
-  console.log("🚀 ~ file: createDatabaseUser.js:46 ~ privateKey:", privateKey);
-  console.log("🚀 ~ file: createDatabaseUser.js:49 ~ publicKey:", publicKey);
 
-  var arn = "";
-  fs.readFile("output.txt", "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
+  const arn = await new Promise(function (resolve, reject) {
+    fs.readFile("output.txt", "utf8", (err, data) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      }
+      const lines = data.split("\n");
 
-    const regex = /apiFunctionsRoleArn:\s*(.*)/;
-    const match = regex.exec(data.replace(/\n/g, " "));
-
-    if (match && match[1]) {
-      console.log(match[1]);
-      arn = match[1];
-    } else {
-      throw new Error("not found");
-    }
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line.startsWith("apiFunctionsRoleArn")) {
+          const value = line.substring(line.indexOf("=") + 1).trim();
+          resolve(value.replace("apiFunctionsRoleArn:", "").trim());
+        }
+      }
+    });
   });
 
-  console.log("🚀 ~ file: createDatabaseUser.js:52 ~ arn", arn);
   const databaseUser = await new Promise(function (resolve, reject) {
     exec(
       `curl --user "${publicKey}:${privateKey}" --digest \

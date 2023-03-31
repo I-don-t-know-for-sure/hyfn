@@ -28,17 +28,17 @@ export const handler = async (event, ctx, callback) => {
     // const { accessToken, userId } = arg[arg.length - 1];
     // await argValidations(arg);
     // await mainValidateFunction(client, accessToken, userId);
-    if (
-      textInfo.title === '' ||
-      textInfo.title === undefined ||
-      typeof textInfo.title !== 'string' ||
-      textInfo.description === '' ||
-      textInfo.description === undefined ||
-      typeof textInfo.description !== 'string'
-    ) {
-      console.log('21');
-      throw new Error('your payload is not right');
-    }
+    // if (
+    //   textInfo.title === '' ||
+    //   textInfo.title === undefined ||
+    //   typeof textInfo.title !== 'string' ||
+    //   textInfo.description === '' ||
+    //   textInfo.description === undefined ||
+    //   typeof textInfo.description !== 'string'
+    // ) {
+    //   console.log('21');
+    //   throw new Error('your payload is not right');
+    // }
 
     if (collectionType === 'automated') {
       if (mustMatch !== '$and' || mustMatch !== '$or') {

@@ -22,11 +22,34 @@ import SignUp from "./pages/SignUp/SignUp";
 
 import ManageBrands from "pages/Brands/ManageBrands";
 import { Amplify } from "aws-amplify";
-import awsconfig from "./aws-exports";
+
 import CreateCompany from "pages/CreateCompany/CreateCompany";
 
 function App() {
-  Amplify.configure(awsconfig);
+  Amplify.configure({
+    Auth: {
+      mandatorySignIn: false,
+      region: import.meta.env.VITE_APP_COGNITO_REGION,
+      userPoolId: import.meta.env.VITE_APP_USER_POOL_ID,
+      identityPoolId: import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID,
+      userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID,
+    },
+    Storage: {
+      region: import.meta.env.VITE_APP_COGNITO_REGION,
+      bucket: import.meta.env.VITE_APP_BUCKET,
+      identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
+    },
+  });
+  console.log("🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_REGION:", {
+    region: import.meta.env.VITE_APP_COGNITO_REGION,
+    userPoolId: import.meta.env.VITE_APP_USER_POOL_ID,
+    identityPoolId: import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID,
+    userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID,
+  });
+  console.log(
+    "🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_IDENTITY_POOL_ID:",
+    import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID
+  );
 
   return (
     <BrowserRouter>
