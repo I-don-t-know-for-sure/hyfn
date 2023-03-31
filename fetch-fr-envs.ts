@@ -32,7 +32,7 @@ import fs from "fs";
         "🚀 ~ file: fetch-envs.js:31 ~ cmd.stdout.on ~ parameters:",
         parameters
       );
-      result = parameters.reduce((accu, parameter) => {
+      result = parameters.reduce((accu: any, parameter: any) => {
         const parameterNameList = parameter.Name.split("/");
         const parameterName = `${
           parameterNameList[parameterNameList.length - 1]

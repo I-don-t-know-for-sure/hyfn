@@ -20,3 +20,4 @@ dist
 cdk.*
 frEnvVaraibles.ts
 envVaraibles.ts
+output.txt
