@@ -1,22 +1,19 @@
-interface DisableLocalCardKeysProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-
-export const handler = async (event) => {
-  const mainFunction = async ({ arg, client, userId }: MainFunctionProps) => {
-    await client
-      .db('generalData')
-      .collection('driverManagement')
-      .updateOne(
-        { userId },
-        {
-          $set: {
-            localCardAPIKeyFilled: false,
-          },
+export const disableLocalCardKeysHandler = async ({ arg, client, userId }: MainFunctionProps) => {
+  await client
+    .db('generalData')
+    .collection('driverManagement')
+    .updateOne(
+      { userId },
+      {
+        $set: {
+          localCardAPIKeyFilled: false,
         },
-        {}
-      );
-  };
-  return await mainWrapper({ event, mainFunction });
+      },
+      {}
+    );
+};
+interface DisableLocalCardKeysProps extends Omit<MainFunctionProps, 'arg'> {}
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+export const handler = async (event) => {
+  return await mainWrapper({ event, mainFunction: disableLocalCardKeysHandler });
 };

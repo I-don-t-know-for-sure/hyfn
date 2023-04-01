@@ -36,6 +36,75 @@ const ts = require("typescript");
           path.extname(filePath) === ".ts"
         ) {
           const fileName = path.basename(filePath, ".ts");
+          // const deleteMainFunction = (filePath) => {
+          //   // Read the file content
+          //   const fileContent = fs.readFileSync(filePath, "utf-8");
+
+          //   // Parse the file content as a TypeScript AST
+          //   const sourceFile = ts.createSourceFile(
+          //     filePath,
+          //     fileContent,
+          //     ts.ScriptTarget.Latest,
+          //     true
+          //   );
+
+          //   // Find the const async arrow function called "mainFunction" inside "handler"
+          //   let mainFunctionNode;
+          //   ts.forEachChild(sourceFile, function findMainFunction(node) {
+          //     if (
+          //       ts.isVariableDeclaration(node) &&
+          //       ts.isIdentifier(node.name) &&
+          //       node.name.text === "handler"
+          //     ) {
+          //       const initializer = node.initializer;
+          //       if (
+          //         initializer &&
+          //         ts.isArrowFunction(initializer) &&
+          //         ts.isBlock(initializer.body)
+          //       ) {
+          //         ts.forEachChild(initializer.body, function findMain(node) {
+          //           if (
+          //             ts.isVariableDeclaration(node) &&
+          //             ts.isIdentifier(node.name) &&
+          //             node.name.text === "mainFunction"
+          //           ) {
+          //             mainFunctionNode = node;
+          //           }
+          //           ts.forEachChild(node, findMain);
+          //         });
+          //       }
+          //     }
+          //     ts.forEachChild(node, findMainFunction);
+          //   });
+
+          //   if (!mainFunctionNode) {
+          //     // throw new Error("Cannot find mainFunction inside handler");
+          //     return;
+          //   }
+
+          //   // Remove the mainFunction node from the AST
+          //   const result = ts.transform(sourceFile, [
+          //     (context) => {
+          //       const visit = (node) => {
+          //         if (node === mainFunctionNode) {
+          //           return ts.createNotEmittedStatement(node);
+          //         }
+          //         return ts.visitEachChild(node, visit, context);
+          //       };
+          //       return (node) => ts.visitNode(node, visit);
+          //     },
+          //   ]);
+          //   const transformedSourceFile = result.transformed[0];
+
+          //   // Print the updated AST
+          //   const printer = ts.createPrinter();
+          //   const updatedFileContent = printer.printFile(transformedSourceFile);
+
+          //   // Write the modified file content back to the file
+          //   fs.writeFileSync(filePath, updatedFileContent);
+          // };
+          // deleteMainFunction(filePath);
+
           function extractAndExportMainFunction(filePath) {
             // Read the file content
             const fileContent = fs.readFileSync(filePath, "utf-8");
@@ -108,7 +177,7 @@ const ts = require("typescript");
             );
             const updatedModifiedFileContent = modifiedFileContent.replace(
               regex,
-              newMainFunctionName
+              `mainFunction: ${newMainFunctionName}`
             );
 
             // Add the mainFunction declaration with the new name to the beginning of the file
@@ -121,43 +190,12 @@ const ts = require("typescript");
                 mainFunctionNode.name.text,
                 newMainFunctionName
               );
-            const updatedFileContent = `export const ${newMainFunctionName} = ${updatedMainFunctionDeclaration};\n${updatedModifiedFileContent}`;
+            const updatedFileContent = `export const ${updatedMainFunctionDeclaration};\n${updatedModifiedFileContent}`;
 
             // Write the modified file content back to the file
             fs.writeFileSync(filePath, updatedFileContent);
           }
-
-          // Example usage:
           extractAndExportMainFunction(filePath);
-          // const fileName = path.basename(filePath, ".ts");
-          // const interfaceName =
-          //   fileName.charAt(0).toUpperCase() + fileName.slice(1) + "Props";
-          // const interfaceDefinition = `interface ${interfaceName} extends Omit<MainFunctionProps, 'arg'> {\n  // add your interface properties here\n}\n`;
-          // let fileContent = fs.readFileSync(filePath, { encoding: "utf-8" });
-          // fileContent = fileContent.replace(
-          //   /(\/\/<interfaces>)([\s\S]*)(\/\/<\/interfaces>)/gm,
-          //   `$1\n${interfaceDefinition}$3`
-          // );
-
-          // // find and modify mainFunction
-          // const functionRegex =
-          //   /(export\s+)?const\s+mainFunction\s*=\s*async\s*<T>?\([\s\S]*?\)\s*=>\s*[\s\S]*?;/gm;
-          // let match = functionRegex.exec(fileContent);
-          // if (match !== null) {
-          //   // replace function name with file name
-          //   const functionName =
-          //     fileName.charAt(0).toLowerCase() + fileName.slice(1);
-          //   fileContent = fileContent.replace(
-          //     match[0],
-          //     `const ${functionName}${match[1]}`
-          //   );
-          //   // add export statement
-          //   fileContent += `\n\nexport { ${functionName} };`;
-          //   fs.writeFileSync(filePath, fileContent);
-          //   console.log(`Modified ${filePath}`);
-          // } else {
-          //   console.log(`No async mainFunction found in ${filePath}`);
-          // }
         }
       }
     });
