@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const ts = require("typescript");
 (async () => {
   const dir = process.argv[2];
   // function to recursively loop through directories and files
@@ -35,20 +36,99 @@ const path = require("path");
           path.extname(filePath) === ".ts"
         ) {
           const fileName = path.basename(filePath, ".ts");
-          function addInterfaceToTSFile(filePath) {
+          function extractAndExportMainFunction(filePath) {
+            // Read the file content
             const fileContent = fs.readFileSync(filePath, "utf-8");
+
+            // Parse the file content as a TypeScript AST
+            const sourceFile = ts.createSourceFile(
+              filePath,
+              fileContent,
+              ts.ScriptTarget.Latest,
+              true
+            );
+
+            // Find the const async arrow function called "mainFunction"
+            let mainFunctionNode;
+            ts.forEachChild(sourceFile, function findMainFunction(node) {
+              if (
+                ts.isVariableDeclaration(node) &&
+                ts.isIdentifier(node.name) &&
+                node.name.text === "handler"
+              ) {
+                const initializer = node.initializer;
+                if (
+                  initializer &&
+                  ts.isArrowFunction(initializer) &&
+                  ts.isBlock(initializer.body)
+                ) {
+                  ts.forEachChild(initializer.body, function findMain(node) {
+                    if (
+                      ts.isVariableDeclaration(node) &&
+                      ts.isIdentifier(node.name) &&
+                      node.name.text === "mainFunction"
+                    ) {
+                      const mainFunctionInitializer = node.initializer;
+                      if (
+                        mainFunctionInitializer &&
+                        ts.isArrowFunction(mainFunctionInitializer) &&
+                        ts.isBlock(mainFunctionInitializer.body)
+                      ) {
+                        mainFunctionNode = node;
+                      }
+                    }
+                    ts.forEachChild(node, findMain);
+                  });
+                }
+              }
+              ts.forEachChild(node, findMainFunction);
+            });
+
+            if (!mainFunctionNode) {
+              // throw new Error("Cannot find mainFunction inside handler");
+              return;
+            }
+
+            // Get the new name for the mainFunction based on the file name
             const fileName = path.basename(filePath, ".ts");
-            const interfaceName = `${fileName
+            const newMainFunctionName = `${fileName
               .charAt(0)
-              .toUpperCase()}${fileName.slice(1)}Props`;
+              .toLowerCase()}${fileName.slice(1)}Handler`;
 
-            const interfaceDeclaration = `interface ${interfaceName} extends Omit<MainFunctionProps, "arg"> {\n  // Add your interface properties here\n}\n`;
+            // Replace all references to the mainFunction with the new name
+            const printer = ts.createPrinter();
+            const modifiedFileContent = printer.printNode(
+              ts.EmitHint.Unspecified,
+              sourceFile,
+              sourceFile
+            );
+            const regex = new RegExp(
+              `\\b${mainFunctionNode.name.text}\\b`,
+              "g"
+            );
+            const updatedModifiedFileContent = modifiedFileContent.replace(
+              regex,
+              newMainFunctionName
+            );
 
-            const modifiedFileContent = `${interfaceDeclaration}${fileContent}`;
+            // Add the mainFunction declaration with the new name to the beginning of the file
+            const mainFunctionDeclaration = fileContent.substring(
+              mainFunctionNode.pos,
+              mainFunctionNode.end
+            );
+            const updatedMainFunctionDeclaration =
+              mainFunctionDeclaration.replace(
+                mainFunctionNode.name.text,
+                newMainFunctionName
+              );
+            const updatedFileContent = `export const ${newMainFunctionName} = ${updatedMainFunctionDeclaration};\n${updatedModifiedFileContent}`;
 
-            fs.writeFileSync(filePath, modifiedFileContent);
+            // Write the modified file content back to the file
+            fs.writeFileSync(filePath, updatedFileContent);
           }
-          addInterfaceToTSFile(filePath);
+
+          // Example usage:
+          extractAndExportMainFunction(filePath);
           // const fileName = path.basename(filePath, ".ts");
           // const interfaceName =
           //   fileName.charAt(0).toUpperCase() + fileName.slice(1) + "Props";
