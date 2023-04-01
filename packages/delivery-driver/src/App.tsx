@@ -42,7 +42,7 @@ function App() {
     "🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_IDENTITY_POOL_ID:",
     import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID
   );
-  // console.log(Auth)
+  console.log("update");
 
   return (
     <BrowserRouter>

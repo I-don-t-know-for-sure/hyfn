@@ -14,7 +14,7 @@ export const getCustomerData = async ({
   event,
   userId,
 }: GetCustomerDataProps) => {
-  console.log(process.env.kmsKeyARN);
+  console.log(process.env);
   const mongo = client;
   const customerDoc = await mongo
     .db('generalData')

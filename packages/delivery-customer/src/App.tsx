@@ -29,6 +29,12 @@ import CreateCustomer from "./pages/CreateCustomer/CreateCustomer";
 import { Amplify } from "aws-amplify";
 
 function App() {
+  console.log("🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_REGION:", {
+    region: import.meta.env.VITE_APP_COGNITO_REGION,
+    userPoolId: import.meta.env.VITE_APP_USER_POOL_ID,
+    identityPoolId: import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID,
+    userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID,
+  });
   Amplify.configure({
     Auth: {
       mandatorySignIn: false,
@@ -43,16 +49,11 @@ function App() {
       identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
     },
   });
-  console.log("🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_REGION:", {
-    region: import.meta.env.VITE_APP_COGNITO_REGION,
-    userPoolId: import.meta.env.VITE_APP_USER_POOL_ID,
-    identityPoolId: import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID,
-    userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID,
-  });
   console.log(
     "🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_IDENTITY_POOL_ID:",
     import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID
   );
+  console.log("update");
 
   useEffect(() => {}, []);
 

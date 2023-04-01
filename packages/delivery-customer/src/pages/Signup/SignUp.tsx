@@ -1,65 +1,78 @@
-import { Alert, Box, Button, Card, Container, Group, TextInput } from '@mantine/core';
-import { randomId, useLocalStorage } from '@mantine/hooks';
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Container,
+  Group,
+  TextInput,
+} from "@mantine/core";
+import { randomId, useLocalStorage } from "@mantine/hooks";
 
-import { t } from '../../util/i18nextFix';;
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
-import Translation from '../../components/Translation';
+import { t } from "../../util/i18nextFix";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import Translation from "../../components/Translation";
 
-import { lngs } from '../../components/Menu/config';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { useUser } from '../../contexts/userContext/User';
-import { useForm } from '@mantine/form';
+import { lngs } from "../../components/Menu/config";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { useUser } from "../../contexts/userContext/User";
+import { useForm } from "@mantine/form";
 
 const SignUp: React.FC = () => {
   // const { registerUser, user } = useRealmApp();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { signUp, confirmSignUp, userId, loggedIn, resendConfirmationEmail } = useUser();
+  const { signUp, confirmSignUp, userId, loggedIn, resendConfirmationEmail } =
+    useUser();
   const [signUpSuccess, setSignUpSuccess] = useState(false);
-  const [verificationCode, setVerificationCode] = useState('');
-  const [exception, setException] = useState({ exception: false, message: '', code: '' });
+  const [verificationCode, setVerificationCode] = useState("");
+  const [exception, setException] = useState({
+    exception: false,
+    message: "",
+    code: "",
+  });
 
   const navigate = useNavigate();
   const [customerInfo, setCustomerInfo] = useLocalStorage<any>({
-    key: 'customerInfo',
+    key: "customerInfo",
   });
 
   const form = useForm({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
   useEffect(() => {
     if (loggedIn) {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }
   }, [loggedIn, navigate]);
 
   return (
     <Container
       sx={{
-        height: '88vh',
+        height: "88vh",
         // width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
         // alignItems: 'center',
       }}
     >
       {exception.exception && (
-        <Alert title={t('User Already Exists')} color={'red'}>
-          {t('An account with this information already exists')}
+        <Alert title={t("User Already Exists")} color={"red"}>
+          {t("An account with this information already exists")}
         </Alert>
       )}
       <Card
-        shadow={'md'}
-        m={' auto'}
+        shadow={"md"}
+        m={" auto"}
         sx={{
-          width: '380px',
+          width: "380px",
           // alignSelf: 'center',
           // justifySelf: 'center',
         }}
@@ -67,15 +80,15 @@ const SignUp: React.FC = () => {
         {signUpSuccess ? (
           <Container
             sx={{
-              flexDirection: 'column',
-              width: '100%',
+              flexDirection: "column",
+              width: "100%",
             }}
             mb={16}
           >
             <TextInput
               mb={16}
-              sx={{ width: '100%' }}
-              label={t('Confirmation code')}
+              sx={{ width: "100%" }}
+              label={t("Confirmation code")}
               value={verificationCode}
               onChange={(e) => {
                 setVerificationCode(e.target.value);
@@ -85,7 +98,11 @@ const SignUp: React.FC = () => {
               fullWidth
               onClick={async () => {
                 try {
-                  await confirmSignUp({ email: form.values.email, code: verificationCode, navigate });
+                  await confirmSignUp({
+                    email: form.values.email,
+                    code: verificationCode,
+                    navigate,
+                  });
                 } catch (error) {
                   const { status, message, name, code } = error as {
                     message: string;
@@ -99,7 +116,7 @@ const SignUp: React.FC = () => {
                 }
               }}
             >
-              {t('Confirm account')}
+              {t("Confirm account")}
             </Button>
           </Container>
         ) : (
@@ -107,24 +124,27 @@ const SignUp: React.FC = () => {
             onSubmit={form.onSubmit(async (values) => {
               const id = randomId();
               try {
-                setException({ exception: false, code: '', message: '' });
+                setException({ exception: false, code: "", message: "" });
 
                 showNotification({
-                  title: t('Signing up'),
-                  message: t('In progress'),
+                  title: t("Signing up"),
+                  message: t("In progress"),
                   loading: true,
                   autoClose: false,
                   id,
                 });
                 const { email, password, ...rest } = values;
                 const trimmedEmail = values.email.trim();
-                await signUp({ email: trimmedEmail, password: values.password });
+                await signUp({
+                  email: trimmedEmail,
+                  password: values.password,
+                });
                 setSignUpSuccess(true);
                 setCustomerInfo({ email, ...rest });
                 updateNotification({
-                  title: t('Check your Email for confirmation Email'),
-                  message: t('Signed up successfully'),
-                  color: 'green',
+                  title: t("Check your Email for confirmation Email"),
+                  message: t("Signed up successfully"),
+                  color: "green",
                   loading: false,
                   autoClose: false,
                   id,
@@ -137,13 +157,13 @@ const SignUp: React.FC = () => {
                   name: string;
                 };
 
-                console.log('already in use');
+                console.log("already in use");
                 setException({ exception: true, code, message });
 
                 updateNotification({
-                  title: t('An Error  occurred'),
-                  message: t('Error'),
-                  color: 'red',
+                  title: t("An Error  occurred"),
+                  message: t("Error"),
+                  color: "red",
                   loading: false,
                   autoClose: true,
                   id,
@@ -152,23 +172,32 @@ const SignUp: React.FC = () => {
               }
             })}
           >
-            <TextInput type="email" required label="email" {...form.getInputProps('email')} />
-            <TextInput label="password" type="password" {...form.getInputProps('password')} />
+            <TextInput
+              type="email"
+              required
+              label={t("Email")}
+              {...form.getInputProps("email")}
+            />
+            <TextInput
+              label={t("Password")}
+              type="password"
+              {...form.getInputProps("password")}
+            />
             <Button fullWidth mt={16} type="submit">
-              {t('Signup')}
-            </Button>{' '}
+              {t("Signup")}
+            </Button>{" "}
           </form>
         )}
         <Box
           sx={{
-            margin: '16px auto 6px auto',
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'baseline',
+            margin: "16px auto 6px auto",
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "baseline",
           }}
         >
           <Box>
-            {t('have an account?')} <Link to="/login">{t('Login')}</Link>
+            {t("have an account?")} <Link to="/login">{t("Login")}</Link>
           </Box>
           <Translation lngs={lngs} />
         </Box>

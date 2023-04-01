@@ -23,9 +23,7 @@ export function customerApp({ stack }: StackContext) {
     `customerCognitoIdentityPoolId-${stack.stage}`
   );
 
-  const cognitoUserPoolId = Fn.importValue(
-    `customerCognitoRegion-${stack.stage}`
-  );
+  const cognitoUserPoolId = Fn.importValue(`customerUserPoolId-${stack.stage}`);
 
   const cognitoUserPoolClientId = Fn.importValue(
     `customerUserPoolClientId-${stack.stage}`
