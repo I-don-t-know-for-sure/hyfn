@@ -1,3 +1,6 @@
+interface SetProductAsPickedUpProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 'use strict';
 
 import { mainWrapper } from 'hyfn-server';

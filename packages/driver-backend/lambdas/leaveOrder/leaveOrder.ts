@@ -1,3 +1,6 @@
+interface LeaveOrderProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { DRIVER_STATUS_NOT_SET, USER_TYPE_DRIVER } from '../common/constants';

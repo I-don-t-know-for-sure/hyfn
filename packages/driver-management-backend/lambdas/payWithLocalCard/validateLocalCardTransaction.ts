@@ -1,3 +1,6 @@
+interface ValidateLocalCardTransactionProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import {
   isLocalCardTransactionValidated,
   MainFunctionProps,

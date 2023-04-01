@@ -1,3 +1,6 @@
+interface GetActiveOrdersProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { DRIVER_STATUS_IN_PROGRESS, USER_TYPE_DRIVER } from 'hyfn-types';
 import { ObjectId } from 'mongodb';

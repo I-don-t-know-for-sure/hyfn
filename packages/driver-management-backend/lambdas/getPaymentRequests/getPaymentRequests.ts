@@ -1,3 +1,6 @@
+interface GetPaymentRequestsProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 

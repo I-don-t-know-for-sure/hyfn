@@ -1,3 +1,6 @@
+interface GenerateImageUrlProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 'use strict';
 
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';

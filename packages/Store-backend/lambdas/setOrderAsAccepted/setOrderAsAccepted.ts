@@ -1,3 +1,6 @@
+interface SetOrderAsAcceptedProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { orderSchema, USER_TYPE_DRIVER } from 'hyfn-types';
 import { ObjectId } from 'mongodb';

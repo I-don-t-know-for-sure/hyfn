@@ -1,3 +1,6 @@
+interface CreateManagementProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { DEFAULT_MANAGEMENT_CUT } from 'hyfn-types';
 

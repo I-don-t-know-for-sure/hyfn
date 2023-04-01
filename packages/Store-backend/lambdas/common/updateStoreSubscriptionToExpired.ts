@@ -1,3 +1,6 @@
+interface UpdateStoreSubscriptionToExpiredProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { ObjectId } from 'mongodb';
 import { gibbrish } from 'hyfn-types';
 

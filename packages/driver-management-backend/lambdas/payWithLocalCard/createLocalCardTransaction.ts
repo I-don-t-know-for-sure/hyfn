@@ -1,3 +1,6 @@
+interface CreateLocalCardTransactionProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { hex_to_ascii, MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { adminName } from 'hyfn-types';
 import { ObjectId } from 'mongodb';

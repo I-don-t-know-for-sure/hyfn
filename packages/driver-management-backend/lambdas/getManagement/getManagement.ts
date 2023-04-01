@@ -1,3 +1,6 @@
+interface GetManagementProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
 export const handler = async (event) => {

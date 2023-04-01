@@ -1,3 +1,6 @@
+interface DeleteImagesProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { s3 } from '../s3';
 
 export const deleteImages = async (imageKeys) => {

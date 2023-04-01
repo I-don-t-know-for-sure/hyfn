@@ -1,3 +1,6 @@
+interface GetCustomerDataProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 'use strict';
 
 import { MainFunctionProps } from 'hyfn-server';

@@ -1,3 +1,6 @@
+interface IndexProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { getStoreFronts } from './getStoreFronts/getStoreFronts';
 
 type LambdaHandlers = {

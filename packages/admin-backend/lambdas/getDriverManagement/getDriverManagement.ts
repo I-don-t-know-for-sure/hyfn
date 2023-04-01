@@ -1,3 +1,6 @@
+interface GetDriverManagementProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from "hyfn-server";
 
 const { ObjectId } = require("mongodb");

@@ -1,6 +1,9 @@
-"use strict";
+interface GetAdminDocumentProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
+("use strict");
 
-import { mainWrapper } from "hyfn-server";
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
 
 export const handler = async (event, ctx) => {

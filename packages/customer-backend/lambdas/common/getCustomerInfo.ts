@@ -1,3 +1,6 @@
+interface GetCustomerInfoProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MongoClient } from 'mongodb';
 
 export const getCustomerInfo = async ({

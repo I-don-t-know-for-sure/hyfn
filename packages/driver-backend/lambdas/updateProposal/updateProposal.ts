@@ -1,3 +1,6 @@
+interface UpdateProposalProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { driverSchema, orderSchema } from 'hyfn-types';
 import { smaller } from 'mathjs';

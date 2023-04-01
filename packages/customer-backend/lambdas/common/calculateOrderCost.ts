@@ -1,3 +1,6 @@
+interface CalculateOrderCostProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import axios from 'axios';
 import { deliveryServiceFee, storeAndCustomerServiceFee, storeServiceFee } from './constants';
 import { convertObjectToArray } from './convertObjectToArray';

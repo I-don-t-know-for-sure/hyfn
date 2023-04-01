@@ -1,3 +1,6 @@
+interface CompletePaymentRequestProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { KMS } from "aws-sdk";
 import {
   decryptData,

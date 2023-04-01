@@ -1,3 +1,6 @@
+interface CancelTransactionProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 

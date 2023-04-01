@@ -1,3 +1,6 @@
+interface UtilsProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import axios from 'axios';
 import { randomUUID } from 'crypto';
 import { add, largerEq, multiply, smaller, smallerEq, subtract } from 'mathjs';

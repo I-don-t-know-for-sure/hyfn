@@ -1,3 +1,6 @@
+interface GetStoreFrontsProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { storeFrontSchema, test4 } from 'hyfn-types';

@@ -1,3 +1,6 @@
+interface GenerateImageURLProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 "use strict";
 
 const aws = require("aws-sdk");

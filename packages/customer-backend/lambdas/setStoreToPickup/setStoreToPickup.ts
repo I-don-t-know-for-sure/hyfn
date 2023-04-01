@@ -1,3 +1,6 @@
+interface SetStoreToPickupProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 'use strict';
 import axios from 'axios';
 import { ObjectId } from 'mongodb';

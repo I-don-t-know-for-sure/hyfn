@@ -1,3 +1,6 @@
+interface VerifyDriverManagementProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
 

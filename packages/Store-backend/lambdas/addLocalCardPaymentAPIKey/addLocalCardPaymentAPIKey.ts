@@ -1,3 +1,6 @@
+interface AddLocalCardPaymentAPIKeyProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 const { HmacSHA256 } = require('crypto-js');
 
 const { default: axios } = require('axios');

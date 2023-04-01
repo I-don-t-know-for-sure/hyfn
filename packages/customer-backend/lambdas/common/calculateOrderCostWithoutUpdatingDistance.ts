@@ -1,3 +1,6 @@
+interface CalculateOrderCostWithoutUpdatingDistanceProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { deliveryServiceFee, storeAndCustomerServiceFee, storeServiceFee } from './constants';
 import { convertObjectToArray } from './convertObjectToArray';
 

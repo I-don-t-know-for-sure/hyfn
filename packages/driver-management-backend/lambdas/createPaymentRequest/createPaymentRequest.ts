@@ -1,3 +1,6 @@
+interface CreatePaymentRequestProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { adminName } from 'hyfn-types';
 

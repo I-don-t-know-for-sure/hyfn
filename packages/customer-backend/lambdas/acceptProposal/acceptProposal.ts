@@ -1,3 +1,6 @@
+interface AcceptProposalProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { USER_TYPE_CUSTOMER } from 'hyfn-types';
 import { ObjectId } from 'mongodb';

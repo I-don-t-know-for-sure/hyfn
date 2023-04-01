@@ -1,3 +1,6 @@
+interface CreateLocalCardTransactionForWalletProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { HmacSHA256 } from 'crypto-js';
 import { ObjectId } from 'mongodb';
 import { adminName, subscriptionCost, TRANSACTION_TYPE_WALLET } from '../resources';

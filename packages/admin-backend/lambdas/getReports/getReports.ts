@@ -1,4 +1,7 @@
-import { mainWrapper } from "hyfn-server";
+interface GetReportsProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
 
 import { test3 } from "hyfn-types";

@@ -1,3 +1,6 @@
+interface PaySubscriptionProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 'use strict';
 
 import { mainWrapperWithSession } from 'hyfn-server';

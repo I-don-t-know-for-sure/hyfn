@@ -1,4 +1,7 @@
-import { mainWrapper } from "hyfn-server";
+interface CreateAdminDocumentProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
 
 export const handler = async (event) => {
   const mainFunction = async ({ arg, client }) => {

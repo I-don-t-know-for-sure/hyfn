@@ -1,3 +1,6 @@
+interface GetDriverInfoProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps } from 'hyfn-server/src';
 import { findOne, mainWrapper } from 'hyfn-server/src';

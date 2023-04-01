@@ -1,3 +1,6 @@
+interface DisableLocalCardAPIKeysProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 
 export const handler = async (event) => {

@@ -1,3 +1,6 @@
+interface SubscriptionCheckProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MongoClient, ObjectId } from 'mongodb';
 import { gibbrish } from './constants';
 

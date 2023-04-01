@@ -1,3 +1,6 @@
+interface DeleteLocalCardAPIKeyProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { localCardKeysSchema, storeSchema } from '../resources';
 import { z } from 'zod';

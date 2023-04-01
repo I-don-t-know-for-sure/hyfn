@@ -1,3 +1,6 @@
+interface CreateOrderProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 'use strict';
 
 import { ObjectId } from 'mongodb';

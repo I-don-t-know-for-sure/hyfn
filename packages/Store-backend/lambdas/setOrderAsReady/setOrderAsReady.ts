@@ -1,3 +1,6 @@
+interface SetOrderAsReadyProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 const { ObjectId } = require('mongodb');
 
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';

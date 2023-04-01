@@ -1,3 +1,6 @@
+interface SetProductAsNotFoundProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { ObjectId } from 'mongodb';
 import { mainWrapper } from 'hyfn-server/src';
 

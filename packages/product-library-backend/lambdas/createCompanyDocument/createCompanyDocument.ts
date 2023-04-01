@@ -1,3 +1,6 @@
+interface CreateCompanyDocumentProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 "use strict";
 
 import { MainFunctionProps, mainWrapperWithSession } from "hyfn-server";

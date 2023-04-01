@@ -1,3 +1,6 @@
+interface GetTransactionsListProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { ObjectId } from 'mongodb';
 
 export const getTransactionsList = async ({ arg, client }) => {

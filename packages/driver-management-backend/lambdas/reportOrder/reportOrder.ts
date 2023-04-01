@@ -1,3 +1,6 @@
+interface ReportOrderProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ORDER_TYPE_DELIVERY } from 'hyfn-types';
 import { ObjectId } from 'mongodb';

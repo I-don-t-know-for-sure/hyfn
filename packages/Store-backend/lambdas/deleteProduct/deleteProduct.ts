@@ -1,3 +1,6 @@
+interface DeleteProductProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 const ObjectId = require('mongodb').ObjectId;
 
 import { mainWrapperWithSession } from 'hyfn-server';

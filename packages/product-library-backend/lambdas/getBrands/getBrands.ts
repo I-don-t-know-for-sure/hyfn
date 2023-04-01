@@ -1,3 +1,6 @@
+interface GetBrandsProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 "use strict";
 
 import { mainWrapper, _200 } from "hyfn-server";

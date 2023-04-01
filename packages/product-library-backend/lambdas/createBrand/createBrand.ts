@@ -1,6 +1,9 @@
-"use strict";
+interface CreateBrandProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
+("use strict");
 
-import { mainWrapper } from "hyfn-server";
+import { mainWrapper, MainFunctionProps } from "hyfn-server";
 import { ObjectId } from "mongodb";
 
 export const handler = async (event, ctx) => {

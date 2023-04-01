@@ -1,3 +1,6 @@
+interface CreateServiceFeeCardTransactionProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { ObjectId } from 'mongodb';
 
 import { adminName, STORE_STATUS_ACCEPTED, transactionSchema } from 'hyfn-types';

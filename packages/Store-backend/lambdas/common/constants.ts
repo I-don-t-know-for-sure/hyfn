@@ -1,3 +1,6 @@
+interface ConstantsProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 export const storeServiceFee = 0.01;
 export const deliveryServiceFee = 0.15;
 export const customerServiceFee = 0.02;

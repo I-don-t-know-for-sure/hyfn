@@ -1,3 +1,6 @@
+interface ValidateLocalCardTransactionProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { ObjectId } from 'mongodb';
 import { adminName } from '../../common/constants';
 import { getAdminLocalCardCreds } from '../../common/getAdminLocalCardCreds';

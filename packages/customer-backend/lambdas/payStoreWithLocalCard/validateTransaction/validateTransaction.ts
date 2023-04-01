@@ -1,3 +1,6 @@
+interface ValidateTransactionProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { ObjectId } from 'mongodb';
 
 import { ORDER_TYPE_PICKUP, STORE_STATUS_PAID } from 'hyfn-types';

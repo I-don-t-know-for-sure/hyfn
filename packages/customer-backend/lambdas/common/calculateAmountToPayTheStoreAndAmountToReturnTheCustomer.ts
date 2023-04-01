@@ -1,3 +1,6 @@
+interface CalculateAmountToPayTheStoreAndAmountToReturnTheCustomerProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 // import { ORDER_TYPE_PICKUP, storeAndCustomerServiceFee, storeServiceFee } from './constants';
 // import { calculateProductOptionsValue } from './utils';
 

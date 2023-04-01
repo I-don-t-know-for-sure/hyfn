@@ -1,3 +1,6 @@
+interface UpdateLocalCardSettingsProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { storeSchema } from '../resources';
 import { z } from 'zod';

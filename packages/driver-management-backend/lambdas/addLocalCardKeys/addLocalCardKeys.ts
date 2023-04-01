@@ -1,3 +1,6 @@
+interface AddLocalCardKeysProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { KMS } from 'aws-sdk';
 import { encryptData, hex_to_ascii, mainWrapper } from 'hyfn-server';
 

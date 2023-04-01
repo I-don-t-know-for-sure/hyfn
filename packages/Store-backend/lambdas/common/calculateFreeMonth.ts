@@ -1,3 +1,6 @@
+interface CalculateFreeMonthProps extends Omit<MainFunctionProps, "arg"> {
+  // Add your interface properties here
+}
 import { addMonths } from './addMonths';
 import { FREE_Month } from './constants';
 
