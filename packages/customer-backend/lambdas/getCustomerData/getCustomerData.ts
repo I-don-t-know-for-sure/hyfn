@@ -24,7 +24,7 @@ export const getCustomerData = async ({
 
   return customerDoc;
 };
-export const handler = async (event) => {
+export const handler = async (event: any) => {
   return await mainWrapper({ event, mainFunction: getCustomerData });
   // Ensures that the client will close when you finish/error
 
