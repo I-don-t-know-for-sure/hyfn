@@ -1,11 +1,7 @@
-interface ConstantsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 export const paymentMethods = {
   sadad: 'Sadad',
   localCard: 'Local card',
 };
-
 export const tarnsactionStatus = {
   paying: 'Paying',
   paid: 'Paid',

@@ -61,7 +61,9 @@ export const updateStoreOwnerInfoHandler = async ({ arg, client, session }: Main
   );
   return result;
 };
-interface UpdateStoreOwnerInfoProps extends Omit<MainFunctionProps, 'arg'> {}
+interface UpdateStoreOwnerInfoProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { ObjectId } from 'mongodb';
 import {

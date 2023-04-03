@@ -18,9 +18,11 @@ export const getBrandsHandler = async ({ arg, client }) => {
   result = products;
   return result;
 };
-interface GetBrandsProps extends Omit<MainFunctionProps, "arg"> {}
+interface GetBrandsProps extends Omit<MainFunctionProps, "arg"> {
+  arg: any;
+}
 ("use strict");
-import { mainWrapper } from "hyfn-server";
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getBrandsHandler });
 };

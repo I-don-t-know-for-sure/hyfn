@@ -87,7 +87,9 @@ export const openAndCloseStoreHandler = async ({ arg, client, session }: MainFun
   // Ensures that the client will close when you finish/error
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
 };
-interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {}
+interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';

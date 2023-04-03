@@ -40,9 +40,11 @@ export const getProductsForStoreHandler = async ({ arg, client }) => {
   return products;
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
 };
-interface GetProductsForStoreProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetProductsForStoreProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getProductsForStoreHandler });

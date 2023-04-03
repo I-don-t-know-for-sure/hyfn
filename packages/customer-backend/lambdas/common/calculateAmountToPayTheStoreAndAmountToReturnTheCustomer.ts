@@ -1,18 +1,11 @@
-interface CalculateAmountToPayTheStoreAndAmountToReturnTheCustomerProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 // import { ORDER_TYPE_PICKUP, storeAndCustomerServiceFee, storeServiceFee } from './constants';
 // import { calculateProductOptionsValue } from './utils';
-
 // export function calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({ storeOrder }) {
 //   var orderCost = 0;
-
 //   const amountToPay = storeOrder.addedProducts.reduce((accu, product) => {
 //     console.log(product, 'hhdhdhdhdh');
-
 //     if (!product.pickup || Object.keys(product.pickup)?.length !== 2)
 //       throw new Error('one of the products was not picked');
-
 //     orderCost = orderCost + product.pricing.price * product.qty;
 //     const productValuesPrice = calculateProductOptionsValue(product);
 //     console.log(
@@ -26,7 +19,6 @@ interface CalculateAmountToPayTheStoreAndAmountToReturnTheCustomerProps extends 
 //     '🚀 ~ file: calculateAmountToPayTheStoreAndAmountToReturnTheCustomer.js:14 ~ amountToPay ~ amountToPay',
 //     amountToPay
 //   );
-
 //   const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
 //   // our service fee
 //   const serviceFee = orderCost * storeAndCustomerServiceFee;
@@ -45,9 +37,7 @@ interface CalculateAmountToPayTheStoreAndAmountToReturnTheCustomerProps extends 
 //     amountToPayServiceFee
 //   );
 //   // delivery fee after our fee
-
 //   // total cost of the order
-
 //   const amountToReturnToCustomer = serviceFee - amountToPayServiceFee;
 //   return {
 //     amountToReturnToCustomer: amountToReturnToCustomer,
@@ -55,20 +45,15 @@ interface CalculateAmountToPayTheStoreAndAmountToReturnTheCustomerProps extends 
 //     originalCost: orderCostAfterFee,
 //   };
 // }
-
 import { add, multiply, subtract } from 'mathjs';
 import { ORDER_TYPE_PICKUP, storeAndCustomerServiceFee, storeServiceFee } from './constants';
 import { calculateProductOptionsValue } from './utils';
-
 export function calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({ storeOrder }) {
   var orderCost = 0;
-
   const amountToPay = storeOrder.addedProducts.reduce((accu, product) => {
     console.log(product, 'hhdhdhdhdh');
-
     if (!product.pickup || Object.keys(product.pickup)?.length !== 2)
       throw new Error('one of the products was not picked');
-
     orderCost = add(multiply(product.qty, product.pricing.price), orderCost) as unknown as number;
     console.log(
       '🚀 ~ file: calculateAmountToPayTheStoreAndAmountToReturnTheCustomer.ts:70 ~ amountToPay ~ orderCost:',
@@ -86,7 +71,6 @@ export function calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({ store
     '🚀 ~ file: calculateAmountToPayTheStoreAndAmountToReturnTheCustomer.js:14 ~ amountToPay ~ amountToPay',
     amountToPay
   );
-
   const orderCostAfterFee = subtract(orderCost, multiply(orderCost, storeServiceFee));
   // our service fee
   const serviceFee = multiply(orderCost, storeAndCustomerServiceFee);
@@ -105,9 +89,7 @@ export function calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({ store
     amountToPayServiceFee
   );
   // delivery fee after our fee
-
   // total cost of the order
-
   const amountToReturnToCustomer = subtract(serviceFee, amountToPayServiceFee);
   return {
     amountToReturnToCustomer: amountToReturnToCustomer,

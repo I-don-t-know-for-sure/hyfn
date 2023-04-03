@@ -13,7 +13,6 @@ export const createAdminDocumentHandler = async ({
     .insertOne({
       ...adminInfo,
     });
-
   return result;
 };
 export const handler = async (event) => {

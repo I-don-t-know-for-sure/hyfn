@@ -72,7 +72,9 @@ export const createStoreDocumentHandler = async ({
     }
   }
 };
-interface CreateStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {}
+interface CreateStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { currencies, gibbrish } from '../resources';
@@ -82,7 +84,6 @@ export const handler = async (event, ctx, callback) => {
     readConcern: { level: 'local' },
     writeConcern: { w: 'majority' },
   };
-
   return await mainWrapperWithSession({
     ctx,
     callback,

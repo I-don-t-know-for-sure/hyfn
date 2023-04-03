@@ -1,14 +1,13 @@
 interface ConstantsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
+    arg: any;
 }
 export const paymentMethods = {
-  sadad: 'Sadad',
-  localCard: 'Local card',
+    sadad: 'Sadad',
+    localCard: 'Local card',
 };
-
 export const tarnsactionStatus = {
-  paying: 'Paying',
-  paid: 'Paid',
+    paying: 'Paying',
+    paid: 'Paid',
 };
 export const VERIFIED_DRIVER_AMOUNT = 750;
 export const storeServiceFee = 0.01;
@@ -28,7 +27,6 @@ export const DRIVER_STATUS_DELIVERED = 'delivered';
 export const DRIVER_STATUS_IN_PROGRESS = 'in progress';
 export const DEFAULT_MANAGEMENT_CUT = 0.07;
 export const MAXIMUM_MANAGEMENT_CUT = 0.15;
-
 export const USER_TYPE_CUSTOMER = 'customer';
 export const USER_TYPE_STORE = 'store';
 export const USER_TYPE_DRIVER = 'driver';

@@ -1,10 +1,9 @@
-interface DeleteLocalCardAPIKeyProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
+interface DeleteLocalCardAPIKeyProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
 }
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { localCardKeysSchema, storeSchema } from '../resources';
 import { z } from 'zod';
-
 const deleteLocalCardAPIKey = async ({ client, arg, session }: MainFunctionProps) => {
   const { userId } = arg[arg.length - 1];
   type Store = z.infer<typeof storeSchema>;
@@ -19,7 +18,6 @@ const deleteLocalCardAPIKey = async ({ client, arg, session }: MainFunctionProps
         },
       }
     );
-
   await client
     .db('generalData')
     .collection<Store>('storeInfo')
@@ -33,7 +31,6 @@ const deleteLocalCardAPIKey = async ({ client, arg, session }: MainFunctionProps
       },
       { session }
     );
-
   await client
     .db('generalData')
     .collection<z.infer<typeof localCardKeysSchema>>('localCardKeys')
@@ -48,7 +45,6 @@ const deleteLocalCardAPIKey = async ({ client, arg, session }: MainFunctionProps
     );
   return 'success';
 };
-
 export const handler = async (event) => {
   return await mainWrapperWithSession({ event, mainFunction: deleteLocalCardAPIKey });
 };

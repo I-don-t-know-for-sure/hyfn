@@ -1,33 +1,26 @@
-interface ConfirmPickupProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
+interface ConfirmPickupProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ORDER_STATUS_DELIVERED } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
-
 interface ConfirmPickupProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-
 export const confirmPickup = async ({ arg, client, userId }: ConfirmPickupProps) => {
   const { orderId, country, pickupConfirmation } = arg[0];
   const { _id } = await client
     .db('generalData')
     .collection('customerInfo')
     .findOne({ customerId: userId }, { projection: { _id: 1 } });
-
   const orderDoc = await client
     .db('base')
     .collection('orders')
     .findOne({ _id: new ObjectId(orderId) });
-
   if (!orderDoc.serviceFeePaid) {
     throw new Error('service fee not paid');
   }
   if (orderDoc.userId !== _id.toString()) {
     throw new Error('user Id does not match');
   }
-
   const confirmationStore = orderDoc.orders.find(
     (store) => store.pickupConfirmation === pickupConfirmation
   );
@@ -38,10 +31,8 @@ export const confirmPickup = async ({ arg, client, userId }: ConfirmPickupProps)
     if (store._id === confirmationStore._id) {
       return false;
     }
-
     return !store.pickedUp;
   });
-
   await client
     .db('base')
     .collection('orders')
@@ -64,7 +55,6 @@ export const confirmPickup = async ({ arg, client, userId }: ConfirmPickupProps)
     );
   // if()
 };
-
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: confirmPickup });
 };

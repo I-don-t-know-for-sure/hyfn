@@ -33,9 +33,11 @@ export const setOrderAsPreparingHandler = async ({ arg, client }) => {
     );
   return 'success';
 };
-interface SetOrderAsPreparingProps extends Omit<MainFunctionProps, 'arg'> {}
+interface SetOrderAsPreparingProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 const { ObjectId } = require('mongodb');
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ORDER_STATUS_PREPARING, STORE_STATUS_ACCEPTED, STORE_STATUS_PAID } from '../resources';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setOrderAsPreparingHandler });

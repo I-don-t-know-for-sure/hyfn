@@ -31,9 +31,11 @@ export const updateProductHandler = async ({ arg, client }) => {
   console.log(status, "shshshshssh");
   return result;
 };
-interface UpdateProductProps extends Omit<MainFunctionProps, "arg"> {}
+interface UpdateProductProps extends Omit<MainFunctionProps, "arg"> {
+  arg: any;
+}
 ("use strict");
-import { mainWrapper } from "hyfn-server";
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: updateProductHandler });

@@ -7,9 +7,11 @@ export const getCompanyDocumentHandler = async ({ arg, client }) => {
     .findOne({ userId });
   return result === null ? {} : result;
 };
-interface GetCompanyDocumentProps extends Omit<MainFunctionProps, "arg"> {}
+interface GetCompanyDocumentProps extends Omit<MainFunctionProps, "arg"> {
+  arg: any;
+}
 ("use strict");
-import { mainWrapper } from "hyfn-server";
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
 export const handler = async (event, ctx) => {
   return await mainWrapper({

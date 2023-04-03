@@ -48,7 +48,9 @@ export const setProductAsPickedUpHandler = async ({ arg, client, userId }: MainF
   result = 'success';
   return result;
 };
-interface SetProductAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {}
+interface SetProductAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 import { mainWrapper, MainFunctionProps } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { STORE_STATUS_ACCEPTED, STORE_STATUS_PENDING, USER_TYPE_STORE } from 'hyfn-types';

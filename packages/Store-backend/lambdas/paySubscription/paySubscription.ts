@@ -55,8 +55,8 @@ export const paySubscriptionHandler = async ({ arg, client }) => {
   // }
   // result = payment.data;
   /*
-add transactionId and other payment info like phone number and maybe time to customerData collection
-*/
+  add transactionId and other payment info like phone number and maybe time to customerData collection
+  */
   await client
     .db('generalData')
     .collection('storeInfo')
@@ -88,9 +88,11 @@ add transactionId and other payment info like phone number and maybe time to cus
     );
   return result;
 };
-interface PaySubscriptionProps extends Omit<MainFunctionProps, 'arg'> {}
+interface PaySubscriptionProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
-import { mainWrapperWithSession } from 'hyfn-server';
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapperWithSession({

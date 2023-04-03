@@ -32,7 +32,9 @@ export const updateProductStateHandler = async ({ arg, client, session }: MainFu
   returnValue = 'success';
   return { message: returnValue };
 };
-interface UpdateProductStateProps extends Omit<MainFunctionProps, 'arg'> {}
+interface UpdateProductStateProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';

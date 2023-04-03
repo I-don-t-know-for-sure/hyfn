@@ -1,9 +1,5 @@
-interface CalculateFreeMonthProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 import { addMonths } from './addMonths';
 import { FREE_Month } from './constants';
-
 export function calculateFreeMonth({ storeDoc }: { storeDoc: any }) {
   // const today = new Date();
   // today.setHours(today.getHours() + 2);
@@ -28,7 +24,6 @@ export function calculateFreeMonth({ storeDoc }: { storeDoc: any }) {
   // };
   // console.log(subscriptionInfo, 'shshsh');
   //   }
-
   const subscriptionInfo = storeDoc.subscriptionInfo
     ? {
         timeOfPayment: storeDoc.subscriptionInfo.timeOfPayment,
@@ -40,6 +35,5 @@ export function calculateFreeMonth({ storeDoc }: { storeDoc: any }) {
         numberOfMonths: FREE_Month,
         expirationDate: addMonths(FREE_Month),
       };
-
   return subscriptionInfo;
 }

@@ -10,9 +10,11 @@ export const getProductFromBarcodeHandler = async ({ arg, client }) => {
   result = products;
   return result;
 };
-interface GetProductFromBarcodeProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetProductFromBarcodeProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getProductFromBarcodeHandler });
 };

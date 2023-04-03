@@ -46,7 +46,9 @@ export const deleteCollectionHandler = async ({
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
-interface DeleteCollectionProps extends Omit<MainFunctionProps, 'arg'> {}
+interface DeleteCollectionProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
@@ -57,7 +59,6 @@ export const handler = async (event, ctx) => {
     readConcern: { level: 'local' },
     writeConcern: { w: 'majority' },
   };
-
   return await mainWrapperWithSession({
     event,
     ctx,

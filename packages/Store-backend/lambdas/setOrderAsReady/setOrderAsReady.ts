@@ -33,7 +33,9 @@ export const setOrderAsReadyHandler = async ({ arg, client }: MainFunctionProps)
     );
   return 'success';
 };
-interface SetOrderAsReadyProps extends Omit<MainFunctionProps, 'arg'> {}
+interface SetOrderAsReadyProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 const { ObjectId } = require('mongodb');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ORDER_STATUS_READY, STORE_STATUS_PREPARING } from '../common/constants';

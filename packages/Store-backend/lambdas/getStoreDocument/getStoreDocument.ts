@@ -6,9 +6,11 @@ export const getStoreDocumentHandler = async ({ arg, client }) => {
   console.log(result);
   return result;
 };
-interface GetStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getStoreDocumentHandler });
 };

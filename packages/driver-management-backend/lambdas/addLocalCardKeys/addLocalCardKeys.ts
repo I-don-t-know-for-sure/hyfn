@@ -50,9 +50,11 @@ export const addLocalCardKeysHandler = async ({ arg, client, userId }) => {
       {}
     );
 };
-interface AddLocalCardKeysProps extends Omit<MainFunctionProps, 'arg'> {}
+interface AddLocalCardKeysProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 import { KMS } from 'aws-sdk';
-import { encryptData, hex_to_ascii, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, encryptData, hex_to_ascii, mainWrapper } from 'hyfn-server';
 const { default: axios } = require('axios');
 const { HmacSHA256 } = require('crypto-js');
 const dataServicesURL = process.env.moalmlatDataService;

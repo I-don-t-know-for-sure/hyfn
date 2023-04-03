@@ -1,5 +1,5 @@
-interface ValidateLocalCardTransactionProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
+interface ValidateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
 }
 import { ObjectId } from 'mongodb';
 import {
@@ -14,17 +14,13 @@ import {
   MainFunctionProps,
   mainWrapperWithSession,
 } from 'hyfn-server';
-
 const validateLocalCardTransaction = async ({ arg, client, session }: MainFunctionProps) => {
   const { transactionId } = arg[0];
-
   // const dataServicesURL = process.env.moalmlatDataService;
-
   const transaction = await client
     .db('generalData')
     .collection('transactions')
     .findOne({ _id: new ObjectId(transactionId) }, { session });
-
   console.log('any');
   if (transaction.validated) {
     return 'transaction already approved';
@@ -39,12 +35,9 @@ const validateLocalCardTransaction = async ({ arg, client, session }: MainFuncti
     secretKey,
     TerminalId,
     transactionId,
-
     includeLocalCardTransactionFeeToPrice: false,
-
     amount: transaction.amount,
   });
-
   if (isValidated) {
     await client
       .db('generalData')
@@ -59,7 +52,6 @@ const validateLocalCardTransaction = async ({ arg, client, session }: MainFuncti
         { session }
       );
   }
-
   console.log('herehh');
   if (isValidated) {
     if (transaction.transactionType === TRANSACTION_TYPE_WALLET) {
@@ -82,9 +74,7 @@ const validateLocalCardTransaction = async ({ arg, client, session }: MainFuncti
         .db('generalData')
         .collection('storeInfo')
         .findOne({ _id: new ObjectId(transaction.customerId) }, { session });
-
       const numberOfMonths = transaction.amount / subscriptionCost;
-
       const addMonths = (monthsToAdd = 1, currentDate = new Date()) => {
         const currentMonth = currentDate.getMonth();
         if (monthsToAdd + currentMonth >= 12) {
@@ -97,7 +87,6 @@ const validateLocalCardTransaction = async ({ arg, client, session }: MainFuncti
           return currentDate;
         }
       };
-
       const subscriptionInfo = storeDoc.subscriptionInfo
         ? {
             timeOfPayment: storeDoc.subscriptionInfo.timeOfPayment,
@@ -109,7 +98,6 @@ const validateLocalCardTransaction = async ({ arg, client, session }: MainFuncti
             numberOfMonths: numberOfMonths,
             expirationDate: addMonths(numberOfMonths),
           };
-
       // const payment = await axios(config);
       // console.log(payment.data);
       // if (payment.data.statusCode === 927) {
@@ -119,13 +107,10 @@ const validateLocalCardTransaction = async ({ arg, client, session }: MainFuncti
       // if (payment.data.statusCode !== 0) {
       //   throw "transaction went wrong";
       // }
-
       // result = payment.data;
-
-      /* 
-add transactionId and other payment info like phone number and maybe time to customerData collection
-*/
-
+      /*
+      add transactionId and other payment info like phone number and maybe time to customerData collection
+      */
       await client
         .db('generalData')
         .collection('storeInfo')
@@ -141,7 +126,6 @@ add transactionId and other payment info like phone number and maybe time to cus
           },
           {}
         );
-
       await client
         .db('base')
         .collection('storeFronts')
@@ -157,10 +141,8 @@ add transactionId and other payment info like phone number and maybe time to cus
     }
     return 'transaction approved';
   }
-
   return 'transaction not approved yet or not found';
 };
-
 export const handler = async (event) => {
   return await mainWrapperWithSession({ event, mainFunction: validateLocalCardTransaction });
 };

@@ -1,21 +1,16 @@
-interface FindOrdersProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
+interface FindOrdersProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
 }
-'use strict';
-
+('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-
 import { ObjectId } from 'mongodb';
 import { ORDER_TYPE_DELIVERY, COLLECTION } from 'hyfn-types';
-
 export const mainFunction = async ({ arg, client, event }: MainFunctionProps) => {
   console.log('🚀 ~ file: findOrders.ts:7 ~ COLLECTION:', COLLECTION);
   // await findOrderValidations(arg);
-
   console.log(event);
   const userCoords = arg[0];
   const { city, country, driverId, lastDoc } = arg[1];
-
   // the driver must be at most 2 kilos from the order to take it
   const driverData = await client.db('generalData').collection('driverData').findOne({
     driverId,
@@ -26,7 +21,6 @@ export const mainFunction = async ({ arg, client, event }: MainFunctionProps) =>
   if (!driverData.verified && !driverData.balance) {
     throw new Error('Driver not verified');
   }
-
   console.log(driverData.onDuty);
   if (driverData.onDuty) {
     const result = await client
@@ -92,14 +86,12 @@ export const mainFunction = async ({ arg, client, event }: MainFunctionProps) =>
       .toArray();
     console.log('🚀 ~ file: findOrders.js:53 ~ mainFunction ~ orders', orders);
     console.log('🚀 ~ file: findOrders.js:53 ~ mainFunction ~ orders', orders);
-
     if (!orders) {
       return [];
     }
     console.log('anything');
     return orders || [];
   }
-
   // Ensures that the client will close when you finish/error
 };
 export const handler = async (event) => {

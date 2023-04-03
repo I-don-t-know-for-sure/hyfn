@@ -50,7 +50,9 @@ export const updateStoreInfoHandler = async ({ arg, client, session }: MainFunct
   }
   return result;
 };
-interface UpdateStoreInfoProps extends Omit<MainFunctionProps, 'arg'> {}
+interface UpdateStoreInfoProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { ObjectId } from 'mongodb';
 import { currencies } from '../resources';

@@ -231,7 +231,9 @@ export const handlerHandler = async ({ arg, client, session, event }: MainFuncti
   }
   return result;
 };
-interface HandlerProps extends Omit<MainFunctionProps, 'arg'> {}
+interface HandlerProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
@@ -241,7 +243,6 @@ export const handler = async (event, ctx, callback) => {
     readConcern: { level: 'local' },
     writeConcern: { w: 'majority' },
   };
-
   const response = await mainWrapperWithSession({
     ctx,
     callback,

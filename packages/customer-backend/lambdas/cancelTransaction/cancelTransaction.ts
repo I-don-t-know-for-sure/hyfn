@@ -1,14 +1,10 @@
-interface CancelTransactionProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
+interface CancelTransactionProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
 }
 import { MainFunctionProps, mainWrapper, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 
-interface CancelTransactionPropos extends Omit<MainFunctionProps, 'arg'> {
-  arg: any[];
-}
-
-export const cancelTransaction = async ({ arg, client, session }: CancelTransactionPropos) => {
+export const cancelTransaction = async ({ arg, client, session }: CancelTransactionProps) => {
   const { transactionId } = arg[0];
   const transactionDoc = await client
     .db('generalData')
@@ -17,7 +13,6 @@ export const cancelTransaction = async ({ arg, client, session }: CancelTransact
   if (transactionDoc.validated) {
     throw new Error('transaction validated');
   }
-
   await client
     .db('generalData')
     .collection('transactions')
@@ -43,7 +38,6 @@ export const cancelTransaction = async ({ arg, client, session }: CancelTransact
       { session }
     );
 };
-
 export const handler = async (event) => {
   return await mainWrapperWithSession({ event, mainFunction: cancelTransaction });
 };

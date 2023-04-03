@@ -45,13 +45,14 @@ export const deleteProductHandler = async ({ arg, client, event }) => {
   // await session.abortTransaction();
   return result;
 };
-interface DeleteProductProps extends Omit<MainFunctionProps, 'arg'> {}
+interface DeleteProductProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 const ObjectId = require('mongodb').ObjectId;
-import { mainWrapperWithSession } from 'hyfn-server';
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { deleteImages } from '../common/utils/deleteImages';
 export const handler = async (event, ctx) => {
   // await argValidations(arg);
-
   return await mainWrapperWithSession({
     event,
     ctx,

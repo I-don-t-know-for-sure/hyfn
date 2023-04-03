@@ -6,6 +6,8 @@ export const bulkUpdateHandler = async ({
   ctx,
   callback,
 }: MainFunctionProps) => {
+  var result;
+
   console.log('🚀 ~ file: bulkUpdate.js ~ line 26 ~ export const handler= ~ arg', arg);
   const { storeId, country, productsArray } = arg[0];
   const validatedArray = productsArray;
@@ -111,18 +113,18 @@ export const bulkUpdateHandler = async ({
   await client.db('base').collection('products').bulkWrite(updateQuery);
   return result;
 };
-interface BulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {}
+interface BulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx, callback) => {
-  var result;
   // turnOffCallbackAwaitForEmptyEventLoop(ctx);
   // const client = await getMongoClientWithIAMRole();
   // const arg = JSON.parse(event.body);
   // const { accessToken, userId } = arg[arg.length - 1];
   // await mainValidateFunction(client, accessToken, userId);
-
   const response = await mainWrapper({ ctx, event, callback, mainFunction: bulkUpdateHandler });
   return response;
 };

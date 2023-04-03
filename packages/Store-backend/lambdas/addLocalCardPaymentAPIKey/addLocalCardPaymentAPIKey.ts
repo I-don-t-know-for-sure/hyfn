@@ -1,39 +1,30 @@
-interface AddLocalCardPaymentAPIKeyProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
+interface AddLocalCardPaymentAPIKeyProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
 }
 const { HmacSHA256 } = require('crypto-js');
-
 const { default: axios } = require('axios');
-
 const { calculateFreeMonth } = require('../common/calculateFreeMonth');
-
 import { KMS } from 'aws-sdk';
 import { encryptData, hex_to_ascii, MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-
 const dataServicesURL = process.env.moalmlatDataService;
-
 const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainFunctionProps) => {
   const { TerminalId, MerchantId, secretKey } = arg[0];
   const userDocument = await client.db('generalData').collection('storeInfo').findOne({ userId });
   const { _id } = userDocument;
   const storeId = _id.toString();
   const encryptedSecretkey = await encryptData(secretKey, process.env.kmsKeyARN || '', new KMS());
-
   console.log('🚀 ~ file: isLocalCardTransactionValidated.js:8 ~ dataServicesURL', dataServicesURL);
   const now = new Date();
   console.log('here iaLocal');
   const merchantKey = hex_to_ascii(secretKey);
-
   const strHashData = `DateTimeLocalTrxn=${now.getTime()}&MerchantId=${MerchantId}&TerminalId=${TerminalId}`;
   const hashed = HmacSHA256(strHashData, merchantKey).toString().toUpperCase();
-
   const result = await axios.post(dataServicesURL, {
     // method: 'POST',
     // headers: {
     //   'content-type': 'application/json',
     // },
-
     // data: {
     MerchantReference: '',
     TerminalId: TerminalId,
@@ -49,12 +40,10 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainF
   //   return false;
   //   // or throw an error telling that the transaction doesn't exist
   // }
-
   const areKeysValid = Array.isArray(result.data.Transactions);
   if (!areKeysValid) {
     throw new Error('your keys are not valid');
   }
-
   const paymentKeys = await client
     .db('generalData')
     .collection('localCardKeys')
@@ -104,7 +93,6 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainF
               MerchantId,
               secretKey: encryptedSecretkey,
             },
-
             localCardAPIKeyFilled: true,
           },
         },
@@ -112,7 +100,6 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainF
           session,
         }
       );
-
     await client
       .db('generalData')
       .collection('localCardKeys')
@@ -121,7 +108,6 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainF
         {
           $set: {
             inUse: true,
-
             storeId,
           },
         },
@@ -131,7 +117,6 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainF
       );
     return 'success';
   }
-
   let subscriptionInfo = calculateFreeMonth({ storeDoc: userDocument });
   await client
     .db('generalData')
@@ -154,7 +139,6 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainF
         session,
       }
     );
-
   await client
     .db('base')
     .collection('storeFronts')
@@ -167,13 +151,11 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainF
       },
       { session }
     );
-
   await client.db('generalData').collection('localCardKeys').insertOne(
     {
       TerminalId,
       MerchantId,
       secretKey: encryptedSecretkey,
-
       inUse: true,
       storeId,
     },
@@ -181,10 +163,8 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainF
       session,
     }
   );
-
   return 'success and added a month free';
 };
-
 export const handler = async (event) => {
   return await mainWrapperWithSession({
     event,

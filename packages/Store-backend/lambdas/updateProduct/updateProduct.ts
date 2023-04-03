@@ -263,31 +263,31 @@ export const updateProductHandler = async ({ arg, client, session }: MainFunctio
       // }
     }
     /*
-                      await mongo
-                      .db("base")
-                      .collection(`${city}__storeFronts`)
-                  .updateOne(
-                    { _id: new ObjectId(storeFrontId) },
-                    {
-                      $set: {
-                        [`${label}`]: {
-                          collectionName: label,
-                          collectionId: value,
-                          products: {
-                            textInfo,
-                            _id: new ObjectId(productId),
-                            pricing,
-                            measurementSystem,
-                            images: imagesURLs,
-                            hasOptions: options.hasOptions,
+                          await mongo
+                          .db("base")
+                          .collection(`${city}__storeFronts`)
+                      .updateOne(
+                        { _id: new ObjectId(storeFrontId) },
+                        {
+                          $set: {
+                            [`${label}`]: {
+                              collectionName: label,
+                              collectionId: value,
+                              products: {
+                                textInfo,
+                                _id: new ObjectId(productId),
+                                pricing,
+                                measurementSystem,
+                                images: imagesURLs,
+                                hasOptions: options.hasOptions,
+                              },
+                            },
                           },
                         },
-                      },
-                    },
-                    { session }
-                    );
-                    
-                    */
+                        { session }
+                        );
+                        
+                        */
     // if (isActive && !oldProductDoc.isActive) {
     //   console.log("filter 139");
     //   const bothCollections = [
@@ -532,7 +532,9 @@ export const updateProductHandler = async ({ arg, client, session }: MainFunctio
   returnValue = 'success';
   return { message: returnValue };
 };
-interface UpdateProductProps extends Omit<MainFunctionProps, 'arg'> {}
+interface UpdateProductProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';

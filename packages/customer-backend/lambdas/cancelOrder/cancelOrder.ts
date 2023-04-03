@@ -1,6 +1,4 @@
-interface CancelOrderProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
+interface CancelOrderProps extends Omit<MainFunctionProps, 'arg'> {}
 import { ObjectId } from 'mongodb';
 import {
   ORDER_STATUS_PREPARING,
@@ -9,10 +7,8 @@ import {
   ORDER_TYPE_PICKUP,
   USER_TYPE_DRIVER,
 } from '../common/constants';
-
 import { findOne, mainWrapperWithSession, updateOne } from 'hyfn-server/src';
 import { MainFunctionProps } from 'hyfn-server/src';
-
 interface CancelOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -46,11 +42,9 @@ export const cancelOrder = async ({ arg, client, session, userId }: CancelOrderP
   const orderHasPaidStores = orderDoc.orders.some((store) => {
     return store.paid;
   });
-
   if (orderHasPaidStores) {
     throw new Error('order has paid stores');
   }
-
   // check if any of the stores orders are being prepared or already prepared
   const isAnyOfTheOrdersPrepared = orderDoc.orders.some((status) => {
     return (
@@ -61,13 +55,10 @@ export const cancelOrder = async ({ arg, client, session, userId }: CancelOrderP
   if (orderReported) {
     throw new Error('this order is blocked because it`s reported');
   }
-
   if (isAnyOfTheOrdersPrepared) {
     throw Error('order is being prepared or order is ready');
   }
-
   const orderType = orderDoc.orderType;
-
   if (orderType === ORDER_TYPE_PICKUP) {
     const customerUpdateResult = await client
       .db('generalData')
@@ -95,7 +86,6 @@ export const cancelOrder = async ({ arg, client, session, userId }: CancelOrderP
     //       },
     //     }
     //   );
-
     // delete order
     const orderUpdateResult = await client
       .db('base')
@@ -109,7 +99,6 @@ export const cancelOrder = async ({ arg, client, session, userId }: CancelOrderP
         },
         { session }
       );
-
     updateOne({ updateOneResult: orderUpdateResult });
   }
   if (orderType === ORDER_TYPE_DELIVERY) {
@@ -123,7 +112,6 @@ export const cancelOrder = async ({ arg, client, session, userId }: CancelOrderP
         return true;
       }
     });
-
     if (isOrderTakenByDriver) {
       const driverDataUpdate = await client
         .db('generalData')
@@ -143,7 +131,6 @@ export const cancelOrder = async ({ arg, client, session, userId }: CancelOrderP
     // if (isOrderTakenByDriver) {
     //   throw new Error('Order is taken by driver');
     // }
-
     if (orderDoc.serviceFeePaid) {
       // return the customer thier money before deleting the order document
       const customerUpdateResult = await client
@@ -161,7 +148,6 @@ export const cancelOrder = async ({ arg, client, session, userId }: CancelOrderP
           { session }
         );
       updateOne({ updateOneResult: customerUpdateResult });
-
       // await updateOne({
       //   query: {
       //     _id: new ObjectId(orderDoc.userId),

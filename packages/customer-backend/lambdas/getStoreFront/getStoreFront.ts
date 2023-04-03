@@ -1,7 +1,5 @@
-interface GetStoreFrontProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
-'use strict';
+interface GetStoreFrontProps extends Omit<MainFunctionProps, 'arg'> {}
+('use strict');
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps } from 'hyfn-server/src';
 import { findOne, mainWrapper } from 'hyfn-server/src';
@@ -28,12 +26,10 @@ export const getStoreFront = async ({ arg, client }: GetStoreFrontProps) => {
     );
   findOne({ findOneResult: storeFrontDoc });
   return storeFrontDoc;
-
   // Ensures that the client will close when you finish/error
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getStoreFront });
-
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };

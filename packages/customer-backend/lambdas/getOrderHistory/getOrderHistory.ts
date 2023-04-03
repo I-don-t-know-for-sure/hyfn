@@ -1,10 +1,6 @@
-interface GetOrderHistoryProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
-'use strict';
-
+interface GetOrderHistoryProps extends Omit<MainFunctionProps, 'arg'> {}
+('use strict');
 import { ObjectId } from 'mongodb';
-
 import { ORDER_STATUS_DELIVERED, USER_TYPE_CUSTOMER } from 'hyfn-types';
 import { mainWrapper } from 'hyfn-server';
 import { MainFunctionProps } from 'hyfn-server';
@@ -13,9 +9,7 @@ interface GetOrderHistoryProps extends Omit<MainFunctionProps, 'arg'> {
 }
 export const getOrderHistory = async ({ arg, client }: GetOrderHistoryProps) => {
   var result;
-
   const { customerId, status, country, lastDoc } = arg[0];
-
   if (lastDoc) {
     result = await client
       .db('base')
@@ -78,12 +72,10 @@ export const getOrderHistory = async ({ arg, client }: GetOrderHistoryProps) => 
     .limit(20)
     .toArray();
   return result;
-
   // Ensures that the client will close when you finish/error
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getOrderHistory });
-
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };

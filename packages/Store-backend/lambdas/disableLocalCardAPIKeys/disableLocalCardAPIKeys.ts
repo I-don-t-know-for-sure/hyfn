@@ -36,7 +36,9 @@ export const disableLocalCardAPIKeysHandler = async ({
       { session }
     );
 };
-interface DisableLocalCardAPIKeysProps extends Omit<MainFunctionProps, 'arg'> {}
+interface DisableLocalCardAPIKeysProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 export const handler = async (event) => {
   return await mainWrapperWithSession({ event, mainFunction: disableLocalCardAPIKeysHandler });

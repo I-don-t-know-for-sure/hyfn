@@ -33,7 +33,9 @@ export const updateLocalCardSettingsHandler = async ({
       }
     );
 };
-interface UpdateLocalCardSettingsProps extends Omit<MainFunctionProps, 'arg'> {}
+interface UpdateLocalCardSettingsProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { storeSchema } from '../resources';
 import { z } from 'zod';

@@ -1,8 +1,5 @@
-interface GetTransactionsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
-'use strict';
-
+interface GetTransactionsProps extends Omit<MainFunctionProps, 'arg'> {}
+('use strict');
 import { ObjectId } from 'mongodb';
 import { mainWrapper } from 'hyfn-server/src';
 import { MainFunctionProps } from 'hyfn-server/src';
@@ -23,7 +20,6 @@ const getTransactions = async ({ arg, client }: GetTransactionsProps) => {
       .toArray();
     return transactions;
   }
-
   const transactions = await client
     .db('generalData')
     .collection('transactions')
@@ -37,7 +33,6 @@ const getTransactions = async ({ arg, client }: GetTransactionsProps) => {
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getTransactions });
   // Ensures that the client will close when you finish/error
-
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };

@@ -49,7 +49,9 @@ export const setProductAsNotFoundHandler = async ({ arg, client, userId }: MainF
   result = 'success';
   return result;
 };
-interface SetProductAsNotFoundProps extends Omit<MainFunctionProps, 'arg'> {}
+interface SetProductAsNotFoundProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { mainWrapper, MainFunctionProps } from 'hyfn-server';
 import { ObjectId } from 'mongodb';

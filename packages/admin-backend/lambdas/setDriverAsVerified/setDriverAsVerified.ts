@@ -1,21 +1,20 @@
 export const setDriverAsVerifiedHandler = async ({ arg, client }) => {
-  const { driverId } = arg[0];
-  const result = await client
-    .db("generalData")
-    .collection("driverData")
-    .updateOne(
-      { _id: new ObjectId(driverId) },
-      {
+    const { driverId } = arg[0];
+    const result = await client
+        .db("generalData")
+        .collection("driverData")
+        .updateOne({ _id: new ObjectId(driverId) }, {
         $set: {
-          verified: true,
+            verified: true,
         },
-      }
-    );
-  return result;
+    });
+    return result;
 };
-interface SetDriverAsVerifiedProps extends Omit<MainFunctionProps, "arg"> {}
+interface SetDriverAsVerifiedProps extends Omit<MainFunctionProps, "arg"> {
+    arg: any;
+}
 import { MainFunctionProps, mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
 export const handler = async (event) => {
-  return await mainWrapper({ event, mainFunction: setDriverAsVerifiedHandler });
+    return await mainWrapper({ event, mainFunction: setDriverAsVerifiedHandler });
 };

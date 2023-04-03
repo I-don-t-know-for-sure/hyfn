@@ -83,7 +83,9 @@ export const getActiveOrdersHandler = async ({ arg, client }) => {
   console.log(JSON.stringify(orders));
   return orders;
 };
-interface GetActiveOrdersProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetActiveOrdersProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { ObjectId } from 'mongodb';
 import {
@@ -92,7 +94,7 @@ import {
   USER_TYPE_DRIVER,
   USER_TYPE_STORE,
 } from '../resources';
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getActiveOrdersHandler });
 };

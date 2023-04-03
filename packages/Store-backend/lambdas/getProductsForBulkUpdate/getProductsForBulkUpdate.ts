@@ -48,7 +48,9 @@ export const getProductsForBulkUpdateHandler = async ({
     .toArray();
   return products;
 };
-interface GetProductsForBulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetProductsForBulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';

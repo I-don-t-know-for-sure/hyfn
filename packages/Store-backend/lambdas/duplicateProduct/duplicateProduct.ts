@@ -48,9 +48,11 @@ export const duplicateProductHandler = async ({ arg, client }) => {
   await client.db('base').collection('products').insertMany(products, {});
   return result;
 };
-interface DuplicateProductProps extends Omit<MainFunctionProps, 'arg'> {}
+interface DuplicateProductProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapper({

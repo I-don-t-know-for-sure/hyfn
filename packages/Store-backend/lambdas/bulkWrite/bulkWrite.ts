@@ -1,4 +1,6 @@
 export const bulkWriteHandler = async ({ event, arg, client }) => {
+  var result;
+
   const { productsArray, storeId } = arg[0];
   const objKeysExample = ['name', 'price', 'barcode'];
   const objKeysDetailed = ['title', 'description', 'price', 'prevPrice', 'costPerItem'];
@@ -69,11 +71,11 @@ export const bulkWriteHandler = async ({ event, arg, client }) => {
   await client.db('base').collection('products').insertMany(outputArray);
   return result;
 };
-interface BulkWriteProps extends Omit<MainFunctionProps, 'arg'> {}
+interface BulkWriteProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx, callback) => {
-  var result;
-
   return await mainWrapper({ ctx, callback, event, mainFunction: bulkWriteHandler });
 };

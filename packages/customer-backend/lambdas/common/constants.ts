@@ -1,16 +1,11 @@
-interface ConstantsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 export const paymentMethods = {
   sadad: 'Sadad',
   localCard: 'Local card',
 };
-
 export const tarnsactionStatus = {
   paying: 'Paying',
   paid: 'Paid',
 };
-
 export const storeServiceFee = 0.01;
 export const deliveryServiceFee = 0.15;
 export const customerServiceFee = 0.02;
@@ -35,7 +30,6 @@ export const STORE_STATUS_READY_FOR_PAYMENT = 'ready for payment';
 export const ORDER_STATUS_DELIVERED = 'delivered';
 export const USER_STATUS_DELIVERED = 'delivered';
 export const STORE_STATUS_NOT_SET = 'not set';
-
 export const storeTypes = [
   { value: 'restaurant', label: 'Restaurant' },
   { value: 'grocery', label: 'Grocery' },
@@ -52,7 +46,6 @@ export const storeTypes = [
   //     label: t("Construction materials"),
   //   },
   // { value: 'furniture', label: 'Furniture' },
-
   {
     value: 'watches, jewlery, and accessories',
     label: 'Watches, jewlery, and accessories',

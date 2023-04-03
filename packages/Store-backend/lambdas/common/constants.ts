@@ -1,13 +1,8 @@
-interface ConstantsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 export const storeServiceFee = 0.01;
 export const deliveryServiceFee = 0.15;
 export const customerServiceFee = 0.02;
-
 export const storeAndCustomerServiceFee = storeServiceFee + customerServiceFee;
 export const currencies = { Libya: 'LYD' };
-
 export const USER_TYPE_CUSTOMER = 'customer';
 export const USER_TYPE_STORE = 'store';
 export const USER_TYPE_DRIVER = 'driver';
@@ -55,7 +50,6 @@ export const storeTypes = [
   //     label: t("Construction materials"),
   //   },
   // { value: 'furniture', label: 'Furniture' },
-
   {
     value: 'watches, jewlery, and accessories',
     label: 'Watches, jewlery, and accessories',

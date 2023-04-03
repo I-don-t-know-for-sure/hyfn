@@ -1,19 +1,14 @@
-interface UpdateProposalProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
+interface UpdateProposalProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { driverSchema, orderSchema } from 'hyfn-types';
 import { smaller } from 'mathjs';
 import { ObjectId } from 'mongodb';
 import { z } from 'zod';
-
 interface UpdateProposalProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-
 const updateProposal = async ({ arg, client, userId }: UpdateProposalProps) => {
   const { country, orderId, price } = arg[0];
-
   const driverDoc = await client
     .db('generalData')
     .collection('driverData')
@@ -21,7 +16,6 @@ const updateProposal = async ({ arg, client, userId }: UpdateProposalProps) => {
   if (!driverDoc) {
     throw new Error('driver not found');
   }
-
   if (driverDoc.reported) {
     throw new Error('You have a reported order');
   }
@@ -29,14 +23,12 @@ const updateProposal = async ({ arg, client, userId }: UpdateProposalProps) => {
   if (driverDoc.onDuty) {
     throw new Error('You are on duty');
   }
-
   if (!driverDoc.verified) {
     throw new Error('you are not verified');
   }
   if (!driverDoc.driverManagement) {
     throw new Error('You are not trusted by a driver management');
   }
-
   const orderDoc = await client
     .db('base')
     .collection('orders')
@@ -50,7 +42,6 @@ const updateProposal = async ({ arg, client, userId }: UpdateProposalProps) => {
   if (smaller(driverDoc.balance, orderDoc.orderCost)) {
     throw new Error('driver does not have enough balance');
   }
-
   await client
     .db('base')
     .collection('orders')
@@ -67,10 +58,8 @@ const updateProposal = async ({ arg, client, userId }: UpdateProposalProps) => {
       },
       { arrayFilters: [{ 'proposal.managementId': driverDoc.driverManagement[0] }] }
     );
-
   return 'success';
 };
-
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: updateProposal });
 };

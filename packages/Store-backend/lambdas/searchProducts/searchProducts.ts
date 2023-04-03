@@ -40,7 +40,9 @@ export const searchProductsHandler = async ({ arg, client }: MainFunctionProps) 
   result = await coll.aggregate(agg).toArray();
   return result;
 };
-interface SearchProductsProps extends Omit<MainFunctionProps, 'arg'> {}
+interface SearchProductsProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx) => {

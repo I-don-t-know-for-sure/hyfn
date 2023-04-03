@@ -39,7 +39,9 @@ export const setOrderAsDeliveredHandler = async ({ arg, client, userId }: MainFu
     );
   return 'success';
 };
-interface SetOrderAsDeliveredProps extends Omit<MainFunctionProps, 'arg'> {}
+interface SetOrderAsDeliveredProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 const { ObjectId } = require('mongodb');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import {

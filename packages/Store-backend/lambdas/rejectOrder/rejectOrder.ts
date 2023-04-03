@@ -132,7 +132,9 @@ export const rejectOrderHandler = async ({ arg, client, userId }: MainFunctionPr
   }
   return result;
 };
-interface RejectOrderProps extends Omit<MainFunctionProps, 'arg'> {}
+interface RejectOrderProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { ObjectId } from 'mongodb';
 import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP, storeSchema } from '../resources';

@@ -1,9 +1,6 @@
-interface SubscriptionCheckProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 import { MongoClient, ObjectId } from 'mongodb';
 import { gibbrish } from './constants';
-
+import { MainFunctionProps } from 'hyfn-server';
 export const subscriptionCheck = async ({
   //   expirationDate,
   //   monthlySubscriptionPaid,
@@ -35,7 +32,6 @@ export const subscriptionCheck = async ({
         .collection('storeFronts')
         .updateOne(
           { _id: new ObjectId(storeId) },
-
           {
             $set: {
               city: gibbrish,

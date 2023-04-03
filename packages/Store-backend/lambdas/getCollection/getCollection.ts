@@ -13,7 +13,9 @@ export const getCollectionHandler = async ({ arg, client }: MainFunctionProps) =
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
-interface GetCollectionProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetCollectionProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';

@@ -1,15 +1,12 @@
 interface GetProductProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
+  arg: any;
 }
-"use strict";
-
-import { mainWrapper } from "hyfn-server";
+("use strict");
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
-
 export const handler = async (event, ctx) => {
   const getProductfunction = async ({ arg, client }) => {
     const { productId } = arg[0];
-
     const product = await client
       .db("productsLibrary")
       .collection("products")
@@ -24,10 +21,8 @@ export const handler = async (event, ctx) => {
       );
     return product;
   };
-
   const result = await mainWrapper({ event, mainFunction: getProductfunction });
   // Ensures that the client will close when you finish/error
-
   return result;
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };

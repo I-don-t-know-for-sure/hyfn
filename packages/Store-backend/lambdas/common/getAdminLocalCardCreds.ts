@@ -1,6 +1,5 @@
-interface GetAdminLocalCardCredsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
+import { MainFunctionProps } from 'hyfn-server';
+
 export const getAdminLocalCardCreds = () => {
   const MerchantId = process.env.MerchantId;
   const TerminalId = process.env.TerminalId;
@@ -9,6 +8,5 @@ export const getAdminLocalCardCreds = () => {
     '🚀 ~ file: getAdminLocalCardCreds.js:5 ~ getAdminLocalCardCreds ~ secretKey',
     secretKey
   );
-
   return { MerchantId, TerminalId, secretKey };
 };

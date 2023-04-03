@@ -13,7 +13,9 @@ export const getProductHandler = async ({ arg, client, userId }: MainFunctionPro
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
-interface GetProductProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetProductProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';

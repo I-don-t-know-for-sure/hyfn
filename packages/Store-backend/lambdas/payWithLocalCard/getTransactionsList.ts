@@ -1,12 +1,10 @@
-interface GetTransactionsListProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
+interface GetTransactionsListProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
 }
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-
 const getTransactionsList = async ({ arg, client }) => {
   const { userId: customerId, lastDoc: lastDoc } = arg[0];
-
   if (lastDoc) {
     const transactions = await client
       .db('generalData')
@@ -19,7 +17,6 @@ const getTransactionsList = async ({ arg, client }) => {
       .toArray();
     return transactions;
   }
-
   const transactions = await client
     .db('generalData')
     .collection('transactions')
@@ -30,7 +27,6 @@ const getTransactionsList = async ({ arg, client }) => {
     .toArray();
   return transactions;
 };
-
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getTransactionsList });
 };

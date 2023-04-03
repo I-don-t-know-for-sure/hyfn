@@ -1,10 +1,7 @@
-interface AcceptProposalProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
+interface AcceptProposalProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { USER_TYPE_CUSTOMER } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
-
 interface AcceptProposalProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -14,7 +11,6 @@ export const acceptProposal = async ({ arg, client, userId }: AcceptProposalProp
     .db('generalData')
     .collection('customerInfo')
     .findOne({ customerId: userId });
-
   const orderDoc = await client
     .db('base')
     .collection('orders')
@@ -26,15 +22,12 @@ export const acceptProposal = async ({ arg, client, userId }: AcceptProposalProp
     throw new Error('order canceled');
   }
   const customerStatus = orderDoc.status.find((status) => status.userType === USER_TYPE_CUSTOMER);
-
   if (customerStatus._id !== customerDoc._id.toString()) {
     throw new Error('order is not for this user');
   }
-
   if (!orderDoc.proposals.find((proposal) => proposal.managementId === driverManagementId)) {
     throw new Error('driver managemnt not found');
   }
-
   await client
     .db('base')
     .collection('orders')
@@ -51,7 +44,6 @@ export const acceptProposal = async ({ arg, client, userId }: AcceptProposalProp
     );
   return 'success';
 };
-
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: acceptProposal });
 };

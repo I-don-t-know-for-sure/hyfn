@@ -1,13 +1,9 @@
-interface SetDeliveryFeePaidProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
+interface SetDeliveryFeePaidProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-
 interface SetDeliveryFeePaidProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-
 export const setDeliveryFeePaid = async ({ arg, client, userId }: SetDeliveryFeePaidProps) => {
   const { country } = arg[0];
   const driverDoc = await client
@@ -17,7 +13,6 @@ export const setDeliveryFeePaid = async ({ arg, client, userId }: SetDeliveryFee
   if (!driverDoc.onDuty) {
     throw new Error('driver has no active order');
   }
-
   await client
     .db('base')
     .collection('orders')
@@ -31,7 +26,6 @@ export const setDeliveryFeePaid = async ({ arg, client, userId }: SetDeliveryFee
     );
   return 'success';
 };
-
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setDeliveryFeePaid });
 };

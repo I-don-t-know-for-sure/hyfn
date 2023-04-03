@@ -1,10 +1,6 @@
-interface CalculateOrderCostProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 import axios from 'axios';
 import { deliveryServiceFee, storeAndCustomerServiceFee, storeServiceFee } from './constants';
 import { convertObjectToArray } from './convertObjectToArray';
-
 export const calculateOrdercost = async ({ orderArray, orderObject, coordinates, buyerCoords }) => {
   console.log(
     '🚀 ~ file: calculateOrderCost.js ~ line 6 ~ calculateOrdercost ~ coordinates',
@@ -13,7 +9,6 @@ export const calculateOrdercost = async ({ orderArray, orderObject, coordinates,
   async function getDeliveryDetails() {
     const deliveryUrl = coordinates.reduce(
       (accum, point) => `${accum};${point[0]},${point[1]}`,
-
       `${buyerCoords[0]},${buyerCoords[1]}`
     );
     console.log(
@@ -44,7 +39,6 @@ export const calculateOrdercost = async ({ orderArray, orderObject, coordinates,
     storesArray,
     orderObject
   );
-
   // const deliveryFee = deliveryDetails.data.routes[0].distance * 0.0001
   const allStoresDurations = storesArray.reduce((accu, store) => {
     const storeTotalDuration = store.addedProducts.reduce((accu, product) => {
@@ -52,25 +46,20 @@ export const calculateOrdercost = async ({ orderArray, orderObject, coordinates,
     }, 3);
     return accu + storeTotalDuration;
   }, 0);
-
   const durationInMinutes = allStoresDurations + deliveryDetails.data.routes[0].duration / 60;
-
   const deliveryFee =
     (durationInMinutes / 60) * 30 < 5 ? 5 : Math.ceil((durationInMinutes / 60) * 30);
-
   const orderCost = storesArray.reduce((accu, store) => {
     const storeTotal = store.addedProducts?.reduce(
       (acc, product) => acc + product.pricing.price * product.qty,
       0
     );
-
     return accu + storeTotal;
   }, 0);
   // order cost after our fee
   const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
   // delivery fee after our fee
   const deliveryFeeAfterFee = Math.ceil(deliveryFee - deliveryFee * deliveryServiceFee);
-
   // our service fee
   const serviceFee = orderCost * storeAndCustomerServiceFee + deliveryFee * deliveryServiceFee;
   // total cost of the order

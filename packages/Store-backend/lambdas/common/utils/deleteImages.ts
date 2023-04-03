@@ -1,8 +1,4 @@
-interface DeleteImagesProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 import { s3 } from '../s3';
-
 export const deleteImages = async (imageKeys) => {
   const sizeArray = [
     { folder: 'laptop', sizes: [350, 350] },
@@ -10,7 +6,6 @@ export const deleteImages = async (imageKeys) => {
     { folder: 'mobile', sizes: [150, 150] },
     { folder: 'tablet', sizes: [200, 200] },
   ];
-
   const deleteArray = imageKeys.flatMap((key) => {
     if (key === 'c72e349a9bc184cbdcfb1386060d4b5b') {
       return [];
@@ -27,7 +22,6 @@ export const deleteImages = async (imageKeys) => {
     Delete: { Objects: deleteArray },
   };
   console.log(params);
-
   const data = await s3.deleteObjects(params).promise();
   console.log(data);
 };

@@ -1,18 +1,13 @@
-interface UtilsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 import axios from 'axios';
 import { randomUUID } from 'crypto';
 import { add, largerEq, multiply, smaller, smallerEq, subtract } from 'mathjs';
 import { ObjectId } from 'mongodb';
-
 import {
   ORDER_TYPE_DELIVERY,
   deliveryServiceFee,
   storeAndCustomerServiceFee,
   storeServiceFee,
 } from './constants';
-
 export const updateRating = (
   oldCurrentRatingTotal = 0,
   oldRatingCount = 0,
@@ -21,20 +16,16 @@ export const updateRating = (
 ) => {
   const newCurrentRatigTotal = oldCurrentRatingTotal + newRating - oldRating;
   const newRatingCount = oldRatingCount;
-
   const newCurrentRating = newCurrentRatigTotal / newRatingCount;
-
   return {
     currentRating: newCurrentRating.toFixed(1),
     currentRatingTotal: newCurrentRatigTotal,
     ratingCount: newRatingCount,
   };
 };
-
 export const addRating = (oldCurrentRatingTotal = 0, oldRatingCount = 0, newRating) => {
   const newCurrentRatigTotal = oldCurrentRatingTotal + newRating;
   const newRatingCount = oldRatingCount + 1;
-
   const newCurrentRating = newCurrentRatigTotal / newRatingCount;
   return {
     currentRating: newCurrentRating.toFixed(1),
@@ -42,7 +33,6 @@ export const addRating = (oldCurrentRatingTotal = 0, oldRatingCount = 0, newRati
     ratingCount: newRatingCount,
   };
 };
-
 export const rateDriver = async ({
   newRating,
   customerId,
@@ -53,7 +43,6 @@ export const rateDriver = async ({
   client,
 }) => {
   var result;
-
   await client
     .db('base')
     .collection('orders')
@@ -68,7 +57,6 @@ export const rateDriver = async ({
       },
       { session }
     );
-
   await client
     .db('generalData')
     .collection('driverInfo')
@@ -83,19 +71,16 @@ export const rateDriver = async ({
       },
       { session, upsert: true }
     );
-
   const { currentRatingTotal: oldCurrentRatingTotal = 0, ratingCount: oldRatingCount = 0 } =
     await client
       .db('generalData')
       .collection('driverData')
       .findOne({ _id: new ObjectId(driverId) }, { session });
-
   const { currentRating, currentRatingTotal, ratingCount } = addRating(
     oldCurrentRatingTotal,
     oldRatingCount,
     newRating
   );
-
   await client
     .db('generalData')
     .collection('driverData')
@@ -114,7 +99,6 @@ export const rateDriver = async ({
     );
   result = 'rating successful';
 };
-
 export const getStore = async (store, client) => {
   const storeDoc = await client
     .db('generalData')
@@ -122,7 +106,6 @@ export const getStore = async (store, client) => {
     .findOne({ _id: new ObjectId(store._id) });
   return { ...storeDoc };
 };
-
 export const updateAllOrder = async (arg, client) => {
   const orderCart = arg[0];
   const buyerInfo = arg[1];
@@ -135,7 +118,6 @@ export const updateAllOrder = async (arg, client) => {
   }
   // for (let i = 0; i < orderCart?.length; i++) {
   //   const store = orderCart[i];
-
   //   if (store.country !== country && store.city !== city) {
   //     throw new Error('can not order from different cities or countries ');
   //   }
@@ -144,23 +126,18 @@ export const updateAllOrder = async (arg, client) => {
   //   }
   //   coordinates.push(store.coords.coordinates);
   // }
-
   var storesArray: any[] = [];
   console.log('🚀 ~ file: utils.js ~ line 140 ~ updateAllOrder ~ storesArray', storesArray);
-
   for (let i = 0; i < orderCart.length; i++) {
     const store = orderCart[i];
     const storeDoc = await client
       .db('generalData')
       .collection('storeInfo')
       .findOne({ _id: new ObjectId(store._id) }, {});
-
     if (storeDoc.city !== city || storeDoc.country !== country) {
       throw new Error('location do not match');
     }
-
     // const currency = storeDoc.currency
-
     if (store.country !== country && store.city !== city) {
       throw new Error('can not order from different cities or countries ');
     }
@@ -170,7 +147,6 @@ export const updateAllOrder = async (arg, client) => {
     // if (store.orderType === 'Pickup') {
     //   continue;
     // }
-
     var addedProductsDocs: any[] = [];
     if (storeDoc.subscriptionInfo.expirationDate < new Date()) {
       console.log(
@@ -212,11 +188,9 @@ export const updateAllOrder = async (arg, client) => {
               (validValue) => validValue.key === customerValue.key
             );
           });
-
           return { ...option, optionValues: validValues };
         });
       }
-
       addedProductsDocs.push({
         ...productDoc,
         key: new ObjectId().toString(),
@@ -225,7 +199,6 @@ export const updateAllOrder = async (arg, client) => {
         instructions: product?.instructions,
       });
     }
-
     storesArray.push({
       ...storeDoc,
       pickupConfirmation: new ObjectId().toString(),
@@ -234,10 +207,8 @@ export const updateAllOrder = async (arg, client) => {
       orderStatus: 'pending',
     });
   }
-
   const orderCost = calculateOrderCost(storesArray);
   console.log('🚀 ~ file: utils.js:195 ~ updateAllOrder ~ orderCost', orderCost);
-
   if (orderCost < 50) {
     throw new Error('can not create order with less than 50');
   }
@@ -251,7 +222,6 @@ export const updateAllOrder = async (arg, client) => {
   }, 0);
   const storePickupFee = (() => {
     const fee = multiply(allStoresDurations, 0.25);
-
     if (largerEq(fee, 5)) {
       return 5;
     }
@@ -263,23 +233,18 @@ export const updateAllOrder = async (arg, client) => {
   if (coordinates.length > 0 && orderCart[0].orderType === ORDER_TYPE_DELIVERY) {
     const deliveryUrl = coordinates.reduce(
       (accum, point) => `${accum};${point[0]},${point[1]}`,
-
       `${buyerInfo.customerCoords[1]},${buyerInfo.customerCoords[0]}`
     );
     // return { orderCart, buyerInfo, orders, deliveryUrl };
-
     // const deliveryDetails = await axios({
     //   method: 'get',
     //   url: `https://api.mapbox.com/directions/v5/mapbox/driving/${deliveryUrl}?annotations=maxspeed&overview=full&geometries=geojson&access_token=pk.eyJ1IjoiYmFyaW9teW1lbiIsImEiOiJjbDFrcXRnaHowM2lxM2Jtb3h3Z2J4bDQ0In0.DKfCj0bt3QfE9QgacrWnpA`,
     // });
     console.log(deliveryUrl);
     // const deliveryFee = deliveryDetails.data.routes[0].distance * 0.0001
-
     // const durationInMinutes = allStoresDurations + deliveryDetails.data.routes[0].duration / 60;
-
     // const deliveryFee =
     //   (durationInMinutes / 60) * 30 < 5 ? 5 : Math.ceil((durationInMinutes / 60) * 30);
-
     // const orderCost = calculateOrderCost(storesArray);
     // order cost after our fee
     const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
@@ -299,7 +264,6 @@ export const updateAllOrder = async (arg, client) => {
           $set: {
             order: {
               orders: storesArray,
-
               // deliveryDetails: {
               orderType: orderCart[0].orderType,
               buyerCoords: [buyerInfo.customerCoords[1], buyerInfo.customerCoords[0]],
@@ -330,10 +294,8 @@ export const updateAllOrder = async (arg, client) => {
     //     (acc, product) => acc + product.pricing.price * product.qty,
     //     0
     //   );
-
     //   return accu + storeTotal;
     // }, 0);
-
     // const orderCost = calculateOrderCost(storesArray);
     // order cost after our fee
     const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
@@ -341,7 +303,6 @@ export const updateAllOrder = async (arg, client) => {
     const serviceFee = orderCost * storeAndCustomerServiceFee;
     // total cost of the order
     const totalCost = orderCostAfterFee + serviceFee;
-
     await client
       .db('generalData')
       .collection(`customerInfo`)
@@ -351,7 +312,6 @@ export const updateAllOrder = async (arg, client) => {
           $set: {
             order: {
               orders: storesArray,
-
               /////
               coords: {
                 type: 'MultiPoint',
@@ -366,7 +326,6 @@ export const updateAllOrder = async (arg, client) => {
               distance: 0,
               deliveryFee: 0,
               orderCost: parseFloat(orderCostAfterFee.toFixed(3)),
-
               totalCost: parseFloat(totalCost.toFixed(3)),
               deliveryDate,
             },
@@ -379,7 +338,6 @@ export const updateAllOrder = async (arg, client) => {
     //         $set: {
     //           order: {
     //             orders: storesArray,
-
     //             deliveryDetails: {
     //               /////
     //               geometery: {
@@ -394,28 +352,22 @@ export const updateAllOrder = async (arg, client) => {
     //               distance: 0,
     //               deliveryFee: 0,
     //               orderCost: parseFloat(orderCostAfterFee.toFixed(3)),
-
     //               totalCost: parseFloat(totalCost.toFixed(3)),
     //             },
     //           },
     //         },
     //       },
     //  {},
-
     //     );
     return;
   }
 };
-
 export const updateOrderProducts = async (arg, client) => {
   console.log('🚀 ~ file: utils.js ~ line 277 ~ updateOrderProducts ~ arg', arg);
   const orderCart = arg[0];
-
   const customerInfo = arg[1];
-
   const metchesOrder = orderCart[0];
   const { country, city } = metchesOrder;
-
   const customerDoc = await client
     .db('generalData')
     .collection('customerInfo')
@@ -435,7 +387,6 @@ export const updateOrderProducts = async (arg, client) => {
     if (store._id !== orders[i]._id) {
       return 'should update all order';
     }
-
     console.log(JSON.stringify(orderCart));
     for (let x = 0; x < orderCart[i]?.addedProducts?.length; x++) {
       if (
@@ -454,7 +405,6 @@ export const updateOrderProducts = async (arg, client) => {
           );
         if (!newProduct) throw 'product does not exist';
         if (newProduct?.country !== productToBeAdded?.country) throw 'product invalid or something';
-
         newStoreAddedProducts.push({
           ...newProduct,
           qty: productToBeAdded.qty,
@@ -465,7 +415,6 @@ export const updateOrderProducts = async (arg, client) => {
         });
       }
     }
-
     newOrder.push({
       ...orderCart[i],
       addedProducts: newStoreAddedProducts,
@@ -477,11 +426,9 @@ export const updateOrderProducts = async (arg, client) => {
       (acc, product) => acc + product.pricing.price * product.qty,
       0
     );
-
     return accu + storeTotal;
   }, 0);
   const deliveryFee = customerDoc?.order?.deliveryDetails?.deliveryFee;
-
   // order cost after our fee
   const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
   // delivery fee after our fee
@@ -490,7 +437,6 @@ export const updateOrderProducts = async (arg, client) => {
   const serviceFee = orderCost * storeAndCustomerServiceFee + deliveryFee * deliveryServiceFee;
   // total cost of the order
   const totalCost = orderCostAfterFee + serviceFee + deliveryFeeAfterFee;
-
   await client
     .db('generalData')
     .collection(`customerInfo`)
@@ -512,7 +458,6 @@ export const updateOrderProducts = async (arg, client) => {
       {}
     );
 };
-
 export const getCountryInfo = () => {
   const countries = ['Libya'];
   const cities = [
@@ -562,7 +507,6 @@ export const getCountryInfo = () => {
   ];
   return { countries, cities };
 };
-
 export const getCountryInfoRightOne = () => {
   return [
     {
@@ -623,7 +567,6 @@ function calculateOrderCost(storesArray) {
         '🚀 ~ file: utils.js:559 ~ productValuesPrice=product.options.reduce ~ productValuesPrice',
         productValuesPrice
       );
-
       const productTotalPrice = add(product.pricing.price, productValuesPrice);
       console.log('hcbdhcbdhbcdhcdbhdbchbdhb', productTotalPrice * product.qty);
       return add(acc, multiply(productTotalPrice, product.qty));
@@ -632,7 +575,6 @@ function calculateOrderCost(storesArray) {
       ...storesArray[currentIndex],
       orderCost: subtract(storeTotal, multiply(storeTotal, storeServiceFee)),
     };
-
     console.log(
       '🚀 ~ file: utils.js:559 ~ productValuesPrice=product.options.reduce ~ productValuesPrice',
       subtract(storeTotal, multiply(storeTotal, storeServiceFee))

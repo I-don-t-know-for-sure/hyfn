@@ -1,6 +1,4 @@
-interface GetStoreFrontsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
+interface GetStoreFrontsProps extends Omit<MainFunctionProps, 'arg'> {}
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { storeFrontSchema, test4 } from 'hyfn-types';
@@ -15,11 +13,9 @@ export const getStoreFronts = async ({ arg, client }: GetStoreFrontsProps) => {
   console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
   console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
   console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
-
   const { country, city, coords, nearby } = arg[0];
   const { filter: storeType } = arg[1];
   const lastDoc = arg[2];
-
   const query =
     nearby && storeType !== 'all'
       ? {
@@ -77,7 +73,6 @@ export const getStoreFronts = async ({ arg, client }: GetStoreFrontsProps) => {
       )
       .limit(20)
       .toArray();
-
     return stores;
   }
   const stores = await client
@@ -98,13 +93,11 @@ export const getStoreFronts = async ({ arg, client }: GetStoreFrontsProps) => {
     })
     .limit(20)
     .toArray();
-
   return stores;
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getStoreFronts });
   // Ensures that the client will close when you finish/error
-
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };

@@ -41,9 +41,11 @@ export const getCollectionProductsHandler = async ({ arg, client }) => {
   });
   return result;
 };
-interface GetCollectionProductsProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetCollectionProductsProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
-import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getCollectionProductsHandler });

@@ -35,7 +35,9 @@ export const getOrderHistoryHandler = async ({ arg, client }: MainFunctionProps)
   console.log(JSON.stringify(orders));
   return orders;
 };
-interface GetOrderHistoryProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetOrderHistoryProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
 import { ObjectId } from 'mongodb';
 import { ORDER_STATUS_DELIVERED } from '../resources';

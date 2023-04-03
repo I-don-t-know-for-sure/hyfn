@@ -1,6 +1,3 @@
-interface AddMonthsProps extends Omit<MainFunctionProps, "arg"> {
-  // Add your interface properties here
-}
 export const addMonths = (monthsToAdd = 1, currentDate = new Date()) => {
   const currentMonth = currentDate.getMonth();
   if (monthsToAdd + currentMonth >= 12) {

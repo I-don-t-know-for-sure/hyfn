@@ -244,9 +244,11 @@ export const createProductHandler = async ({ arg, client }) => {
   console.log(result);
   return result;
 };
-interface CreateProductProps extends Omit<MainFunctionProps, 'arg'> {}
+interface CreateProductProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 ('use strict');
-import { mainWrapperWithSession } from 'hyfn-server';
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx, callback) => {
   const transactionOptions = {
@@ -254,7 +256,6 @@ export const handler = async (event, ctx, callback) => {
     readConcern: { level: 'local' },
     writeConcern: { w: 'majority' },
   };
-
   return await mainWrapperWithSession({
     mainFunction: createProductHandler,
     ctx,
