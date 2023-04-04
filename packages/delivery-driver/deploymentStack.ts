@@ -1,6 +1,7 @@
 import { Cognito, StackContext, StaticSite, use } from "sst/constructs";
 import { getStage } from "../../stacks/getStage";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import * as ssm from "aws-cdk-lib/aws-ssm";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
 import {
@@ -14,6 +15,11 @@ export function driverApp({ stack }: StackContext) {
   // const { api } = use(driverApiStack);
   const s3BucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const paymentAppUrl = Fn.importValue(`paymentAppUrl-${stack.stage}`);
+  // const mapName = Fn.importValue(`MapName${stack.stage}`);
+  // const mapRegion = Fn.importValue(`MapRegion${stack.stage}`);
+  // const mapStyle = Fn.importValue(`MapStyle${stack.stage}`);
+  // const parameter = ssm.StringParameter.valueFromLookup(stack as any, 'my-parameter');
+
   // const cognitoIdentityPoolId = Fn.importValue(
   //   `driverCognitoIdentityPoolId-${stack.stage}`
   // );
@@ -45,6 +51,7 @@ export function driverApp({ stack }: StackContext) {
     environment: {
       GENERATE_SOURCEMAP: "false",
       VITE_APP_BUCKET_URL: `https://${s3BucketName}.s3.${stack.region}.amazonaws.com`,
+
       VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
         frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
@@ -64,7 +71,7 @@ export function driverApp({ stack }: StackContext) {
     },
   });
 
-  new CfnOutput(stack, "driverSiteUrl-" + stack.stage, {
+  new CfnOutput(stack as any, "driverSiteUrl-" + stack.stage, {
     value: site.url || localhost + "3009",
     exportName: "driverSiteUrl-" + stack.stage, // export name
   });

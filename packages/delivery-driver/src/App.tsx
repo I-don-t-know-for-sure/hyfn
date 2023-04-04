@@ -17,6 +17,8 @@ import CreateAccount from "Pages/CreateAccount/CreateAccount";
 import { Amplify, Auth } from "aws-amplify";
 
 import Proposals from "Pages/Proposals/Proposals";
+import Map from "Pages/Home/HomeWithMap";
+
 function App() {
   Amplify.configure({
     Auth: {
@@ -31,6 +33,24 @@ function App() {
       bucket: import.meta.env.VITE_APP_BUCKET,
       identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
     },
+    // VITE_APP_MAP_NAME: mapName,
+    //   VITE_APP_MAP_REGION: mapRegion,
+    //   VITE_APP_MAP_STYLE: mapStyle,
+    // geo: {
+    //   AmazonLocationService: {
+    //     maps: {
+    //       items: {
+    //         [import.meta.env.VITE_APP_MAP_NAME]: {
+    //           // REQUIRED - Amazon Location Service Map resource name
+    //           style: import.meta.env.VITE_APP_MAP_STYLE, // REQUIRED - String representing the style of map resource
+    //         },
+    //       },
+    //       default: import.meta.env.VITE_APP_MAP_NAME, // REQUIRED - Amazon Location Service Map resource name to set as default
+    //     },
+
+    //     region: import.meta.env.VITE_APP_MAP_REGION, // REQUIRED - Amazon Location Service Region
+    //   },
+    // },
   });
   console.log("🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_REGION:", {
     region: import.meta.env.VITE_APP_COGNITO_REGION,
@@ -54,6 +74,14 @@ function App() {
               element={
                 <Page>
                   <Home />
+                </Page>
+              }
+            />
+            <Route
+              path="/map"
+              element={
+                <Page>
+                  <Map />
                 </Page>
               }
             />

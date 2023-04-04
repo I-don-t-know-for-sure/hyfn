@@ -16,6 +16,7 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
   userDocument,
 }) => {
   const { mutate: takeOrder } = useTakeOrder();
+  console.log("🚀 ~ file: AvailableOrder.tsx:63 ~ userDocument:", userDocument);
 
   return (
     <Card m={"24px auto"} key={order?._id.toString()}>
@@ -56,10 +57,10 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
           orderId={order._id.toString()}
           proposal={order?.proposals?.find(
             (proposal) =>
-              proposal?.managementId === userDocument.driverManagement[0]
+              proposal?.managementId === userDocument?.driverManagement[0]
           )}
         />
-        {userDocument.driverManagement[0] === order.acceptedProposal && (
+        {userDocument?.driverManagement === order.acceptedProposal && (
           <Group>
             <Button
               onClick={() => {

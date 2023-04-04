@@ -18,19 +18,19 @@ export const mainFunction = async ({ arg, client, event }: MainFunctionProps) =>
   if (!driverData) {
     throw new Error('driver not found');
   }
-  if (!driverData.verified && !driverData.balance) {
-    throw new Error('Driver not verified');
-  }
+  //   if (!driverData.verified && !driverData.balance) {
+  //     throw new Error('Driver not verified');
+  //   }
   console.log(driverData.onDuty);
   if (driverData.onDuty) {
-    const result = await client
-      .db('base')
-      .collection('orders')
-      .findOne({
-        _id: new ObjectId(driverData.orderId),
-      });
-    console.log([result]);
-    return [result] || [];
+    // const result = await client
+    //   .db('base')
+    //   .collection('orders')
+    //   .findOne({
+    //     _id: new ObjectId(driverData.orderId),
+    //   });
+    // console.log([result]);
+    // return [result] || [];
   } else {
     const db = client.db('base');
     if (lastDoc) {

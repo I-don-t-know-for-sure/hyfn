@@ -3,10 +3,11 @@ import { StackContext, Api, use, Function, StaticSite, Cognito } from 'sst/const
 import * as iam from 'aws-cdk-lib/aws-iam';
 
 import { getStage } from '../../stacks/getStage';
-import { frConfig } from '../../frEnvVaraibles';
+
 import { config } from '../../envVaraibles';
 // import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
 import { CfnOutput, Fn } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 const pathToLambdas = '../driver-backend/lambdas/';
 
@@ -229,11 +230,11 @@ export function driverCognitoStack({ stack }: StackContext) {
     }),
   ]);
 
-  new CfnOutput(stack, 'driverCognitoIdentityPoolId-' + stack.stage, {
+  new CfnOutput(stack as any, 'driverCognitoIdentityPoolId-' + stack.stage, {
     value: auth.cognitoIdentityPoolId || '',
     exportName: 'driverCognitoIdentityPoolId-' + stack.stage, // export name
   });
-  new CfnOutput(stack, 'driverCognitoRegion-' + stack.stage, {
+  new CfnOutput(stack as any, 'driverCognitoRegion-' + stack.stage, {
     value: stack.region || '',
     exportName: 'driverCognitoRegion-' + stack.stage, // export name
   });

@@ -1,44 +1,57 @@
-import { Button, Card, Container, FileInput, Group, NativeSelect, Paper, Stack, TextInput, Title } from '@mantine/core'
-import { useForm } from '@mantine/form'
+import {
+  Button,
+  Card,
+  Container,
+  FileInput,
+  Group,
+  NativeSelect,
+  Paper,
+  Stack,
+  TextInput,
+  Title,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
 
-import { t } from 'utils/i18nextFix'
-import { useCreateDriver } from 'hooks/useCreateDriver'
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
-import { useUser } from 'contexts/userContext/User'
+import { t } from "utils/i18nextFix";
+import { useCreateDriver } from "hooks/useCreateDriver";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { useUser } from "contexts/userContext/User";
 
 interface AccountDetailsProps {}
 
 const CreateAccount: React.FC<AccountDetailsProps> = () => {
-  const { mutate } = useCreateDriver()
-  const navigate = useNavigate()
+  const { mutate } = useCreateDriver();
+  const navigate = useNavigate();
   const form = useForm({
     initialValues: {
-      driverName: '',
+      driverName: "",
 
-      driverPhone: '',
+      driverPhone: "",
 
-      passportNumber: '',
-      tarnsportationMethod: 'car',
+      // passportNumber: "",
+      tarnsportationMethod: "car",
     },
-  })
-  const { loggedIn, userDocument } = useUser()
+  });
+  const { loggedIn, userDocument } = useUser();
 
   useEffect(() => {
     if (loggedIn) {
-      if (typeof userDocument === 'object') {
+      if (typeof userDocument === "object") {
         if (Object.keys(userDocument).length > 0) {
-          navigate('/', { replace: true })
+          navigate("/", { replace: true });
         }
       }
     }
     if (!loggedIn) {
-      navigate('/signup', { replace: true })
+      navigate("/signup", { replace: true });
     }
-  }, [loggedIn, userDocument])
+  }, [loggedIn, userDocument]);
 
-  const [passportPic, setPassportPic] = useState<File | null>(null)
-  const [passportAndFacePic, setPassportAndFacePic] = useState<File | null>(null)
+  // const [passportPic, setPassportPic] = useState<File | null>(null);
+  // const [passportAndFacePic, setPassportAndFacePic] = useState<File | null>(
+  //   null
+  // );
   // useRefreshCustomUserData()
 
   return (
@@ -46,29 +59,29 @@ const CreateAccount: React.FC<AccountDetailsProps> = () => {
       <form
         onSubmit={form.onSubmit(async (values) => {
           try {
-            console.log(values)
+            console.log(values);
 
-            mutate({ ...values, passportPic, passportAndFacePic })
+            mutate({ ...values });
           } catch (e) {
-            console.error(e)
+            console.error(e);
           }
         })}
       >
         <Card
-          shadow={'md'}
+          shadow={"md"}
           sx={{
-            marginTop: '6px',
+            marginTop: "6px",
           }}
         >
           <Title order={3} mb={8}>
-            {t('Personal Info')}
+            {t("Personal Info")}
           </Title>
           <Stack>
             <TextInput
               type="text"
               // required
-              label={t('Full name')}
-              {...form.getInputProps('driverName')}
+              label={t("Full name")}
+              {...form.getInputProps("driverName")}
             />
 
             {/* <Group grow>
@@ -83,66 +96,36 @@ const CreateAccount: React.FC<AccountDetailsProps> = () => {
             <TextInput
               type="number"
               // required
-              label={t('driverPhone')}
-              {...form.getInputProps('driverPhone')}
+              label={t("driverPhone")}
+              {...form.getInputProps("driverPhone")}
             />
-            <TextInput
+            {/* <TextInput
               type="text"
               // required
-              label={t('Passport number')}
-              {...form.getInputProps('passportNumber')}
-            />
+              label={t("Passport number")}
+              {...form.getInputProps("passportNumber")}
+            /> */}
 
-            <FileInput required value={passportPic} onChange={setPassportPic} label={t('Passport Picture')} />
+            {/* <FileInput
+              required
+              value={passportPic}
+              onChange={setPassportPic}
+              label={t("Passport Picture")}
+            />
             <FileInput
               required
               value={passportAndFacePic}
               onChange={setPassportAndFacePic}
-              label={t('Passport and face pic')}
-            />
+              label={t("Passport and face pic")}
+            /> */}
           </Stack>
-          {/* <Group
-                grow
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Input.Wrapper label={t("Personal Picture")}>
-                  <Input
-                    type={"file"}
-                    title={t("Personal Picture")}
-                    onChange={(e) =>
-                      form.setFieldValue("personalImageObj", [
-                        ...e.target.files,
-                      ])
-                    }
-                  />
-                </Input.Wrapper>
-                <Box
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Image
-                    src={`${import.meta.env.VITE_APP_BUCKETURL}/${data?.personlImage[0]}`}
-                    width={100}
-                    height={100}
-                    radius={6}
-                    mt={6}
-                  />
-                </Box>
-              </Group> */}
         </Card>
 
         <Paper
-          title={t('Transportaion Info')}
-          shadow={'md'}
+          title={t("Transportaion Info")}
+          shadow={"md"}
           sx={{
-            marginTop: '6px',
+            marginTop: "6px",
           }}
         >
           <Title order={3} mb={8}>
@@ -150,18 +133,18 @@ const CreateAccount: React.FC<AccountDetailsProps> = () => {
           </Title>
 
           <NativeSelect
-            label={t('Transprotaion method')}
+            label={t("Transprotaion method")}
             data={[
-              { value: 'car', label: t('Car') },
-              { value: 'motorcycle', label: t('Motorcycle') },
-              { value: 'truck', label: t('Truck') },
-              { value: 'van', label: t('Van') },
+              { value: "car", label: t("Car") },
+              { value: "motorcycle", label: t("Motorcycle") },
+              { value: "truck", label: t("Truck") },
+              { value: "van", label: t("Van") },
             ]}
             onChange={(e) => {
-              console.log(e)
-              console.log('hshsh')
+              console.log(e);
+              console.log("hshsh");
 
-              form.setFieldValue('tarnsportationMethod', e.target.value)
+              form.setFieldValue("tarnsportationMethod", e.target.value);
             }}
             value={form.values.tarnsportationMethod}
           />
@@ -210,17 +193,17 @@ const CreateAccount: React.FC<AccountDetailsProps> = () => {
           <Button
             fullWidth
             sx={{
-              maxWidth: '450px',
+              maxWidth: "450px",
             }}
-            m={'0px auto'}
+            m={"0px auto"}
             type="submit"
           >
-            {t('Create Account')}
+            {t("Create Account")}
           </Button>
         </Group>
       </form>
     </Container>
-  )
-}
+  );
+};
 
-export default CreateAccount
+export default CreateAccount;
