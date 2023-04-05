@@ -1,6 +1,6 @@
 export const getCollectionProductsHandler = async ({ arg, client }) => {
   var result;
-  console.log(event);
+
   const { country, storeId, lastDoc, collectionId } = arg[0];
   if (lastDoc) {
     result = await client
