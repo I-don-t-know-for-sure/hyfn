@@ -1,12 +1,12 @@
-import { AspectRatio, Box, Text, UnstyledButton } from '@mantine/core';
-import Image from 'components/Image';
-import ProductControler from 'components/ProductControler';
-import { storeServiceFee } from 'config/constents';
+import { AspectRatio, Box, Text, UnstyledButton } from "@mantine/core";
+import Image from "components/Image";
+import ProductControler from "components/ProductControler";
+import { storeServiceFee } from "config/constents";
 
-import React from 'react';
+import React from "react";
 
-import { UseMutateFunction } from 'react-query';
-import { Link } from 'react-router-dom';
+import { UseMutateFunction } from "react-query";
+import { Link } from "react-router-dom";
 
 interface ProductType {
   _id: any;
@@ -64,17 +64,17 @@ const Product: React.FC<ProductProps> = ({
   return (
     <Box
       sx={{
-        width: '100%',
+        width: "100%",
 
-        height: '100%',
-        position: 'relative',
+        height: "100%",
+        position: "relative",
       }}
     >
       {!product?.options?.hasOptions && (
         <Box
           sx={{
             zIndex: 999,
-            position: 'absolute',
+            position: "absolute",
             top: 10,
             right: 30,
           }}
@@ -92,7 +92,7 @@ const Product: React.FC<ProductProps> = ({
         to={productUrl}
         state={{ orderType: orderType }}
         style={{
-          textDecoration: 'none',
+          textDecoration: "none",
         }}
       >
         <Box m={12} style={{}}>
@@ -100,18 +100,25 @@ const Product: React.FC<ProductProps> = ({
             <Image
               radius={6}
               sx={{
-                width: '100%',
+                width: "100%",
 
-                height: '100px',
+                height: "100px",
               }}
-              imageName={product?.images?.length > 0 ? product.images[0] : 'c72e349a9bc184cbdcfb1386060d4b5b'}
+              imageName={
+                product?.images?.length > 0
+                  ? product.images[0]
+                  : "c72e349a9bc184cbdcfb1386060d4b5b"
+              }
             />
           </AspectRatio>
 
           <Box>
             <Text>
               {currency}
-              {(product.pricing.price - product.pricing.price * storeServiceFee).toFixed(3)}
+              {(
+                product.pricing.price -
+                product.pricing.price * storeServiceFee
+              ).toFixed(3)}
             </Text>
           </Box>
           <Box>

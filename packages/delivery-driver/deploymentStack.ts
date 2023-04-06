@@ -4,10 +4,7 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
-import {
-  driverApiStack,
-  driverCognitoStack,
-} from "../driver-backend/driverStack";
+
 const localhost = "http://localhost:";
 
 export function driverApp({ stack }: StackContext) {

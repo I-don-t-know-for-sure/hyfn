@@ -1,3 +1,9 @@
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { ObjectId } from 'mongodb';
+('use strict');
+interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 export const openAndCloseStoreHandler = async ({ arg, client, session }: MainFunctionProps) => {
   var result;
   const storeId = arg[0];
@@ -87,12 +93,6 @@ export const openAndCloseStoreHandler = async ({ arg, client, session }: MainFun
   // Ensures that the client will close when you finish/error
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
 };
-interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapperWithSession({
     event,

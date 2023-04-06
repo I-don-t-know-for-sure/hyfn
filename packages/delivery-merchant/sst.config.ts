@@ -1,10 +1,7 @@
 import { SSTConfig } from "sst";
 
 import { RemovalPolicy } from "aws-cdk-lib";
-import {
-  storeApiStack,
-  storeCognitoStack,
-} from "../Store-backend/storeBackend";
+import { storeApiStack, storeCognitoStack } from "../../stacks/storeBackend";
 import { storeApp } from "./deploymentStack";
 
 export default {

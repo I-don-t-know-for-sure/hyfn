@@ -138,28 +138,32 @@ const PayModal: React.FC<PayModalProps> = ({
                   orderSaleFee,
                   order.serviceFee
                 )}`}</Text>
-                <PayWithLocalCardButton
-                  createLocalCardTransaction={createLocalCardTransaction}
-                  flag={LOCAL_CARD_TRANSACTION_FLAG_SERVICE_FEE}
-                  // isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
-                  orderId={orderId}
-                  storeId={storeId}
-                />
+                {!!add(orderSaleFee, order.serviceFee) && (
+                  <PayWithLocalCardButton
+                    createLocalCardTransaction={createLocalCardTransaction}
+                    flag={LOCAL_CARD_TRANSACTION_FLAG_SERVICE_FEE}
+                    // isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
+                    orderId={orderId}
+                    storeId={storeId}
+                  />
+                )}
               </Stack>
             </Group>
             <Group position="apart">
               <Text>{t("Delivery fee")}</Text>
               <Stack spacing={2}>
                 <Text>{`${store.currency} ${order.deliveryFee}`}</Text>
-                <PayWithLocalCardButton
-                  createLocalCardTransaction={
-                    createManagementLocalCardTransaction
-                  }
-                  flag={LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT}
-                  isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
-                  orderId={orderId}
-                  storeId={storeId}
-                />
+                {!!order.deliveryFee && (
+                  <PayWithLocalCardButton
+                    createLocalCardTransaction={
+                      createManagementLocalCardTransaction
+                    }
+                    flag={LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT}
+                    isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
+                    orderId={orderId}
+                    storeId={storeId}
+                  />
+                )}
               </Stack>
             </Group>
 
@@ -168,13 +172,15 @@ const PayModal: React.FC<PayModalProps> = ({
 
               <Stack spacing={2}>
                 <Text>{`${store.currency} ${orderTotalAfterFee}`}</Text>
-                <PayWithLocalCardButton
-                  createLocalCardTransaction={createStoreLocalCardTransaction}
-                  flag={LOCAL_CARD_TRANSACTION_FLAG_STORE}
-                  //   isBalanceEnough={equal(orderSaleFee, balance) as boolean}
-                  orderId={orderId}
-                  storeId={storeId}
-                />
+                {!!orderTotalAfterFee && (
+                  <PayWithLocalCardButton
+                    createLocalCardTransaction={createStoreLocalCardTransaction}
+                    flag={LOCAL_CARD_TRANSACTION_FLAG_STORE}
+                    //   isBalanceEnough={equal(orderSaleFee, balance) as boolean}
+                    orderId={orderId}
+                    storeId={storeId}
+                  />
+                )}
               </Stack>
             </Group>
           </Stack>

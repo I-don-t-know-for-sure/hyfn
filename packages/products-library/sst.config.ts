@@ -5,7 +5,7 @@ import { libraryApp } from "./deploymentStack";
 import {
   libraryApiStack,
   libraryCognitoStack,
-} from "../product-library-backend/productsLibraryStack";
+} from "../../stacks/productsLibraryStack";
 
 export default {
   config(_input) {

@@ -153,6 +153,7 @@ export const updateAllOrder = async (arg, client) => {
         '🚀 ~ file: utils.js:152 ~ updateAllOrder ~ subscriptionInfo',
         storeDoc.subscriptionInfo
       );
+      throw new Error('expired subscription');
     }
     console.log(storeDoc, 'ddd');
     for (let x = 0; x < store.addedProducts.length; x++) {

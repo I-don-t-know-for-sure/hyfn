@@ -9,12 +9,13 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { getStage } from "../../stacks/getStage";
-import { frConfig } from "../../frEnvVaraibles";
-import { config } from "../../envVaraibles";
+import { getStage } from "./getStage";
+import { frConfig } from "../frEnvVaraibles";
+import { config } from "../envVaraibles";
 
 import { CfnOutput, Fn } from "aws-cdk-lib";
-const pathToLambdas = "../product-library-backend/lambdas/";
+import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
+const pathToLambdas = "./packages/product-library-backend/lambdas/";
 
 const localhost = "http://localhost:";
 
@@ -22,12 +23,16 @@ export function libraryApiStack({ stack }: StackContext) {
   // const { s3Bucket } = use(imagesBucketStack);
   // const { key } = use(kmsStack);
   const { auth } = use(libraryCognitoStack);
-  const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
-  const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
+  const { s3Bucket } = use(imagesBucketStack);
+  const { key } = use(kmsStack);
+  const keyArn = key.keyArn;
+  const imagesBucketName = s3Bucket.bucketName;
+  // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
+  // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const stage = getStage(stack.stage);
   const defaultFunction = new Function(stack, "librarydefaultFunction", {
     handler:
-      "../Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+      "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
   });
   const api = new Api(stack, "libraryApi", {
     defaults: {
@@ -171,8 +176,10 @@ export function libraryApiStack({ stack }: StackContext) {
 export function libraryCognitoStack({ stack }: StackContext) {
   // const { s3Bucket } = use(imagesBucketStack);
   // const { authBucket } = use(authBucketStack);
-  const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
-  const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
+  const { authBucket } = use(authBucketStack);
+  const authBucketArn = authBucket.bucketArn;
+  // const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
+
   // const { site: paymentAppSite } = use(paymentApp);
   // const { api } = use(libraryB);
   const stage = getStage(stack.stage);

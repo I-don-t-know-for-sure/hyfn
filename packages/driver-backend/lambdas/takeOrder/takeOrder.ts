@@ -29,18 +29,18 @@ export const takeOrderHandler = async ({ arg, session, client }: MainFunctionPro
   if (!driverDoc) {
     throw new Error('driver not found');
   }
-  console.log('🚀 ~ file: takeOrder.js:31 ~ mainFunction ~ driverDoc', driverDoc);
+
   if (driverDoc.reported) {
     throw new Error('You have a reported order');
   }
-  console.log(driverDoc, 'hshshshssh');
+
   // if (driverDoc.onDuty) {
   //     throw new Error('you are on duty');
   // }
   // if (!driverDoc.verified) {
   //     throw new Error('you are not verified');
   // }
-  if (!driverDoc.driverManagement[0]) {
+  if (!driverDoc?.driverManagement[0]) {
     throw new Error('You are not trusted by a driver management');
   }
   // if(!driverDoc.verified){
@@ -53,7 +53,7 @@ export const takeOrderHandler = async ({ arg, session, client }: MainFunctionPro
   if (!orderDoc) {
     throw new Error('order not found');
   }
-  console.log('🚀 ~ file: takeOrder.js:56 ~ mainFunction ~ orderDoc', JSON.stringify(orderDoc));
+
   // if (orderDoc.orderCost > 750) {
   //   throw new Error('You can`t take an order that costs more than 750');
   // }
@@ -97,7 +97,7 @@ export const takeOrderHandler = async ({ arg, session, client }: MainFunctionPro
   const managementFee = deliveryFeeAfterHyfnFee;
   // const serviceFee = add(add(orderDoc.serviceFee, managementFee), hyfnFee);
   const serviceFee = add(orderDoc.serviceFee, hyfnFee);
-  console.log('🚀 ~ file: takeOrder.js:93 ~ mainFunction ~ serviceFee', serviceFee);
+
   type Order = z.infer<typeof orderSchema>;
   await db.collection<Order>('orders').updateOne(
     {

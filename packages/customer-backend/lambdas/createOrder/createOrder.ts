@@ -54,6 +54,13 @@ const createOrder = async ({ arg, client, session, userId: customerId }: CreateO
   // }
   console.log('hhdh');
   const mongo = client.db('base');
+  // if (storeDoc.subscriptionInfo.expirationDate < new Date()) {
+  //   console.log(
+  //     '🚀 ~ file: utils.js:152 ~ updateAllOrder ~ subscriptionInfo',
+  //     storeDoc.subscriptionInfo
+  //   );
+  //   throw new Error('expired subscription');
+  // }
   const storesArray: any[] = [];
   for (let i = 0; i < order.orders?.length; i++) {
     const store = order.orders[i];

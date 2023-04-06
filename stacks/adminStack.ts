@@ -9,26 +9,29 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { getStage } from "../../stacks/getStage";
+import { getStage } from "../stacks/getStage";
 
-import { config } from "../../envVaraibles";
+import { config } from "../envVaraibles";
 
 import { CfnOutput, Fn } from "aws-cdk-lib";
-const pathToLambdas = "./lambdas/";
+import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
+const pathToLambdas = "./packages/admin-backend/lambdas/";
 
 const localhost = "http://localhost:";
 export function adminApiStack({ stack }: StackContext) {
   const { auth } = use(adminCognitoStack);
 
-  // const { s3Bucket } = use(imagesBucketStack);
-  // const { key } = use(kmsStack);
-  const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
-  const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
+  const { s3Bucket } = use(imagesBucketStack);
+  const { key } = use(kmsStack);
+  const keyArn = key.keyArn;
+  const imagesBucketName = s3Bucket.bucketName;
+  // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
+  // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const stage = getStage(stack.stage);
 
   const defaultFunction = new Function(stack, "admindefaultFunction", {
     handler:
-      "../Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+      "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
   });
   const api = new Api(stack, "adminApi", {
     defaults: {
@@ -163,8 +166,10 @@ export function adminApiStack({ stack }: StackContext) {
 
 export function adminCognitoStack({ stack }: StackContext) {
   // const { s3Bucket } = use(imagesBucketStack);
-  // const { authBucket } = use(authBucketStack);
-  const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
+  const { authBucket } = use(authBucketStack);
+  const authBucketArn = authBucket.bucketArn;
+
+  // const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
 
   // const { site: paymentAppSite } = use(paymentApp);
 

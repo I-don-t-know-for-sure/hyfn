@@ -5,13 +5,17 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "deploy": "sst deploy",
+    "deploy-prod": "sst deploy --stage production",
+    "deploy-staging": "sst deploy --stage staging",
+    "deploy-dev": "sst deploy --region eu-west-3 --stage development",
+    "wrap": "node ../../wrapper.cjs",
+    "sst-dev": "sst dev --region eu-west-3 --stage development",
+    "start": "sst bind --region eu-west-3 --stage development  vite",
     "console": "sst console",
     "after-install": "node ./fetch-envs.js && node ./fetch-fr-envs.js && tsc --build ./packages/hyfn-client && tsc --build ./packages/hyfn-types && tsc --build ./packages/hyfn-server ",
     "fetch-envs": "node ./fetch-envs.js && node ./fetch-fr-envs.js",
     "build-ts": "tsc --build ./packages/hyfn-client && tsc --build ./packages/hyfn-types && tsc --build ./packages/hyfn-server ",
-    "createDatabaseUser": "node ./createDatabaseUser.js",
-    "start": "sst dev --region eu-west-3"
+    "createDatabaseUser": "node ./createDatabaseUser.js"
   },
   "devDependencies": {
     "@serverless-stack/resources": "^1.18.4",

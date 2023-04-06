@@ -3,10 +3,7 @@ import { getStage } from "../../stacks/getStage";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
-import {
-  storeApiStack,
-  storeCognitoStack,
-} from "../Store-backend/storeBackend";
+import { storeApiStack, storeCognitoStack } from "../../stacks/storeBackend";
 const localhost = "http://localhost:";
 
 export function storeApp({ stack }: StackContext) {

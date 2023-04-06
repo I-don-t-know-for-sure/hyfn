@@ -5,7 +5,7 @@ import { managementApp } from "./deploymentStack";
 import {
   managementApiStack,
   managementCognitoStack,
-} from "../driver-management-backend/driverManagement";
+} from "../../stacks/driverManagement";
 
 export default {
   config(_input) {

@@ -1,5 +1,5 @@
-interface CreateOrderDataProps extends Omit<MainFunctionProps, 'arg'> {}
 ('use strict');
+
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
 import { getCustomerInfo } from '../common/getCustomerInfo';

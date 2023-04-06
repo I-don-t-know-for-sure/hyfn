@@ -27,6 +27,7 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import ManageAddresses from "./pages/Addresses/Addresses";
 import CreateCustomer from "./pages/CreateCustomer/CreateCustomer";
 import { Amplify } from "aws-amplify";
+import LandingPage from "pages/LandingPage/LandingPage";
 
 function App() {
   console.log("🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_REGION:", {
@@ -63,7 +64,8 @@ function App() {
     <BrowserRouter>
       <Menu>
         <Routes>
-          <Route path={"/"}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path={"/stores"}>
             <Route
               index
               element={
