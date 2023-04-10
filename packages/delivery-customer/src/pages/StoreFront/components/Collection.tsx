@@ -1,13 +1,13 @@
-import { Carousel } from '@mantine/carousel';
-import { Box, Button, Center, Loader, Text } from '@mantine/core';
-import Product from 'components/Product';
-import { useCart } from 'contexts/cartContext/Provider';
-import { useOnScreen } from 'hooks/useOnScreen';
-import { t } from 'util/i18nextFix';;
-import { useGetCollectionProducts } from 'pages/Collection/hooks/useGetCollectionProducts';
-import React, { useEffect, useRef, useState } from 'react';
+import { Carousel } from "@mantine/carousel";
+import { Box, Button, Center, Loader, Text } from "@mantine/core";
+import Product from "components/Product";
+import { useCart } from "contexts/cartContext/Provider";
+import { useOnScreen } from "hooks/useOnScreen";
+import { t } from "util/i18nextFix";
+import { useGetCollectionProducts } from "pages/Collection/hooks/useGetCollectionProducts";
+import React, { useEffect, useRef, useState } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 interface CollectionProps {
   collectionName: string;
@@ -30,7 +30,8 @@ const Collection: React.FC<CollectionProps> = ({
   collectionId,
   addedProducts,
 }) => {
-  const { setCartInfo, addProductToCart, reduceOrRemoveProductFromCart } = useCart();
+  const { setCartInfo, addProductToCart, reduceOrRemoveProductFromCart } =
+    useCart();
 
   // const CustomRightArrow = ({ onClick, ...rest }: any) => {
   //   const {
@@ -65,15 +66,18 @@ const Collection: React.FC<CollectionProps> = ({
     documents: 5,
     isOnScreen,
   });
-  console.log('🚀 ~ file: Collection.tsx:67 ~ products:', products);
+  console.log("🚀 ~ file: Collection.tsx:67 ~ products:", products);
   const [slideIndex, setSlideIndex] = useState(0);
   useEffect(() => {
     console.log(
-      '🚀 ~ file: Collection.tsx:145 ~ index:',
+      "🚀 ~ file: Collection.tsx:145 ~ index:",
       slideIndex,
-      products?.pages?.flatMap((product) => product)?.length - 1,
+      products?.pages?.flatMap((product) => product)?.length - 1
     );
-    if (slideIndex === products?.pages?.flatMap((product) => product)?.length - 1) {
+    if (
+      slideIndex ===
+      products?.pages?.flatMap((product) => product)?.length - 1
+    ) {
       fetchNextPage({
         pageParam:
           products?.pages[products.pages.length - 1][
@@ -86,11 +90,11 @@ const Collection: React.FC<CollectionProps> = ({
     <Box ref={elementRef} mb={63}>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
-        <Text weight={700} sx={{ fontSize: '24px' }}>
+        <Text weight={700} sx={{ fontSize: "24px" }}>
           {collectionName}
         </Text>
         <Button
@@ -99,7 +103,7 @@ const Collection: React.FC<CollectionProps> = ({
           to={`/collection/${storefront._id.toString()}/${collectionId}/${country}`}
           state={{ city, country, storeInfo: storefront }}
         >
-          {t('show all')}
+          {t("show all")}
         </Button>
       </Box>
       {isLoading ? (
@@ -109,9 +113,9 @@ const Collection: React.FC<CollectionProps> = ({
           <Carousel
             // slidesToScroll={4}
 
-            slideSize={'45%'}
+            slideSize={"45%"}
             withIndicators
-            align={'start'}
+            align={"start"}
             // slideSize={'10%'}
             onSlideChange={(index) => {
               setSlideIndex(index);
@@ -124,14 +128,29 @@ const Collection: React.FC<CollectionProps> = ({
             {products?.pages?.map((page) => {
               return page?.map((product) => {
                 const addProduct = () => {
-                  addProductToCart(storefront, product, setCartInfo, city, country, orderType);
+                  addProductToCart(
+                    storefront,
+                    product,
+                    setCartInfo,
+                    city,
+                    country,
+                    orderType
+                  );
                 };
                 const reduceOrRemoveProduct = () => {
-                  reduceOrRemoveProductFromCart(storefront, product, setCartInfo);
+                  reduceOrRemoveProductFromCart(
+                    storefront,
+                    product,
+                    setCartInfo
+                  );
                 };
                 const productUrl = product?.options?.hasOptions
-                  ? `/product/${storefront._id.toString()}/${country}/${city}/${product._id}`
-                  : `/product/withnotoptions/${storefront._id.toString()}/${country}/${city}/${product._id}`;
+                  ? `/product/${storefront._id.toString()}/${country}/${city}/${
+                      product._id
+                    }`
+                  : `/product/withnotoptions/${storefront._id.toString()}/${country}/${city}/${
+                      product._id
+                    }`;
                 return (
                   <Carousel.Slide key={product?._id?.toString()}>
                     <Product
@@ -155,13 +174,13 @@ const Collection: React.FC<CollectionProps> = ({
               <Carousel.Slide>
                 <Box
                   sx={{
-                    width: '100%',
+                    width: "100%",
 
-                    height: '100%',
+                    height: "100%",
 
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
                   <Loader />

@@ -1,11 +1,17 @@
-import { ActionIcon, AspectRatio, Box, Text, UnstyledButton, useMantineTheme } from '@mantine/core';
-import Image from '../../../components/Image';
-import ProductControler from '../../../components/ProductControler';
-import { storeServiceFee } from '../../../config/constents';
-import React, { useEffect, useState } from 'react';
+import {
+  ActionIcon,
+  AspectRatio,
+  Box,
+  Text,
+  UnstyledButton,
+  useMantineTheme,
+} from "@mantine/core";
+import Image from "../../../components/Image";
+import ProductControler from "../../../components/ProductControler";
+import { storeServiceFee } from "../../../config/constents";
+import React, { useEffect, useState } from "react";
 
-
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 interface ProductType {
   _id: any;
@@ -71,17 +77,17 @@ const Product: React.FC<ProductProps> = ({
   return (
     <Box
       sx={{
-        width: '320px',
-        margin: 'auto',
-        height: '400px',
-        position: 'relative',
+        width: "320px",
+        margin: "auto",
+        height: "400px",
+        position: "relative",
       }}
     >
       {!product?.options?.hasOptions && (
         <Box
           sx={{
             zIndex: 999,
-            position: 'absolute',
+            position: "absolute",
             top: 20,
             right: 30,
           }}
@@ -131,14 +137,16 @@ const Product: React.FC<ProductProps> = ({
         component={Link}
         to={productUrl}
         style={{
-          textDecoration: 'none',
+          textDecoration: "none",
         }}
       >
         <Box m={12} style={{}}>
           <Image radius={6} imageName={product.images[0]} />
 
           <Box>
-            <Text>${product.pricing.price - product.pricing.price * storeServiceFee}</Text>
+            <Text>
+              ${product.pricing.price - product.pricing.price * storeServiceFee}
+            </Text>
           </Box>
           <Box>
             <Text weight={700}>{product.textInfo.title}</Text>

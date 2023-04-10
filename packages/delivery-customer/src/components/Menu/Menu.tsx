@@ -20,6 +20,8 @@ import {
   LoadingOverlay,
   Loader,
   Stack,
+  Image,
+  Flex,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -231,7 +233,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
   return (
     <Wrapper>
       <StyledNav>
-        {loggedIn && (
+        {loggedIn ? (
           <Box
             style={{
               padding: "0px 16px",
@@ -458,6 +460,56 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
               </Box>
             </Box>
           </Box>
+        ) : (
+          <Box
+            p={"sm"}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: "6vw",
+              }}
+            >
+              <Text
+                weight={700}
+                size={"5vw"}
+                sx={(theme) => ({
+                  fontFamily: "sans-serif",
+
+                  [theme.fn.largerThan("md")]: {
+                    fontSize: "34px",
+                  },
+                })}
+              >
+                hyfn
+              </Text>
+            </Box>
+
+            <Group>
+              <Button
+                sx={{
+                  borderRadius: "18px",
+                }}
+                variant="light"
+              >
+                {t("Login")}
+              </Button>
+              <Button
+                sx={{
+                  borderRadius: "18px",
+                }}
+              >
+                {t("Signup")}
+              </Button>
+            </Group>
+          </Box>
         )}
       </StyledNav>
       {loggedIn && location.pathname.startsWith("/orders") && (
@@ -485,7 +537,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                 width: "45%",
               }}
               component={Link}
-              to={"orders/activeorders"}
+              to={"/orders/activeorders"}
             >
               {t("Active Orders")}
             </Button>
@@ -495,7 +547,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                 width: "45%",
               }}
               component={Link}
-              to={"orders/orderhistory"}
+              to={"/store/orders/orderhistory"}
             >
               {t("History")}
             </Button>

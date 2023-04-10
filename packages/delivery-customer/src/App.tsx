@@ -64,10 +64,10 @@ function App() {
     <BrowserRouter>
       <Menu>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path={"/stores"}>
+          <Route path={"/"}>
+            <Route index element={<LandingPage />} />
             <Route
-              index
+              path="/home"
               element={
                 <Page>
                   <Home />

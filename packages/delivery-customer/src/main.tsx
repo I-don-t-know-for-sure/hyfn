@@ -1,20 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import reportWebVitals from "./reportWebVitals";
 
 //import UserProvider from "contexts/UserContext/Provider";
-import Providers from './Providers';
-import './i18nextBase';
+
+import Providers from "./Providers";
+import "./i18nextBase";
 ReactDOM.render(
   <React.StrictMode>
     <Providers>
       <App />
     </Providers>
   </React.StrictMode>,
-  document.getElementById('root'),
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

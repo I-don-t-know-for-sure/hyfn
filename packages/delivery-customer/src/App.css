@@ -36,6 +36,13 @@
 .card {
   padding: 2em;
 }
+.glow {
+  transition: box-shadow 0.5s ease-in-out;
+  box-shadow: 0 0 2px rgba(225, 237, 216, 0.6), 0 0 4px rgba(225, 237, 216, 0.6),
+    0 0 6px rgba(225, 237, 216, 0.6), 0 0 8px rgba(225, 237, 216, 0.6),
+    0 0 12px rgba(225, 237, 216, 0.6), 0 0 16px rgba(225, 237, 216, 0.6),
+    0 0 24px rgba(225, 237, 216, 0.6);
+}
 
 .read-the-docs {
   color: #888;

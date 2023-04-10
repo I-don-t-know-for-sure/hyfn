@@ -1,7 +1,8 @@
 'use strict';
 const AWS = require('aws-sdk');
+
 const util = require('util');
-//const sharp = require("sharp");
+
 import * as JimpObj from 'jimp';
 
 const s3 = new AWS.S3();
@@ -48,6 +49,9 @@ export const handler = async (event, ctx) => {
       return;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // set thumbnail width. Resize will set the height automatically to maintain aspect ratio.
     var sizeArray = [
       { folder: 'laptop', sizes: [350, 350] },
@@ -55,6 +59,7 @@ export const handler = async (event, ctx) => {
       { folder: 'mobile', sizes: [150, 150] },
       { folder: 'tablet', sizes: [200, 200] },
     ];
+
     for (let i = 0; i < 4; i++) {
       var screen = sizeArray[i];
 
@@ -70,7 +75,6 @@ export const handler = async (event, ctx) => {
         console.log(error, 'hdhdh');
         return;
       }
-
       // Upload the thumbnail image to the destination bucket
       try {
         const destparams = {

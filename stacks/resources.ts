@@ -1,4 +1,4 @@
-import { Bucket, StackContext } from "sst/constructs";
+import { Bucket, Function, StackContext } from "sst/constructs";
 
 import * as kms from "aws-cdk-lib/aws-kms";
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -22,12 +22,30 @@ export function imagesBucketStack({ stack }: StackContext) {
     resources: [`${s3Bucket.bucketArn}/*`],
     principals: [new AnyPrincipal()],
   });
-
   s3Bucket.cdk.bucket.addToResourcePolicy(bucketPolicy);
+  const resizeFunction = new Function(stack, "resizeFunction", {
+    handler:
+      "./packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",
+  });
+  // s3Bucket.addNotifications(stack, {
+  //   resizeFunction: {
+
+  //     function:
+  //       "./packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",
+  //     events: ["object_created_put"],
+  //     filters: [{ prefix: "initial/" }],
+  //   },
+  // });
+  const policy = new iam.PolicyStatement({
+    sid: "VisualRecognitionPermissions",
+    effect: iam.Effect.ALLOW,
+    actions: ["rekognition:*"],
+    resources: ["*"],
+  });
+  resizeFunction.addToRolePolicy(policy as any);
   s3Bucket.addNotifications(stack, {
-    resizeFunction: {
-      function:
-        "./packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",
+    test: {
+      function: resizeFunction,
       events: ["object_created_put"],
       filters: [{ prefix: "initial/" }],
     },
