@@ -22,7 +22,7 @@ export function imagesBucketStack({ stack }: StackContext) {
     resources: [`${s3Bucket.bucketArn}/*`],
     principals: [new AnyPrincipal()],
   });
-  s3Bucket.cdk.bucket.addToResourcePolicy(bucketPolicy);
+  s3Bucket.cdk.bucket.addToResourcePolicy(bucketPolicy as any);
   const resizeFunction = new Function(stack, "resizeFunction", {
     handler:
       "./packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",

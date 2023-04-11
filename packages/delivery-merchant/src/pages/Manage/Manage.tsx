@@ -28,12 +28,14 @@ import { useGetProductsForBulkUpdate } from "./hooks/useGetProductsForBulkUpdate
 import { useSearchProducts } from "./hooks/useSearchProducts";
 import Test from "./components/Text";
 import TestTwo from "./components/TestTwo";
+import { useRemoveProductsBackgrounds } from "./hooks/useRemoveBackground";
 // import { Helmet } from 'react-helmet'
 
 const ManageProducts: React.FC = () => {
   const [lastDocId] = useState();
   const [filterText, setFilterText] = useState("");
   const [checkedFilter, setCheckedFilter] = useState<any>("all");
+  const { mutate: removeBackgounds } = useRemoveProductsBackgrounds();
   // const { data, isLoading, isError, fetchNextPage } = useGetProducts({
   //   lastDocId,
   //   check: checkedFilter,
@@ -162,6 +164,22 @@ const ManageProducts: React.FC = () => {
                     state={{ products: selectedProducts }}
                   >
                     {t("Options")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="xs"
+                    onClick={() => {
+                      const productIds = selectedProducts.map(
+                        (product) => product._id
+                      );
+                      console.log(
+                        "🚀 ~ file: Manage.tsx:173 ~ productIds:",
+                        productIds
+                      );
+                      removeBackgounds({ productIds });
+                    }}
+                  >
+                    {t("Remove image backgrounds")}
                   </Button>
                   {selectedProducts.length === 1 && (
                     <DuplicateModal productId={selectedProducts[0]?._id} />
