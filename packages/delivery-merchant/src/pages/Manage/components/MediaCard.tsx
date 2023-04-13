@@ -16,7 +16,7 @@ import { t } from "utils/i18nextFix";
 
 import { ProductsCard } from "../types";
 import { useState } from "react";
-import { useRemoveBackground } from "../hooks/useRemoveBackground";
+
 interface MediaCardProps extends ProductsCard {
   currentImages?: string[];
 }
@@ -144,10 +144,14 @@ const MediaCard: React.FC<MediaCardProps> = ({
                       // const newImages = currentImages.filter(
                       //   (image) => image !== imageName
                       // );
+                      console.log(
+                        "🚀 ~ file: MediaCard.tsx:149 ~ {currentImages?.map ~ productInfo?.removeBackgroundImages?.length:",
+                        productInfo?.removeBackgroundImages
+                      );
                       if (e.target.checked) {
                         if (productInfo?.removeBackgroundImages?.length > 0) {
                           const updatedDeletedImages = [
-                            ...productInfo?.deletedImages,
+                            ...productInfo?.removeBackgroundImages,
                             imageName,
                           ];
                           onChangeHandler(

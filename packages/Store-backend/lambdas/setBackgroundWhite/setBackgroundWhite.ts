@@ -21,12 +21,13 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
   const { keys } = arg[0];
   console.log('🚀 ~ file: setBackgroundWhite.ts:21 ~ setBackgroundWhiteHandler ~ keys:', keys);
   const bucket = process.env.bucketName;
-  const formData = {
-    lang: 'en',
-    convert_to: 'image-backgroundremover',
-    files: [],
-  } as any;
+  const files = [];
   for (const key of keys) {
+    const formData = {
+      lang: 'en',
+      convert_to: 'image-backgroundremover',
+      files: [],
+    } as any;
     const getObjectParams = {
       Bucket: bucket,
       Key: 'initial/' + key,
@@ -41,67 +42,69 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
     console.log('🚀 ~ file: setBackgroundWhite.ts:38 ~ setBackgroundWhiteHandler ~ strem:');
 
     formData.files.push(strem);
-  }
 
-  //   const readStream = stream.Readable.from(buffer);
-  //   const file = new Blob([buffer], { type: 'image/jpeg' });
+    //   const readStream = stream.Readable.from(buffer);
+    //   const file = new Blob([buffer], { type: 'image/jpeg' });
 
-  const convertRequest = {
-    url: api_url,
-    method: 'post',
-    formData: formData,
-    headers: {
-      'Authorization': '2c91437a82df4e6192ae5be05b8c8136',
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  console.log(
-    '🚀 ~ file: setBackgroundWhite.ts:51 ~ setBackgroundWhiteHandler ~ convertRequest:',
-    JSON.stringify(convertRequest)
-  );
+    const convertRequest = {
+      url: api_url,
+      method: 'post',
+      formData: formData,
+      headers: {
+        'Authorization': '2c91437a82df4e6192ae5be05b8c8136',
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    console.log(
+      '🚀 ~ file: setBackgroundWhite.ts:51 ~ setBackgroundWhiteHandler ~ convertRequest:',
+      JSON.stringify(convertRequest)
+    );
 
-  const result = await new Promise((resolve, reject) => {
-    request(convertRequest, (err, response, body) => {
-      if (err) {
-        reject(err);
-      } else {
-        console.log('🚀 ~ file: setBackgroundWhite.ts:60 ~ request ~ err:', body);
-        resolve(JSON.parse(body));
-      }
-    });
-  });
-
-  console.log('🚀 ~ file: setBackgroundWhite.ts:49 ~ result ~ result:', result);
-
-  const resultsRequest = {
-    url: results_url,
-    method: 'POST',
-    formData: result,
-  };
-
-  const results: any = await new Promise((resolve, reject) => {
-    const pollResults = () => {
-      request(resultsRequest, (err, response, body) => {
+    const result = await new Promise((resolve, reject) => {
+      request(convertRequest, (err, response, body) => {
         if (err) {
           reject(err);
         } else {
-          const result = JSON.parse(body);
-          if (result.finished) {
-            resolve(result);
-          } else {
-            setTimeout(pollResults, 1000);
-          }
+          console.log('🚀 ~ file: setBackgroundWhite.ts:60 ~ request ~ err:', body);
+          resolve(JSON.parse(body));
         }
       });
-    };
-    pollResults();
-  });
-  console.log(
-    '🚀 ~ file: setBackgroundWhite.ts:102 ~ constresults:any=awaitnewPromise ~ results:',
-    results
-  );
+    });
 
-  for (const file of results.files) {
+    console.log('🚀 ~ file: setBackgroundWhite.ts:49 ~ result ~ result:', result);
+
+    const resultsRequest = {
+      url: results_url,
+      method: 'POST',
+      formData: result,
+    };
+
+    const results: any = await new Promise((resolve, reject) => {
+      const pollResults = () => {
+        request(resultsRequest, (err, response, body) => {
+          if (err) {
+            reject(err);
+          } else {
+            const result = JSON.parse(body);
+            if (result.finished) {
+              resolve(result);
+            } else {
+              setTimeout(pollResults, 1000);
+            }
+          }
+        });
+      };
+      pollResults();
+    });
+    console.log(
+      '🚀 ~ file: setBackgroundWhite.ts:102 ~ constresults:any=awaitnewPromise ~ results:',
+      results
+    );
+
+    files.push(results.files[0]);
+  }
+
+  for (const file of files) {
     const imageKey = file.url.split('/')[file.url.split('/').length - 1].split('.')[0];
     var sizeArray = [
       { folder: 'laptop', sizes: [350, 350] },

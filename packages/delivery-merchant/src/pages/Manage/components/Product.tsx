@@ -52,6 +52,8 @@ const Product: React.FC<ProductProps> = () => {
     collections: [],
     images: [],
     files: [],
+    deletedImages: [],
+    removeBackgroundImages: [],
   });
 
   const { mutate, data } = useCreateProduct();

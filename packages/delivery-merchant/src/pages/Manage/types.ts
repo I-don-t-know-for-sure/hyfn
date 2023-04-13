@@ -46,4 +46,5 @@ export interface ProductsCard {
   ) => void;
   productInfo: ProductInfo;
   isLoading?: boolean;
+  productId?: string;
 }

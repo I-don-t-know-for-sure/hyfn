@@ -34,6 +34,7 @@ export const mainWrapper = async ({
       client,
       event,
       userId,
+      accessToken,
     });
     result = _200(result);
   } catch (error: any) {

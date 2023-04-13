@@ -5,6 +5,7 @@ export interface MainFunctionProps {
   event: any;
   client: MongoClient;
   userId: string;
+  accessToken?: any;
   session?: any;
   ctx?: any;
   callback?: any;

@@ -1,27 +1,68 @@
-import { Box, Card, CardSection, Paper, Skeleton, Stack, Text, TextInput } from '@mantine/core'
-import { t } from 'utils/i18nextFix'
-import React, { useEffect, useState } from 'react'
-import { ProductInfo, ProductsCard } from '../types'
-import { RichTextEditor } from '@mantine/rte'
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Card,
+  CardSection,
+  Group,
+  Paper,
+  Skeleton,
+  Stack,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { t } from "utils/i18nextFix";
+import React, { useEffect, useState } from "react";
+import { ProductInfo, ProductsCard } from "../types";
+import FullTextEditor from "../../../components/FullTextEditor";
+import { log } from "console";
+import GenerateDescriptionModal from "./GenerateDescriptionModal";
 
-const InfoCard: React.FC<ProductsCard> = ({ onChangeHandler, productInfo, isLoading }) => {
+const InfoCard: React.FC<ProductsCard> = ({
+  onChangeHandler,
+  productInfo,
+  isLoading,
+  productId,
+}) => {
+  const [value, setValue] = useState("");
+  const [generatedDescription, setGenerateDescription] = useState("");
+  console.log("🚀 ~ file: InfoCard.tsx:23 ~ value:", value);
+  console.log(
+    "🚀 ~ file: InfoCard.tsx:23 ~ value:",
+    productInfo.textInfo.description
+  );
+  useEffect(() => {
+    console.log(
+      "🚀 ~ file: InfoCard.tsx:23 ~ description:",
+      productInfo,
+      isLoading,
+      value
+    );
+
+    if (!isLoading) {
+      if (value === "") {
+        setValue(productInfo.textInfo.description);
+      }
+    }
+  }, [isLoading, productInfo.textInfo.description]);
   // const [value, setValue] = useState("");
 
-  // useEffect(() => {
-  //   if (productInfo.textInfo?.description !== value) {
-  //     onChangeHandler(value, "textInfo", "description");
-  //   }
-  // }, [value]);
+  useEffect(() => {
+    if (productInfo.textInfo?.description !== value) {
+      onChangeHandler(value, "textInfo", "description");
+    }
+  }, [value]);
+
   return (
-    <Paper shadow={'sm'} p={'md'} sx={{ margin: 'auto' }}>
+    <Paper shadow={"sm"} p={"md"} sx={{ margin: "auto" }}>
       {isLoading ? (
         <>
           <Box>
-            <Text>{t('Title')}</Text>
+            <Text>{t("Title")}</Text>
             <Skeleton height={30} />
           </Box>
           <Box>
-            <Text>{t('Description')}</Text>
+            <Text>{t("Description")}</Text>
             <Skeleton height={30} />
           </Box>
         </>
@@ -29,18 +70,56 @@ const InfoCard: React.FC<ProductsCard> = ({ onChangeHandler, productInfo, isLoad
         <Stack>
           <TextInput
             required
-            label={t('Title')}
-            value={productInfo.textInfo?.title || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeHandler(e.target.value, 'textInfo', 'title')}
-          />
-          <TextInput
-            label={t('Description')}
-            required
-            value={productInfo.textInfo?.description || ''}
+            label={t("Title")}
+            value={productInfo.textInfo?.title || ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onChangeHandler(e.target.value, 'textInfo', 'description')
+              onChangeHandler(e.target.value, "textInfo", "title")
             }
           />
+
+          {/* {!isLoading &&
+            productInfo?.textInfo?.description &&
+            (() => {
+              console.log(
+                "🚀 ~ file: InfoCard.tsx:81bxdhchdbchdbh ~ value:",
+                productInfo.textInfo.description
+              );
+
+              return (
+                <FullTextEditor
+                  setValue={setValue}
+                  value={productInfo.textInfo.description}
+                />
+              );
+            })()} */}
+          {!isLoading && productInfo?.textInfo?.description && (
+            <Stack>
+              <Group position="apart">
+                <Text weight={700}>{t("Description")}</Text>{" "}
+                <GenerateDescriptionModal
+                  productId={productId}
+                  onDescriptionChangeHandler={(newDescription: string) => {
+                    // setGenerateDescription(newDescription);
+                    // onChangeHandler(newDescription, "textInfo", "description");
+                  }}
+                />
+              </Group>
+
+              <FullTextEditor
+                setValue={setValue}
+                value={productInfo.textInfo.description}
+                // newContent={generatedDescription}
+              />
+            </Stack>
+          )}
+          {/* <TextInput
+            label={t("Description")}
+            required
+            value={productInfo.textInfo?.description || ""}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onChangeHandler(e.target.value, "textInfo", "description")
+            }
+          /> */}
           {/* <RichTextEditor
             value={productInfo.textInfo?.description || ""}
             onChange={setValue}
@@ -48,7 +127,7 @@ const InfoCard: React.FC<ProductsCard> = ({ onChangeHandler, productInfo, isLoad
         </Stack>
       )}
     </Paper>
-  )
-}
+  );
+};
 
-export default InfoCard
+export default InfoCard;

@@ -110,6 +110,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}
               isLoading={isLoading}
+              productId={productId}
             />
             <MediaCard
               currentImages={productInfo.images}

@@ -45,6 +45,8 @@ export function storeApiStack({ stack }: StackContext) {
     environment: {
       kmsKeyARN: keyArn,
       //////////////////////////
+      chat_gpt_api_key: config[stage].chat_gpt_api_key,
+
       MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
       accessKeyId: config[stage].accessKeyId,
       bucketName: imagesBucketName,
@@ -66,14 +68,54 @@ export function storeApiStack({ stack }: StackContext) {
       secretAccessKey: config[stage].secretAccessKey,
     },
   });
+  const generateProductDescription = new Function(
+    stack,
+    "generateProductDescription",
+    {
+      handler:
+        pathToLambdas +
+        "generateProductDescription/generateProductDescription.handler",
+      functionName: "generateProductDescription" + stack.stage,
+      role: defaultFunction.role,
+      timeout: 300,
+      url: true,
+      environment: {
+        kmsKeyARN: keyArn,
+        //////////////////////////
+        chat_gpt_api_key: config[stage].chat_gpt_api_key,
+
+        MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+        accessKeyId: config[stage].accessKeyId,
+        bucketName: imagesBucketName,
+        groupId: config[stage].groupId,
+        moalmlatDataService: config[stage].moalmlatDataService,
+        userPoolId: auth.userPoolId,
+        userPoolClientId: auth.userPoolClientId,
+        mongoPrivetKey: config[stage].mongoPrivetKey,
+        mongoPublicKey: config[stage].mongoPublicKey,
+        region: stack.region,
+        sadadURL: config[stage].sadadURL,
+        secretKey: config[stage].secretKey,
+        MerchantId: config[stage].MerchantId,
+        TerminalId: config[stage].TerminalId,
+        mongdbURLKey: config[stage].mongdbURLKey,
+
+        sadadApiKey: config[stage].sadadApiKey,
+
+        secretAccessKey: config[stage].secretAccessKey,
+      },
+    }
+  );
   const api = new Api(stack, "storeApi", {
     defaults: {
       function: {
         role: defaultFunction.role,
-        timeout: 30,
+        timeout: 60,
         environment: {
           kmsKeyARN: keyArn,
           //////////////////////////
+          chat_gpt_api_key: config[stage].chat_gpt_api_key,
+          generateProductDescription: generateProductDescription.url || "",
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
@@ -103,6 +145,14 @@ export function storeApiStack({ stack }: StackContext) {
           handler:
             pathToLambdas + "getProductsForStore/getProductsForStore.handler",
           functionName: "getProductsForStore" + stack.stage,
+        },
+      },
+      "POST /generateDescriptionClient": {
+        function: {
+          handler:
+            pathToLambdas +
+            "generateDescriptionClient/generateDescriptionClient.handler",
+          functionName: "generateDescriptionClient" + stack.stage,
         },
       },
       "POST /removeAllProductsBackgrounds": {
