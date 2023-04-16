@@ -1,24 +1,28 @@
-import { Checkbox, TextInput } from '@mantine/core'
-import React from 'react'
-import { ActionTypes } from '../BulkUpdateTable'
-import TableInput from './TableInput'
+import { Checkbox, TextInput } from "@mantine/core";
+import React from "react";
+import { ActionTypes } from "../BulkUpdateTable";
+import TableInput from "./TableInput";
 
 interface TableRowProps {
-  product: any
-  selectvalue: any
-  onChangeHandler: any
+  product: any;
+  selectvalue: any;
+  onChangeHandler: any;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ product, selectvalue, onChangeHandler }) => {
-  const { _id } = product
+const TableRow: React.FC<TableRowProps> = ({
+  product,
+  selectvalue,
+  onChangeHandler,
+}) => {
+  const { _id } = product;
 
-  console.log(product)
   return (
     <tr key={_id}>
       {selectvalue.map((value, index) => {
-        const keys = value?.split('.')
+        const keys = value?.split(".");
 
-        const keyValue = keys?.length > 1 ? product[keys[0]][keys[1]] : product[keys[0]]
+        const keyValue =
+          keys?.length > 1 ? product[keys[0]][keys[1]] : product[keys[0]];
 
         return (
           <td key={index}>
@@ -66,12 +70,20 @@ const TableRow: React.FC<TableRowProps> = ({ product, selectvalue, onChangeHandl
                 }
               />
             )} */}
-            <TableInput _id={_id} keyValue={keyValue} keys={keys} onChangeHandler={onChangeHandler} value={value} />
+            {value === ""}
+            <TableInput
+              productInfo={product}
+              _id={_id}
+              keyValue={keyValue}
+              keys={keys}
+              onChangeHandler={onChangeHandler}
+              value={value}
+            />
           </td>
-        )
+        );
       })}
     </tr>
-  )
-}
+  );
+};
 
-export default TableRow
+export default TableRow;

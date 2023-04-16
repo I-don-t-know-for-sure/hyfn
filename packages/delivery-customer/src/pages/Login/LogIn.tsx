@@ -71,7 +71,7 @@ const LogIn: React.FC<LogInProps> = () => {
         return;
       }
 
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
       localStorage.removeItem("customerInfo");
     }
   }, [loggedIn]);

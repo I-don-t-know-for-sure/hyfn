@@ -2,6 +2,7 @@ import {
   ActionIcon,
   AspectRatio,
   Box,
+  Group,
   Text,
   UnstyledButton,
   useMantineTheme,
@@ -12,6 +13,7 @@ import { storeServiceFee } from "../../../config/constents";
 import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
+import { t } from "i18next";
 
 interface ProductType {
   _id: any;
@@ -21,11 +23,12 @@ interface ProductType {
   };
   pricing: {
     price: number;
+    currency: string;
   };
   options: { hasOptions: boolean };
   images: string[];
-  customerLikesProduct: boolean;
-  likes: number;
+
+  measurementSystem: string;
 }
 
 interface ProductProps {
@@ -61,19 +64,6 @@ const Product: React.FC<ProductProps> = ({
   addedProducts,
   // likeMutation,
 }) => {
-  const initialLikeValue = product.customerLikesProduct;
-  const [likeProduct, setLikeProduct] = useState(initialLikeValue);
-  const theme = useMantineTheme();
-  const [addedLike, setAddedLike] = useState(0);
-
-  useEffect(() => {
-    // setAddedLike(
-    //   product.customerLikesProduct === true
-    //     ? product.likes - 1
-    //     : product.likes + 1
-    // );
-  }, [likeProduct]);
-
   return (
     <Box
       sx={{
@@ -144,13 +134,28 @@ const Product: React.FC<ProductProps> = ({
           <Image radius={6} imageName={product.images[0]} />
 
           <Box>
-            <Text>
-              ${product.pricing.price - product.pricing.price * storeServiceFee}
-            </Text>
+            <Text weight={700}>{product.textInfo.title}</Text>
           </Box>
           <Box>
-            <Text weight={700}>{product.textInfo.title}</Text>
-            <Text>{product.textInfo.description}</Text>
+            <Group spacing={3}>
+              <Text>{product?.pricing?.currency || "LYD"}</Text>
+              <Text
+                sx={(theme) => ({
+                  fontSize: "24px",
+                  color: theme.primaryColor,
+                })}
+              >
+                {` ${
+                  product.pricing.price -
+                  product.pricing.price * storeServiceFee
+                } `}
+              </Text>
+              <Text>{t("Per")}</Text>
+              <Text color="red">{t(product?.measurementSystem)}</Text>
+            </Group>
+            {/* <Text>
+              ${product.pricing.price - product.pricing.price * storeServiceFee}
+            </Text> */}
           </Box>
         </Box>
       </UnstyledButton>

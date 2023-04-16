@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   Group,
   Loader,
   NumberInput,
@@ -18,6 +19,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 import Image from "../../components/Image";
+import { Image as CoreImage } from "@mantine/core";
 import { useFixedComponent } from "../../contexts/fixedComponentContext/FixedComponentProvider";
 
 import { randomId } from "@mantine/hooks";
@@ -26,6 +28,8 @@ import { useGetProduct } from "./hooks/useGetProduct";
 import { storeServiceFee } from "../../config/constents";
 import { ImageModal } from "hyfn-client";
 import { useImage } from "contexts/imageContext/ImageProvider";
+import HtmlRenderer from "components/HtmlReader";
+import { calculatePrecision, calculateStep } from "./functions";
 
 interface ProductWithoutOptionsProps {}
 
@@ -50,7 +54,6 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
     isError,
     error,
   } = useGetProduct({ storefront, city, country, productId }, true);
-
   const [, setFixedComponent] = useFixedComponent();
   const handlers = useRef<NumberInputHandlers>();
   const { addProductWithNoOptionsToCart, setCartInfo, cart } = useCart();
@@ -88,23 +91,6 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
   //     country
   //   );
   // };
-
-  const calculatePrecision = (measurementSystem: string) => {
-    if (measurementSystem === "Kilo" || measurementSystem === "Liter") {
-      return 2;
-    }
-    if (measurementSystem === "Unit") {
-      return 0;
-    }
-  };
-  const calculateStep = (measurementSystem: string) => {
-    if (measurementSystem === "Kilo" || measurementSystem === "Liter") {
-      return 0.25;
-    }
-    if (measurementSystem === "Unit") {
-      return 1;
-    }
-  };
 
   useEffect(() => {
     const fixedComponentConstructor = [
@@ -166,7 +152,16 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
               min={0}
               step={calculateStep(product?.measurementSystem)}
               styles={{ input: { textAlign: "center" } }}
-              icon={<Text>{t(product?.measurementSystem)}</Text>}
+              parser={(value) => value.replace(/[$,\s]/g, "")}
+              formatter={(value) =>
+                !Number.isNaN(parseFloat(value))
+                  ? `${t(product?.measurementSystem)} ${value}`.replace(
+                      /(\d)(?=(\d{3})+(?!\d))/g,
+                      "$1,"
+                    )
+                  : `${t(product?.measurementSystem)} `
+              }
+              // icon={<Text m={"md"}>{t(product?.measurementSystem)}</Text>}
             />
 
             <ActionIcon
@@ -266,7 +261,7 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
                 />
               </AspectRatio>
             }
-            src={`${url}${screenSizes[0]}/${product.images[0]}`}
+            src={`${url}initial/${product.images[0]}`}
           />
           {/* <AspectRatio
             ratio={500 / 500}
@@ -299,18 +294,46 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
             >
               {product.textInfo.title}
             </Text>
-            <Text>{product.textInfo.description}</Text>
-            <Text
-              sx={{
-                fontSize: "24px",
-              }}
-            >
-              {`${storeDoc?.currency || "LYD"} ${
-                product.pricing.price - product.pricing.price * storeServiceFee
-              }`}
-            </Text>
+            <Group spacing={3}>
+              <Text>{storeDoc?.currency || "LYD"}</Text>
+              <Text
+                sx={(theme) => ({
+                  fontSize: "24px",
+                  color: theme.primaryColor,
+                })}
+              >
+                {` ${
+                  product.pricing.price -
+                  product.pricing.price * storeServiceFee
+                } `}
+              </Text>
+              <Text>{t("Per")}</Text>
+              <Text color="red">{t(product?.measurementSystem)}</Text>
+            </Group>
           </Container>
           <Space h={12} />
+        </Box>
+
+        <Divider
+          labelPosition="center"
+          label={
+            <Text weight={700} size={16}>
+              {t("Description")}
+            </Text>
+          }
+        />
+
+        <Box
+          sx={{
+            width: "100%",
+            // overflowX: "auto",
+            display: "flex",
+            flexWrap: "wrap",
+            whiteSpace: "normal",
+          }}
+        >
+          <HtmlRenderer htmlString={product.textInfo.description} />
+          {/* <Text>{product.textInfo.description}</Text> */}
         </Box>
       </Container>
     )

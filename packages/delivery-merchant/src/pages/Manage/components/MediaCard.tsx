@@ -1,14 +1,19 @@
 import {
   ActionIcon,
+  AspectRatio,
   Badge,
   Box,
   Button,
   Card,
+  Center,
   Checkbox,
+  FileInput,
+  FileInputProps,
   Group,
   Image,
   Input,
   Paper,
+  Stack,
   Text,
   Title,
 } from "@mantine/core";
@@ -16,10 +21,73 @@ import { t } from "utils/i18nextFix";
 
 import { ProductsCard } from "../types";
 import { useState } from "react";
+import ValueComponent from "components/PreviewImage";
 
 interface MediaCardProps extends ProductsCard {
   currentImages?: string[];
 }
+
+/* function Value({ file }: { file: File }) {
+  const reader = new FileReader();
+  const [imageUrl, setImageUrl] = useState("");
+  reader.onloadend = () => {
+    const base64String = (reader.result as string)
+      .replace("data:", "")
+      .replace(/^.+,/, "");
+
+    setImageUrl(`data:image/png;base64,${base64String}`);
+  };
+
+  reader.readAsDataURL(file);
+
+  return (
+    <Stack
+
+    // sx={(theme) => ({
+    //   backgroundColor:
+    //     theme.colorScheme === "dark"
+    //       ? theme.colors.dark[7]
+    //       : theme.colors.gray[1],
+    //   fontSize: theme.fontSizes.xs,
+    //   padding: `${3} ${7}`,
+    //   borderRadius: theme.radius.sm,
+    // })}
+    >
+      <Box style={{ width: "150px" }}>
+        <Image
+          style={{ width: "100%", height: "auto", objectFit: "contain" }}
+          src={imageUrl}
+        />
+      </Box>
+
+      <span
+        style={{
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          maxWidth: 200,
+          display: "inline-block",
+        }}
+      >
+        {file.name}
+      </span>
+    </Stack>
+  );
+}
+
+const ValueComponent: FileInputProps["valueComponent"] = ({ value }) => {
+  if (Array.isArray(value)) {
+    return (
+      <Group spacing="sm" py="xs">
+        {value.map((file, index) => (
+          <Value file={file} key={index} />
+        ))}
+      </Group>
+    );
+  }
+
+  return <Value file={value} />;
+}; */
 const MediaCard: React.FC<MediaCardProps> = ({
   onChangeHandler,
   productInfo,
@@ -29,7 +97,6 @@ const MediaCard: React.FC<MediaCardProps> = ({
 
   return (
     <Paper shadow={"sm"} p={"md"} sx={{ margin: "auto", marginBlock: 10 }}>
-      <Title>{t("Product Images")}</Title>
       <Box>
         {files?.map((file, number) => {
           return (
@@ -56,17 +123,18 @@ const MediaCard: React.FC<MediaCardProps> = ({
           );
         })}
 
-        <Input
-          type={"file"}
+        <FileInput
+          label={t("Product pictures")}
           multiple
-          onChange={(event) => {
+          value={productInfo.files}
+          onChange={(newFiles) => {
             const uploadedFiles =
-              files?.length > 0
-                ? [...files, ...event.target.files]
-                : [...event.target.files];
+              files?.length > 0 ? [...files, ...newFiles] : [...newFiles];
             onChangeHandler(uploadedFiles, "files");
           }}
+          valueComponent={ValueComponent}
         />
+
         <Box
           sx={{
             display: "flex",
@@ -130,20 +198,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
                     </svg>
                   </ActionIcon>
                   <Checkbox
-                    // onChange={(e) => {
-                    //   setKeys((keys) => {
-                    //     if (e.target.checked) {
-                    //       return [...keys, imageName];
-                    //     }
-                    //     return keys.filter((key) => {
-                    //       return key !== imageName;
-                    //     });
-                    //   });
-                    // }}
                     onChange={(e) => {
-                      // const newImages = currentImages.filter(
-                      //   (image) => image !== imageName
-                      // );
                       console.log(
                         "🚀 ~ file: MediaCard.tsx:149 ~ {currentImages?.map ~ productInfo?.removeBackgroundImages?.length:",
                         productInfo?.removeBackgroundImages
@@ -177,27 +232,6 @@ const MediaCard: React.FC<MediaCardProps> = ({
                     }}
                   />
                 </Group>
-                {/* <Button
-                  onClick={() => {
-                    const newImages = currentImages.filter(
-                      (image) => image !== imageName
-                    );
-                    if (productInfo?.deletedImages?.length > 0) {
-                      const updatedDeletedImages = [
-                        ...productInfo?.deletedImages,
-                        imageName,
-                      ];
-                      onChangeHandler(updatedDeletedImages, "deletedImages");
-                    } else {
-                      onChangeHandler([imageName], "deletedImages");
-                    }
-                    onChangeHandler(newImages, "images");
-                  }}
-                  variant="outline"
-                  size="xs"
-                >
-                  {t("Delete")}
-                </Button> */}
               </Box>
             );
           })}

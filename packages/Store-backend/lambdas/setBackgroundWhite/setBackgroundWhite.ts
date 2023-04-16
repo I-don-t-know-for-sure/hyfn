@@ -1,12 +1,12 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import AWS, { S3 } from 'aws-sdk';
 import * as stream from 'stream';
 import request from 'request';
-import Jimp from 'jimp';
 import fs from 'fs';
 import { log } from 'console';
 import axios from 'axios';
 import { ReadStream, createReadStream } from 'fs';
+import AWS, { S3 } from 'aws-sdk';
+import Jimp from 'jimp';
 const s3 = new AWS.S3();
 
 interface setBackgroundWhite extends Omit<MainFunctionProps, 'arg'> {
@@ -118,14 +118,22 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
 
       // Use the sharp module to resize the image and save in a buffer.
       try {
-        var buffer = await (
+        var productImage = await (await Jimp.read(`${api_result_url}${file.url}`))
+          .resize(screen.sizes[0], screen.sizes[1], Jimp.RESIZE_BEZIER)
+          .quality(100);
+        const whiteImage = new Jimp(productImage.getWidth(), productImage.getHeight(), 0xffffffff);
+
+        // Composite the images
+        var buffer = await whiteImage
+          .composite(productImage, 0, 0)
+          .getBufferAsync(Jimp.AUTO as any);
+
+        /*  var buffer = await (
           await Jimp.read(`${api_result_url}${file.url}`)
         )
           .resize(screen.sizes[0], screen.sizes[1], Jimp.RESIZE_BEZIER)
           .quality(100)
-          .getBufferAsync(Jimp.AUTO as any);
-
-        //   var buffer = await sharp(origimage.Body).resize(width).toBuffer();
+          .getBufferAsync(Jimp.AUTO as any); */
       } catch (error) {
         console.log(error, 'hdhdh');
         return;

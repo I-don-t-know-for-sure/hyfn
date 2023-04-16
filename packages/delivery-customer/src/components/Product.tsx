@@ -64,9 +64,9 @@ const Product: React.FC<ProductProps> = ({
   return (
     <Box
       sx={{
-        width: "100%",
+        minWidth: "100%",
 
-        height: "100%",
+        minHeight: "100%",
         position: "relative",
       }}
     >
@@ -123,7 +123,7 @@ const Product: React.FC<ProductProps> = ({
           </Box>
           <Box>
             <Text weight={700}>{product.textInfo.title}</Text>
-            <Text>{product.textInfo.description}</Text>
+            {/* <Text>{product.textInfo.description}</Text> */}
           </Box>
         </Box>
       </UnstyledButton>

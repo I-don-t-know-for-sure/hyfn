@@ -112,9 +112,10 @@ const Collection: React.FC<CollectionProps> = ({
         isFetched && (
           <Carousel
             // slidesToScroll={4}
-
+            height="100%"
+            sx={{ flex: 1 }}
             slideSize={"45%"}
-            withIndicators
+            withIndicators={false}
             align={"start"}
             // slideSize={'10%'}
             onSlideChange={(index) => {
@@ -152,7 +153,12 @@ const Collection: React.FC<CollectionProps> = ({
                       product._id
                     }`;
                 return (
-                  <Carousel.Slide key={product?._id?.toString()}>
+                  <Carousel.Slide
+                    sx={{
+                      width: "fit-content",
+                    }}
+                    key={product?._id?.toString()}
+                  >
                     <Product
                       currency={storefront.currency}
                       product={product}
@@ -161,7 +167,6 @@ const Collection: React.FC<CollectionProps> = ({
                       addProduct={addProduct}
                       addedProducts={addedProducts}
                       reduceOrRemoveProduct={reduceOrRemoveProduct}
-                      //   likeMutation={likeMutation}
                       city={city}
                       country={country}
                       storefront={storefront}

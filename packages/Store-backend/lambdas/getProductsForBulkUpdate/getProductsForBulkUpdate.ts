@@ -37,7 +37,7 @@ export const getProductsForBulkUpdateHandler = async ({
     .find(queryDoc, {
       projection: {
         collections: 0,
-        images: 0,
+
         storeId: 0,
         inventory: 0,
         shipping: 0,

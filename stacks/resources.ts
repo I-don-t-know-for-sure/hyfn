@@ -1,4 +1,4 @@
-import { Bucket, Function, StackContext } from "sst/constructs";
+import { Bucket, Function, StackContext, toCdkDuration } from "sst/constructs";
 
 import * as kms from "aws-cdk-lib/aws-kms";
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -15,6 +15,17 @@ export function imagesBucketStack({ stack }: StackContext) {
         allowedHeaders: ["*"],
       },
     ],
+    cdk: {
+      bucket: {
+        lifecycleRules: [
+          {
+            id: "MyLifecycle",
+            prefix: "image-reader/",
+            expiration: toCdkDuration(`1 day`),
+          },
+        ],
+      },
+    },
   });
 
   const bucketPolicy = new PolicyStatement({
@@ -23,6 +34,7 @@ export function imagesBucketStack({ stack }: StackContext) {
     principals: [new AnyPrincipal()],
   });
   s3Bucket.cdk.bucket.addToResourcePolicy(bucketPolicy as any);
+
   const resizeFunction = new Function(stack, "resizeFunction", {
     handler:
       "./packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",
@@ -36,13 +48,9 @@ export function imagesBucketStack({ stack }: StackContext) {
   //     filters: [{ prefix: "initial/" }],
   //   },
   // });
-  const policy = new iam.PolicyStatement({
-    sid: "VisualRecognitionPermissions",
-    effect: iam.Effect.ALLOW,
-    actions: ["rekognition:*"],
-    resources: ["*"],
-  });
-  resizeFunction.addToRolePolicy(policy as any);
+
+  // s3Bucket.cdk.bucket.addToResourcePolicy(policy as any);
+  // resizeFunction.addToRolePolicy(policy as any);
   s3Bucket.addNotifications(stack, {
     test: {
       function: resizeFunction,

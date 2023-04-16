@@ -1,38 +1,57 @@
-import { Box, Card, CardSection, Divider, Group, Select, Skeleton, Text, TextInput } from '@mantine/core'
-import { t } from 'utils/i18nextFix'
-import React from 'react'
-import { ProductInfo, ProductsCard } from '../types'
+import {
+  Box,
+  Card,
+  CardSection,
+  Divider,
+  Group,
+  Paper,
+  Select,
+  Skeleton,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { t } from "utils/i18nextFix";
+import React from "react";
+import { ProductInfo, ProductsCard } from "../types";
 
 interface AppProps {
-  onChangeHandler: (value: any, firstChangedKey: string, chengedKey: string) => void
-  productInfo: ProductInfo
+  onChangeHandler: (
+    value: any,
+    firstChangedKey: string,
+    chengedKey: string
+  ) => void;
+  productInfo: ProductInfo;
 }
 
-const PricingCard: React.FC<ProductsCard> = ({ onChangeHandler, productInfo, isLoading }) => {
+const PricingCard: React.FC<ProductsCard> = ({
+  onChangeHandler,
+  productInfo,
+  isLoading,
+}) => {
   return (
-    <Card shadow={'sm'} p={'md'} sx={{ margin: 'auto', marginBlock: 10 }}>
+    <Paper shadow={"sm"} p={"md"} sx={{ margin: "auto", marginBlock: 10 }}>
       {isLoading ? (
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            padding: '18px 32px',
-            justifyContent: 'space-between',
+            display: "flex",
+            flexDirection: "row",
+            padding: "18px 32px",
+            justifyContent: "space-between",
           }}
         >
           <Group
             grow
             position="center"
             sx={{
-              width: '100%',
+              width: "100%",
             }}
           >
             <Box>
-              <Text>{t('Pricing')}</Text>
+              <Text>{t("Pricing")}</Text>
               <Skeleton height={30} />
             </Box>
             <Box>
-              <Text>{t('Currency')}</Text>
+              <Text>{t("Currency")}</Text>
               <Skeleton height={30} />
             </Box>
           </Group>
@@ -40,38 +59,72 @@ const PricingCard: React.FC<ProductsCard> = ({ onChangeHandler, productInfo, isL
       ) : (
         <CardSection
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            padding: '18px 32px',
-            justifyContent: 'space-between',
+            display: "flex",
+            flexDirection: "row",
+            padding: "18px 32px",
+            justifyContent: "space-between",
           }}
         >
           <Group
             grow
             position="center"
             sx={{
-              width: '100%',
+              width: "100%",
             }}
           >
             <TextInput
               type="number"
-              label={t('Pricing')}
+              label={t("Pricing")}
               required
-              placeholder={t(`${productInfo.pricing.currency} 10.00 Per ${productInfo.measurementSystem}`)}
-              value={`${productInfo?.pricing?.price || ''}`}
+              placeholder={t(
+                `${productInfo.pricing.currency} 10.00 Per ${productInfo.measurementSystem}`
+              )}
+              value={`${productInfo?.pricing?.price || ""}`}
               onChange={(e) => {
-                onChangeHandler(e.target.value, 'pricing', 'price')
+                onChangeHandler(e.target.value, "pricing", "price");
               }}
+              rightSectionWidth={100}
+              rightSection={
+                <Group
+                  position="right"
+                  sx={{
+                    width: "100%",
+                  }}
+                  spacing={5}
+                >
+                  <Text weight={120}>{t("per")}</Text>
+
+                  <Select
+                    variant="unstyled"
+                    sx={{
+                      maxWidth: "65%",
+                    }}
+                    // label={t("Mesurement System")}
+                    required
+                    data={[
+                      { label: t("Kilo"), value: "Kilo" },
+                      { label: t("Liter"), value: "Liter" },
+                      // { label: t("Gram"), value: "Gram" },
+                      // { label: t("Milliliter"), value: "Milliliter" },
+                      { label: t("Unit"), value: "Unit" },
+                    ]}
+                    value={productInfo.measurementSystem}
+                    onChange={(e) => {
+                      onChangeHandler(e, "measurementSystem");
+                    }}
+                  />
+                </Group>
+              }
             />
 
             <Select
               style={{
-                minWidth: '80px',
+                minWidth: "80px",
               }}
               required
-              label={t('Currency')}
+              label={t("Currency")}
               data={[
-                { label: 'LYD', value: 'LYD' },
+                { label: "LYD", value: "LYD" },
                 // { label: 'USD', value: 'USD' },
               ]}
               value={productInfo.pricing.currency}
@@ -86,25 +139,25 @@ const PricingCard: React.FC<ProductsCard> = ({ onChangeHandler, productInfo, isL
       {isLoading ? (
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            padding: '18px 32px',
-            justifyContent: 'space-between',
+            display: "flex",
+            flexDirection: "row",
+            padding: "18px 32px",
+            justifyContent: "space-between",
           }}
         >
           <Group
             grow
             position="center"
             sx={{
-              width: '100%',
+              width: "100%",
             }}
           >
             <Box>
-              <Text>{t('Compare at Price')}</Text>
+              <Text>{t("Compare at Price")}</Text>
               <Skeleton height={30} />
             </Box>
             <Box>
-              <Text>{t('Cost Per Item')}</Text>
+              <Text>{t("Cost Per Item")}</Text>
               <Skeleton height={30} />
             </Box>
           </Group>
@@ -112,30 +165,30 @@ const PricingCard: React.FC<ProductsCard> = ({ onChangeHandler, productInfo, isL
       ) : (
         <CardSection
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            padding: '18px 32px',
-            justifyContent: 'space-between',
+            display: "flex",
+            flexDirection: "row",
+            padding: "18px 32px",
+            justifyContent: "space-between",
           }}
         >
           <Group
             grow
             position="center"
             sx={{
-              width: '100%',
+              width: "100%",
             }}
           >
             <TextInput
               type="number"
               required
-              label={t('Compare at Price')}
+              label={t("Compare at Price")}
               placeholder={`${productInfo.pricing.currency} 20.00 Per ${productInfo.measurementSystem}`}
-              value={`${productInfo?.pricing?.prevPrice || ''}`}
+              value={`${productInfo?.pricing?.prevPrice || ""}`}
               onChange={(e) => {
-                onChangeHandler(e.target.value, 'pricing', 'prevPrice')
+                onChangeHandler(e.target.value, "pricing", "prevPrice");
               }}
             />
-            <TextInput
+            {/* <TextInput
               type="number"
               required
               label={t('Cost Per Item')}
@@ -144,12 +197,12 @@ const PricingCard: React.FC<ProductsCard> = ({ onChangeHandler, productInfo, isL
               onChange={(e) => {
                 onChangeHandler(e.target.value, 'pricing', 'costPerItem')
               }}
-            />
+            /> */}
           </Group>
         </CardSection>
       )}
-    </Card>
-  )
-}
+    </Paper>
+  );
+};
 
-export default PricingCard
+export default PricingCard;

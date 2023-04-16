@@ -43,7 +43,7 @@ const Cart: React.FC<CartProps> = ({}) => {
             >
               {t("your cart is empty! ... go fill it up")}
             </Text>
-            <Button component={Link} to={"/"}>
+            <Button component={Link} to={"/home"}>
               {t("Home")}
             </Button>
           </Container>

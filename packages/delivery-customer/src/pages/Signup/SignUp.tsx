@@ -48,7 +48,7 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     }
   }, [loggedIn, navigate]);
 

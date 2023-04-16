@@ -17,36 +17,43 @@ import {
   Stack,
   Text,
   TextInput,
+  Title,
   UnstyledButton,
-} from '@mantine/core'
-import { useDebouncedValue } from '@mantine/hooks'
-import { t } from 'utils/i18nextFix'
-import { forwardRef, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import useGetCollections from '../hooks/useGetCollections'
-import { useGetProductsFromBarcode } from '../hooks/useGetProductFromBarcode'
+} from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
+import { t } from "utils/i18nextFix";
+import { forwardRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import useGetCollections from "../hooks/useGetCollections";
+import { useGetProductsFromBarcode } from "../hooks/useGetProductFromBarcode";
 
-import { ProductsCard } from '../types'
-import Product from './Product'
+import { ProductsCard } from "../types";
+import Product from "./Product";
 
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  label: string
+interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
+  label: string;
 }
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ label, ...others }: ItemProps, ref) => (
-  <div ref={ref} {...others}>
-    <Text size="md"> {label}</Text>
-  </div>
-))
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+  ({ label, ...others }: ItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <Text size="md"> {label}</Text>
+    </div>
+  )
+);
 
 interface CollectionCardProps extends ProductsCard {}
 
-const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, productInfo, isLoading }) => {
-  const [searchedTag, setSearchedTag] = useState('')
-  const [searchText, setSearchText] = useState(productInfo.barcode)
+const CollectionCard: React.FC<CollectionCardProps> = ({
+  onChangeHandler,
+  productInfo,
+  isLoading,
+}) => {
+  const [searchedTag, setSearchedTag] = useState("");
+  const [searchText, setSearchText] = useState(productInfo.barcode);
   const [debouncedValue] = useDebouncedValue(searchText, 500, {
     leading: true,
-  })
+  });
 
   const {
     data: collections,
@@ -54,17 +61,18 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
     isLoading: areCollectoinsLoading,
     isFetched: areCollectionsFetched,
     error: collectionsError,
-  } = useGetCollections()
+  } = useGetCollections();
 
-  const { data: barcodeProducts = [], isLoading: areBarCodeProductsLoading } = useGetProductsFromBarcode({
-    searchString: debouncedValue,
-  })
-  const [products, setProducts] = useState([])
+  const { data: barcodeProducts = [], isLoading: areBarCodeProductsLoading } =
+    useGetProductsFromBarcode({
+      searchString: debouncedValue,
+    });
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    setProducts(barcodeProducts)
-  }, [areBarCodeProductsLoading])
-  console.log(barcodeProducts)
+    setProducts(barcodeProducts);
+  }, [areBarCodeProductsLoading]);
+  console.log(barcodeProducts);
 
   return (
     <Container>
@@ -75,12 +83,12 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
         >
           <Skeleton
             height={30}
-            radius={'md'}
+            radius={"md"}
             //  m={4}
           />
           <Skeleton
             height={30}
-            radius={'md'}
+            radius={"md"}
             //  m={4}
           />
         </Paper>
@@ -92,9 +100,11 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
           <Container>
             <Stack>
               <Box>
-                <Header height={25} sx={{ marginBottom: 10 }}>
-                  <Text>{t('Product status')}</Text>
-                </Header>
+                {/* <Header height={25} sx={{ marginBottom: 10 }}>
+                </Header> */}
+                <Title order={4}>
+                  <Text>{t("Product status")}</Text>
+                </Title>
                 {isLoading ? (
                   <>
                     <Loader />
@@ -105,19 +115,19 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
                     // direction="column"
                   >
                     <Checkbox
-                      label={t('Active')}
+                      label={t("Active")}
                       checked={productInfo?.isActive || false}
                       onChange={(e) => {
-                        const checked = e.currentTarget.checked
-                        onChangeHandler(checked, 'isActive')
+                        const checked = e.currentTarget.checked;
+                        onChangeHandler(checked, "isActive");
                       }}
                     />
                     <Checkbox
-                      label={t('Draft or InActive')}
+                      label={t("Draft or InActive")}
                       checked={!productInfo?.isActive || false}
                       onChange={(e) => {
-                        const checked = !e.currentTarget.checked
-                        onChangeHandler(checked, 'isActive')
+                        const checked = !e.currentTarget.checked;
+                        onChangeHandler(checked, "isActive");
                       }}
                     />
                   </Group>
@@ -131,38 +141,50 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
                   <Select
                     itemComponent={SelectItem}
                     searchable
-                    label={t('Collections')}
+                    label={t("Collections")}
                     data={
                       collections?.length > 0 && areCollectionsFetched
                         ? collections?.filter((collection) => {
-                            const isAlreadySelected = productInfo.collections?.find(
-                              (selectedCollection) => collection.value === selectedCollection.value,
-                            )
+                            const isAlreadySelected =
+                              productInfo.collections?.find(
+                                (selectedCollection) =>
+                                  collection.value === selectedCollection.value
+                              );
 
-                            return !isAlreadySelected
+                            return !isAlreadySelected;
                           })
                         : []
                     }
                     nothingFound={
-                      <Button variant="outline" component={Link} to={'/createcollection'}>
-                        {t('Add')} {searchedTag}
+                      <Button
+                        variant="outline"
+                        component={Link}
+                        to={"/createcollection"}
+                      >
+                        {t("Add")} {searchedTag}
                       </Button>
                     }
-                    placeholder={t('collection')}
+                    placeholder={t("collection")}
                     onFocus={() => {
-                      refetchCollections()
+                      refetchCollections();
                     }}
                     maxDropdownHeight={400}
                     filter={(value, item) => {
-                      setSearchedTag(value)
-                      return item.label?.includes(value.toLowerCase().trim())
+                      setSearchedTag(value);
+                      return item.label?.includes(value.toLowerCase().trim());
                     }}
                     onChange={(e) => {
                       const collection = collections?.find((collection) => {
-                        return collection.value === e
-                      })
-                      const selectedCollections = productInfo.collections?.length > 0 ? productInfo.collections : []
-                      onChangeHandler([...selectedCollections, collection], 'collections')
+                        return collection.value === e;
+                      });
+                      const selectedCollections =
+                        productInfo.collections?.length > 0
+                          ? productInfo.collections
+                          : [];
+                      onChangeHandler(
+                        [...selectedCollections, collection],
+                        "collections"
+                      );
                     }}
                   />
                 )}
@@ -175,10 +197,18 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
                             size="xs"
                             variant="subtle"
                             onClick={() => {
-                              const filteredCollections = productInfo.collections.filter((oldCollection) => {
-                                return oldCollection.value !== collection.value
-                              })
-                              onChangeHandler(filteredCollections, 'collections')
+                              const filteredCollections =
+                                productInfo.collections.filter(
+                                  (oldCollection) => {
+                                    return (
+                                      oldCollection.value !== collection.value
+                                    );
+                                  }
+                                );
+                              onChangeHandler(
+                                filteredCollections,
+                                "collections"
+                              );
                             }}
                           >
                             X
@@ -187,27 +217,27 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
                       >
                         {collection.label}
                       </Badge>
-                    )
+                    );
                   })}
                 </Box>
               </Box>
 
               <Box
                 sx={{
-                  height: '300px',
+                  height: "300px",
                 }}
               >
-                <TextInput
+                {/* <TextInput
                   value={searchText}
                   onChange={(e) => {
                     onChangeHandler(e.target.value, 'barcode')
                     setSearchText(e.target.value)
                   }}
                   label={t('Product barcode')}
-                />
+                /> */}
                 {products.length > 0 && (
                   <Card
-                    shadow={'lg'}
+                    shadow={"lg"}
                     // mt={6}
                     // sx={{
                     //   maxHeight: '200px',
@@ -221,38 +251,45 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
                         <Box
                           key={index}
                           sx={(theme) => ({
-                            borderRadius: '6px',
+                            borderRadius: "6px",
 
-                            ['&:hover']: {
+                            ["&:hover"]: {
                               backgroundColor:
-                                theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
+                                theme.colorScheme === "dark"
+                                  ? theme.colors.dark[5]
+                                  : theme.colors.gray[0],
                             },
-                            cursor: 'pointer',
+                            cursor: "pointer",
                           })}
                           mt={6}
                           onClick={() => {
-                            onChangeHandler(product.images, 'images')
-                            onChangeHandler(product.images, 'productLibraryImages')
+                            onChangeHandler(product.images, "images");
+                            onChangeHandler(
+                              product.images,
+                              "productLibraryImages"
+                            );
                           }}
                         >
                           <Box
                             m={6}
                             sx={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
                             }}
                           >
                             <Image
                               withPlaceholder
-                              width={'30px'}
-                              height={'30px'}
-                              src={`${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${product.images[0]}`}
+                              width={"30px"}
+                              height={"30px"}
+                              src={`${
+                                import.meta.env.VITE_APP_BUCKET_URL
+                              }/tablet/${product.images[0]}`}
                             />
                             <Text>{product.textInfo.title}</Text>
                           </Box>
                         </Box>
-                      )
+                      );
                     })}
                   </Card>
                 )}
@@ -277,7 +314,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ onChangeHandler, produc
         </Paper>
       )}
     </Container>
-  )
-}
+  );
+};
 
-export default CollectionCard
+export default CollectionCard;

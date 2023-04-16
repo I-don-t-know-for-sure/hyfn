@@ -6,10 +6,11 @@ import {
   StaticSite,
   Cognito,
 } from "sst/constructs";
-
+import * as cdk from "aws-cdk-lib";
 import * as iam from "aws-cdk-lib/aws-iam";
 import { config } from "../envVaraibles";
-
+import * as events from "aws-cdk-lib/aws-events";
+import * as targets from "aws-cdk-lib/aws-events-targets";
 import { getStage } from "./getStage";
 import { frConfig } from "../frEnvVaraibles";
 
@@ -32,6 +33,16 @@ export function storeApiStack({ stack }: StackContext) {
   // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const stage = getStage(stack.stage);
 
+  const rule = new events.Rule(stack as any, "backgroundRemoval", {
+    // schedule: events.Schedule.rate(cdk.Duration.minutes(10)),
+    // targets: [new targets.LambdaFunction(firstLambda)]
+  });
+
+  rule.addEventPattern({
+    source: ["background_removal"],
+    detailType: ["background_removal"],
+  });
+
   const defaultFunction = new Function(stack, "defaultFunction", {
     handler:
       "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
@@ -50,6 +61,7 @@ export function storeApiStack({ stack }: StackContext) {
       MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
       accessKeyId: config[stage].accessKeyId,
       bucketName: imagesBucketName,
+      bucketArn: s3Bucket.bucketArn,
       groupId: config[stage].groupId,
       moalmlatDataService: config[stage].moalmlatDataService,
       userPoolId: auth.userPoolId,
@@ -68,6 +80,40 @@ export function storeApiStack({ stack }: StackContext) {
       secretAccessKey: config[stage].secretAccessKey,
     },
   });
+  const uploadImagesToS3 = new Function(stack, "uploadImagesToS3", {
+    handler: pathToLambdas + "setBackgroundWhite/uploadImagesToS3.handler",
+    functionName: "uploadImagesToS3" + stack.stage,
+    role: defaultFunction.role,
+    timeout: 300,
+    url: true,
+    environment: {
+      kmsKeyARN: keyArn,
+      //////////////////////////
+      chat_gpt_api_key: config[stage].chat_gpt_api_key,
+
+      MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+      accessKeyId: config[stage].accessKeyId,
+      bucketName: imagesBucketName,
+      bucketArn: s3Bucket.bucketArn,
+      groupId: config[stage].groupId,
+      moalmlatDataService: config[stage].moalmlatDataService,
+      userPoolId: auth.userPoolId,
+      userPoolClientId: auth.userPoolClientId,
+      mongoPrivetKey: config[stage].mongoPrivetKey,
+      mongoPublicKey: config[stage].mongoPublicKey,
+      region: stack.region,
+      sadadURL: config[stage].sadadURL,
+      secretKey: config[stage].secretKey,
+      MerchantId: config[stage].MerchantId,
+      TerminalId: config[stage].TerminalId,
+      mongdbURLKey: config[stage].mongdbURLKey,
+
+      sadadApiKey: config[stage].sadadApiKey,
+
+      secretAccessKey: config[stage].secretAccessKey,
+    },
+  });
+  rule.addTarget(new targets.LambdaFunction(uploadImagesToS3 as any));
   const generateProductDescription = new Function(
     stack,
     "generateProductDescription",
@@ -87,6 +133,8 @@ export function storeApiStack({ stack }: StackContext) {
         MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
         accessKeyId: config[stage].accessKeyId,
         bucketName: imagesBucketName,
+        bucketArn: s3Bucket.bucketArn,
+
         groupId: config[stage].groupId,
         moalmlatDataService: config[stage].moalmlatDataService,
         userPoolId: auth.userPoolId,
@@ -118,6 +166,8 @@ export function storeApiStack({ stack }: StackContext) {
           generateProductDescription: generateProductDescription.url || "",
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
+          bucketArn: s3Bucket.bucketArn,
+
           bucketName: imagesBucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,
@@ -153,6 +203,14 @@ export function storeApiStack({ stack }: StackContext) {
             pathToLambdas +
             "generateDescriptionClient/generateDescriptionClient.handler",
           functionName: "generateDescriptionClient" + stack.stage,
+        },
+      },
+      "POST /generateImageReaderPutUrl": {
+        function: {
+          handler:
+            pathToLambdas +
+            "generateImageReaderPutUrl/generateImageReaderPutUrl.handler",
+          functionName: "generateImageReaderPutUrl" + stack.stage,
         },
       },
       "POST /removeAllProductsBackgrounds": {

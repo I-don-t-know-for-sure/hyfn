@@ -1,6 +1,5 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
-import { removeBackgrounds } from '../common/functions/removeBackgrounds';
+
 import { generateProductDescription } from '../common/functions/generateProductDescription';
 
 interface GenerateDescriptionClientProps extends Omit<MainFunctionProps, 'arg'> {

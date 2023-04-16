@@ -15,31 +15,21 @@ import { usePrevious } from "@mantine/hooks";
 import { commonQuestions } from "config/constents";
 import { t } from "i18next";
 import React, { useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FooterLinks } from "./components/Footer";
+import { useUser } from "contexts/userContext/User";
 
 interface LandingPageProps {}
 
 const LandingPage: React.FC<LandingPageProps> = ({}) => {
-  // const theme = useMantineTheme().colorScheme;
-
-  // const previousValue = useRef(theme);
-  // const mantineColorScheme = useMantineColorScheme();
-  // mantineColorScheme.toggleColorScheme("light");
-  // const { pathname } = useLocation();
+  // const navigate = useNavigate();
+  // const { loggedIn } = useUser();
   // useEffect(() => {
-  //   if (pathname !== "/") {
-  //     mantineColorScheme.toggleColorScheme(previousValue.current);
+  //   if (loggedIn) {
+  //     navigate("/home", { replace: true });
   //   }
-  // }, [pathname]);
+  // }, [loggedIn]);
 
-  const handleClick = (ref: any) => {
-    ref.current.classList.add("glow");
-    setTimeout(() => {
-      ref.current.classList.remove("glow");
-    }, 1000);
-    ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
   return (
     <Stack
       sx={{

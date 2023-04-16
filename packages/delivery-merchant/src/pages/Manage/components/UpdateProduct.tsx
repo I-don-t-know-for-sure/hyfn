@@ -119,22 +119,22 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
               isLoading={isLoading}
             />
 
-            <MeasurementSystemCard
+            {/* <MeasurementSystemCard
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}
               isLoading={isLoading}
-            />
+            /> */}
             <PricingCard
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}
               isLoading={isLoading}
             />
 
-            <ShippingCard
+            {/* <ShippingCard
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}
               isLoading={isLoading}
-            />
+            /> */}
             <OptionsCard
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}

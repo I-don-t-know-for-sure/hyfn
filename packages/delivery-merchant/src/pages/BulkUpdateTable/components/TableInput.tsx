@@ -1,28 +1,39 @@
-import { Checkbox, Select, TextInput } from '@mantine/core'
-import { useDebouncedValue } from '@mantine/hooks'
-import { measurementSystem } from 'config/constants'
-import React, { useEffect, useRef, useState } from 'react'
-import { ActionTypes } from '../BulkUpdateTable'
+import { Checkbox, Select, TextInput } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
+import { measurementSystem } from "config/constants";
+import React, { useEffect, useRef, useState } from "react";
+import { ActionTypes } from "../BulkUpdateTable";
+import DescriptionModal from "./DescriptionModal";
+import ImageModal from "./ImageModal";
 
 interface TableInputProps {
-  value: any
-  onChangeHandler: any
-  keyValue: any
-  keys: any
-  _id: any
+  value: any;
+  onChangeHandler: any;
+  keyValue: any;
+  keys: any;
+  _id: any;
+  productInfo: any;
 }
 
-const TableInput: React.FC<TableInputProps> = ({ value, onChangeHandler, keyValue, keys, _id }) => {
-  const ref = useRef()
-  console.log(keyValue)
+const TableInput: React.FC<TableInputProps> = ({
+  value,
+  onChangeHandler,
+  keyValue,
+  keys,
+  _id,
+  productInfo,
+}) => {
+  console.log("🚀 ~ file: TableInput.tsx:23 ~ keyValue:", keyValue);
 
-  return value === 'isActive' ? (
+  const ref = useRef();
+
+  return value === "isActive" ? (
     <Checkbox
       ref={ref}
       defaultChecked={keyValue}
       onChange={(e) => {
-        console.log('hghgf')
-        console.log(keyValue)
+        console.log("hghgf");
+        console.log(keyValue);
         if (keys.length > 1) {
           onChangeHandler({
             type: ActionTypes.ON_CHANGE_HANDLER,
@@ -32,8 +43,8 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChangeHandler, keyValu
               changedKey: keys[1],
               _id,
             },
-          })
-          return
+          });
+          return;
         }
 
         onChangeHandler({
@@ -44,7 +55,7 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChangeHandler, keyValu
 
             _id,
           },
-        })
+        });
       }}
       // onBlur={(e) => {
       //   onChangeHandler({
@@ -58,12 +69,12 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChangeHandler, keyValu
       //   })
       // }}
     />
-  ) : value === 'measurementSystem' ? (
+  ) : value === "measurementSystem" ? (
     <Select
       defaultValue={keyValue}
       data={measurementSystem}
       onChange={(e) => {
-        console.log(keyValue)
+        console.log(keyValue);
 
         if (keys.length > 1) {
           onChangeHandler({
@@ -74,8 +85,8 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChangeHandler, keyValu
               changedKey: keys[1],
               _id,
             },
-          })
-          return
+          });
+          return;
         }
         onChangeHandler({
           type: ActionTypes.ON_CHANGE_HANDLER,
@@ -85,8 +96,21 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChangeHandler, keyValu
             // changedKey: keys[1],
             _id,
           },
-        })
+        });
       }}
+    />
+  ) : value === "textInfo.description" ? (
+    <DescriptionModal
+      value={keyValue}
+      onChange={onChangeHandler}
+      _id={_id}
+      productInfo={productInfo}
+    />
+  ) : value === "images" ? (
+    <ImageModal
+      _id={_id}
+      onChange={onChangeHandler}
+      productInfo={productInfo}
     />
   ) : (
     // <TableInput
@@ -116,7 +140,7 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChangeHandler, keyValu
 
       defaultValue={keyValue}
       onBlur={(e) => {
-        console.log(e)
+        console.log(e);
 
         onChangeHandler({
           type: ActionTypes.ON_CHANGE_HANDLER,
@@ -126,10 +150,10 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChangeHandler, keyValu
             changedKey: keys[1],
             _id,
           },
-        })
+        });
       }}
     />
-  )
-}
+  );
+};
 
-export default TableInput
+export default TableInput;

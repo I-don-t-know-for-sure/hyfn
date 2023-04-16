@@ -11,13 +11,15 @@ import {
   Group,
   Loader,
   MultiSelect,
+  NumberInput,
+  NumberInputHandlers,
   Paper,
   Space,
   Text,
 } from "@mantine/core";
 import { ImageModal } from "hyfn-client";
 import { useCart } from "../../contexts/cartContext/Provider";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
@@ -28,6 +30,8 @@ import { t } from "../../util/i18nextFix";
 import { useGetProduct } from "./hooks/useGetProduct";
 import { storeServiceFee } from "../../config/constents";
 import { useImage } from "contexts/imageContext/ImageProvider";
+import { calculatePrecision, calculateStep } from "./functions";
+import HtmlRenderer from "components/HtmlReader";
 
 interface ProductProps {}
 
@@ -38,6 +42,7 @@ const Product: React.FC<ProductProps> = ({}) => {
     city: string;
     productId: string;
   }>();
+  const handlers = useRef<NumberInputHandlers>();
 
   // const { orderType } = state as { orderType: string };
   const [product, setProduct] = useState<any>();
@@ -235,7 +240,7 @@ const Product: React.FC<ProductProps> = ({}) => {
               theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
           })}
         >
-          <Box
+          {/*  <Box
             sx={{
               display: "flex",
               width: editing ? "25%" : "200px",
@@ -249,7 +254,49 @@ const Product: React.FC<ProductProps> = ({}) => {
             <ActionIcon size={24} variant="outline">
               <AiOutlinePlus onClick={increaseQTY} />
             </ActionIcon>
-          </Box>
+          </Box> */}
+          <Group spacing={5}>
+            <ActionIcon
+              size={"md"}
+              variant="default"
+              onClick={() => handlers.current.decrement()}
+            >
+              –
+            </ActionIcon>
+
+            <NumberInput
+              size={"xs"}
+              sx={{
+                maxWidth: "150px",
+              }}
+              hideControls
+              precision={calculatePrecision(product?.measurementSystem)}
+              value={qty}
+              onChange={(val) => setQty(val !== undefined ? val : (0 as any))}
+              handlersRef={handlers}
+              min={0}
+              step={calculateStep(product?.measurementSystem)}
+              styles={{ input: { textAlign: "center" } }}
+              parser={(value) => value.replace(/[$,\s]/g, "")}
+              formatter={(value) =>
+                !Number.isNaN(parseFloat(value))
+                  ? `${t(product?.measurementSystem)} ${value}`.replace(
+                      /(\d)(?=(\d{3})+(?!\d))/g,
+                      "$1,"
+                    )
+                  : `${t(product?.measurementSystem)} `
+              }
+              // icon={<Text m={"md"}>{t(product?.measurementSystem)}</Text>}
+            />
+
+            <ActionIcon
+              size={"md"}
+              variant="default"
+              onClick={() => handlers.current.increment()}
+            >
+              +
+            </ActionIcon>
+          </Group>
           <Box
             sx={{
               width: editing ? "70%" : "initail",
@@ -313,7 +360,48 @@ const Product: React.FC<ProductProps> = ({}) => {
         }}
       >
         <Box>
-          <ImageModal src={`${url}${screenSizes[0]}/${product.images[0]}`} />
+          {/* <ImageModal src={`${url}${screenSizes[0]}/${product.images[0]}`} /> */}
+          <ImageModal
+            sx={(theme) => ({
+              maxWidth: 500,
+              borderRadius: "6px",
+              maxHeight: 500,
+              [theme.fn.largerThan("sm")]: {
+                maxWidth: 300,
+                maxHeight: 300,
+              },
+            })}
+            ImageComponent={
+              <AspectRatio
+                ratio={500 / 500}
+                sx={(theme) => ({
+                  maxWidth: 500,
+                  borderRadius: "6px",
+                  maxHeight: 500,
+                  [theme.fn.largerThan("sm")]: {
+                    maxWidth: 300,
+                    maxHeight: 300,
+                  },
+                })}
+                mx="auto"
+              >
+                <Image
+                  radius={6}
+                  sx={{
+                    width: "100%",
+
+                    height: "100px",
+                  }}
+                  imageName={
+                    product?.images?.length > 0
+                      ? product.images[0]
+                      : "c72e349a9bc184cbdcfb1386060d4b5b"
+                  }
+                />
+              </AspectRatio>
+            }
+            src={`${url}initial/${product.images[0]}`}
+          />
           {/* <AspectRatio
             ratio={500 / 500}
             sx={(theme) => ({
@@ -345,16 +433,31 @@ const Product: React.FC<ProductProps> = ({}) => {
             >
               {product.textInfo.title}
             </Text>
-            <Text>{product.textInfo.description}</Text>
-            <Text
+            <Group spacing={3}>
+              <Text>{storeDoc?.currency || "LYD"}</Text>
+              <Text
+                sx={(theme) => ({
+                  fontSize: "24px",
+                  color: theme.primaryColor,
+                })}
+              >
+                {` ${
+                  product.pricing.price -
+                  product.pricing.price * storeServiceFee
+                } `}
+              </Text>
+              <Text>{t("Per")}</Text>
+              <Text color="red">{t(product?.measurementSystem)}</Text>
+            </Group>
+            {/* <Text
               sx={{
-                fontSize: "24px",
+                fontSize: "14px",
               }}
             >
               {`${storeDoc?.currency || "LYD"} ${
                 product.pricing.price - product.pricing.price * storeServiceFee
-              }`}
-            </Text>
+              } ${t("Per")} `}
+            </Text> */}
           </Container>
           <Space h={12} />
           <Box>
@@ -398,7 +501,14 @@ const Product: React.FC<ProductProps> = ({}) => {
                 margin: "12px auto",
               }}
             >
-              <Divider />
+              <Divider
+                labelPosition="center"
+                label={
+                  <Text weight={700} size={16}>
+                    {t("Options")}
+                  </Text>
+                }
+              />
               <Box
                 sx={{
                   margin: "12px auto",
@@ -552,6 +662,15 @@ const Product: React.FC<ProductProps> = ({}) => {
             </Paper>
           );
         })}
+        <Divider
+          labelPosition="center"
+          label={
+            <Text weight={700} size={16}>
+              {t("Description")}
+            </Text>
+          }
+        />
+        <HtmlRenderer htmlString={product?.textInfo?.description} />
       </Container>
     )
   );

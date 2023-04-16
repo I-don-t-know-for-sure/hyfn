@@ -37,7 +37,7 @@ export const useConfigurationData = () => {
   const links: LinkProps[] = [
     {
       label: t("Home"),
-      link: "/",
+      link: "/home",
       svg: AiFillHome,
     },
     {
@@ -95,7 +95,7 @@ export const useConfigurationData = () => {
   const bottomNavLinks: LinkProps[] = [
     {
       label: t("Home"),
-      link: "/",
+      link: "/home",
       svg: AiFillHome,
     },
     // {

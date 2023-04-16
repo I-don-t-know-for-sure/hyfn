@@ -13,32 +13,69 @@ import {
 } from '../resources';
 import { ObjectId } from 'mongodb';
 
-const s3 = new AWS.S3();
-const rekognition = new AWS.Rekognition({ region: 'us-east-1' });
+const s3 = new AWS.S3({ region: 'eu-west-3' });
+const rekognition = new AWS.Rekognition({ region: 'eu-west-1' });
 export const generateProductDescriptionHandler = async ({
   arg,
   client,
   userId,
 }: GenerateProductDescriptionProps) => {
-  // console.log('🚀 ~ file: generateProductDescription.ts:18 ~ client:', client);
-
-  const base64Data = arg[0].image.replace(/^data:image\/\w+;base64,/, '');
-  const buffer = Buffer.from(base64Data, 'base64');
+  var text = '';
+  const imageKeys = arg[0]?.imageKeys;
+  const bucketFolder = 'image-reader/';
   const productId = arg[0]?.productId;
 
+  for (const imageKey of imageKeys) {
+    console.log('imageKey', imageKey);
+
+    const object = await s3
+      .getObject({ Bucket: process.env.bucketName, Key: bucketFolder + imageKey })
+      .promise();
+    const params: AWS.Rekognition.DetectTextRequest = {
+      Image: {
+        Bytes: object.Body,
+      },
+    };
+    console.log('imageKey', imageKey);
+    try {
+      const result = await rekognition.detectText(params).promise();
+      var blocks = result.TextDetections.filter(
+        (detection) => detection.Type === 'WORD' || detection.Type === 'LINE'
+      );
+      // console.log(blocks);
+      const textResult = blocks.reduce((acc, detection) => {
+        if (detection.Type === 'LINE') {
+          return `${acc}${detection.DetectedText}\n`;
+        } else {
+          return `${acc}${detection.DetectedText} `;
+        }
+      }, '');
+
+      text += '\n' + textResult;
+    } catch (error) {
+      console.log('🚀 ~ file: generateProductDescription.ts:58 ~ error:', error);
+    }
+  }
+
+  /*  const object = await s3
+    .getObject({ Bucket: process.env.bucketName, Key: bucketFolder + imageKey[0] })
+    .promise();
   const params: AWS.Rekognition.DetectTextRequest = {
     Image: {
-      Bytes: buffer,
+      Bytes: object.Body,
     },
   };
-  console.log('🚀 ~ file: generateProductDescription.ts:39 ~ text ~ text:');
+  console.log(
+    '🚀 ~ file: generateProductDescription.ts:39 ~ text ~ text:',
+    bucketFolder + imageKey
+  );
   try {
     const result = await rekognition.detectText(params).promise();
     var blocks = result.TextDetections.filter(
       (detection) => detection.Type === 'WORD' || detection.Type === 'LINE'
     );
     // console.log(blocks);
-    var text = blocks.reduce((acc, detection) => {
+    const textResult = blocks.reduce((acc, detection) => {
       if (detection.Type === 'LINE') {
         return `${acc}${detection.DetectedText}\n`;
       } else {
@@ -49,6 +86,9 @@ export const generateProductDescriptionHandler = async ({
     console.log('🚀 ~ file: generateProductDescription.ts:38 ~ error:', error);
     throw new Error('error');
   }
+ */
+
+  /////////////////////////////
 
   console.log('🚀 ~ file: generateProductDescription.ts:39 ~ text ~ text:', text);
 

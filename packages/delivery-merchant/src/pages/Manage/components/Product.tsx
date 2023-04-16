@@ -126,19 +126,19 @@ const Product: React.FC<ProductProps> = () => {
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}
             />
-            <MeasurementSystemCard
+            {/* <MeasurementSystemCard
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}
-            />
+            /> */}
             <PricingCard
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}
             />
 
-            <ShippingCard
+            {/* <ShippingCard
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}
-            />
+            /> */}
             <OptionsCard
               onChangeHandler={onChangeHandler}
               productInfo={productInfo}

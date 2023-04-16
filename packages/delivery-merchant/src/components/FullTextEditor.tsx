@@ -44,10 +44,10 @@ const FullTextEditor: React.FC<FullTextEditorProps> = ({
       setValue(e.editor.getHTML());
     },
   });
-  useEffect(() => {
-    console.log("🚀 ~ file: FullTextEditor.tsx:36 ~ value", newContent);
-    editor?.commands?.setContent(newContent);
-  }, [newContent]);
+  // useEffect(() => {
+  //   console.log("🚀 ~ file: FullTextEditor.tsx:36 ~ value", newContent);
+  //   editor?.commands?.setContent(newContent);
+  // }, [newContent]);
 
   // useEffect(() => {
   //   if (editor?.isEmpty) {
