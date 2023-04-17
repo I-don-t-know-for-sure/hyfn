@@ -1,4 +1,4 @@
-import { MainFunctionProps } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import request from 'request';
 import AWS, { S3 } from 'aws-sdk';
 import Jimp from 'jimp';
@@ -11,9 +11,15 @@ interface UploadImagesToS3Props extends Omit<MainFunctionProps, 'arg'> {
 const api_url = 'https://api.backgroundremoverai.com/v1/convert/';
 const results_url = 'https://api.backgroundremoverai.com/v1/results/';
 const api_result_url = 'https://api.backgroundremoverai.com';
-export const uploadImagesToS3Handler = async ({ arg, client, userId }: UploadImagesToS3Props) => {
+export const uploadImagesToS3Handler = async ({
+  arg,
+  client,
+  userId,
+  event,
+}: UploadImagesToS3Props) => {
+  console.log('🚀 ~ file: uploadImagesToS3.ts:15 ~ uploadImagesToS3Handler ~ event:', event);
   console.log('uploadImagesToS3Handler');
-
+  return;
   const { results } = arg[0];
   const files = [];
 
@@ -112,4 +118,8 @@ export const uploadImagesToS3Handler = async ({ arg, client, userId }: UploadIma
     }
   }
   return 'success';
+};
+
+export const handler = async (event: any, context: any) => {
+  return await mainWrapper({ event, mainFunction: uploadImagesToS3Handler });
 };

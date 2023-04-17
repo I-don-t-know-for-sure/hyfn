@@ -5,6 +5,7 @@ import {
   Function,
   StaticSite,
   Cognito,
+  EventBus,
 } from "sst/constructs";
 import * as cdk from "aws-cdk-lib";
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -32,16 +33,6 @@ export function storeApiStack({ stack }: StackContext) {
   // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
   // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const stage = getStage(stack.stage);
-
-  const rule = new events.Rule(stack as any, "backgroundRemoval", {
-    // schedule: events.Schedule.rate(cdk.Duration.minutes(10)),
-    // targets: [new targets.LambdaFunction(firstLambda)]
-  });
-
-  rule.addEventPattern({
-    source: ["background_removal"],
-    detailType: ["background_removal"],
-  });
 
   const defaultFunction = new Function(stack, "defaultFunction", {
     handler:
@@ -80,7 +71,14 @@ export function storeApiStack({ stack }: StackContext) {
       secretAccessKey: config[stage].secretAccessKey,
     },
   });
-  const uploadImagesToS3 = new Function(stack, "uploadImagesToS3", {
+
+  // removeBackgrounds.addToRolePolicy(
+  //   new iam.PolicyStatement({
+  //     actions: ["events:PutEvents"],
+  //     resources: ["*"],
+  //   })
+  // );
+  /*  const uploadImagesToS3 = new Function(stack, "uploadImagesToS3", {
     handler: pathToLambdas + "setBackgroundWhite/uploadImagesToS3.handler",
     functionName: "uploadImagesToS3" + stack.stage,
     role: defaultFunction.role,
@@ -112,8 +110,56 @@ export function storeApiStack({ stack }: StackContext) {
 
       secretAccessKey: config[stage].secretAccessKey,
     },
+  }); */
+
+  new EventBus(stack, "Bus", {
+    rules: {
+      backgroundRemoval: {
+        pattern: {
+          source: ["background_removal"],
+          detailType: ["background_removal"],
+        },
+
+        targets: {
+          uploadImagesToS3: {
+            function: {
+              role: defaultFunction.role,
+              timeout: 300,
+              handler:
+                pathToLambdas + "setBackgroundWhite/uploadImagesToS3.handler",
+              environment: {
+                kmsKeyARN: keyArn,
+                //////////////////////////
+                chat_gpt_api_key: config[stage].chat_gpt_api_key,
+
+                MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+                accessKeyId: config[stage].accessKeyId,
+                bucketName: imagesBucketName,
+                bucketArn: s3Bucket.bucketArn,
+                groupId: config[stage].groupId,
+                moalmlatDataService: config[stage].moalmlatDataService,
+                userPoolId: auth.userPoolId,
+                userPoolClientId: auth.userPoolClientId,
+                mongoPrivetKey: config[stage].mongoPrivetKey,
+                mongoPublicKey: config[stage].mongoPublicKey,
+                region: stack.region,
+                sadadURL: config[stage].sadadURL,
+                secretKey: config[stage].secretKey,
+                MerchantId: config[stage].MerchantId,
+                TerminalId: config[stage].TerminalId,
+                mongdbURLKey: config[stage].mongdbURLKey,
+
+                sadadApiKey: config[stage].sadadApiKey,
+
+                secretAccessKey: config[stage].secretAccessKey,
+              },
+            },
+          },
+        },
+      },
+    },
   });
-  rule.addTarget(new targets.LambdaFunction(uploadImagesToS3 as any));
+
   const generateProductDescription = new Function(
     stack,
     "generateProductDescription",

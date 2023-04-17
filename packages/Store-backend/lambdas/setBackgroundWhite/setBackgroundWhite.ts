@@ -20,6 +20,17 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
   console.log('🚀 ~ file: setBackgroundWhite.ts:20 ~ setBackgroundWhiteHandler ~ arg:', arg);
   const { keys } = arg[0];
   console.log('🚀 ~ file: setBackgroundWhite.ts:21 ~ setBackgroundWhiteHandler ~ keys:', keys);
+  let newKeys;
+
+  // Check if the array has at least 5 elements
+  if (keys.length >= 5) {
+    // Use splice to remove the last 5 elements from the array and assign them to newKeys
+    newKeys = keys.splice(-5);
+  } else {
+    // If the array has less than 5 elements, use pop to remove all the elements and assign them to newKeys
+    newKeys = keys.splice(0, keys.length);
+  }
+
   const bucket = process.env.bucketName;
   const files = [];
   for (const key of keys) {
@@ -42,9 +53,6 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
     console.log('🚀 ~ file: setBackgroundWhite.ts:38 ~ setBackgroundWhiteHandler ~ strem:');
 
     formData.files.push(strem);
-
-    //   const readStream = stream.Readable.from(buffer);
-    //   const file = new Blob([buffer], { type: 'image/jpeg' });
 
     const convertRequest = {
       url: api_url,
@@ -127,13 +135,6 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
         var buffer = await whiteImage
           .composite(productImage, 0, 0)
           .getBufferAsync(Jimp.AUTO as any);
-
-        /*  var buffer = await (
-          await Jimp.read(`${api_result_url}${file.url}`)
-        )
-          .resize(screen.sizes[0], screen.sizes[1], Jimp.RESIZE_BEZIER)
-          .quality(100)
-          .getBufferAsync(Jimp.AUTO as any); */
       } catch (error) {
         console.log(error, 'hdhdh');
         return;
@@ -167,172 +168,32 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
       }
     }
   }
-  // await downloadImageToS3(
-  //   `${api_result_url}${results.files[0].url}`,
-  //   bucket,
-  //   'backgroundless/' + key
-  // );
-  // const putObjectParams = {
-  //   Bucket: bucket,
-  //   Key: `backgroundless/${key}`,
-  //   Body: results.files[0].data,
-  //   ContentType: getObjectResult.ContentType,
+
+  // create an event with eventBridge of type background_removal
+  // const eventBridge = new AWS.EventBridge();
+  // const params = {
+  //   Entries: [
+  //     {
+  //       Detail: JSON.stringify({  }),
+  //       DetailType: 'background_removal',
+  //       // EventBusName: 'default',
+  //       Source: 'background_removal',
+  //     },
+  //   ],
   // };
-  // await s3.putObject(putObjectParams).promise();
+  // // put the event async
+  // // await eventBridge.putEvents(params).promise();
+  // eventBridge.putEvents(params, function (err, data) {
+  //   if (err) {
+  //     console.log('Error', err);
+  //   } else {
+  //     console.log('Success', data);
+  //   }
+  // });
+
   return 'success';
 };
-/* export const setBackgroundWhiteHandler = async ({ arg }) => {
-  const { key } = arg[0];
-  const bucket = process.env.bucketName;
 
-  // for(key in keys) {}
-
-
-  const getObjectParams = {
-    Bucket: bucket,
-    Key: 'initial/' + key,
-  };
-
-
-  const getObjectResult = await s3.getObject(getObjectParams).promise();
-  const tmpPath = '/tmp/myfile.jpg';
-  await fs.promises.writeFile(tmpPath, getObjectResult.Body as any);
-  const buffer = await Jimp.read(getObjectResult.Body as any).then((image) =>
-    image.getBufferAsync(Jimp.AUTO as any)
-  );
-
-  const streamObj = new stream.Readable({
-    read() {
-      this.push(buffer);
-      this.push(null);
-    },
-  });
-
-  console.log('🚀 ~ file: setBackgroundWhite.ts:25 ~ setBackgroundWhiteHandler ~ buffer:', buffer);
-  function readStream(stream) {
-    return new Promise((resolve, reject) => {
-      let data = '';
-      stream.on('data', (chunk) => {
-        data += chunk.toString();
-      });
-      stream.on('error', (err) => {
-        reject(err);
-      });
-      stream.on('end', () => {
-        resolve(data);
-      });
-    });
-  }
-  const file = await fs.promises.readFile(tmpPath);
-  await s3.putObject({ Bucket: bucket, Key: 'checking/' + key }).promise();
-  console.log('🚀 ~ file: setBackgroundWhite.ts:56 ~ setBackgroundWhiteHandler ~ file:', file);
-  const strem = fs.createReadStream(tmpPath);
-
-  console.log('🚀 ~ file: setBackgroundWhite.ts:56 ~ setBackgroundWhiteHandler ~ strem:', strem);
-  //   const readStream = stream.Readable.from(buffer);
-  //   const file = new Blob([buffer], { type: 'image/jpeg' });
-
-  const formData = {
-    lang: 'en',
-    convert_to: 'image-backgroundremover',
-    files: strem,
-  } as any;
-  //   const formData = {
-  //     lang: 'en',
-  //     convert_to: 'image-backgroundremover',
-  //     files: {
-  //       value: getObjectResult.Body,
-  //       options: {
-  //         filename: key,
-  //         contentType: getObjectResult.ContentType,
-  //       },
-  //     },
-  //   } as any;
-
-  const convertRequest = {
-    url: api_url,
-    method: 'post',
-    formData: formData,
-    headers: {
-      'Authorization': '2c91437a82df4e6192ae5be05b8c8136',
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  console.log(
-    '🚀 ~ file: setBackgroundWhite.ts:51 ~ setBackgroundWhiteHandler ~ convertRequest:',
-    JSON.stringify(convertRequest)
-  );
-
-  const result = await new Promise((resolve, reject) => {
-    request(convertRequest, (err, response, body) => {
-      if (err) {
-        reject(err);
-      } else {
-        console.log('🚀 ~ file: setBackgroundWhite.ts:60 ~ request ~ err:', body);
-        resolve(JSON.parse(body));
-      }
-    });
-  });
-
-  console.log('🚀 ~ file: setBackgroundWhite.ts:49 ~ result ~ result:', result);
-
-  const resultsRequest = {
-    url: results_url,
-    method: 'POST',
-    formData: result,
-  };
-
-  const results: any = await new Promise((resolve, reject) => {
-    const pollResults = () => {
-      request(resultsRequest, (err, response, body) => {
-        if (err) {
-          reject(err);
-        } else {
-          const result = JSON.parse(body);
-          if (result.finished) {
-            resolve(result);
-          } else {
-            setTimeout(pollResults, 1000);
-          }
-        }
-      });
-    };
-    pollResults();
-  });
-  console.log(
-    '🚀 ~ file: setBackgroundWhite.ts:102 ~ constresults:any=awaitnewPromise ~ results:',
-    results
-  );
-  await downloadImageToS3(
-    `${api_result_url}${results.files[0].url}`,
-    bucket,
-    'backgroundless/' + key
-  );
-  // const putObjectParams = {
-  //   Bucket: bucket,
-  //   Key: `backgroundless/${key}`,
-  //   Body: results.files[0].data,
-  //   ContentType: getObjectResult.ContentType,
-  // };
-  // await s3.putObject(putObjectParams).promise();
-  return 'success';
-}; */
-// const downloadImageToS3 = async (imageUrl: string, bucketName: string, objectKey: string) => {
-//   const response = await axios.get(imageUrl, {
-//     responseType: 'arraybuffer',
-//   });
-
-//   const objectParams = {
-//     Bucket: bucketName,
-//     Key: objectKey,
-//     Body: response.data,
-//     // ContentType: response.headers['content-type'],
-//   };
-
-//   await s3.putObject(objectParams).promise();
-
-//   console.log(`Image downloaded and saved to S3 bucket ${bucketName} with object key ${objectKey}`);
-// };
 export const handler = async (event) => {
   const {
     arg: [{ keys }],
@@ -340,7 +201,4 @@ export const handler = async (event) => {
   console.log('🚀 ~ file: setBackgroundWhite.ts:323 ~ handler ~ keys:', keys);
   // return await mainWrapper({ event, mainFunction: setBackgroundWhiteHandler });
   return await setBackgroundWhiteHandler({ arg: [{ keys }] });
-  // await setBackgroundWhiteHandler({
-  //   arg: [{ key: 'WhatsApp Image 2023-04-09 at 1.52.24 PM.jpeg' }],
-  // });
 };
