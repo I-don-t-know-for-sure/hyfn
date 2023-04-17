@@ -17,7 +17,7 @@ export const handler = async (event, ctx) => {
   try {
     const content = await client.db('base').collection('products').find({ storeId }).toArray();
 
-    const region = 'eu-south-1';
+    const region = process.env.region;
     const bucketName = 'download-all-products';
     const { accessKeyId, secretAccessKey } = {
       //accessKeyId: "AKIAYTHGFE3UDZTFZJYR",

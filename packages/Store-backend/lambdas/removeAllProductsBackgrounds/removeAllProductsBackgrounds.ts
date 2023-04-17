@@ -1,6 +1,11 @@
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { removeBackgrounds } from '../common/functions/removeBackgrounds';
+import {
+  removeBackgrounds,
+  sendRemoveBackgroundsEventBus,
+} from '../common/functions/removeBackgrounds';
+
+import AWS, { S3 } from 'aws-sdk';
 
 interface RemoveAllProductsBackgroundsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
@@ -9,6 +14,7 @@ interface RemoveAllProductsBackgroundsProps extends Omit<MainFunctionProps, 'arg
 export const removeAllProductsBackgroundsHandler = async ({
   arg,
   client,
+  session,
 }: RemoveAllProductsBackgroundsProps) => {
   const { productIds } = arg[0];
   const imageKeys = [];
@@ -20,9 +26,13 @@ export const removeAllProductsBackgroundsHandler = async ({
       .findOne({ _id: new ObjectId(productId) }, { projection: { _id: false, images: true } });
     imageKeys.push(...product.images);
   }
-  console.log('🚀 ~ file: removeAllProductsBackgrounds.ts:15 ~ imageKeys:', imageKeys);
+  console.log(
+    '🚀 ~ file: removeAllProductsBackgrounds.ts:15 ~ imageKeys:',
+    process.env.backgroundRemovalEventBus
+  );
 
-  removeBackgrounds({ keys: imageKeys });
+  sendRemoveBackgroundsEventBus(imageKeys);
+  // removeBackgrounds({ keys: imageKeys });
   return 'success';
 };
 

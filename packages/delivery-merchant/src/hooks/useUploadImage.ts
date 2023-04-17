@@ -73,6 +73,11 @@ const useUploadImage = () => {
       console.log(generatedURLs, "sjbdhcbhdbchbdhcbh");
 
       const generatedIndex = i;
+      console.log(
+        "🚀 ~ file: useUploadImage.ts:76 ~ //awaitfiles?.forEach ~ generatedIndex:",
+        generatedIndex
+      );
+      console.log(generatedURLs[generatedIndex][0], "sjbdhcbhdbchbdhcbh");
 
       const status = await fetch(generatedURLs[generatedIndex][0], {
         method: "PUT",

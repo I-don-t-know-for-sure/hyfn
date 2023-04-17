@@ -16,11 +16,10 @@ const api_url = 'https://api.backgroundremoverai.com/v1/convert/';
 const results_url = 'https://api.backgroundremoverai.com/v1/results/';
 const api_result_url = 'https://api.backgroundremoverai.com';
 
-export const setBackgroundWhiteHandler = async ({ arg }) => {
-  console.log('🚀 ~ file: setBackgroundWhite.ts:20 ~ setBackgroundWhiteHandler ~ arg:', arg);
-  const { keys } = arg[0];
+export const setBackgroundWhiteHandler = async ({ keys, eventBusName }) => {
   console.log('🚀 ~ file: setBackgroundWhite.ts:21 ~ setBackgroundWhiteHandler ~ keys:', keys);
-  let newKeys;
+
+  let newKeys = [];
 
   // Check if the array has at least 5 elements
   if (keys.length >= 5) {
@@ -33,7 +32,7 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
 
   const bucket = process.env.bucketName;
   const files = [];
-  for (const key of keys) {
+  for (const key of newKeys) {
     const formData = {
       lang: 'en',
       convert_to: 'image-backgroundremover',
@@ -168,37 +167,43 @@ export const setBackgroundWhiteHandler = async ({ arg }) => {
       }
     }
   }
-
-  // create an event with eventBridge of type background_removal
-  // const eventBridge = new AWS.EventBridge();
-  // const params = {
-  //   Entries: [
-  //     {
-  //       Detail: JSON.stringify({  }),
-  //       DetailType: 'background_removal',
-  //       // EventBusName: 'default',
-  //       Source: 'background_removal',
-  //     },
-  //   ],
-  // };
-  // // put the event async
-  // // await eventBridge.putEvents(params).promise();
-  // eventBridge.putEvents(params, function (err, data) {
-  //   if (err) {
-  //     console.log('Error', err);
-  //   } else {
-  //     console.log('Success', data);
-  //   }
-  // });
-
+  console.log('🚀 ~ file: setBackgroundWhite.ts:171 ~ setBackgroundWhiteHandler ~ keys:', keys);
+  if (keys.length > 0) {
+    const eventBridge = new AWS.EventBridge();
+    const params = {
+      Entries: [
+        {
+          Detail: JSON.stringify({ keys: keys, eventBusName }),
+          DetailType: 'background_removal',
+          EventBusName: eventBusName,
+          Source: 'background_removal',
+        },
+      ],
+    };
+    // put the event async
+    // await eventBridge.putEvents(params).promise();
+    eventBridge.putEvents(params, function (err, data) {
+      if (err) {
+        console.log('Error', err);
+      } else {
+        console.log('Success', data);
+      }
+    });
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: `EventBus event sent with args: `,
+      }),
+    };
+  }
   return 'success';
 };
 
 export const handler = async (event) => {
-  const {
-    arg: [{ keys }],
-  } = JSON.parse(event.body);
-  console.log('🚀 ~ file: setBackgroundWhite.ts:323 ~ handler ~ keys:', keys);
-  // return await mainWrapper({ event, mainFunction: setBackgroundWhiteHandler });
-  return await setBackgroundWhiteHandler({ arg: [{ keys }] });
+  console.log('🚀 ~ file: setBackgroundWhite.ts:200 ~ handler ~ event:', typeof event.detail);
+
+  const { eventBusName, keys } = event.detail;
+  // console.log('🚀 ~ file: setBackgroundWhite.ts:323 ~ handler ~ keys:', keys);
+  // // return await mainWrapper({ event, mainFunction: setBackgroundWhiteHandler });
+  return await setBackgroundWhiteHandler({ keys, eventBusName });
 };

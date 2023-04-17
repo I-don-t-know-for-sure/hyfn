@@ -1,4 +1,4 @@
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, getMongoClientWithIAMRole, mainWrapper } from 'hyfn-server';
 
 interface GenerateProductDescriptionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
@@ -13,17 +13,25 @@ import {
 } from '../resources';
 import { ObjectId } from 'mongodb';
 
-const s3 = new AWS.S3({ region: 'eu-west-3' });
+const s3 = new AWS.S3({ region: process.env.region });
 const rekognition = new AWS.Rekognition({ region: 'eu-west-1' });
 export const generateProductDescriptionHandler = async ({
-  arg,
+  products,
+  eventBusName,
   client,
-  userId,
-}: GenerateProductDescriptionProps) => {
+}: {
+  products: any[];
+  eventBusName: string;
+  client: MainFunctionProps['client'];
+}) => {
+  const product = products.pop();
+
+  // Check if the array has at least 5 elements
+
   var text = '';
-  const imageKeys = arg[0]?.imageKeys;
+  const imageKeys = product?.imageKeys;
   const bucketFolder = 'image-reader/';
-  const productId = arg[0]?.productId;
+  const productId = product?.productId;
 
   for (const imageKey of imageKeys) {
     console.log('imageKey', imageKey);
@@ -165,7 +173,9 @@ export const generateProductDescriptionHandler = async ({
 };
 
 export const handler = async (event) => {
-  return await mainWrapper({ event, mainFunction: generateProductDescriptionHandler });
+  const { eventBusName, products } = event.detail;
+  const client = await getMongoClientWithIAMRole();
+  return await generateProductDescriptionHandler({ client, eventBusName, products });
 };
 
 const createChatPrompt = (prompt: any) => {

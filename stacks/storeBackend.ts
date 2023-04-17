@@ -6,6 +6,7 @@ import {
   StaticSite,
   Cognito,
   EventBus,
+  Queue,
 } from "sst/constructs";
 import * as cdk from "aws-cdk-lib";
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -38,6 +39,7 @@ export function storeApiStack({ stack }: StackContext) {
     handler:
       "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
   });
+
   const removeBackgrounds = new Function(stack, "removeBackgrounds", {
     handler: pathToLambdas + "setBackgroundWhite/setBackgroundWhite.handler",
     functionName: "setBackgroundWhite" + stack.stage,
@@ -65,7 +67,6 @@ export function storeApiStack({ stack }: StackContext) {
       MerchantId: config[stage].MerchantId,
       TerminalId: config[stage].TerminalId,
       mongdbURLKey: config[stage].mongdbURLKey,
-
       sadadApiKey: config[stage].sadadApiKey,
 
       secretAccessKey: config[stage].secretAccessKey,
@@ -112,7 +113,7 @@ export function storeApiStack({ stack }: StackContext) {
     },
   }); */
 
-  new EventBus(stack, "Bus", {
+  const eventBus = new EventBus(stack, "Bus", {
     rules: {
       backgroundRemoval: {
         pattern: {
@@ -126,7 +127,7 @@ export function storeApiStack({ stack }: StackContext) {
               role: defaultFunction.role,
               timeout: 300,
               handler:
-                pathToLambdas + "setBackgroundWhite/uploadImagesToS3.handler",
+                pathToLambdas + "setBackgroundWhite/setBackgroundWhite.handler",
               environment: {
                 kmsKeyARN: keyArn,
                 //////////////////////////
@@ -159,7 +160,99 @@ export function storeApiStack({ stack }: StackContext) {
       },
     },
   });
+  const generateProductDescriptionEventBus = new EventBus(
+    stack,
+    "generateProductDescriptionEventBus",
+    {
+      rules: {
+        backgroundRemoval: {
+          pattern: {
+            source: ["generate_product_description"],
+            detailType: ["generate_product_description"],
+          },
 
+          targets: {
+            uploadImagesToS3: {
+              function: {
+                role: defaultFunction.role,
+                timeout: 300,
+                handler:
+                  pathToLambdas +
+                  "generateProductDescription/generateProductDescription.handler",
+                environment: {
+                  kmsKeyARN: keyArn,
+                  //////////////////////////
+                  chat_gpt_api_key: config[stage].chat_gpt_api_key,
+
+                  MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+                  accessKeyId: config[stage].accessKeyId,
+                  bucketName: imagesBucketName,
+                  bucketArn: s3Bucket.bucketArn,
+                  groupId: config[stage].groupId,
+                  moalmlatDataService: config[stage].moalmlatDataService,
+                  userPoolId: auth.userPoolId,
+                  userPoolClientId: auth.userPoolClientId,
+                  mongoPrivetKey: config[stage].mongoPrivetKey,
+                  mongoPublicKey: config[stage].mongoPublicKey,
+                  region: stack.region,
+                  sadadURL: config[stage].sadadURL,
+                  secretKey: config[stage].secretKey,
+                  MerchantId: config[stage].MerchantId,
+                  TerminalId: config[stage].TerminalId,
+                  mongdbURLKey: config[stage].mongdbURLKey,
+
+                  sadadApiKey: config[stage].sadadApiKey,
+
+                  secretAccessKey: config[stage].secretAccessKey,
+                },
+              },
+            },
+          },
+        },
+      },
+    }
+  );
+
+  // const sendEventbus = new Function(stack, "sendEventbus", {
+  //   handler: pathToLambdas + "setBackgroundWhite/sendEventbusEvent.handler",
+  //   functionName: "sendEventbus" + stack.stage,
+  //   url: true,
+  // });
+  /*  const queue = new Queue(stack, "queue", {
+    consumer: {
+      function: {
+        handler:
+          pathToLambdas + "setBackgroundWhite/setBackgroundWhite.handler",
+        environment: {
+          kmsKeyARN: keyArn,
+          //////////////////////////
+          chat_gpt_api_key: config[stage].chat_gpt_api_key,
+
+          MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+          accessKeyId: config[stage].accessKeyId,
+          bucketName: imagesBucketName,
+          bucketArn: s3Bucket.bucketArn,
+
+          groupId: config[stage].groupId,
+          moalmlatDataService: config[stage].moalmlatDataService,
+          userPoolId: auth.userPoolId,
+          userPoolClientId: auth.userPoolClientId,
+          mongoPrivetKey: config[stage].mongoPrivetKey,
+          mongoPublicKey: config[stage].mongoPublicKey,
+          region: stack.region,
+          sadadURL: config[stage].sadadURL,
+          secretKey: config[stage].secretKey,
+          MerchantId: config[stage].MerchantId,
+          TerminalId: config[stage].TerminalId,
+          mongdbURLKey: config[stage].mongdbURLKey,
+
+          sadadApiKey: config[stage].sadadApiKey,
+
+          secretAccessKey: config[stage].secretAccessKey,
+        },
+      },
+    },
+  }); */
   const generateProductDescription = new Function(
     stack,
     "generateProductDescription",
@@ -213,7 +306,15 @@ export function storeApiStack({ stack }: StackContext) {
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketArn: s3Bucket.bucketArn,
-
+          backgroundRemovalEventBus: eventBus.eventBusName,
+          backgroundRemovalEventBusDetailType: "background_removal",
+          backgroundRemovalEventBusSource: "background_removal",
+          generateProductDescriptionEventBus:
+            generateProductDescriptionEventBus.eventBusName,
+          generateProductDescriptionEventBusDetailType:
+            "generate_product_description",
+          generateProductDescriptionEventBusSource:
+            "generate_product_description",
           bucketName: imagesBucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,

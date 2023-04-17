@@ -122,7 +122,7 @@ const GenerateDescriptionModal: React.FC<GenerateDescriptionModalProps> = ({
               if (!value) {
                 return;
               }
-              generateProductDescription({ images: value, productId });
+              generateProductDescription([{ images: value, productId }]);
             }}
           >
             {t("Generate")}

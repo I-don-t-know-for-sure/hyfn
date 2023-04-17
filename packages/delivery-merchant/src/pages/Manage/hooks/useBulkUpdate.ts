@@ -49,6 +49,7 @@ export const useBulkUpdate = () => {
       };
       const keysArray = getKeys(productsArray);
       // return;
+      var productsToGenerateDescription = [];
       for (let i = 0; i < keysArray.length; i++) {
         const { files, generateDescriptionImages, _id } = keysArray[i];
         const upload = useUploadImage();
@@ -84,24 +85,28 @@ export const useBulkUpdate = () => {
 
         if (generateDescriptionImages?.length > 0) {
           try {
-            const { generatedURLs, generatedNames } =
-              await generateProductDescriptionImageUrl(
-                generateDescriptionImages
-              );
-            // loop through products array and and find the product that has the _id that matches the product._id and set description field to ""
-            for (let i = 0; i < products.length; i++) {
-              const product = products[i];
-              if (product._id === _id) {
-                delete product.description;
-              }
-            }
+            // const { generatedURLs, generatedNames } =
+            //   await generateProductDescriptionImageUrl(
+            //     generateDescriptionImages
+            //   );
+            // // loop through products array and and find the product that has the _id that matches the product._id and set description field to ""
+            // for (let i = 0; i < products.length; i++) {
+            //   const product = products[i];
+            //   if (product._id === _id) {
+            //     delete product.description;
+            //   }
+            // }
 
-            await upload({
-              files: generateDescriptionImages,
-              generatedNames,
-              generatedURLs,
-            });
-            mutate({ images: generatedNames, productId: _id });
+            // await upload({
+            //   files: generateDescriptionImages,
+            //   generatedNames,
+            //   generatedURLs,
+            // });
+
+            productsToGenerateDescription = [
+              ...productsToGenerateDescription,
+              { images: generateDescriptionImages, productId: _id },
+            ];
           } catch (error) {
             console.log(
               "🚀 ~ file: useBulkUpdate.ts:66 ~ returnuseMutation ~ error:",
@@ -110,6 +115,7 @@ export const useBulkUpdate = () => {
           }
         }
       }
+      mutate(productsToGenerateDescription);
       /*
        * create a function that takes a value and logs it to console
        */
