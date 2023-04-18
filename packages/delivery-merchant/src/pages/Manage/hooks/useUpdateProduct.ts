@@ -39,26 +39,33 @@ export const useUpdateProduct = () => {
           autoClose: false,
         });
         const { deletedImages, productLibraryImages = [], ...rest } = product;
-        const { generatedNames, generatedURLs } = await generateProductsUrls(
-          product?.files?.length
-        );
-        const imagesURLs = await upload({
-          files: product?.files,
-          generatedNames,
-          generatedURLs,
-        });
+        if (product?.files?.length > 0) {
+          const { generatedNames, generatedURLs } = await generateProductsUrls(
+            product?.files?.length
+          );
+          var imagesURLs = await upload({
+            files: product?.files,
+            generatedNames,
+            generatedURLs,
+          });
 
-        console.log([
-          { ...rest, imagesURLs: [...imagesURLs, ...productLibraryImages] },
-          userDocument?.storeDoc,
-          productId,
-          deletedImages,
-        ]);
-
+          console.log([
+            { ...rest, imagesURLs: [...imagesURLs, ...productLibraryImages] },
+            userDocument?.storeDoc,
+            productId,
+            deletedImages,
+          ]);
+        }
         const res = await fetchUtil({
           url: `${import.meta.env.VITE_APP_BASE_URL}/updateProduct`,
           reqData: [
-            { ...rest, imagesURLs: [...imagesURLs, ...productLibraryImages] },
+            {
+              ...rest,
+              imagesURLs: [
+                ...(imagesURLs?.length > 0 ? imagesURLs : []),
+                ...productLibraryImages,
+              ],
+            },
             userDocument?.storeDoc,
             productId,
             deletedImages,

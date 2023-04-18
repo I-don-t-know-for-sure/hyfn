@@ -57,7 +57,7 @@ export const generateImageReaderPutUrlHandler = async ({
 
   // console.log(`Presigned URL to put object: ${signedUrl}`);
 
-  return { generatedURLs: [imageURLs], generatedNames: [imageKeys] };
+  return { generatedURLs: imageURLs, generatedNames: imageKeys };
 };
 
 export const handler = async (event) => {

@@ -1,12 +1,12 @@
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import * as stream from 'stream';
+import { MainFunctionProps, getMongoClientWithIAMRole, mainWrapper } from 'hyfn-server';
+import { backgroundRemovalPerImage } from 'hyfn-types';
 import request from 'request';
 import fs from 'fs';
-import { log } from 'console';
-import axios from 'axios';
-import { ReadStream, createReadStream } from 'fs';
+
 import AWS, { S3 } from 'aws-sdk';
 import Jimp from 'jimp';
+import { ObjectId } from 'mongodb';
+import { smaller } from 'mathjs';
 const s3 = new AWS.S3();
 
 interface setBackgroundWhite extends Omit<MainFunctionProps, 'arg'> {
@@ -16,7 +16,7 @@ const api_url = 'https://api.backgroundremoverai.com/v1/convert/';
 const results_url = 'https://api.backgroundremoverai.com/v1/results/';
 const api_result_url = 'https://api.backgroundremoverai.com';
 
-export const setBackgroundWhiteHandler = async ({ keys, eventBusName }) => {
+export const setBackgroundWhiteHandler = async ({ keys, storeId, eventBusName, client }) => {
   console.log('🚀 ~ file: setBackgroundWhite.ts:21 ~ setBackgroundWhiteHandler ~ keys:', keys);
 
   let newKeys = [];
@@ -30,6 +30,31 @@ export const setBackgroundWhiteHandler = async ({ keys, eventBusName }) => {
     newKeys = keys.splice(0, keys.length);
   }
 
+  /////////////////////////////
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ _id: new ObjectId(storeId) }, { projection: { balance: true } });
+
+  const price = backgroundRemovalPerImage * newKeys.length;
+
+  if (smaller(storeDoc.balance, price)) {
+    throw new Error('balance not enough');
+  }
+
+  await client
+    .db('generalData')
+    .collection('storeInfo')
+    .updateOne(
+      { _id: new ObjectId(storeId) },
+      {
+        $inc: {
+          balance: -price,
+        },
+      }
+    );
+
+  ///////////////////////////////
   const bucket = process.env.bucketName;
   const files = [];
   for (const key of newKeys) {
@@ -196,14 +221,16 @@ export const setBackgroundWhiteHandler = async ({ keys, eventBusName }) => {
       }),
     };
   }
+
   return 'success';
 };
 
 export const handler = async (event) => {
   console.log('🚀 ~ file: setBackgroundWhite.ts:200 ~ handler ~ event:', typeof event.detail);
 
-  const { eventBusName, keys } = event.detail;
+  const { eventBusName, keys, storeId } = event.detail;
+  const client = await getMongoClientWithIAMRole();
   // console.log('🚀 ~ file: setBackgroundWhite.ts:323 ~ handler ~ keys:', keys);
   // // return await mainWrapper({ event, mainFunction: setBackgroundWhiteHandler });
-  return await setBackgroundWhiteHandler({ keys, eventBusName });
+  return await setBackgroundWhiteHandler({ keys, eventBusName, client: client, storeId });
 };

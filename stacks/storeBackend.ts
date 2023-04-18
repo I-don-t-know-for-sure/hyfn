@@ -73,46 +73,6 @@ export function storeApiStack({ stack }: StackContext) {
     },
   });
 
-  // removeBackgrounds.addToRolePolicy(
-  //   new iam.PolicyStatement({
-  //     actions: ["events:PutEvents"],
-  //     resources: ["*"],
-  //   })
-  // );
-  /*  const uploadImagesToS3 = new Function(stack, "uploadImagesToS3", {
-    handler: pathToLambdas + "setBackgroundWhite/uploadImagesToS3.handler",
-    functionName: "uploadImagesToS3" + stack.stage,
-    role: defaultFunction.role,
-    timeout: 300,
-    url: true,
-    environment: {
-      kmsKeyARN: keyArn,
-      //////////////////////////
-      chat_gpt_api_key: config[stage].chat_gpt_api_key,
-
-      MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
-      accessKeyId: config[stage].accessKeyId,
-      bucketName: imagesBucketName,
-      bucketArn: s3Bucket.bucketArn,
-      groupId: config[stage].groupId,
-      moalmlatDataService: config[stage].moalmlatDataService,
-      userPoolId: auth.userPoolId,
-      userPoolClientId: auth.userPoolClientId,
-      mongoPrivetKey: config[stage].mongoPrivetKey,
-      mongoPublicKey: config[stage].mongoPublicKey,
-      region: stack.region,
-      sadadURL: config[stage].sadadURL,
-      secretKey: config[stage].secretKey,
-      MerchantId: config[stage].MerchantId,
-      TerminalId: config[stage].TerminalId,
-      mongdbURLKey: config[stage].mongdbURLKey,
-
-      sadadApiKey: config[stage].sadadApiKey,
-
-      secretAccessKey: config[stage].secretAccessKey,
-    },
-  }); */
-
   const eventBus = new EventBus(stack, "Bus", {
     rules: {
       backgroundRemoval: {
@@ -122,7 +82,7 @@ export function storeApiStack({ stack }: StackContext) {
         },
 
         targets: {
-          uploadImagesToS3: {
+          setBackgroundWhite: {
             function: {
               role: defaultFunction.role,
               timeout: 300,
@@ -213,46 +173,6 @@ export function storeApiStack({ stack }: StackContext) {
     }
   );
 
-  // const sendEventbus = new Function(stack, "sendEventbus", {
-  //   handler: pathToLambdas + "setBackgroundWhite/sendEventbusEvent.handler",
-  //   functionName: "sendEventbus" + stack.stage,
-  //   url: true,
-  // });
-  /*  const queue = new Queue(stack, "queue", {
-    consumer: {
-      function: {
-        handler:
-          pathToLambdas + "setBackgroundWhite/setBackgroundWhite.handler",
-        environment: {
-          kmsKeyARN: keyArn,
-          //////////////////////////
-          chat_gpt_api_key: config[stage].chat_gpt_api_key,
-
-          MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
-          accessKeyId: config[stage].accessKeyId,
-          bucketName: imagesBucketName,
-          bucketArn: s3Bucket.bucketArn,
-
-          groupId: config[stage].groupId,
-          moalmlatDataService: config[stage].moalmlatDataService,
-          userPoolId: auth.userPoolId,
-          userPoolClientId: auth.userPoolClientId,
-          mongoPrivetKey: config[stage].mongoPrivetKey,
-          mongoPublicKey: config[stage].mongoPublicKey,
-          region: stack.region,
-          sadadURL: config[stage].sadadURL,
-          secretKey: config[stage].secretKey,
-          MerchantId: config[stage].MerchantId,
-          TerminalId: config[stage].TerminalId,
-          mongdbURLKey: config[stage].mongdbURLKey,
-
-          sadadApiKey: config[stage].sadadApiKey,
-
-          secretAccessKey: config[stage].secretAccessKey,
-        },
-      },
-    },
-  }); */
   const generateProductDescription = new Function(
     stack,
     "generateProductDescription",

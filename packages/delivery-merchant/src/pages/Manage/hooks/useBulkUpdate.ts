@@ -115,10 +115,11 @@ export const useBulkUpdate = () => {
           }
         }
       }
-      mutate(productsToGenerateDescription);
       /*
        * create a function that takes a value and logs it to console
        */
+      mutate(productsToGenerateDescription);
+
       console.log(
         "🚀 ~ file: useBulkUpdate.ts:34 ~ returnuseMutation ~ products:",
         products

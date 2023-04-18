@@ -16,7 +16,7 @@ export const removeAllProductsBackgroundsHandler = async ({
   client,
   session,
 }: RemoveAllProductsBackgroundsProps) => {
-  const { productIds } = arg[0];
+  const { productIds, storeId } = arg[0];
   const imageKeys = [];
 
   for (const productId of productIds) {
@@ -31,7 +31,7 @@ export const removeAllProductsBackgroundsHandler = async ({
     process.env.backgroundRemovalEventBus
   );
 
-  sendRemoveBackgroundsEventBus(imageKeys);
+  sendRemoveBackgroundsEventBus({ imageKeys, storeId });
   // removeBackgrounds({ keys: imageKeys });
   return 'success';
 };

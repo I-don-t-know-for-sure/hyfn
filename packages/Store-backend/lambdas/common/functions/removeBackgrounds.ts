@@ -1,6 +1,11 @@
-import axios from 'axios';
 import AWS from 'aws-sdk';
-export function sendRemoveBackgroundsEventBus(imageKeys: any[]) {
+export function sendRemoveBackgroundsEventBus({
+  imageKeys,
+  storeId,
+}: {
+  imageKeys: any[];
+  storeId: string;
+}) {
   const eventBridge = new AWS.EventBridge();
   const params = {
     Entries: [
@@ -8,6 +13,7 @@ export function sendRemoveBackgroundsEventBus(imageKeys: any[]) {
         Detail: JSON.stringify({
           keys: imageKeys,
           eventBusName: process.env.backgroundRemovalEventBus,
+          storeId,
         }),
         DetailType: 'background_removal',
         EventBusName: process.env.backgroundRemovalEventBus,
@@ -25,6 +31,6 @@ export function sendRemoveBackgroundsEventBus(imageKeys: any[]) {
     }
   });
 }
-export const removeBackgrounds = async ({ keys }: { keys: string[] }) => {
-  sendRemoveBackgroundsEventBus(keys);
+export const removeBackgrounds = async ({ keys, storeId }: { keys: string[]; storeId: string }) => {
+  sendRemoveBackgroundsEventBus({ imageKeys: keys, storeId });
 };

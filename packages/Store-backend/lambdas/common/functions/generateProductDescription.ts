@@ -1,19 +1,27 @@
 import axios from 'axios';
 import AWS from 'aws-sdk';
 export const generateProductDescription = async ({ arg }: { arg: any }) => {
-  console.log('🚀 ~ file: generateProductDescription.ts:31 ~ generateProductDescription ~ r:', arg);
-  return;
-  const products = arg[0].products;
+  console.log(
+    '🚀 ~ file: generateProductDescription.ts:31 ~ generateProductDescription ~ r:',
+    JSON.stringify(arg)
+  );
+  console.log(
+    '🚀 ~ file: generateProductDescription.ts:31 ~ generateProductDescription ~ r:',
+    process.env.generateProductDescriptionEventBus
+  );
+
+  const { products, storeId } = arg[0];
   const eventBridge = new AWS.EventBridge();
   const params = {
     Entries: [
       {
         Detail: JSON.stringify({
           products,
-          eventBusName: process.env.backgroundRemovalEventBus,
+          storeId,
+          eventBusName: process.env.generateProductDescriptionEventBus,
         }),
         DetailType: 'generate_product_description',
-        EventBusName: process.env.backgroundRemovalEventBus,
+        EventBusName: process.env.generateProductDescriptionEventBus,
         Source: 'generate_product_description',
       },
     ],

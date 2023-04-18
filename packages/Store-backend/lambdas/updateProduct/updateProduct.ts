@@ -47,7 +47,7 @@ export const updateProductHandler = async ({ arg, client, session }: MainFunctio
     await deleteImages(deletedImages);
   }
   if (removeBackgroundImages?.length > 0) {
-    removeBackgrounds({ keys: removeBackgroundImages });
+    removeBackgrounds({ keys: removeBackgroundImages, storeId: id });
   }
 
   const images =

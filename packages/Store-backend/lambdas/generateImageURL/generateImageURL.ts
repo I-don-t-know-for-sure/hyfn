@@ -28,14 +28,14 @@ export const handler = async (event, ctx) => {
       secretAccessKey,
       signetureVersion: 'v4',
     });
-    const screens = ['initial', 'mobile', 'tablet', 'laptop'];
+    const screens = ['initial'];
     const generatedURLs = [];
     const generatedNames = [];
     for (let i = 0; i < numberOfGeneratedURLs; i++) {
       const rawBytes = await randomBytes(16);
       const imageName = rawBytes.toString('hex');
       const imageVarients = [];
-      for (let x = 0; x < 4; x++) {
+      for (let x = 0; x < screens.length; x++) {
         const params = {
           Bucket: bucketName,
           Key: `${screens[x]}/${imageName}`,
@@ -44,7 +44,7 @@ export const handler = async (event, ctx) => {
         const uploadURL = await s3.getSignedUrlPromise('putObject', params);
         imageVarients.push(uploadURL);
       }
-      generatedURLs.push(imageVarients);
+      generatedURLs.push(...imageVarients);
       generatedNames.push(imageName);
     }
     result = { generatedURLs, generatedNames };

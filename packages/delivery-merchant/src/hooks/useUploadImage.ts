@@ -77,9 +77,9 @@ const useUploadImage = () => {
         "🚀 ~ file: useUploadImage.ts:76 ~ //awaitfiles?.forEach ~ generatedIndex:",
         generatedIndex
       );
-      console.log(generatedURLs[generatedIndex][0], "sjbdhcbhdbchbdhcbh");
+      console.log(generatedURLs[generatedIndex], "sjbdhcbhdbchbdhcbh");
 
-      const status = await fetch(generatedURLs[generatedIndex][0], {
+      const status = await fetch(generatedURLs[generatedIndex], {
         method: "PUT",
         headers: {
           "content-Type": "multipart/form",

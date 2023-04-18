@@ -3,22 +3,18 @@ import {
   Box,
   Button,
   Card,
-  CardSection,
   Checkbox,
   Container,
   Group,
   Header,
   Image,
   Loader,
-  MultiSelect,
   Paper,
   Select,
   Skeleton,
   Stack,
   Text,
-  TextInput,
   Title,
-  UnstyledButton,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { t } from "utils/i18nextFix";
@@ -99,9 +95,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
         >
           <Container>
             <Stack>
-              <Box>
-                {/* <Header height={25} sx={{ marginBottom: 10 }}>
-                </Header> */}
+              <Stack>
                 <Title order={4}>
                   <Text>{t("Product status")}</Text>
                 </Title>
@@ -111,8 +105,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                   </>
                 ) : (
                   <Group
-                    sx={{ height: 100 }}
-                    // direction="column"
+                  // sx={{ height: 100 }}
                   >
                     <Checkbox
                       label={t("Active")}
@@ -123,7 +116,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                       }}
                     />
                     <Checkbox
-                      label={t("Draft or InActive")}
+                      label={t("InActive")}
                       checked={!productInfo?.isActive || false}
                       onChange={(e) => {
                         const checked = !e.currentTarget.checked;
@@ -220,32 +213,15 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                     );
                   })}
                 </Box>
-              </Box>
+              </Stack>
 
               <Box
                 sx={{
                   height: "300px",
                 }}
               >
-                {/* <TextInput
-                  value={searchText}
-                  onChange={(e) => {
-                    onChangeHandler(e.target.value, 'barcode')
-                    setSearchText(e.target.value)
-                  }}
-                  label={t('Product barcode')}
-                /> */}
                 {products.length > 0 && (
-                  <Card
-                    shadow={"lg"}
-                    // mt={6}
-                    // sx={{
-                    //   maxHeight: '200px',
-                    //   overflowY: 'auto',
-                    //   display: 'flex',
-                    //   flexDirection: 'column',
-                    // }}
-                  >
+                  <Card shadow={"lg"}>
                     {products.map((product, index) => {
                       return (
                         <Box
@@ -293,21 +269,6 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                     })}
                   </Card>
                 )}
-                {/* <Select
-              label={t("Product barcode")}
-              data={products.map((product) => product)}
-              searchable
-              onSearchChange={(e) => {
-                setSearchText(e);
-              }}
-              value={productInfo.barcode}
-              filter={(value, item) => {
-                return false;
-              }}
-            /> */}
-                {/* {barcodeProducts.map((product) => {
-              return <Text>{product.label}</Text>;
-            })} */}
               </Box>
             </Stack>
           </Container>

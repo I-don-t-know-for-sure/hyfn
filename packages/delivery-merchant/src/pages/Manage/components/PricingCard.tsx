@@ -92,7 +92,7 @@ const PricingCard: React.FC<ProductsCard> = ({
                   }}
                   spacing={5}
                 >
-                  <Text weight={120}>{t("per")}</Text>
+                  <Text weight={120}>{t("Per")}</Text>
 
                   <Select
                     variant="unstyled"

@@ -1,5 +1,5 @@
 import { MainFunctionProps, getMongoClientWithIAMRole, mainWrapper } from 'hyfn-server';
-
+import { descriptionGenerationPricePerImage } from 'hyfn-types';
 interface GenerateProductDescriptionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -12,6 +12,7 @@ import {
   chatTranslateBefore,
 } from '../resources';
 import { ObjectId } from 'mongodb';
+import { smaller } from 'mathjs';
 
 const s3 = new AWS.S3({ region: process.env.region });
 const rekognition = new AWS.Rekognition({ region: 'eu-west-1' });
@@ -19,17 +20,41 @@ export const generateProductDescriptionHandler = async ({
   products,
   eventBusName,
   client,
+  storeId,
 }: {
   products: any[];
   eventBusName: string;
   client: MainFunctionProps['client'];
+  storeId: string;
 }) => {
   const product = products.pop();
 
-  // Check if the array has at least 5 elements
-
   var text = '';
   const imageKeys = product?.imageKeys;
+
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ _id: new ObjectId(storeId) }, { projection: { balance: true } });
+
+  const price = descriptionGenerationPricePerImage * imageKeys.length;
+
+  if (smaller(storeDoc.balance, price)) {
+    throw new Error('balance not enough');
+  }
+
+  await client
+    .db('generalData')
+    .collection('storeInfo')
+    .updateOne(
+      { _id: new ObjectId(storeId) },
+      {
+        $inc: {
+          balance: -price,
+        },
+      }
+    );
+
   const bucketFolder = 'image-reader/';
   const productId = product?.productId;
 
@@ -65,38 +90,7 @@ export const generateProductDescriptionHandler = async ({
     }
   }
 
-  /*  const object = await s3
-    .getObject({ Bucket: process.env.bucketName, Key: bucketFolder + imageKey[0] })
-    .promise();
-  const params: AWS.Rekognition.DetectTextRequest = {
-    Image: {
-      Bytes: object.Body,
-    },
-  };
-  console.log(
-    '🚀 ~ file: generateProductDescription.ts:39 ~ text ~ text:',
-    bucketFolder + imageKey
-  );
-  try {
-    const result = await rekognition.detectText(params).promise();
-    var blocks = result.TextDetections.filter(
-      (detection) => detection.Type === 'WORD' || detection.Type === 'LINE'
-    );
-    // console.log(blocks);
-    const textResult = blocks.reduce((acc, detection) => {
-      if (detection.Type === 'LINE') {
-        return `${acc}${detection.DetectedText}\n`;
-      } else {
-        return `${acc}${detection.DetectedText} `;
-      }
-    }, '');
-  } catch (error) {
-    console.log('🚀 ~ file: generateProductDescription.ts:38 ~ error:', error);
-    throw new Error('error');
-  }
- */
-
-  /////////////////////////////
+  console.log('🚀 ~ file: generateProductDescription.ts:63 ~ text:', text);
 
   console.log('🚀 ~ file: generateProductDescription.ts:39 ~ text ~ text:', text);
 
@@ -114,13 +108,10 @@ export const generateProductDescriptionHandler = async ({
       },
       data: {
         model: 'gpt-3.5-turbo',
-        // prompt: prompt,
+
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.5,
         max_tokens: 2000,
-        // "top_p": 1,
-        // "frequency_penalty": 0,
-        // "presence_penalty": 0
       },
     });
     const translatePrompt = createTranslatePrompt(chatResult);
@@ -133,13 +124,10 @@ export const generateProductDescriptionHandler = async ({
       },
       data: {
         model: 'gpt-3.5-turbo',
-        // prompt: prompt,
+
         messages: [{ role: 'user', content: translatePrompt }],
         temperature: 0.5,
         max_tokens: 1000,
-        // "top_p": 1,
-        // "frequency_penalty": 0,
-        // "presence_penalty": 0
       },
     });
 
@@ -159,23 +147,47 @@ export const generateProductDescriptionHandler = async ({
           },
         }
       );
+    await client.db('base').collection('productDescriptions').insertOne({
+      productId,
+      description: productDescription,
+    });
   } catch (error) {
     console.log('🚀 ~ file: generateProductDescription.ts:55 ~ error:', error);
     throw new Error('error');
   }
 
-  // .then((response) => {
-  //   console.log(response.data.choices[0].text);
-  // })
-  // .catch((error) => {
-  //   console.error(error);
-  // });
+  if (products.length > 0) {
+    const eventBridge = new AWS.EventBridge();
+    const params = {
+      Entries: [
+        {
+          Detail: JSON.stringify({
+            products,
+            storeId,
+            eventBusName: eventBusName,
+          }),
+          DetailType: 'generate_product_description',
+          EventBusName: process.env.generateProductDescriptionEventBus,
+          Source: 'generate_product_description',
+        },
+      ],
+    };
+    // put the event async
+    // await eventBridge.putEvents(params).promise();
+    eventBridge.putEvents(params, function (err, data) {
+      if (err) {
+        console.log('Error', err);
+      } else {
+        console.log('Success', data);
+      }
+    });
+  }
 };
 
 export const handler = async (event) => {
-  const { eventBusName, products } = event.detail;
+  const { eventBusName, products, storeId } = event.detail;
   const client = await getMongoClientWithIAMRole();
-  return await generateProductDescriptionHandler({ client, eventBusName, products });
+  return await generateProductDescriptionHandler({ client, eventBusName, products, storeId });
 };
 
 const createChatPrompt = (prompt: any) => {
