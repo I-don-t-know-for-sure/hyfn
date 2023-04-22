@@ -53,7 +53,7 @@ export const handler = async (event, ctx) => {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // set thumbnail width. Resize will set the height automatically to maintain aspect ratio.
-    var sizeArray = [
+    /*  var sizeArray = [
       { folder: 'laptop', sizes: [350, 350] },
       { folder: 'preview', sizes: [550, 550] },
       { folder: 'mobile', sizes: [150, 150] },
@@ -67,7 +67,7 @@ export const handler = async (event, ctx) => {
       try {
         var buffer = await (await Jimp.read(origimage.Body))
           .resize(screen.sizes[0], screen.sizes[1], Jimp.RESIZE_BEZIER)
-          .quality(90)
+          .quality(100)
           .getBufferAsync(Jimp.AUTO);
 
         //   var buffer = await sharp(origimage.Body).resize(width).toBuffer();
@@ -104,7 +104,8 @@ export const handler = async (event, ctx) => {
       }
     }
 
-    console.log(`bucket = ${bucketName} ... imageKey = ${imageKey}`);
+    console.log(`bucket = ${bucketName} ... imageKey = ${imageKey}`); */
+    await resizeAndSaveImages(origimage, dstBucket, imageKey);
   } catch (error) {
     result = error.message;
   } finally {
@@ -116,3 +117,51 @@ export const handler = async (event, ctx) => {
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
+
+async function resizeAndSaveImages(origimage, dstBucket, imageKey) {
+  const sizeArray = [
+    // { folder: 'laptop', sizes: [350, 350] },
+    { folder: 'preview', sizes: [] },
+    { folder: 'mobile', sizes: [150, 150] },
+    { folder: 'tablet', sizes: [300, 300] },
+  ];
+
+  const promises = [];
+
+  for (let i = 0; i < sizeArray.length; i++) {
+    const screen = sizeArray[i];
+    let buffer;
+    const original = await Jimp.read(origimage.Body);
+    if (screen.folder === 'preview') {
+      buffer = await (await Jimp.read(origimage.Body))
+        .resize(original.bitmap.width, original.bitmap.height, Jimp.RESIZE_BEZIER)
+        .quality(100)
+        .getBufferAsync(Jimp.AUTO);
+    } else {
+      buffer = await (await Jimp.read(origimage.Body))
+        .resize(screen.sizes[0], screen.sizes[1], Jimp.RESIZE_BEZIER)
+        .quality(100)
+        .getBufferAsync(Jimp.AUTO);
+    }
+    const destparams = {
+      Bucket: dstBucket,
+      Key: `${screen.folder}/${imageKey}`,
+      Body: buffer,
+      ContentType: 'image',
+    };
+
+    const putResult = s3.putObject(destparams).promise();
+    console.log(putResult);
+    promises.push(putResult);
+  }
+
+  try {
+    const values = await Promise.allSettled(promises);
+    console.log(values);
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+
+  console.log(`bucket = ${dstBucket} ... imageKey = ${imageKey}`);
+}

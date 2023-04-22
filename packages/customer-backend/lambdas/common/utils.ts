@@ -7,7 +7,8 @@ import {
   deliveryServiceFee,
   storeAndCustomerServiceFee,
   storeServiceFee,
-} from './constants';
+  baseServiceFee,
+} from 'hyfn-types';
 export const updateRating = (
   oldCurrentRatingTotal = 0,
   oldRatingCount = 0,
@@ -236,25 +237,14 @@ export const updateAllOrder = async (arg, client) => {
       (accum, point) => `${accum};${point[0]},${point[1]}`,
       `${buyerInfo.customerCoords[1]},${buyerInfo.customerCoords[0]}`
     );
-    // return { orderCart, buyerInfo, orders, deliveryUrl };
-    // const deliveryDetails = await axios({
-    //   method: 'get',
-    //   url: `https://api.mapbox.com/directions/v5/mapbox/driving/${deliveryUrl}?annotations=maxspeed&overview=full&geometries=geojson&access_token=pk.eyJ1IjoiYmFyaW9teW1lbiIsImEiOiJjbDFrcXRnaHowM2lxM2Jtb3h3Z2J4bDQ0In0.DKfCj0bt3QfE9QgacrWnpA`,
-    // });
+
     console.log(deliveryUrl);
-    // const deliveryFee = deliveryDetails.data.routes[0].distance * 0.0001
-    // const durationInMinutes = allStoresDurations + deliveryDetails.data.routes[0].duration / 60;
-    // const deliveryFee =
-    //   (durationInMinutes / 60) * 30 < 5 ? 5 : Math.ceil((durationInMinutes / 60) * 30);
-    // const orderCost = calculateOrderCost(storesArray);
-    // order cost after our fee
+
     const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
-    // our service fee
-    const serviceFee = orderCost * storeAndCustomerServiceFee;
-    // delivery fee after our fee
-    // const deliveryFeeAfterFee = Math.ceil(deliveryFee - deliveryFee * deliveryServiceFee);
-    // total cost of the order
-    const totalCost = orderCostAfterFee + serviceFee;
+
+    const serviceFee = add(baseServiceFee, multiply(orderCost, storeAndCustomerServiceFee));
+
+    const totalCost = add(orderCostAfterFee, serviceFee);
     console.log(orderCost, JSON.stringify(storesArray));
     await client
       .db('generalData')
@@ -274,9 +264,9 @@ export const updateAllOrder = async (arg, client) => {
               duration: 0,
               distance: 0,
               deliveryFee: 0,
-              serviceFee: parseFloat(serviceFee.toFixed(3)),
-              totalCost: parseFloat(totalCost.toFixed(3)),
-              orderCost: parseFloat(orderCostAfterFee.toFixed(3)),
+              serviceFee: serviceFee,
+              totalCost: totalCost,
+              orderCost: orderCostAfterFee,
               originalDeliveryFee: 0,
               coords: {
                 type: 'MultiPoint',
@@ -301,9 +291,10 @@ export const updateAllOrder = async (arg, client) => {
     // order cost after our fee
     const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
     // our service fee
-    const serviceFee = orderCost * storeAndCustomerServiceFee;
+
+    const serviceFee = add(baseServiceFee, multiply(orderCost, storeAndCustomerServiceFee));
     // total cost of the order
-    const totalCost = orderCostAfterFee + serviceFee;
+    const totalCost = add(orderCostAfterFee, serviceFee);
     await client
       .db('generalData')
       .collection(`customerInfo`)
@@ -321,13 +312,13 @@ export const updateAllOrder = async (arg, client) => {
               orderType: orderCart[0].orderType,
               buyerCoords: [buyerInfo.customerCoords[1], buyerInfo.customerCoords[0]],
               buyerAddress: buyerInfo.customerAddress,
-              serviceFee: parseFloat(serviceFee.toFixed(3)),
+              serviceFee: serviceFee,
               storeServiceFee: storePickupFee,
               duration: 0,
               distance: 0,
               deliveryFee: 0,
               orderCost: parseFloat(orderCostAfterFee.toFixed(3)),
-              totalCost: parseFloat(totalCost.toFixed(3)),
+              totalCost: totalCost,
               deliveryDate,
             },
           },

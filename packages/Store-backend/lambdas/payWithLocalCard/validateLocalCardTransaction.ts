@@ -35,7 +35,7 @@ const validateLocalCardTransaction = async ({ arg, client, session }: MainFuncti
     secretKey,
     TerminalId,
     transactionId,
-    includeLocalCardTransactionFeeToPrice: false,
+    includeLocalCardTransactionFeeToPrice: true,
     amount: transaction.amount,
   });
   if (isValidated) {

@@ -4,10 +4,6 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
 
-import {
-  customerApiStack,
-  customerCognitoStack,
-} from "../customer-backend/customerStack";
 const localhost = "http://localhost:";
 
 export function customerApp({ stack }: StackContext) {
@@ -30,6 +26,7 @@ export function customerApp({ stack }: StackContext) {
   );
   const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
   const url = Fn.importValue(`customerApiUrl-${stack.stage}`);
+  const storeUrl = Fn.importValue(`storeSiteUrl-${stack.stage}`);
 
   const site = new StaticSite(stack, "customer-app", {
     path: "./",
@@ -52,6 +49,7 @@ export function customerApp({ stack }: StackContext) {
       VITE_APP_BUCKET_URL: `https://${s3BucketName}.s3.${stack.region}.amazonaws.com`,
       VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
         frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
+      VITE_APP_STORE_APP_URL: storeUrl,
       // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
       VITE_APP_PAYMENT_APP_URL: paymentAppUrl || localhost + "3002",
       VITE_APP_COGNITO_IDENTITY_POOL_ID: cognitoIdentityPoolId || "",
@@ -66,7 +64,7 @@ export function customerApp({ stack }: StackContext) {
     },
   });
 
-  new CfnOutput(stack, "customerSiteUrl-" + stack.stage, {
+  new CfnOutput(stack as any, "customerSiteUrl-" + stack.stage, {
     value: site.url || localhost + "3003",
     exportName: "customerSiteUrl-" + stack.stage, // export name
   });

@@ -1,17 +1,32 @@
-import { Box, Card, CardSection, Checkbox, Divider, Loader, Radio, Space } from '@mantine/core'
-import { randomId } from '@mantine/hooks'
-import { t } from 'utils/i18nextFix'
-import React from 'react'
-import { CollectionCard, CollectionInfo } from '../types'
-import CollectionConditions from './CollectionConditions'
+import {
+  Box,
+  Card,
+  CardSection,
+  Checkbox,
+  Divider,
+  Loader,
+  Paper,
+  Radio,
+  Space,
+} from "@mantine/core";
+import { randomId } from "@mantine/hooks";
+import { t } from "utils/i18nextFix";
+import React from "react";
+import { CollectionCard, CollectionInfo } from "../types";
+import CollectionConditions from "./CollectionConditions";
 
 interface TypeCardProps extends CollectionCard {}
 
-const TypeCard: React.FC<TypeCardProps> = ({ onChangeHandler, collectionInfo, setCollectionInfo, isLoading }) => {
+const TypeCard: React.FC<TypeCardProps> = ({
+  onChangeHandler,
+  collectionInfo,
+  setCollectionInfo,
+  isLoading,
+}) => {
   return (
-    <Card
-      shadow={'sm'}
-      p={'md'}
+    <Paper
+      shadow={"sm"}
+      p={"md"}
       // sx={{ margin: "auto", marginBlock: 10 }}
     >
       {/*
@@ -23,50 +38,59 @@ const TypeCard: React.FC<TypeCardProps> = ({ onChangeHandler, collectionInfo, se
         <Box>
           <CardSection>
             <Radio.Group
-              label={t('Collection Type')}
+              label={t("Collection Type")}
               description={t(
-                'check manual to add products one by one. check automated to add all existing products and future products that meet the conditions you set',
+                "check manual to add products one by one. check automated to add all existing products and future products that meet the conditions you set"
               )}
-              value={collectionInfo.collectionType || 'manual'}
+              value={collectionInfo.collectionType || "manual"}
               onChange={(e) => {
-                onChangeHandler(e, 'collectionType')
+                onChangeHandler(e, "collectionType");
 
-                if (e === 'automated') {
-                  setCollectionInfo((prevState: CollectionInfo): CollectionInfo => {
+                if (e === "automated") {
+                  setCollectionInfo(
+                    (prevState: CollectionInfo): CollectionInfo => {
+                      return {
+                        ...prevState,
+                        conditions: {
+                          ...prevState.conditions,
+                          conditionArray: [
+                            {
+                              value: "",
+                              conditions: "$gt",
+                              objectKey: "tag",
+                              key: randomId(),
+                            },
+                          ],
+                        },
+                      };
+                    }
+                  );
+                  return;
+                }
+
+                setCollectionInfo(
+                  (prevState: CollectionInfo): CollectionInfo => {
                     return {
                       ...prevState,
                       conditions: {
                         ...prevState.conditions,
-                        conditionArray: [
-                          {
-                            value: '',
-                            conditions: '$gt',
-                            objectKey: 'tag',
-                            key: randomId(),
-                          },
-                        ],
+                        conditionArray: [],
                       },
-                    }
-                  })
-                  return
-                }
-
-                setCollectionInfo((prevState: CollectionInfo): CollectionInfo => {
-                  return {
-                    ...prevState,
-                    conditions: {
-                      ...prevState.conditions,
-                      conditionArray: [],
-                    },
+                    };
                   }
-                })
+                );
               }}
             >
-              <Radio value="manual" label={t('Manual')} required checked={collectionInfo.collectionType === 'manual'} />
+              <Radio
+                value="manual"
+                label={t("Manual")}
+                required
+                checked={collectionInfo.collectionType === "manual"}
+              />
               <Radio
                 // value="automated"
                 value=""
-                label={t('Automated. later update')}
+                label={t("Automated. later update")}
                 required
                 checked={false}
                 // checked={collectionInfo.collectionType === "automated"}
@@ -81,8 +105,8 @@ const TypeCard: React.FC<TypeCardProps> = ({ onChangeHandler, collectionInfo, se
           />
         </Box>
       )}
-    </Card>
-  )
-}
+    </Paper>
+  );
+};
 
-export default TypeCard
+export default TypeCard;

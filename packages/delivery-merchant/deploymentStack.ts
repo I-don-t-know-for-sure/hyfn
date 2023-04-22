@@ -65,7 +65,7 @@ export function storeApp({ stack }: StackContext) {
     },
   });
 
-  new CfnOutput(stack, "storeSiteUrl-" + stack.stage, {
+  new CfnOutput(stack as any, "storeSiteUrl-" + stack.stage, {
     value: site.url || localhost + "4001",
     exportName: "storeSiteUrl-" + stack.stage, // export name
   });

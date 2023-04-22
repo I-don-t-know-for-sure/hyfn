@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Group } from "@mantine/core";
+import { Box, Button, Grid, Group, Stack } from "@mantine/core";
 import InfoCard from "components/InfoCard";
 
 import React, { useEffect, useState } from "react";
@@ -70,72 +70,76 @@ const UpdateCollection: React.FC<UpdateCollectionProps> = () => {
       {/* <Helmet>
         <title>{t(isLoading ? 'Loading' : collectionInfo?.textInfo?.title)}</title>
       </Helmet> */}
-      <Grid grow>
-        <Grid.Col sm={2} md={6} lg={7}>
-          <InfoCard
-            onChangeHandler={onChangeHandler}
-            info={collectionInfo}
-            isLoading={isLoading}
-          />
-          <TypeCard
-            onChangeHandler={onChangeHandler}
-            collectionInfo={collectionInfo}
-            isLoading={isLoading}
-            setCollectionInfo={setCollectionInfo}
-          />
-          <ProductsSelection
-            collectionId={collectionId}
-            isLoading={isLoading}
-            collectionInfo={collectionInfo}
-            onChangeHandler={onChangeHandler}
-          />
-        </Grid.Col>
-        <Grid.Col sm={2} md={3} lg={2}>
-          <StatusCard
-            isLoading={isLoading}
-            collectionInfo={collectionInfo}
-            onChangeHandler={onChangeHandler}
-          />
-        </Grid.Col>
-      </Grid>
+      <Stack>
+        <Grid grow>
+          <Grid.Col sm={2} md={6} lg={7}>
+            <Stack>
+              <InfoCard
+                onChangeHandler={onChangeHandler}
+                info={collectionInfo}
+                isLoading={isLoading}
+              />
+              <TypeCard
+                onChangeHandler={onChangeHandler}
+                collectionInfo={collectionInfo}
+                isLoading={isLoading}
+                setCollectionInfo={setCollectionInfo}
+              />
+              <ProductsSelection
+                collectionId={collectionId}
+                isLoading={isLoading}
+                collectionInfo={collectionInfo}
+                onChangeHandler={onChangeHandler}
+              />
+            </Stack>
+          </Grid.Col>
+          <Grid.Col sm={2} md={3} lg={2}>
+            <StatusCard
+              isLoading={isLoading}
+              collectionInfo={collectionInfo}
+              onChangeHandler={onChangeHandler}
+            />
+          </Grid.Col>
+        </Grid>
 
-      <Group
-        position="apart"
-        mt={10}
-        sx={{
-          display: "flex",
-
-          margin: "40px 24px",
-        }}
-      >
-        <Button
-          sx={(theme) => ({
-            minWidth: "70px",
-            [theme.fn.smallerThan("md")]: {
-              width: "100%",
-              maxWidth: "450px",
-            },
-          })}
-          onClick={() => {
-            deleteColelction(collectionId);
-          }}
-          variant="outline"
-          color={"red"}
-        >
-          {t("Delete collection")}
-        </Button>
-        <Button
-          fullWidth
+        <Group
+          position="apart"
+          mt={10}
           sx={{
-            maxWidth: "450px",
-          }}
-          onClick={() => {
-            mutate({ collectionId, collection: collectionInfo });
+            display: "flex",
+
+            margin: "40px 24px",
           }}
         >
-          {t("Update")}
-        </Button>
-      </Group>
+          <Button
+            sx={(theme) => ({
+              minWidth: "70px",
+              [theme.fn.smallerThan("md")]: {
+                width: "100%",
+                maxWidth: "450px",
+              },
+            })}
+            onClick={() => {
+              deleteColelction(collectionId);
+            }}
+            variant="outline"
+            color={"red"}
+          >
+            {t("Delete collection")}
+          </Button>
+          <Button
+            fullWidth
+            sx={{
+              maxWidth: "450px",
+            }}
+            onClick={() => {
+              mutate({ collectionId, collection: collectionInfo });
+            }}
+          >
+            {t("Update")}
+          </Button>
+        </Group>
+      </Stack>
     </Box>
   );
 };

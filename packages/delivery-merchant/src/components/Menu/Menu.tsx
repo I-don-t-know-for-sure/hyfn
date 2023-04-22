@@ -20,166 +20,165 @@ import {
   useMantineColorScheme,
   useMantineTheme,
   LoadingOverlay,
-} from '@mantine/core'
-import { useMediaQuery, useWindowScroll } from '@mantine/hooks'
-import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+} from "@mantine/core";
+import { useMediaQuery, useWindowScroll } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-import { MdLanguage, MdLogout } from 'react-icons/md'
-import Panel from './components/Panel'
-import { MENU_HEIGHT, SIDEBAR_WIDTH_FULL, useConfigData } from './config'
-import { useTranslation } from 'react-i18next'
-import { BsMoonStars, BsSun } from 'react-icons/bs'
-import { t } from 'utils/i18nextFix'
-import { useStoreStateControl } from 'hooks/useStoreStateControle'
+import { MdLanguage, MdLogout } from "react-icons/md";
+import Panel from "./components/Panel";
+import { MENU_HEIGHT, SIDEBAR_WIDTH_FULL, useConfigData } from "./config";
+import { useTranslation } from "react-i18next";
+import { BsMoonStars, BsSun } from "react-icons/bs";
+import { t } from "utils/i18nextFix";
+import { useStoreStateControl } from "hooks/useStoreStateControle";
 
-import { useFixedComponent } from 'contexts/fixedComponentContext/FixedComponentProvider'
-import { User } from 'realm-web'
-import { useUserCheck } from 'hooks/useUserCheck'
-import useGetStoreInfo from 'hooks/useGetStoreInfo'
-import { useUser } from 'contexts/userContext/User'
-import TransactionList from 'components/TransactionList'
+import { useFixedComponent } from "contexts/fixedComponentContext/FixedComponentProvider";
+import { User } from "realm-web";
+import { useUserCheck } from "hooks/useUserCheck";
+import useGetStoreInfo from "hooks/useGetStoreInfo";
+import { useUser } from "contexts/userContext/User";
+import TransactionList from "components/TransactionList";
 
 const StyledNav: React.FC = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     styledNav: {
-      position: 'fixed',
+      position: "fixed",
       top: 0,
       left: 0,
-      transition: 'top 0.2s',
-      display: 'flex',
+      transition: "top 0.2s",
+      display: "flex",
       [theme.fn.largerThan(900)]: {
-        flexDirection: 'row-reverse',
+        flexDirection: "row-reverse",
       },
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: '8px',
-      paddingRight: '16px',
-      width: '100%',
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingLeft: "8px",
+      paddingRight: "16px",
+      width: "100%",
       height: `${MENU_HEIGHT}px`,
 
-      borderBottom: 'solid 2px rgba(133, 133, 133, 0.1)',
+      borderBottom: "solid 2px rgba(133, 133, 133, 0.1)",
       zIndex: 20,
-      transform: 'translate3d(0, 0, 0)',
+      transform: "translate3d(0, 0, 0)",
     },
-  }))
+  }));
 
-  const { classes } = useStyles()
-  return <nav className={classes.styledNav}>{children}</nav>
-}
+  const { classes } = useStyles();
+  return <nav className={classes.styledNav}>{children}</nav>;
+};
 
 const Wrapper: React.FC = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     wrapper: {
-      position: 'relative',
+      position: "relative",
 
-      width: '100%',
+      width: "100%",
     },
-  }))
-  const { classes } = useStyles()
-  return <Box className={classes.wrapper}>{children}</Box>
-}
+  }));
+  const { classes } = useStyles();
+  return <Box className={classes.wrapper}>{children}</Box>;
+};
 
 const BodyWrapper: React.FC = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     bodyWrapper: {
-      position: 'relative',
+      position: "relative",
 
-      display: 'flex',
+      display: "flex",
     },
-  }))
-  const { classes } = useStyles()
-  return <Box className={classes.bodyWrapper}>{children}</Box>
-}
+  }));
+  const { classes } = useStyles();
+  return <Box className={classes.bodyWrapper}>{children}</Box>;
+};
 
-const Inner: React.FC<{ showMenu: boolean; isMobile: boolean; loggedIn: boolean }> = ({
-  children,
-  showMenu,
-  isMobile,
-  loggedIn,
-}) => {
-  const useStyles = createStyles((theme, { showMenu }: { showMenu: boolean }, getRef) => ({
-    inner: {
-      flexGrow: 1,
-      marginTop: `${showMenu ? `${MENU_HEIGHT}px` : 0}`,
-      transition: 'margin-top 0.2s',
-      transform: 'translate3d(0, 0, 0)',
+const Inner: React.FC<{
+  showMenu: boolean;
+  isMobile: boolean;
+  loggedIn: boolean;
+}> = ({ children, showMenu, isMobile, loggedIn }) => {
+  const useStyles = createStyles(
+    (theme, { showMenu }: { showMenu: boolean }, getRef) => ({
+      inner: {
+        flexGrow: 1,
+        marginTop: `${showMenu ? `${MENU_HEIGHT}px` : 0}`,
+        transition: "margin-top 0.2s",
+        transform: "translate3d(0, 0, 0)",
 
-      maxWidth: '100%',
+        maxWidth: "100%",
 
-      marginLeft: `${!isMobile && loggedIn ? SIDEBAR_WIDTH_FULL : 0}px`,
+        marginLeft: `${!isMobile && loggedIn ? SIDEBAR_WIDTH_FULL : 0}px`,
 
-      // maxWidth: `${`calc(100% - ${
-      //   isMobile ? SIDEBAR_WIDTH_FULL : SIDEBAR_WIDTH_REDUCED
-      // }px)`}`,
-    },
-  }))
-  const { classes } = useStyles({ showMenu })
-  return <Box className={classes.inner}>{children}</Box>
-}
+        // maxWidth: `${`calc(100% - ${
+        //   isMobile ? SIDEBAR_WIDTH_FULL : SIDEBAR_WIDTH_REDUCED
+        // }px)`}`,
+      },
+    })
+  );
+  const { classes } = useStyles({ showMenu });
+  return <Box className={classes.inner}>{children}</Box>;
+};
 
 const Menu: React.FC = ({ children }) => {
-  useUserCheck()
-  const isXl = useMediaQuery('(min-width: 900px)')
-  const isMobile = isXl === false
+  useUserCheck();
+  const isXl = useMediaQuery("(min-width: 900px)");
+  const isMobile = isXl === false;
   // const { user, logOut } = useRealmApp()
-  const { userDocument, loggedIn, signOut } = useUser()
-  const { data } = useGetStoreInfo()
-  const [visible, setVisible] = useState(false)
+  const { userDocument, loggedIn, signOut } = useUser();
+  const { data } = useGetStoreInfo();
+  const [visible, setVisible] = useState(false);
 
-  const location = useLocation()
-  const [, scrollTo] = useWindowScroll()
-  const theme = useMantineTheme()
-  const { i18n } = useTranslation()
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
-  const dark = colorScheme === 'dark'
-  const { links, lngs, list: avatarList } = useConfigData()
-  const storeName = loggedIn ? userDocument?.storeName : ''
-  const { mutate: openAdnCloseStore } = useStoreStateControl()
+  const location = useLocation();
+  const [, scrollTo] = useWindowScroll();
+  const theme = useMantineTheme();
+  const { i18n } = useTranslation();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
+  const { links, lngs, list: avatarList } = useConfigData();
+  const storeName = loggedIn ? userDocument?.storeName : "";
+  const { mutate: openAdnCloseStore } = useStoreStateControl();
   useEffect(() => {
-    scrollTo({ x: 0, y: 0 })
-  }, [location])
-  const sales = data?.sales?.toFixed(2)
-  console.log('🚀 ~ file: Menu.tsx:138 ~ data', data)
+    scrollTo({ x: 0, y: 0 });
+  }, [location]);
+  const sales = data?.sales?.toFixed(2);
+  console.log("🚀 ~ file: Menu.tsx:138 ~ data", data);
 
-  const [fixedComponent] = useFixedComponent()
-  const FixedComponenet = fixedComponent.length > 0 ? fixedComponent[0] : undefined
+  const [fixedComponent] = useFixedComponent();
+  const FixedComponenet =
+    fixedComponent.length > 0 ? fixedComponent[0] : undefined;
 
-  const [opened, setOpened] = useState(false)
+  const [opened, setOpened] = useState(false);
   return (
     <Wrapper>
       <StyledNav>
-        {isMobile && loggedIn && <Burger opened={opened} onClick={() => setOpened((prevState) => !prevState)} />}
+        {isMobile && loggedIn && (
+          <Burger
+            opened={opened}
+            onClick={() => setOpened((prevState) => !prevState)}
+          />
+        )}
         {loggedIn && (
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'center',
+              display: "flex",
+              alignItems: "center",
             }}
           >
             {!isMobile && (
               <Card
-                shadow={'lg'}
-                p={'xs'}
+                shadow={"lg"}
+                p={"xs"}
                 // m={'0px 4px'}
               >
                 <Group sx={{}} position="apart">
-                  <Text>{t('Sales')}</Text>:<Text>{sales || 0}</Text>
-                </Group>{' '}
+                  <Text>{t("Sales")}</Text>:<Text>{sales || 0}</Text>
+                </Group>{" "}
               </Card>
             )}
-            <Card
-              shadow={'lg'}
-              p={'xs'}
-              // m={'0px 4px'}
-            >
-              <Group position="apart">
-                <Text>{t('status')}</Text>:
-                <Badge color={userDocument?.opened ? 'green' : 'red'}>
-                  {userDocument?.opened ? t('Open') : t('Closed')}
-                </Badge>
-              </Group>
-            </Card>
+
+            <Badge color={userDocument?.opened ? "green" : "red"}>
+              {userDocument?.opened ? t("Open") : t("Closed")}
+            </Badge>
 
             {loggedIn && (
               <AvatarMenu
@@ -189,14 +188,14 @@ const Menu: React.FC = ({ children }) => {
               >
                 <AvatarMenu.Target>
                   <Box
-                    p={'xs'}
-                    m={'0px 4px'}
+                    p={"xs"}
+                    m={"0px 4px"}
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      maxWidth: isMobile ? '120px' : '',
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      maxWidth: isMobile ? "120px" : "",
                     }}
                   >
                     <Avatar
@@ -209,8 +208,8 @@ const Menu: React.FC = ({ children }) => {
                     <Text
                       weight={500}
                       sx={{
-                        padding: '1px 4px',
-                        overflow: 'hidden',
+                        padding: "1px 4px",
+                        overflow: "hidden",
                       }}
                     >
                       {storeName}
@@ -231,20 +230,20 @@ const Menu: React.FC = ({ children }) => {
                 <AvatarMenu.Dropdown>
                   <AvatarMenu.Item
                     onClick={() => {
-                      openAdnCloseStore()
+                      openAdnCloseStore();
                     }}
                   >
-                    {userDocument?.opened ? t('Close store') : t('Open store')}
+                    {userDocument?.opened ? t("Close store") : t("Open store")}
                   </AvatarMenu.Item>
                   <AvatarMenu.Item
                     onClick={async () => {
-                      setVisible(true)
-                      await signOut()
-                      setVisible(false)
+                      setVisible(true);
+                      await signOut();
+                      setVisible(false);
                     }}
                     icon={<MdLogout />}
                   >
-                    {t('Log out')}
+                    {t("Log out")}
                   </AvatarMenu.Item>
                 </AvatarMenu.Dropdown>
               </AvatarMenu>
@@ -256,55 +255,61 @@ const Menu: React.FC = ({ children }) => {
       <Group
         grow
         sx={{
-          position: 'fixed',
-          bottom: '0px',
-          width: '100%',
-          marginLeft: !isMobile ? `${SIDEBAR_WIDTH_FULL}px` : '',
+          position: "fixed",
+          bottom: "0px",
+          width: "100%",
+          marginLeft: !isMobile ? `${SIDEBAR_WIDTH_FULL}px` : "",
           zIndex: 3,
         }}
       >
         {fixedComponent.length > 0 &&
-          (location.pathname.includes('bulkupdate') || location.pathname.includes('optionstable')) && (
-            <FixedComponenet />
-          )}
+          (location.pathname.includes("bulkupdate") ||
+            location.pathname.includes("optionstable")) && <FixedComponenet />}
       </Group>
       <BodyWrapper>
         <LoadingOverlay
           sx={{
-            height: '100vh',
+            height: "100vh",
           }}
           visible={visible}
         />
-        {!isMobile && loggedIn && <Panel lngs={lngs} showMenu links={links} activeLink={location.pathname} />}
+        {!isMobile && loggedIn && (
+          <Panel
+            lngs={lngs}
+            showMenu
+            links={links}
+            activeLink={location.pathname}
+          />
+        )}
         {isMobile && loggedIn && (
           <Drawer
             withCloseButton={false}
             size="sm"
             zIndex={4}
-            padding={'sm'}
+            padding={"sm"}
             opened={opened}
             onClose={() => {
-              setOpened(false)
+              setOpened(false);
             }}
           >
             <Box
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                height: '90%',
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: "90%",
 
-                overflow: 'auto',
+                overflow: "auto",
               }}
               mt={MENU_HEIGHT}
             >
               <Box
                 sx={{
-                  height: 'fit-content',
+                  height: "fit-content",
                 }}
               >
                 {links.map((section) => {
-                  const Icon = section.icon
+                  const Icon = section.icon;
                   if (section.link) {
                     return (
                       <UnstyledButton
@@ -312,15 +317,21 @@ const Menu: React.FC = ({ children }) => {
                         to={section.link}
                         key={section.label}
                         sx={(theme) => ({
-                          padding: ' 12px 12px',
-                          textDecoration: 'none',
-                          display: 'flex',
-                          flexDirection: 'row',
-                          alignItems: 'center',
+                          padding: " 12px 12px",
+                          textDecoration: "none",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
                           fontWeight: 500,
-                          color: location.pathname === section.link ? theme.primaryColor : '-moz-initial',
-                          '&:hover': {
-                            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
+                          color:
+                            location.pathname === section.link
+                              ? theme.primaryColor
+                              : "-moz-initial",
+                          "&:hover": {
+                            backgroundColor:
+                              theme.colorScheme === "dark"
+                                ? theme.colors.dark[5]
+                                : theme.colors.gray[0],
                           },
                         })}
                       >
@@ -328,10 +339,10 @@ const Menu: React.FC = ({ children }) => {
                           style={{
                             marginRight: theme.spacing.md,
                           }}
-                        />{' '}
+                        />{" "}
                         {section.label}
                       </UnstyledButton>
-                    )
+                    );
                   }
                   return (
                     <Accordion
@@ -346,16 +357,18 @@ const Menu: React.FC = ({ children }) => {
                     >
                       <Accordion.Item
                         sx={{
-                          border: '0px',
+                          border: "0px",
                         }}
                         value={section.label}
                       >
-                        <Accordion.Control icon={<Icon />}>{section.label}</Accordion.Control>
+                        <Accordion.Control icon={<Icon />}>
+                          {section.label}
+                        </Accordion.Control>
                         <Box
                           sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
                           }}
                         >
                           {section.items.map((item) => (
@@ -364,18 +377,22 @@ const Menu: React.FC = ({ children }) => {
                               to={item.link}
                               key={item.label}
                               sx={(theme) => ({
-                                padding: ' 12px 12px',
-                                textDecoration: 'none',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
+                                padding: " 12px 12px",
+                                textDecoration: "none",
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
                                 fontWeight: 500,
-                                color: location.pathname.includes(item.link.toLowerCase().trim())
+                                color: location.pathname.includes(
+                                  item.link.toLowerCase().trim()
+                                )
                                   ? theme.primaryColor
-                                  : '-moz-initial',
-                                '&:hover': {
+                                  : "-moz-initial",
+                                "&:hover": {
                                   backgroundColor:
-                                    theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
+                                    theme.colorScheme === "dark"
+                                      ? theme.colors.dark[5]
+                                      : theme.colors.gray[0],
                                 },
                               })}
                             >
@@ -385,15 +402,15 @@ const Menu: React.FC = ({ children }) => {
                         </Box>
                       </Accordion.Item>
                     </Accordion>
-                  )
+                  );
                 })}
                 <TransactionList menu />
               </Box>
 
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'end',
+                  display: "flex",
+                  justifyContent: "end",
                 }}
               >
                 <AvatarMenu>
@@ -406,7 +423,7 @@ const Menu: React.FC = ({ children }) => {
                     {Object.keys(lngs).map((lang) => (
                       <AvatarMenu.Item
                         onClick={() => {
-                          i18n.changeLanguage(lang)
+                          i18n.changeLanguage(lang);
                         }}
                       >
                         {lngs[lang].nativeName}
@@ -416,12 +433,12 @@ const Menu: React.FC = ({ children }) => {
                 </AvatarMenu>
                 <Space
                   sx={{
-                    width: '12px',
+                    width: "12px",
                   }}
                 />
                 <ActionIcon
                   variant="outline"
-                  color={dark ? 'yellow' : 'blue'}
+                  color={dark ? "yellow" : "blue"}
                   onClick={() => toggleColorScheme()}
                   title="Toggle color scheme"
                 >
@@ -430,12 +447,12 @@ const Menu: React.FC = ({ children }) => {
               </Box>
             </Box>
           </Drawer>
-        )}{' '}
+        )}{" "}
         <Inner showMenu isMobile={isMobile} loggedIn={loggedIn}>
           {children}
         </Inner>
       </BodyWrapper>
     </Wrapper>
-  )
-}
-export default Menu
+  );
+};
+export default Menu;

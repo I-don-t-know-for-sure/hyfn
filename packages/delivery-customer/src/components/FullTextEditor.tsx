@@ -15,7 +15,7 @@ interface FullTextEditorProps {
   setValue: any;
 }
 
-export const useFullTextEditor: React.FC<FullTextEditorProps> = ({
+export const FullTextEditor: React.FC<FullTextEditorProps> = ({
   value,
   setValue,
 }) => {

@@ -1,4 +1,6 @@
+import { log } from 'console';
 import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { gibbrish } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
 ('use strict');
 interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {
@@ -18,9 +20,53 @@ export const openAndCloseStoreHandler = async ({ arg, client, session }: MainFun
       { session }
     );
   if (!storeDoc.monthlySubscriptionPaid) {
+    await client
+      .db('base')
+      .collection('storeFronts')
+      .updateOne(
+        {
+          _id: new ObjectId(storeId),
+        },
+        {
+          $set: {
+            opened: false,
+            city: gibbrish,
+          },
+        }
+      );
+    await client
+      .db('generalData')
+      .collection('storeInfo')
+      .updateOne(
+        {
+          _id: new ObjectId(storeId),
+        },
+        {
+          $set: {
+            opened: false,
+          },
+        }
+      );
     throw new Error('you must pay the monthly subscription first');
-    return;
   }
+  console.log(storeDoc.localCardAPIKeyFilled || storeDoc.sadadFilled);
+  console.log(storeDoc.monthlySubscriptionPaid);
+  console.log(
+    storeDoc.storeOwnerInfoFilled
+
+    // storeTrustsTwoDrivers &&
+  );
+  console.log(
+    storeDoc.storeInfoFilled
+
+    // storeTrustsTwoDrivers &&
+  );
+  console.log(
+    // storeTrustsTwoDrivers &&
+    !storeDoc.opened,
+    'hbhbhbhbhhbbhbhb'
+  );
+
   if (
     storeDoc.storeInfoFilled &&
     (storeDoc.localCardAPIKeyFilled || storeDoc.sadadFilled) &&

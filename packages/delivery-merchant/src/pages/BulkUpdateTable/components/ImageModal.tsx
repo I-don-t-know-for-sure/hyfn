@@ -190,17 +190,6 @@ const ImageModal: React.FC<ImageModalProps> = ({
                           },
                         });
                         setImages(newImages);
-                        // onChange({
-                        //   type: ActionTypes.ON_CHANGE_HANDLER,
-                        //   payload: {
-                        //     value: newImages,
-
-                        //     firstChangedKey: "deletedImages",
-
-                        //     _id,
-                        //   },
-                        // });
-                        // onChange(newImages, "images");
                       }}
                     >
                       <svg
@@ -220,58 +209,67 @@ const ImageModal: React.FC<ImageModalProps> = ({
                         <line x1="6" y1="6" x2="18" y2="18" />
                       </svg>
                     </ActionIcon>
-                    <Checkbox
-                      onChange={(e) => {
-                        console.log(
-                          "🚀 ~ file: MediaCard.tsx:149 ~ {currentImages?.map ~ productInfo?.removeBackgroundImages?.length:",
-                          productInfo?.removeBackgroundImages
+                  </Group>
+                </Box>
+              );
+            })}
+            {deletedImagesState?.map((imageName, number) => {
+              return (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    margin: "4px",
+                  }}
+                >
+                  <Image
+                    mb={4}
+                    sx={{
+                      border: "1px solid red",
+                      borderRadius: "6px",
+                    }}
+                    radius={6}
+                    width={70}
+                    height={70}
+                    src={`${
+                      import.meta.env.VITE_APP_BUCKET_URL
+                    }/tablet/${imageName}`}
+                    alt={t("product image")}
+                  />
+                  <Group>
+                    <Button
+                      compact
+                      variant="light"
+                      onClick={() => {
+                        const newImages = productInfo?.deletedImages?.filter(
+                          (image) => image !== imageName
                         );
-                        if (e.target.checked) {
-                          if (productInfo?.removeBackgroundImages?.length > 0) {
-                            const updatedDeletedImages = [
-                              ...productInfo?.removeBackgroundImages,
-                              imageName,
-                            ];
-                            onChange({
-                              type: ActionTypes.ON_CHANGE_HANDLER,
-                              payload: {
-                                value: updatedDeletedImages,
 
-                                firstChangedKey: "removeBackgroundImages",
-
-                                _id,
-                              },
-                            });
-                          } else {
-                            onChange({
-                              type: ActionTypes.ON_CHANGE_HANDLER,
-                              payload: {
-                                value: [imageName],
-
-                                firstChangedKey: "removeBackgroundImages",
-
-                                _id,
-                              },
-                            });
-                          }
-                          return;
-                        }
-                        const updatedDeletedImages =
-                          productInfo.removeBackgroundImages.filter((key) => {
-                            return key !== imageName;
-                          });
                         onChange({
                           type: ActionTypes.ON_CHANGE_HANDLER,
                           payload: {
-                            value: updatedDeletedImages,
+                            value: newImages,
+                            firstChangedKey: "deletedImages",
+                            _id,
+                          },
+                        });
+                        setDeletedImages(newImages);
 
-                            firstChangedKey: "removeBackgroundImages",
-
+                        setImages([...productInfo.images, imageName]);
+                        onChange({
+                          type: ActionTypes.ON_CHANGE_HANDLER,
+                          payload: {
+                            value: [...productInfo.images, imageName],
+                            firstChangedKey: "images",
                             _id,
                           },
                         });
                       }}
-                    />
+                    >
+                      {t("Undo")}
+                    </Button>
                   </Group>
                 </Box>
               );

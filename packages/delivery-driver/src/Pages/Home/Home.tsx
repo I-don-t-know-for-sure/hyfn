@@ -97,12 +97,14 @@ const Home: React.FC<HomeProps> = () => {
     let uniqueIds = [];
     let orders = [];
     return arr.filter((obj) => {
-      const includesUniqueId = uniqueIds.includes(obj.orders[0]._id);
-      if (uniqueIds.includes(obj.orders[0]._id)) {
-        return false;
-      } else {
-        uniqueIds.push(obj.orders[0]._id);
-        return true;
+      // const includesUniqueId = uniqueIds.includes(obj.orders[0]._id);
+      if (Array.isArray(obj.orders)) {
+        if (uniqueIds.includes(obj?.orders[0]?._id)) {
+          return false;
+        } else {
+          uniqueIds.push(obj?.orders[0]?._id);
+          return true;
+        }
       }
     });
   }

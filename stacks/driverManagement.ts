@@ -76,6 +76,17 @@ export function managementApiStack({ stack }: StackContext) {
             pathToLambdas + "getPaymentRequests/getPaymentRequests.handler",
         },
       },
+      "POST /getAllDrivers": {
+        function: {
+          handler: pathToLambdas + "getAllDrivers/getAllDrivers.handler",
+        },
+      },
+      "POST /replaceOrderDriver": {
+        function: {
+          handler:
+            pathToLambdas + "replaceOrderDriver/replaceOrderDriver.handler",
+        },
+      },
       "POST /cancelPaymentRequest": {
         function: {
           handler:
@@ -116,7 +127,7 @@ export function managementApiStack({ stack }: StackContext) {
         },
       },
 
-      "POST /addToManagementDrivers": {
+      "POST /addDriverToManagementDrivers": {
         function: {
           handler:
             pathToLambdas +

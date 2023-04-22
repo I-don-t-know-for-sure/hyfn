@@ -23,7 +23,7 @@ const Image: React.FC<ImageProp> = ({ imageName, ...rest }) => {
     return <BaseImage src={`${url}${screenSizes[1]}/${imageName}`} {...rest} />;
   }
   if (laptop) {
-    return <BaseImage src={`${url}${screenSizes[2]}/${imageName}`} {...rest} />;
+    return <BaseImage src={`${url}${screenSizes[1]}/${imageName}`} {...rest} />;
   }
 };
 

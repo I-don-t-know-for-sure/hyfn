@@ -3,6 +3,7 @@ import {
   Card,
   CardSection,
   Divider,
+  Grid,
   Group,
   Paper,
   Select,
@@ -29,7 +30,7 @@ const PricingCard: React.FC<ProductsCard> = ({
   isLoading,
 }) => {
   return (
-    <Paper shadow={"sm"} p={"md"} sx={{ margin: "auto", marginBlock: 10 }}>
+    <Paper shadow={"sm"} p={"md"}>
       {isLoading ? (
         <Box
           sx={{
@@ -57,83 +58,77 @@ const PricingCard: React.FC<ProductsCard> = ({
           </Group>
         </Box>
       ) : (
-        <CardSection
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            padding: "18px 32px",
-            justifyContent: "space-between",
-          }}
-        >
-          <Group
-            grow
-            position="center"
-            sx={{
-              width: "100%",
-            }}
-          >
-            <TextInput
-              type="number"
-              label={t("Pricing")}
-              required
-              placeholder={t(
-                `${productInfo.pricing.currency} 10.00 Per ${productInfo.measurementSystem}`
-              )}
-              value={`${productInfo?.pricing?.price || ""}`}
-              onChange={(e) => {
-                onChangeHandler(e.target.value, "pricing", "price");
-              }}
-              rightSectionWidth={100}
-              rightSection={
-                <Group
-                  position="right"
-                  sx={{
-                    width: "100%",
-                  }}
-                  spacing={5}
-                >
-                  <Text weight={120}>{t("Per")}</Text>
-
-                  <Select
-                    variant="unstyled"
+        <>
+          <Grid grow>
+            <Grid.Col span={6}>
+              <TextInput
+                sx={{
+                  maxWidth: "100%",
+                }}
+                type="number"
+                label={t("Pricing")}
+                required
+                placeholder={t(
+                  `${productInfo.pricing.currency} 10.00 Per ${productInfo.measurementSystem}`
+                )}
+                value={`${productInfo?.pricing?.price || ""}`}
+                onChange={(e) => {
+                  onChangeHandler(e.target.value, "pricing", "price");
+                }}
+                rightSectionWidth={100}
+                rightSection={
+                  <Group
+                    position="right"
                     sx={{
-                      maxWidth: "65%",
+                      width: "100%",
                     }}
-                    // label={t("Mesurement System")}
-                    required
-                    data={[
-                      { label: t("Kilo"), value: "Kilo" },
-                      { label: t("Liter"), value: "Liter" },
-                      // { label: t("Gram"), value: "Gram" },
-                      // { label: t("Milliliter"), value: "Milliliter" },
-                      { label: t("Unit"), value: "Unit" },
-                    ]}
-                    value={productInfo.measurementSystem}
-                    onChange={(e) => {
-                      onChangeHandler(e, "measurementSystem");
-                    }}
-                  />
-                </Group>
-              }
-            />
+                    spacing={5}
+                  >
+                    <Text weight={120}>{t("Per")}</Text>
 
-            <Select
-              style={{
-                minWidth: "80px",
-              }}
-              required
-              label={t("Currency")}
-              data={[
-                { label: "LYD", value: "LYD" },
-                // { label: 'USD', value: 'USD' },
-              ]}
-              value={productInfo.pricing.currency}
-              // onChange={(e) => {
-              //   onChangeHandler(e, "pricing", "currency");
-              // }}
-            />
-          </Group>
-        </CardSection>
+                    <Select
+                      variant="unstyled"
+                      sx={{
+                        maxWidth: "65%",
+                      }}
+                      // label={t("Mesurement System")}
+                      required
+                      data={[
+                        { label: t("Kilo"), value: "Kilo" },
+                        { label: t("Liter"), value: "Liter" },
+                        // { label: t("Gram"), value: "Gram" },
+                        // { label: t("Milliliter"), value: "Milliliter" },
+                        { label: t("Unit"), value: "Unit" },
+                      ]}
+                      value={productInfo.measurementSystem}
+                      onChange={(e) => {
+                        onChangeHandler(e, "measurementSystem");
+                      }}
+                    />
+                  </Group>
+                }
+              />
+            </Grid.Col>
+            <Grid.Col span={"auto"}>
+              <Select
+                style={{
+                  width: "80px",
+                  maxWidth: "140px",
+                }}
+                required
+                label={t("Currency")}
+                data={[
+                  { label: "LYD", value: "LYD" },
+                  // { label: 'USD', value: 'USD' },
+                ]}
+                value={productInfo.pricing.currency}
+                // onChange={(e) => {
+                //   onChangeHandler(e, "pricing", "currency");
+                // }}
+              />
+            </Grid.Col>
+          </Grid>
+        </>
       )}
       <Divider />
       {isLoading ? (
@@ -163,14 +158,7 @@ const PricingCard: React.FC<ProductsCard> = ({
           </Group>
         </Box>
       ) : (
-        <CardSection
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            padding: "18px 32px",
-            justifyContent: "space-between",
-          }}
-        >
+        <>
           <Group
             grow
             position="center"
@@ -199,7 +187,7 @@ const PricingCard: React.FC<ProductsCard> = ({
               }}
             /> */}
           </Group>
-        </CardSection>
+        </>
       )}
     </Paper>
   );

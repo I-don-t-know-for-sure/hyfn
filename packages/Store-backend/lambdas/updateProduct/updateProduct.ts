@@ -46,9 +46,9 @@ export const updateProductHandler = async ({ arg, client, session }: MainFunctio
   if (deletedImages?.length > 0) {
     await deleteImages(deletedImages);
   }
-  if (removeBackgroundImages?.length > 0) {
-    removeBackgrounds({ keys: removeBackgroundImages, storeId: id });
-  }
+  // if (removeBackgroundImages?.length > 0) {
+  //   removeBackgrounds({ keys: removeBackgroundImages, storeId: id });
+  // }
 
   const images =
     Array.isArray(updatedImages) && Array.isArray(urls)

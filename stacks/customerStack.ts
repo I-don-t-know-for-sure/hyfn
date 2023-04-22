@@ -47,6 +47,7 @@ export function customerApiStack({ stack }: StackContext) {
         environment: {
           kmsKeyARN: keyArn,
           // /////////////////
+
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,

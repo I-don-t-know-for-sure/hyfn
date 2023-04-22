@@ -1,25 +1,47 @@
-import { Button, Card, Checkbox, Group, MultiSelect, Paper, Stack, TransferList, TransferListData } from '@mantine/core'
-import { t } from 'utils/i18nextFix'
+import {
+  Button,
+  Card,
+  Checkbox,
+  Group,
+  MultiSelect,
+  Paper,
+  Stack,
+  TransferList,
+  TransferListData,
+} from "@mantine/core";
+import { t } from "utils/i18nextFix";
 
-import React, { useEffect, useState } from 'react'
-import { useGetCollectionProducts } from '../hooks/useGetCollectionProducts'
+import React, { useEffect, useState } from "react";
+import { useGetCollectionProducts } from "../hooks/useGetCollectionProducts";
 
-import { useGetProductsForCollection } from '../hooks/useGetProductsForCollection'
+import { useGetProductsForCollection } from "../hooks/useGetProductsForCollection";
 
-import { CollectionCard } from '../types'
+import { CollectionCard } from "../types";
 
 interface ProductsSelectionProps extends CollectionCard {
-  collectionId?: string
+  collectionId?: string;
 }
 
-const ProductsSelection: React.FC<ProductsSelectionProps> = ({ collectionInfo, collectionId, onChangeHandler }) => {
-  const [checked, setChecked] = useState(!collectionId)
-  const [collectionProducts, setCollectionProducts] = useState([])
-  const { data, isLoading, isFetched, fetchNextPage, isFetchingNextPage, isIdle } = useGetCollectionProducts({
+const ProductsSelection: React.FC<ProductsSelectionProps> = ({
+  collectionInfo,
+  collectionId,
+  onChangeHandler,
+}) => {
+  const [checked, setChecked] = useState(!collectionId);
+  const [collectionProducts, setCollectionProducts] = useState([]);
+  const {
+    data,
+    isLoading,
+    isFetched,
+    fetchNextPage,
+    isFetchingNextPage,
+    isIdle,
+  } = useGetCollectionProducts({
     collectionId,
     checked,
-  })
-  const [storeFrontTransferList, setStoreFrontTransferList] = useState<TransferListData>([[], []])
+  });
+  const [storeFrontTransferList, setStoreFrontTransferList] =
+    useState<TransferListData>([[], []]);
   const {
     data: products,
     isLoading: areProductsLoading,
@@ -27,8 +49,11 @@ const ProductsSelection: React.FC<ProductsSelectionProps> = ({ collectionInfo, c
     fetchNextPage: fetchNextProducts,
     isFetchingNextPage: isFetchingNextProducts,
     isIdle: areProductsIdle,
-  } = useGetProductsForCollection({ collectionId, checked })
-  const [transferValue, setTransferValue] = useState<TransferListData>([[], []])
+  } = useGetProductsForCollection({ collectionId, checked });
+  const [transferValue, setTransferValue] = useState<TransferListData>([
+    [],
+    [],
+  ]);
 
   // const {
   //   data: storeFrontProducts = [],
@@ -80,55 +105,65 @@ const ProductsSelection: React.FC<ProductsSelectionProps> = ({ collectionInfo, c
   ///////////////////////////////////////////////////
   useEffect(() => {
     if (!isFetchingNextPage && data?.pages?.length > 1) {
-      const mappedProducts = data?.pages[data?.pages?.length - 1]
-      setTransferValue((prevState) => [prevState[0], [...prevState[1], ...mappedProducts]])
-      setCollectionProducts((prevState) => [...prevState, ...mappedProducts])
+      const mappedProducts = data?.pages[data?.pages?.length - 1];
+      setTransferValue((prevState) => [
+        prevState[0],
+        [...prevState[1], ...mappedProducts],
+      ]);
+      setCollectionProducts((prevState) => [...prevState, ...mappedProducts]);
     }
-  }, [isFetchingNextPage])
+  }, [isFetchingNextPage]);
 
   useEffect(() => {
     if (!isFetchingNextProducts && products?.pages?.length > 1) {
-      const mappedProducts = products?.pages[products?.pages?.length - 1]
+      const mappedProducts = products?.pages[products?.pages?.length - 1];
 
-      setTransferValue((prevState) => [[...prevState[0], ...mappedProducts], prevState[1]])
+      setTransferValue((prevState) => [
+        [...prevState[0], ...mappedProducts],
+        prevState[1],
+      ]);
     }
-  }, [isFetchingNextProducts])
+  }, [isFetchingNextProducts]);
 
   useEffect(() => {
     if (products?.pages?.length === 1) {
-      const mappedProducts = products?.pages?.flatMap((page) => page)
-      setTransferValue((prevState) => [mappedProducts, prevState[1]])
+      const mappedProducts = products?.pages?.flatMap((page) => page);
+      setTransferValue((prevState) => [mappedProducts, prevState[1]]);
     }
-  }, [areProductsFetched, areProductsLoading, products])
+  }, [areProductsFetched, areProductsLoading, products]);
 
   useEffect(() => {
     if (data?.pages?.length === 1) {
-      const mappedProducts = data?.pages?.flatMap((page) => page)
-      setTransferValue((prevState) => [prevState[0], mappedProducts])
-      setCollectionProducts(mappedProducts)
+      const mappedProducts = data?.pages?.flatMap((page) => page);
+      setTransferValue((prevState) => [prevState[0], mappedProducts]);
+      setCollectionProducts(mappedProducts);
     }
-  }, [isLoading, data, isFetched])
+  }, [isLoading, data, isFetched]);
 
   useEffect(() => {
     const addedProducts = transferValue[1].filter((newProduct) => {
-      const productAlreadyInCollection = collectionProducts.find((oldProduct) => {
-        return newProduct.value === oldProduct.value
-      })
-      return !productAlreadyInCollection
-    })
+      const productAlreadyInCollection = collectionProducts.find(
+        (oldProduct) => {
+          return newProduct.value === oldProduct.value;
+        }
+      );
+      return !productAlreadyInCollection;
+    });
 
-    onChangeHandler(addedProducts, 'addedProductsArray')
+    onChangeHandler(addedProducts, "addedProductsArray");
 
     if (collectionId) {
       const newValue = collectionProducts.filter((product) => {
-        const isProductAdded = transferValue[1].find((item) => item.value === product.value)
-        if (!isProductAdded) return true
-        return false
-      })
+        const isProductAdded = transferValue[1].find(
+          (item) => item.value === product.value
+        );
+        if (!isProductAdded) return true;
+        return false;
+      });
 
-      onChangeHandler(newValue, 'removedProductsArray')
+      onChangeHandler(newValue, "removedProductsArray");
     }
-  }, [transferValue])
+  }, [transferValue]);
 
   // const dependencyArray =
   //   !collectionId && checked
@@ -154,9 +189,9 @@ const ProductsSelection: React.FC<ProductsSelectionProps> = ({ collectionInfo, c
   // }, dependencyArray);
 
   return (
-    <Card shadow={'lg'}>
+    <Paper shadow={"lg"}>
       <Checkbox
-        label={t('Manage collection products')}
+        label={t("Manage collection products")}
         checked={checked}
         onChange={() => setChecked(!checked)}
         mb={checked ? 18 : 0}
@@ -165,7 +200,7 @@ const ProductsSelection: React.FC<ProductsSelectionProps> = ({ collectionInfo, c
         {checked && (
           <>
             <TransferList
-              titles={[t('All products'), t('Collection Products')]}
+              titles={[t("All products"), t("Collection Products")]}
               value={transferValue}
               onChange={setTransferValue}
               showTransferAll={false}
@@ -178,20 +213,22 @@ const ProductsSelection: React.FC<ProductsSelectionProps> = ({ collectionInfo, c
                       products?.pages[products?.pages?.length - 1][
                         products?.pages[products.pages?.length - 1]?.length - 1
                       ]?.value,
-                  })
+                  });
                 }}
               >
-                {t('More')}
+                {t("More")}
               </Button>
               <Button
                 onClick={() => {
                   fetchNextPage({
                     pageParam:
-                      data?.pages[data?.pages?.length - 1][data?.pages[data.pages?.length - 1]?.length - 1]?.value,
-                  })
+                      data?.pages[data?.pages?.length - 1][
+                        data?.pages[data.pages?.length - 1]?.length - 1
+                      ]?.value,
+                  });
                 }}
               >
-                {t('More')}
+                {t("More")}
               </Button>
             </Group>
           </>
@@ -221,8 +258,8 @@ const ProductsSelection: React.FC<ProductsSelectionProps> = ({ collectionInfo, c
           </>
         )} */}
       </Stack>
-    </Card>
-  )
-}
+    </Paper>
+  );
+};
 
-export default ProductsSelection
+export default ProductsSelection;

@@ -1,3 +1,10 @@
+('use strict');
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+const { ObjectId } = require('mongodb');
+const { subtract, smallerEq, smaller } = require('mathjs');
+interface AddDriverToManagementDriversProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 export const addDriverToManagementDriversHandler = async ({
   arg,
   client,
@@ -16,16 +23,16 @@ export const addDriverToManagementDriversHandler = async ({
   );
   const {
     _id,
-    usedBalance: managementUsedBalance,
-    balance: managementBalance,
+    // usedBalance: managementUsedBalance,
+    // balance: managementBalance,
     verified,
   } = userDocument;
-  const managementUsedBalanceFloat = parseFloat(managementUsedBalance.toFixed(3));
-  console.log(
-    '🚀 ~ file: addDriverToManagementDrivers.js:20 ~ mainFunction ~ managementUsedBalanceInt',
-    managementUsedBalanceFloat
-  );
-  const availableBalance = subtract(managementBalance, managementUsedBalanceFloat);
+  // const managementUsedBalanceFloat = parseFloat(managementUsedBalance.toFixed(3));
+  // console.log(
+  //   '🚀 ~ file: addDriverToManagementDrivers.js:20 ~ mainFunction ~ managementUsedBalanceInt',
+  //   managementUsedBalanceFloat
+  // );
+  // const availableBalance = subtract(managementBalance, managementUsedBalanceFloat);
   const managementId = _id.toString();
   const driverDoc = await client
     .db('generalData')
@@ -40,10 +47,11 @@ export const addDriverToManagementDriversHandler = async ({
   if (storeTrustsDriver) {
     throw new Error('this driver is trusted');
   }
+  console.log('bchdbchdbcbd');
   if (!verified) {
-    if (smaller(availableBalance, trustedBalance)) {
-      throw new Error('You do not have enough balance available');
-    }
+    // if (smaller(availableBalance, trustedBalance)) {
+    throw new Error('You do not have enough balance available');
+    // }
   }
   await client
     .db('generalData')
@@ -56,32 +64,27 @@ export const addDriverToManagementDriversHandler = async ({
         },
         $set: {
           balance: trustedBalance,
+          verified: true,
           // managementCut: managementDoc.managementCut,
         },
       },
       { session }
     );
-  await client
-    .db('generalData')
-    .collection('driverManagement')
-    .updateOne(
-      { userId },
-      {
-        $inc: {
-          usedBalance: Math.abs(trustedBalance),
-        },
-      },
-      { session }
-    );
+
+  // await client
+  //   .db('generalData')
+  //   .collection('driverManagement')
+  //   .updateOne(
+  //     { userId },
+  //     {
+  //       $inc: {
+  //         usedBalance: Math.abs(trustedBalance),
+  //       },
+  //     },
+  //     { session }
+  //   );
   return 'driver was Add to trusted list';
 };
-interface AddDriverToManagementDriversProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
-const { ObjectId } = require('mongodb');
-const { subtract, smallerEq, smaller } = require('mathjs');
 export const handler = async (event) => {
   const result = await mainWrapperWithSession({
     event,

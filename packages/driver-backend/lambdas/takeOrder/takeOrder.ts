@@ -127,7 +127,7 @@ export const takeOrderHandler = async ({ arg, session, client }: MainFunctionPro
       },
       {
         $set: {
-          usedBalance,
+          usedBalance: newUsedBalance,
           onDuty: true,
         },
         $push: { orderIds: orderId },

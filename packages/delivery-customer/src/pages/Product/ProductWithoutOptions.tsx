@@ -30,6 +30,7 @@ import { ImageModal } from "hyfn-client";
 import { useImage } from "contexts/imageContext/ImageProvider";
 import HtmlRenderer from "components/HtmlReader";
 import { calculatePrecision, calculateStep } from "./functions";
+import { Carousel } from "@mantine/carousel";
 
 interface ProductWithoutOptionsProps {}
 
@@ -222,7 +223,56 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
         }}
       >
         <Box>
-          <ImageModal
+          <Carousel>
+            {product.images.map((image) => {
+              return (
+                <Carousel.Slide>
+                  <ImageModal
+                    sx={(theme) => ({
+                      maxWidth: 500,
+                      borderRadius: "6px",
+                      maxHeight: 500,
+                      [theme.fn.largerThan("sm")]: {
+                        maxWidth: 300,
+                        maxHeight: 300,
+                      },
+                    })}
+                    ImageComponent={
+                      <AspectRatio
+                        ratio={500 / 500}
+                        sx={(theme) => ({
+                          maxWidth: 500,
+                          borderRadius: "6px",
+                          maxHeight: 500,
+                          [theme.fn.largerThan("sm")]: {
+                            maxWidth: 300,
+                            maxHeight: 300,
+                          },
+                        })}
+                        mx="auto"
+                      >
+                        <Image
+                          radius={6}
+                          sx={{
+                            width: "100%",
+
+                            height: "100px",
+                          }}
+                          imageName={
+                            product?.images?.length > 0
+                              ? image
+                              : "c72e349a9bc184cbdcfb1386060d4b5b"
+                          }
+                        />
+                      </AspectRatio>
+                    }
+                    src={`${url}preview/${image}`}
+                  />
+                </Carousel.Slide>
+              );
+            })}
+          </Carousel>
+          {/* <ImageModal
             sx={(theme) => ({
               maxWidth: 500,
               borderRadius: "6px",
@@ -233,36 +283,44 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
               },
             })}
             ImageComponent={
-              <AspectRatio
-                ratio={500 / 500}
-                sx={(theme) => ({
-                  maxWidth: 500,
-                  borderRadius: "6px",
-                  maxHeight: 500,
-                  [theme.fn.largerThan("sm")]: {
-                    maxWidth: 300,
-                    maxHeight: 300,
-                  },
-                })}
-                mx="auto"
-              >
-                <Image
-                  radius={6}
-                  sx={{
-                    width: "100%",
+              <Carousel>
+                {product.images.map((image) => {
+                  return (
+                    <Carousel.Slide>
+                      <AspectRatio
+                        ratio={500 / 500}
+                        sx={(theme) => ({
+                          maxWidth: 500,
+                          borderRadius: "6px",
+                          maxHeight: 500,
+                          [theme.fn.largerThan("sm")]: {
+                            maxWidth: 300,
+                            maxHeight: 300,
+                          },
+                        })}
+                        mx="auto"
+                      >
+                        <Image
+                          radius={6}
+                          sx={{
+                            width: "100%",
 
-                    height: "100px",
-                  }}
-                  imageName={
-                    product?.images?.length > 0
-                      ? product.images[0]
-                      : "c72e349a9bc184cbdcfb1386060d4b5b"
-                  }
-                />
-              </AspectRatio>
+                            height: "100px",
+                          }}
+                          imageName={
+                            product?.images?.length > 0
+                              ? image
+                              : "c72e349a9bc184cbdcfb1386060d4b5b"
+                          }
+                        />
+                      </AspectRatio>
+                    </Carousel.Slide>
+                  );
+                })}
+              </Carousel>
             }
-            src={`${url}initial/${product.images[0]}`}
-          />
+            src={`${url}preview/${product.images[0]}`}
+          /> */}
           {/* <AspectRatio
             ratio={500 / 500}
             sx={(theme) => ({

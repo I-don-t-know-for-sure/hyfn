@@ -18,7 +18,7 @@ const getStage = (stage) => {
 
 (async function () {
   const stage = getStage(process.argv[2]);
-
+  let roleARN = process.argv[3];
   ///////////////////////////
   const data = fs.readFileSync(`./.env`, "utf8", (err, data) => {
     if (err) {
@@ -44,24 +44,25 @@ const getStage = (stage) => {
     `${stage}mongoPublicKey`
   ];
   ////////////////////////////
-
-  const arn = await new Promise(function (resolve, reject) {
-    fs.readFile("output.txt", "utf8", (err, data) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      }
-      const lines = data.split("\n");
-
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line.startsWith("apiFunctionsRoleArn")) {
-          const value = line.substring(line.indexOf("=") + 1).trim();
-          resolve(value.replace("apiFunctionsRoleArn:", "").trim());
+  if (!roleARN) {
+    roleARN = await new Promise(function (resolve, reject) {
+      fs.readFile("output.txt", "utf8", (err, data) => {
+        if (err) {
+          console.error(err);
+          reject(err);
         }
-      }
+        const lines = data.split("\n");
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line.startsWith("apiFunctionsRoleArn")) {
+            const value = line.substring(line.indexOf("=") + 1).trim();
+            resolve(value.replace("apiFunctionsRoleArn:", "").trim());
+          }
+        }
+      });
     });
-  });
+  }
 
   const databaseUser = await new Promise(function (resolve, reject) {
     exec(
@@ -76,7 +77,7 @@ const getStage = (stage) => {
           "awsIAMType": "ROLE",
           "roles": [{ "databaseName": "admin", "roleName": "readWriteAnyDatabase"}],
 
-            "username": "${arn}"
+            "username": "${roleARN}"
         }'`,
       (err, stdout, stderr) => {
         if (err) {

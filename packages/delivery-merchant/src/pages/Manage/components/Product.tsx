@@ -6,7 +6,15 @@ import OptionsCard from "./OptionsCard";
 import PricingCard from "./PricingCard";
 import ShippingCard from "./ShippingCard";
 import { ProductInfo, ProductsCard } from "../types";
-import { Box, Button, Center, Container, Divider, Grid } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+} from "@mantine/core";
 
 import MediaCard from "./MediaCard";
 import MeasurementSystemCard from "./MeasurementSystemCard";
@@ -109,68 +117,72 @@ const Product: React.FC<ProductProps> = () => {
         <title>{t('New Product')}</title>
       </Helmet> */}
       <Container m={2} mt={8}>
-        <Grid
-          grow
-          sx={{
-            width: "100%",
-            margin: "auto",
-          }}
-        >
-          <Grid.Col xs={9} sm={7} md={8} lg={8}>
-            <InfoCard
-              onChangeHandler={onChangeHandler}
-              productInfo={productInfo}
-            />
-            <MediaCard
-              currentImages={productInfo.images}
-              onChangeHandler={onChangeHandler}
-              productInfo={productInfo}
-            />
-            {/* <MeasurementSystemCard
-              onChangeHandler={onChangeHandler}
-              productInfo={productInfo}
-            /> */}
-            <PricingCard
-              onChangeHandler={onChangeHandler}
-              productInfo={productInfo}
-            />
-
-            {/* <ShippingCard
-              onChangeHandler={onChangeHandler}
-              productInfo={productInfo}
-            /> */}
-            <OptionsCard
-              onChangeHandler={onChangeHandler}
-              productInfo={productInfo}
-              setProductInfo={setProductInfo}
-            />
-          </Grid.Col>
-          <Grid.Col xs={2} sm={4} md={4} lg={4}>
-            <CollectionCard
-              onChangeHandler={onChangeHandler}
-              productInfo={productInfo}
-            />
-          </Grid.Col>
-        </Grid>
-
-        <Container
-          sx={{
-            display: "flex",
-
-            margin: "40px 24px",
-          }}
-        >
-          <Button
-            fullWidth
+        <Stack>
+          <Grid
+            grow
             sx={{
-              maxWidth: "450px",
+              width: "100%",
+              margin: "auto",
             }}
-            m={"0px auto"}
-            type="submit"
           >
-            {t("Create")}
-          </Button>
-        </Container>
+            <Grid.Col xs={9} sm={7} md={8} lg={8}>
+              <Stack>
+                <InfoCard
+                  onChangeHandler={onChangeHandler}
+                  productInfo={productInfo}
+                />
+                <MediaCard
+                  currentImages={productInfo.images}
+                  onChangeHandler={onChangeHandler}
+                  productInfo={productInfo}
+                />
+                {/* <MeasurementSystemCard
+              onChangeHandler={onChangeHandler}
+              productInfo={productInfo}
+            /> */}
+                <PricingCard
+                  onChangeHandler={onChangeHandler}
+                  productInfo={productInfo}
+                />
+
+                {/* <ShippingCard
+              onChangeHandler={onChangeHandler}
+              productInfo={productInfo}
+            /> */}
+                <OptionsCard
+                  onChangeHandler={onChangeHandler}
+                  productInfo={productInfo}
+                  setProductInfo={setProductInfo}
+                />
+              </Stack>
+            </Grid.Col>
+            <Grid.Col xs={2} sm={4} md={4} lg={4}>
+              <CollectionCard
+                onChangeHandler={onChangeHandler}
+                productInfo={productInfo}
+              />
+            </Grid.Col>
+          </Grid>
+
+          <Container
+            sx={{
+              display: "flex",
+
+              margin: "40px 24px",
+            }}
+          >
+            <Button
+              fullWidth
+              sx={{
+                maxWidth: "450px",
+              }}
+              m={"0px auto"}
+              type="submit"
+            >
+              {t("Create")}
+            </Button>
+          </Container>
+        </Stack>
       </Container>
     </form>
   );

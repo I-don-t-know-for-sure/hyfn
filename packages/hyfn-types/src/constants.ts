@@ -22,9 +22,10 @@ export const test4 = "jcdnj";
 export const ACTIVE_ORDERS = "activeOrders";
 export const ACCEPTED_PROPOSALS_FLAG = "accepted";
 export const ALL_PROPOSALS_FLAG = "all";
-export const storeServiceFee = 0.01;
-export const deliveryServiceFee = 0.15;
-export const customerServiceFee = 0.02;
+export const storeServiceFee = 0.0;
+export const deliveryServiceFee = 0.0;
+export const customerServiceFee = 0.03;
+export const baseServiceFee = 2.5;
 
 export const monthlySubscriptionCost = 50;
 export const progressNotification = {

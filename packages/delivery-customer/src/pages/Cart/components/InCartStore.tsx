@@ -25,6 +25,7 @@ import { useCart } from "contexts/cartContext/Provider";
 import { t } from "util/i18nextFix";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { add, multiply, subtract } from "mathjs";
 
 interface InCartStoreProps {
   inCartStore: any;
@@ -51,17 +52,29 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
             "🚀 ~ file: InCartStore.tsx:48 ~ productOptionsPrice ~ productOptionsPrice",
             productOptionsPrice
           );
-          const priceAfterFee =
-            product?.pricing?.price +
-            productOptionsPrice -
-            (product?.pricing?.price + productOptionsPrice) * storeServiceFee;
-          return acc + priceAfterFee * product?.qty;
+          const priceAfterFee = add(
+            product?.pricing?.price,
+            subtract(
+              productOptionsPrice,
+              multiply(
+                add(product?.pricing?.price, productOptionsPrice),
+                storeServiceFee
+              )
+            )
+          );
+          // const priceAfterFee =
+          //   product?.pricing?.price +
+          //   productOptionsPrice -
+          //   (product?.pricing?.price + productOptionsPrice) * storeServiceFee;
+          return add(acc, multiply(priceAfterFee, product?.qty));
         }, 0);
-        return acc + priceAfterFee;
+        return add(acc, priceAfterFee);
       }
-      const priceAfterFee =
-        product?.pricing?.price - product.pricing.price * storeServiceFee;
-      return acc + priceAfterFee * product?.qty;
+      const priceAfterFee = subtract(
+        product?.pricing?.price,
+        multiply(product.pricing.price, storeServiceFee)
+      );
+      return add(acc, multiply(priceAfterFee, product?.qty));
     },
     0
   );
@@ -244,11 +257,14 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                     )}
                     <Box>
                       <Text>
-                        {` ${inCartStore?.currency || "LYD"} ${(
-                          (product?.pricing?.price +
-                            productOptionsPrice -
-                            (product?.pricing?.price + productOptionsPrice) *
-                              storeServiceFee) *
+                        {` ${inCartStore?.currency || "LYD"} ${multiply(
+                          subtract(
+                            add(product?.pricing?.price, productOptionsPrice),
+                            multiply(
+                              add(product?.pricing?.price, productOptionsPrice),
+                              storeServiceFee
+                            )
+                          ),
                           product?.qty
                         ).toFixed(2)}`}
                       </Text>
@@ -444,8 +460,8 @@ export default InCartStore;
 function calculateProductValuesPrice(product: any) {
   return product.options.reduce((accu, option) => {
     const optionValuesPrice = option.optionValues.reduce((valueAccu, value) => {
-      return valueAccu + parseFloat(value.price);
+      return add(valueAccu, value.price);
     }, 0);
-    return accu + optionValuesPrice;
+    return add(accu, optionValuesPrice);
   }, 0);
 }

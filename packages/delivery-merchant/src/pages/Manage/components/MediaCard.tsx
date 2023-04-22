@@ -96,7 +96,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
   const { files } = productInfo;
 
   return (
-    <Paper shadow={"sm"} p={"md"} sx={{ margin: "auto", marginBlock: 10 }}>
+    <Paper shadow={"sm"} p={"md"}>
       <Box>
         {files?.map((file, number) => {
           return (
@@ -197,7 +197,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
                       <line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
                   </ActionIcon>
-                  <Checkbox
+                  {/* <Checkbox
                     onChange={(e) => {
                       console.log(
                         "🚀 ~ file: MediaCard.tsx:149 ~ {currentImages?.map ~ productInfo?.removeBackgroundImages?.length:",
@@ -230,7 +230,87 @@ const MediaCard: React.FC<MediaCardProps> = ({
                         "removeBackgroundImages"
                       );
                     }}
-                  />
+                  /> */}
+                </Group>
+              </Box>
+            );
+          })}
+          {productInfo?.deletedImages?.map((imageName, number) => {
+            return (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                  margin: "4px",
+                }}
+              >
+                <Image
+                  mb={4}
+                  sx={{
+                    border: "1px solid red",
+                    borderRadius: "6px",
+                  }}
+                  radius={6}
+                  width={70}
+                  height={70}
+                  src={`${
+                    import.meta.env.VITE_APP_BUCKET_URL
+                  }/tablet/${imageName}`}
+                  alt={t("product image")}
+                />
+                <Group>
+                  <Button
+                    compact
+                    variant="light"
+                    onClick={() => {
+                      const newImages = productInfo?.deletedImages?.filter(
+                        (image) => image !== imageName
+                      );
+
+                      onChangeHandler(newImages, "deletedImages");
+
+                      onChangeHandler([...currentImages, imageName], "images");
+                    }}
+                  >
+                    {t("Undo")}
+                  </Button>
+
+                  {/* <Checkbox
+                    onChange={(e) => {
+                      console.log(
+                        "🚀 ~ file: MediaCard.tsx:149 ~ {currentImages?.map ~ productInfo?.removeBackgroundImages?.length:",
+                        productInfo?.removeBackgroundImages
+                      );
+                      if (e.target.checked) {
+                        if (productInfo?.removeBackgroundImages?.length > 0) {
+                          const updatedDeletedImages = [
+                            ...productInfo?.removeBackgroundImages,
+                            imageName,
+                          ];
+                          onChangeHandler(
+                            updatedDeletedImages,
+                            "removeBackgroundImages"
+                          );
+                        } else {
+                          onChangeHandler(
+                            [imageName],
+                            "removeBackgroundImages"
+                          );
+                        }
+                        return;
+                      }
+                      const updatedDeletedImages =
+                        productInfo.removeBackgroundImages.filter((key) => {
+                          return key !== imageName;
+                        });
+                      onChangeHandler(
+                        updatedDeletedImages,
+                        "removeBackgroundImages"
+                      );
+                    }}
+                  /> */}
                 </Group>
               </Box>
             );

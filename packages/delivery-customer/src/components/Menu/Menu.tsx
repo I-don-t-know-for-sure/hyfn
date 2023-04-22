@@ -478,6 +478,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
               }}
             >
               <Text
+                component={Link}
+                to={"/"}
                 weight={700}
                 size={"5vw"}
                 sx={(theme) => ({
@@ -494,6 +496,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
 
             <Group>
               <Button
+                component={Link}
+                to={"/login"}
                 sx={{
                   borderRadius: "18px",
                 }}
@@ -502,6 +506,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                 {t("Login")}
               </Button>
               <Button
+                component={Link}
+                to={"/signup"}
                 sx={{
                   borderRadius: "18px",
                 }}

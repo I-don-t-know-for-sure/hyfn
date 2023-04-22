@@ -1,23 +1,25 @@
 import AWS from 'aws-sdk';
+import axios from 'axios';
+
 export function sendRemoveBackgroundsEventBus({
-  imageKeys,
+  productIds,
   storeId,
 }: {
-  imageKeys: any[];
+  productIds: any[];
   storeId: string;
 }) {
-  const eventBridge = new AWS.EventBridge();
+  /*  const eventBridge = new AWS.EventBridge();
   const params = {
     Entries: [
       {
         Detail: JSON.stringify({
-          keys: imageKeys,
+          productIds,
           eventBusName: process.env.backgroundRemovalEventBus,
           storeId,
         }),
-        DetailType: 'background_removal',
         EventBusName: process.env.backgroundRemovalEventBus,
-        Source: 'background_removal',
+        DetailType: process.env.backgroundRemovalEventBusDetailType,
+        Source: process.env.backgroundRemovalEventBusSource,
       },
     ],
   };
@@ -29,8 +31,26 @@ export function sendRemoveBackgroundsEventBus({
     } else {
       console.log('Success', data);
     }
-  });
+  }); */
+
+  console.log({ productIds, storeId, url: process.env.removeBackgroundsURL });
+
+  axios
+    .post(process.env.removeBackgroundsURL, {
+      productIds,
+      storeId,
+      url: process.env.removeBackgroundsURL,
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
-export const removeBackgrounds = async ({ keys, storeId }: { keys: string[]; storeId: string }) => {
-  sendRemoveBackgroundsEventBus({ imageKeys: keys, storeId });
+export const removeBackgrounds = async ({
+  productIds,
+  storeId,
+}: {
+  productIds: string[];
+  storeId: string;
+}) => {
+  sendRemoveBackgroundsEventBus({ productIds, storeId });
 };

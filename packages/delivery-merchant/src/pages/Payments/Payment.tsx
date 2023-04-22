@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Box,
   Button,
   Card,
@@ -7,6 +8,7 @@ import {
   Group,
   Loader,
   NumberInput,
+  NumberInputHandlers,
   Overlay,
   Select,
   SelectItemProps,
@@ -21,7 +23,7 @@ import { paymentMethods } from "config/data";
 
 import { t } from "utils/i18nextFix";
 import useGetStoreInfo from "hooks/useGetStoreInfo";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 // import { Helmet } from 'react-helmet-async'
 import { useDeleteSadadAPIKey } from "./hooks/useDeleteSadadKey";
 import {
@@ -41,34 +43,26 @@ import TransactionList from "components/TransactionList";
 import { useForm } from "@mantine/form";
 import { useDisableLocalCardKeys } from "./hooks/useDisableLocalCardKeys";
 import { useUpdateLocalCardSettings } from "./hooks/useUpdateLocalCardSettings";
+import PaymentModal from "./components/PaymentModal";
+import { useUpdateSubscription } from "./hooks/useUpdateSubscription";
 
 interface PaymentsProps {}
 
 // store owner fills their info here and make the monthly payments
 // and in the future makes request to get thier money
 
-const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
-  ({ label, ...others }: SelectItemProps, ref) => (
-    <div ref={ref} {...others}>
-      <Group noWrap>
-        <div>
-          <Text size="sm">{label}</Text>
-        </div>
-      </Group>
-    </div>
-  )
-);
-
 const Payments: React.FC<PaymentsProps> = () => {
   const { data, isLoading } = useGetStoreInfo();
   console.log("🚀 ~ file: Payment.tsx:54 ~ data", data);
-  const { mutate: updatePaymentSettings } = useUpdatePaymentSettings();
-  const { mutate: deleteSadadAPIKey } = useDeleteSadadAPIKey();
+  const [value, setValue] = useState<number>(0);
+  const handlers = useRef<NumberInputHandlers>();
+
   const { mutate: disableLocalCardKeys } = useDisableLocalCardKeys();
   const { mutate: deleteLocalCardAPIKey } = useDeleteLocalCardAPIKey();
   const { mutate: addLocalCardAPIkey } = useAddLocalCardAPIKeys();
   const { mutate: updateLocalCardSetting } = useUpdateLocalCardSettings();
-  const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
+  const { mutate: updateSubscription } = useUpdateSubscription();
+
   const form = useForm({
     initialValues: {
       ownerFirstName: "",
@@ -111,6 +105,14 @@ const Payments: React.FC<PaymentsProps> = () => {
       birthYear: "",
     },
   });
+
+  // create a function that converts a string date to normal date
+  const convertDate = (date: string) => {
+    const newDate = new Date(date);
+    return `${newDate.getFullYear()}-${
+      newDate.getMonth() + 1
+    }-${newDate.getDate()} `;
+  };
 
   const { mutate } = useUpdateStoreOwnerInfo();
   return (
@@ -202,7 +204,6 @@ const Payments: React.FC<PaymentsProps> = () => {
               title={t("Account Payments")}
               shadow={"md"}
             >
-              {/* <Overlay opacity={0.6} color="#000" zIndex={55} /> */}
               <Box
                 sx={{
                   display: "flex",
@@ -212,108 +213,62 @@ const Payments: React.FC<PaymentsProps> = () => {
                 <Title order={3} mb={8}>
                   {t("Account Payments")}
                 </Title>
-                <TransactionList />
+                <PaymentModal balance={data?.balance} />
               </Box>
-              <Group
-                grow
-                sx={(theme) => ({
-                  [theme.fn.smallerThan("md")]: {
-                    flexDirection: "column-reverse",
-                  },
-                  display: "flex",
-                  justifyContent: "space-between",
-                })}
-              >
-                {/* <Box>
-                  <Box
-                    sx={(theme) => ({
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'baseline',
-                      [theme.fn.smallerThan('md')]: {
-                        marginTop: 12,
-                      },
-                    })}
-                  >
-                    <Group grow mb={6}>
-                      <NumberInput
-                        required
-                        {...paymentForm.getInputProps('numberOfMonths')}
-                        placeholder={t('Number of months you want to subscribe for')}
-                      />
-                    </Group>
-                    <Group grow sx={{}} m={'auto'}>
-                      <TextInput
-                        required
-                        {...paymentForm.getInputProps('customerPhone')}
-                        placeholder={t('write the paying phone number')}
-                      />
-                      <TextInput
-                        required
-                        {...paymentForm.getInputProps('birthYear')}
-                        placeholder={t('write your birth year')}
-                      />
-                    </Group>
-                    <Group grow mt={12}>
-                      <Button
-                        mb={12}
-                        onClick={() => {
-                          otpSent
-                            ? resendOTP()
-                            : sendOTP({
-                                numberOfMonths: paymentForm.values.numberOfMonths,
-                                customerPhone: paymentForm.values.customerPhone,
-                                birthYear: paymentForm.values.birthYear,
-                                OTPSent: setOtpSent,
-                              })
-                        }}
-                      >
-                        {otpSent ? t('Resend OTP') : t('Send OTP')}
-                      </Button>
-                    </Group>
-                  </Box>
-                  <Group
-                    grow
-                    sx={(theme) => ({
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'baseline',
-                      [theme.fn.smallerThan('md')]: {
-                        marginTop: 12,
-                      },
-                    })}
-                  >
-                    <TextInput required {...paymentForm.getInputProps('OTP')} placeholder={t('write the OTP here')} />
-                    <Button
-                      onClick={() => {
-                        makePayment({
-                          OTP: paymentForm.values.OTP,
-                          numberOfMonths: paymentForm.values.numberOfMonths,
-                        })
-                      }}
-                    >
-                      {t('Make payment')}
-                    </Button>
-                  </Group>
 
-                </Box> */}
-                {/* {paymentMethods[0].value === paymentMethod && <PayWithSadad />} */}
-                {paymentMethods[0].value === paymentMethod && (
-                  <PayWithLocalCard />
-                )}
+              <Stack align="center">
+                <Group>
+                  <Text>
+                    {`${t("Started at")} ${
+                      data?.subscriptionInfo?.timeOfPayment
+                        ? convertDate(data?.subscriptionInfo?.timeOfPayment)
+                        : Number.NaN
+                    }`}
+                  </Text>
+                  <Text>
+                    {`${t("Ends at")} ${
+                      data?.subscriptionInfo?.expirationDate
+                        ? convertDate(data?.subscriptionInfo?.expirationDate)
+                        : Number.NaN
+                    }`}
+                  </Text>
+                </Group>
+                <Group spacing={5}>
+                  <ActionIcon
+                    size={42}
+                    variant="default"
+                    onClick={() => handlers.current.decrement()}
+                  >
+                    –
+                  </ActionIcon>
 
-                <Box>
-                  <Select
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e)}
-                    required
-                    data={paymentMethods}
-                    label={t("choose a payment method")}
-                    itemComponent={SelectItem}
+                  <NumberInput
+                    hideControls
+                    value={value}
+                    onChange={(val) => setValue(val)}
+                    handlersRef={handlers}
+                    // max={10}
+                    min={1}
+                    step={1}
+                    styles={{ input: { width: 54, textAlign: "center" } }}
                   />
-                </Box>
-              </Group>
+
+                  <ActionIcon
+                    size={42}
+                    variant="default"
+                    onClick={() => handlers.current.increment()}
+                  >
+                    +
+                  </ActionIcon>
+                </Group>
+                <Button
+                  onClick={() => {
+                    updateSubscription({ numberOfMonths: value });
+                  }}
+                >
+                  {t("Update subscription")}
+                </Button>
+              </Stack>
             </Card>
           </Stack>
         )

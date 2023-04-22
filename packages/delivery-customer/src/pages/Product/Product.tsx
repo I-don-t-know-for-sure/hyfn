@@ -32,6 +32,7 @@ import { storeServiceFee } from "../../config/constents";
 import { useImage } from "contexts/imageContext/ImageProvider";
 import { calculatePrecision, calculateStep } from "./functions";
 import HtmlRenderer from "components/HtmlReader";
+import { Carousel } from "@mantine/carousel";
 
 interface ProductProps {}
 
@@ -372,35 +373,43 @@ const Product: React.FC<ProductProps> = ({}) => {
               },
             })}
             ImageComponent={
-              <AspectRatio
-                ratio={500 / 500}
-                sx={(theme) => ({
-                  maxWidth: 500,
-                  borderRadius: "6px",
-                  maxHeight: 500,
-                  [theme.fn.largerThan("sm")]: {
-                    maxWidth: 300,
-                    maxHeight: 300,
-                  },
-                })}
-                mx="auto"
-              >
-                <Image
-                  radius={6}
-                  sx={{
-                    width: "100%",
+              <Carousel>
+                {product.images.map((image) => {
+                  return (
+                    <Carousel.Slide>
+                      <AspectRatio
+                        ratio={500 / 500}
+                        sx={(theme) => ({
+                          maxWidth: 500,
+                          borderRadius: "6px",
+                          maxHeight: 500,
+                          [theme.fn.largerThan("sm")]: {
+                            maxWidth: 300,
+                            maxHeight: 300,
+                          },
+                        })}
+                        mx="auto"
+                      >
+                        <Image
+                          radius={6}
+                          sx={{
+                            width: "100%",
 
-                    height: "100px",
-                  }}
-                  imageName={
-                    product?.images?.length > 0
-                      ? product.images[0]
-                      : "c72e349a9bc184cbdcfb1386060d4b5b"
-                  }
-                />
-              </AspectRatio>
+                            height: "100px",
+                          }}
+                          imageName={
+                            product?.images?.length > 0
+                              ? image
+                              : "c72e349a9bc184cbdcfb1386060d4b5b"
+                          }
+                        />
+                      </AspectRatio>
+                    </Carousel.Slide>
+                  );
+                })}
+              </Carousel>
             }
-            src={`${url}initial/${product.images[0]}`}
+            src={`${url}preview/${product.images[0]}`}
           />
           {/* <AspectRatio
             ratio={500 / 500}

@@ -1,7 +1,6 @@
 import Menu from "components/Menu/Menu";
 // import RequireAuth from 'components/RequireAuth'
 
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { Amplify } from "aws-amplify";
@@ -10,11 +9,12 @@ import DriversManagement from "pages/DriversManagement/DriversManagement";
 import SignUp from "pages/SignUp/SignUp";
 import LogIn from "pages/LogIn/LogIn";
 import ActiveOrders from "pages/ActiveOrders/ActiveOrder";
-import OrderHistory from "pages/OrderHistory/OrderHistory";
+
 import Page from "components/Page";
 import CreateManagerAccount from "pages/CreateManagerAccount/CreateManagerAccount";
 import ManagementInfo from "pages/ManagementInfo/ManagementInfo";
 import { useTestQuery } from "hooks/useTestQuery";
+import Orders from "pages/Order/Orders";
 
 function App() {
   Amplify.configure({
@@ -62,21 +62,14 @@ function App() {
             }
           />
           <Route
-            path="/activeOrder"
+            path="/orders"
             element={
               <Page>
-                <ActiveOrders />
+                <Orders />
               </Page>
             }
           />
-          <Route
-            path="/orderHistory"
-            element={
-              <Page>
-                <OrderHistory />
-              </Page>
-            }
-          />
+
           <Route
             path="/createManagement"
             element={

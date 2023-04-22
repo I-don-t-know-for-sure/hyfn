@@ -21,11 +21,14 @@ export const generateProductDescriptionHandler = async ({
   eventBusName,
   client,
   storeId,
+  url,
 }: {
   products: any[];
   eventBusName: string;
   client: MainFunctionProps['client'];
   storeId: string;
+
+  url: string;
 }) => {
   const product = products.pop();
 
@@ -157,7 +160,7 @@ export const generateProductDescriptionHandler = async ({
   }
 
   if (products.length > 0) {
-    const eventBridge = new AWS.EventBridge();
+    /*  const eventBridge = new AWS.EventBridge();
     const params = {
       Entries: [
         {
@@ -166,9 +169,9 @@ export const generateProductDescriptionHandler = async ({
             storeId,
             eventBusName: eventBusName,
           }),
-          DetailType: 'generate_product_description',
           EventBusName: process.env.generateProductDescriptionEventBus,
-          Source: 'generate_product_description',
+          DetailType: process.env.generateProductDescriptionEventBusDetailType,
+          Source: process.env.generateProductDescriptionEventBusSource,
         },
       ],
     };
@@ -180,14 +183,18 @@ export const generateProductDescriptionHandler = async ({
       } else {
         console.log('Success', data);
       }
-    });
+    }); */
+
+    axios.post(url, { products, storeId, eventBusName: eventBusName, url });
   }
 };
 
 export const handler = async (event) => {
-  const { eventBusName, products, storeId } = event.detail;
+  console.log('🚀 ~ file: generateProductDescription.ts:188 ~ handler ~ event:', event);
+
+  const { eventBusName, products, storeId, url } = JSON.parse(event.body);
   const client = await getMongoClientWithIAMRole();
-  return await generateProductDescriptionHandler({ client, eventBusName, products, storeId });
+  return await generateProductDescriptionHandler({ client, eventBusName, products, storeId, url });
 };
 
 const createChatPrompt = (prompt: any) => {

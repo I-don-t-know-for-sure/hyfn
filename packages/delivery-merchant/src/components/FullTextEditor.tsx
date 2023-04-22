@@ -15,14 +15,9 @@ import { createStyles } from "@mantine/core";
 interface FullTextEditorProps {
   value: string;
   setValue: any;
-  newContent?: string;
 }
 
-const FullTextEditor: React.FC<FullTextEditorProps> = ({
-  setValue,
-  value,
-  newContent,
-}) => {
+const FullTextEditor: React.FC<FullTextEditorProps> = ({ setValue, value }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -49,22 +44,13 @@ const FullTextEditor: React.FC<FullTextEditorProps> = ({
   //   editor?.commands?.setContent(newContent);
   // }, [newContent]);
 
-  // useEffect(() => {
-  //   if (editor?.isEmpty) {
-  //     console.log("🚀 ~ file: useFullTextEditor.tsx:20 ~ value:", value);
+  useEffect(() => {
+    if (editor?.isEmpty) {
+      console.log("🚀 ~ file: useFullTextEditor.tsx:20 ~ value:", value);
 
-  //     const { schema } = editor.state;
-  //     const tr = editor.view.state.tr.replaceWith(
-  //       0,
-  //       editor.view.state.doc.content.size,
-  //       schema.nodes.doc.create(
-  //         {},
-  //         schema.nodes.paragraph.create({}, schema.)
-  //       )
-  //     );
-  //     editor.view.dispatch(tr);
-  //   }
-  // }, [value]);
+      editor.commands.setContent(value);
+    }
+  }, [value]);
   const useStyles = createStyles((theme) => ({
     root: {
       ...(theme.colorScheme === "dark"

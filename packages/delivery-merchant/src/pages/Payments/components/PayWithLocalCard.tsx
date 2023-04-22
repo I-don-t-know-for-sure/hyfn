@@ -1,11 +1,19 @@
-import { Box, Button, Center, Group, NumberInput, Text, useMantineColorScheme } from '@mantine/core'
-import { monthlySubscriptionCost } from 'config/constants'
-import { usePayWithLocalCard } from 'hooks/usePayWithLocalCard'
-import { t } from 'utils/i18nextFix'
-import { useEffect, useState } from 'react'
+import {
+  Box,
+  Button,
+  Center,
+  Group,
+  NumberInput,
+  Text,
+  useMantineColorScheme,
+} from "@mantine/core";
+import { monthlySubscriptionCost } from "config/constants";
+import { usePayWithLocalCard } from "hooks/usePayWithLocalCard";
+import { t } from "utils/i18nextFix";
+import { useEffect, useState } from "react";
 
-import { useCreateLocalCatdTransaction } from '../hooks/payWithLocalCard/useCreateLocalCardTransaction'
-import { useLocation } from 'react-router'
+import { useCreateLocalCatdTransaction } from "../hooks/payWithLocalCard/useCreateLocalCardTransaction";
+import { useLocation } from "react-router";
 
 export const PayWithLocalCard: React.FC = () => {
   const {
@@ -15,31 +23,33 @@ export const PayWithLocalCard: React.FC = () => {
     isSuccess,
     data,
     isIdle,
-  } = useCreateLocalCatdTransaction()
-  const [numberOfMonths, setNumberOfMonths] = useState(0)
-  const [paying, setPaying] = useState(false)
-  usePayWithLocalCard()
+  } = useCreateLocalCatdTransaction();
+  const [amount, setAmount] = useState(0);
+  const [paying, setPaying] = useState(false);
+  usePayWithLocalCard();
   useEffect(() => {
     if (isError) {
-      setPaying(false)
+      setPaying(false);
     }
-  })
-  const { colorScheme } = useMantineColorScheme()
+  });
+  const { colorScheme } = useMantineColorScheme();
 
-  const location = useLocation()
-  console.log('🚀 ~ file: PayWithLocalCard.tsx:28 ~ location', location)
+  const location = useLocation();
+  console.log("🚀 ~ file: PayWithLocalCard.tsx:28 ~ location", location);
   useEffect(() => {
     if (!isLoading && isSuccess && data && !isIdle) {
-      const { configurationObject } = data
+      const { configurationObject } = data;
 
       const queryString =
-        '?' +
+        "?" +
         new URLSearchParams({
           ...configurationObject,
-          url: `${import.meta.env.VITE_APP_BASE_URL}/validateLocalCardTransaction`,
+          url: `${
+            import.meta.env.VITE_APP_BASE_URL
+          }/validateLocalCardTransaction`,
           colorScheme,
-        }).toString()
-      window.open(import.meta.env.VITE_APP_PAYMENT_APP_URL + queryString)
+        }).toString();
+      window.open(import.meta.env.VITE_APP_PAYMENT_APP_URL + queryString);
       // window.location.href = 'http://localhost:4001' + queryString
 
       // console.log('🚀 ~ file: PayWithLocalCard.tsx ~ line 20 ~ useEffect ~ configurationObject', configurationObject)
@@ -59,28 +69,32 @@ export const PayWithLocalCard: React.FC = () => {
       // }
       // window.Lightbox.Checkout.showLightbox()
     }
-  }, [data, isLoading, isSuccess])
+  }, [data, isLoading, isSuccess]);
 
   return (
     <Box>
-      <Group>
+      {/* <Group>
         <Text weight={700}>{t('Cost')}</Text> :<Text>{numberOfMonths * monthlySubscriptionCost}</Text>
-      </Group>
-      <NumberInput value={numberOfMonths} onChange={(e) => setNumberOfMonths(e)} label={t('Number of months')} />
+      </Group> */}
+      <NumberInput
+        value={amount}
+        onChange={(e) => setAmount(e)}
+        label={t("Amount")}
+      />
       <Center>
         <Button
           mt={12}
-          sx={{ margin: '0px auto' }}
+          sx={{ margin: "0px auto" }}
           disabled={isLoading || paying}
           onClick={() => {
             // TODO add transaction before opening the payment gateway
-            createLocalCardTransaction({ numberOfMonths })
-            setPaying(true)
+            createLocalCardTransaction({ amount });
+            setPaying(true);
           }}
         >
-          {t('Show payment gateway')}
+          {t("Show payment gateway")}
         </Button>
       </Center>
     </Box>
-  )
-}
+  );
+};

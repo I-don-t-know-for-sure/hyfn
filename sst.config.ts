@@ -35,6 +35,8 @@ export default {
       .stack(imagesBucketStack)
       .stack(authBucketStack)
       .stack(kmsStack)
+      .stack(storeCognitoStack)
+      .stack(storeApiStack)
       .stack(customerCognitoStack)
       .stack(customerApiStack)
       .stack(adminCognitoStack)
@@ -42,10 +44,8 @@ export default {
       .stack(managementCognitoStack)
       .stack(managementApiStack)
       .stack(driverCognitoStack)
-      .stack(driverApiStack)
-      .stack(libraryCognitoStack)
-      .stack(libraryApiStack)
-      .stack(storeCognitoStack)
-      .stack(storeApiStack);
+      .stack(driverApiStack);
+    // .stack(libraryCognitoStack)
+    // .stack(libraryApiStack)
   },
 } satisfies SSTConfig;

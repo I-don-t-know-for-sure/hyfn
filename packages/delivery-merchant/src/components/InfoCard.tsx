@@ -2,11 +2,12 @@ import {
   Box,
   Card,
   CardSection,
+  Paper,
   Skeleton,
   Text,
   TextInput,
 } from "@mantine/core";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import React from "react";
 
 const InfoCard: React.FC<{
@@ -19,7 +20,7 @@ const InfoCard: React.FC<{
   isLoading?: boolean;
 }> = ({ onChangeHandler, info, isLoading }) => {
   return (
-    <Card shadow={"sm"} p={"md"} sx={{ margin: "auto" }}>
+    <Paper shadow={"sm"} p={"md"} sx={{}}>
       {isLoading ? (
         <>
           <Box>
@@ -32,7 +33,7 @@ const InfoCard: React.FC<{
           </Box>
         </>
       ) : (
-        <CardSection m={"sm"}>
+        <>
           <TextInput
             label={t("Collection name")}
             required
@@ -49,9 +50,9 @@ const InfoCard: React.FC<{
               onChangeHandler(e.target.value, "textInfo", "description")
             }
           />
-        </CardSection>
+        </>
       )}
-    </Card>
+    </Paper>
   );
 };
 

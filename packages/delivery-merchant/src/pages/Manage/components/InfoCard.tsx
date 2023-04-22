@@ -54,7 +54,7 @@ const InfoCard: React.FC<ProductsCard> = ({
   }, [value]);
 
   return (
-    <Paper shadow={"sm"} p={"md"} sx={{ margin: "auto" }}>
+    <Paper shadow={"sm"} p={"md"}>
       {isLoading ? (
         <>
           <Box>
@@ -92,17 +92,19 @@ const InfoCard: React.FC<ProductsCard> = ({
                 />
               );
             })()} */}
-          {!isLoading && productInfo?.textInfo?.description && (
+          {!isLoading && (
             <Stack>
               <Group position="apart">
                 <Text weight={700}>{t("Description")}</Text>{" "}
-                <GenerateDescriptionModal
-                  productId={productId}
-                  onDescriptionChangeHandler={(newDescription: string) => {
-                    // setGenerateDescription(newDescription);
-                    // onChangeHandler(newDescription, "textInfo", "description");
-                  }}
-                />
+                {productId && (
+                  <GenerateDescriptionModal
+                    productId={productId}
+                    onDescriptionChangeHandler={(newDescription: string) => {
+                      // setGenerateDescription(newDescription);
+                      // onChangeHandler(newDescription, "textInfo", "description");
+                    }}
+                  />
+                )}
               </Group>
 
               <FullTextEditor

@@ -1,4 +1,13 @@
-import { Box, Button, Container, Divider, Grid, Text } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Flex,
+  Grid,
+  Stack,
+  Text,
+} from "@mantine/core";
 import InfoCard from "components/InfoCard";
 import usePersistState from "hooks/usePersistState";
 import React, { useEffect, useState } from "react";
@@ -123,18 +132,21 @@ const CreateCollection: React.FC<CreateCollectionProps> = ({ requestType }) => {
       {/* <Helmet>
         <title>{t('New Collection')}</title>
       </Helmet> */}
+
       <Grid grow>
         <Grid.Col sm={3} md={6} lg={7}>
-          <InfoCard onChangeHandler={onChangeHandler} info={collectionInfo} />
-          <TypeCard
-            onChangeHandler={onChangeHandler}
-            collectionInfo={collectionInfo}
-            setCollectionInfo={setCollectionInfo}
-          />
-          <ProductsSelection
-            collectionInfo={collectionInfo}
-            onChangeHandler={onChangeHandler}
-          />
+          <Stack>
+            <InfoCard onChangeHandler={onChangeHandler} info={collectionInfo} />
+            <TypeCard
+              onChangeHandler={onChangeHandler}
+              collectionInfo={collectionInfo}
+              setCollectionInfo={setCollectionInfo}
+            />
+            <ProductsSelection
+              collectionInfo={collectionInfo}
+              onChangeHandler={onChangeHandler}
+            />
+          </Stack>
         </Grid.Col>
         <Grid.Col sm={1} md={3} lg={3}>
           <StatusCard

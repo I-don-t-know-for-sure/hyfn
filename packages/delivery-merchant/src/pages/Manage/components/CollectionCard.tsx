@@ -71,7 +71,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
   console.log(barcodeProducts);
 
   return (
-    <Container>
+    <>
       {isLoading ? (
         <Paper
           // sx={{ margin: 'auto' }}
@@ -274,7 +274,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
           </Container>
         </Paper>
       )}
-    </Container>
+    </>
   );
 };
 

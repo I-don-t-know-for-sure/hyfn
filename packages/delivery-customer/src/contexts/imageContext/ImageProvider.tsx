@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext } from "react";
 // import { UserContextApi } from "./types";
 // userInfo : {}
 // updaters: () => {}
@@ -21,7 +21,7 @@ const ImageProvider: React.FC = ({ children }) => {
     <ImageContext.Provider
       value={{
         url: `${import.meta.env.VITE_APP_BUCKET_URL}/`,
-        screenSizes: ['mobile', 'tablet', 'laptop'],
+        screenSizes: ["mobile", "tablet"],
       }}
     >
       {children}
@@ -32,7 +32,7 @@ const ImageProvider: React.FC = ({ children }) => {
 export const useImage = () => {
   const image = useContext(ImageContext);
   if (!image) {
-    throw new Error('call inside the component tree');
+    throw new Error("call inside the component tree");
   }
 
   return image;

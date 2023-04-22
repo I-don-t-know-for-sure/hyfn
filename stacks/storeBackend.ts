@@ -8,13 +8,11 @@ import {
   EventBus,
   Queue,
 } from "sst/constructs";
-import * as cdk from "aws-cdk-lib";
+
 import * as iam from "aws-cdk-lib/aws-iam";
 import { config } from "../envVaraibles";
-import * as events from "aws-cdk-lib/aws-events";
-import * as targets from "aws-cdk-lib/aws-events-targets";
+
 import { getStage } from "./getStage";
-import { frConfig } from "../frEnvVaraibles";
 
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
@@ -72,13 +70,49 @@ export function storeApiStack({ stack }: StackContext) {
       secretAccessKey: config[stage].secretAccessKey,
     },
   });
+  const generateDescription = new Function(stack, "generateDescription", {
+    role: defaultFunction.role,
+    timeout: 300,
+    functionName: "generateProductDescription" + stack.stage,
+
+    url: true,
+    handler:
+      pathToLambdas +
+      "generateProductDescription/generateProductDescription.handler",
+    environment: {
+      kmsKeyARN: keyArn,
+      //////////////////////////
+      chat_gpt_api_key: config[stage].chat_gpt_api_key,
+
+      MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+      accessKeyId: config[stage].accessKeyId,
+      bucketName: imagesBucketName,
+      bucketArn: s3Bucket.bucketArn,
+      groupId: config[stage].groupId,
+      moalmlatDataService: config[stage].moalmlatDataService,
+      userPoolId: auth.userPoolId,
+      userPoolClientId: auth.userPoolClientId,
+      mongoPrivetKey: config[stage].mongoPrivetKey,
+      mongoPublicKey: config[stage].mongoPublicKey,
+      region: stack.region,
+      sadadURL: config[stage].sadadURL,
+      secretKey: config[stage].secretKey,
+      MerchantId: config[stage].MerchantId,
+      TerminalId: config[stage].TerminalId,
+      mongdbURLKey: config[stage].mongdbURLKey,
+
+      sadadApiKey: config[stage].sadadApiKey,
+
+      secretAccessKey: config[stage].secretAccessKey,
+    },
+  });
 
   const eventBus = new EventBus(stack, "Bus", {
     rules: {
       backgroundRemoval: {
         pattern: {
-          source: ["background_removal"],
-          detailType: ["background_removal"],
+          source: ["background_removal" + stack.stage],
+          detailType: ["background_removal" + stack.stage],
         },
 
         targets: {
@@ -87,32 +121,10 @@ export function storeApiStack({ stack }: StackContext) {
               role: defaultFunction.role,
               timeout: 300,
               handler:
-                pathToLambdas + "setBackgroundWhite/setBackgroundWhite.handler",
+                pathToLambdas +
+                "setBackgroundWhite/setBackgroundWhiteEventBus.handler",
               environment: {
-                kmsKeyARN: keyArn,
-                //////////////////////////
-                chat_gpt_api_key: config[stage].chat_gpt_api_key,
-
-                MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
-                accessKeyId: config[stage].accessKeyId,
-                bucketName: imagesBucketName,
-                bucketArn: s3Bucket.bucketArn,
-                groupId: config[stage].groupId,
-                moalmlatDataService: config[stage].moalmlatDataService,
-                userPoolId: auth.userPoolId,
-                userPoolClientId: auth.userPoolClientId,
-                mongoPrivetKey: config[stage].mongoPrivetKey,
-                mongoPublicKey: config[stage].mongoPublicKey,
-                region: stack.region,
-                sadadURL: config[stage].sadadURL,
-                secretKey: config[stage].secretKey,
-                MerchantId: config[stage].MerchantId,
-                TerminalId: config[stage].TerminalId,
-                mongdbURLKey: config[stage].mongdbURLKey,
-
-                sadadApiKey: config[stage].sadadApiKey,
-
-                secretAccessKey: config[stage].secretAccessKey,
+                url: removeBackgrounds.url || "",
               },
             },
           },
@@ -127,8 +139,8 @@ export function storeApiStack({ stack }: StackContext) {
       rules: {
         backgroundRemoval: {
           pattern: {
-            source: ["generate_product_description"],
-            detailType: ["generate_product_description"],
+            source: ["generate_product_description" + stack.stage],
+            detailType: ["generate_product_description" + stack.stage],
           },
 
           targets: {
@@ -138,32 +150,9 @@ export function storeApiStack({ stack }: StackContext) {
                 timeout: 300,
                 handler:
                   pathToLambdas +
-                  "generateProductDescription/generateProductDescription.handler",
+                  "generateProductDescription/generateProductDescriptionEventBus.handler",
                 environment: {
-                  kmsKeyARN: keyArn,
-                  //////////////////////////
-                  chat_gpt_api_key: config[stage].chat_gpt_api_key,
-
-                  MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
-                  accessKeyId: config[stage].accessKeyId,
-                  bucketName: imagesBucketName,
-                  bucketArn: s3Bucket.bucketArn,
-                  groupId: config[stage].groupId,
-                  moalmlatDataService: config[stage].moalmlatDataService,
-                  userPoolId: auth.userPoolId,
-                  userPoolClientId: auth.userPoolClientId,
-                  mongoPrivetKey: config[stage].mongoPrivetKey,
-                  mongoPublicKey: config[stage].mongoPublicKey,
-                  region: stack.region,
-                  sadadURL: config[stage].sadadURL,
-                  secretKey: config[stage].secretKey,
-                  MerchantId: config[stage].MerchantId,
-                  TerminalId: config[stage].TerminalId,
-                  mongdbURLKey: config[stage].mongdbURLKey,
-
-                  sadadApiKey: config[stage].sadadApiKey,
-
-                  secretAccessKey: config[stage].secretAccessKey,
+                  url: generateDescription.url || "",
                 },
               },
             },
@@ -173,7 +162,7 @@ export function storeApiStack({ stack }: StackContext) {
     }
   );
 
-  const generateProductDescription = new Function(
+  /*  const generateProductDescription = new Function(
     stack,
     "generateProductDescription",
     {
@@ -212,7 +201,7 @@ export function storeApiStack({ stack }: StackContext) {
         secretAccessKey: config[stage].secretAccessKey,
       },
     }
-  );
+  ); */
   const api = new Api(stack, "storeApi", {
     defaults: {
       function: {
@@ -222,19 +211,20 @@ export function storeApiStack({ stack }: StackContext) {
           kmsKeyARN: keyArn,
           //////////////////////////
           chat_gpt_api_key: config[stage].chat_gpt_api_key,
-          generateProductDescription: generateProductDescription.url || "",
+          generateProductDescriptionUrl: generateDescription.url || "",
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketArn: s3Bucket.bucketArn,
           backgroundRemovalEventBus: eventBus.eventBusName,
-          backgroundRemovalEventBusDetailType: "background_removal",
-          backgroundRemovalEventBusSource: "background_removal",
+          backgroundRemovalEventBusDetailType:
+            "background_removal" + stack.stage,
+          backgroundRemovalEventBusSource: "background_removal" + stack.stage,
           generateProductDescriptionEventBus:
             generateProductDescriptionEventBus.eventBusName,
           generateProductDescriptionEventBusDetailType:
-            "generate_product_description",
+            "generate_product_description" + stack.stage,
           generateProductDescriptionEventBusSource:
-            "generate_product_description",
+            "generate_product_description" + stack.stage,
           bucketName: imagesBucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,
@@ -270,6 +260,13 @@ export function storeApiStack({ stack }: StackContext) {
             pathToLambdas +
             "generateDescriptionClient/generateDescriptionClient.handler",
           functionName: "generateDescriptionClient" + stack.stage,
+        },
+      },
+      "POST /updateSubscibtion": {
+        function: {
+          handler:
+            pathToLambdas + "updateSubscibtion/updateSubscibtion.handler",
+          functionName: "updateSubscibtion" + stack.stage,
         },
       },
       "POST /generateImageReaderPutUrl": {

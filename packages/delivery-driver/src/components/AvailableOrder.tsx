@@ -17,6 +17,9 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
 }) => {
   const { mutate: takeOrder } = useTakeOrder();
   console.log("🚀 ~ file: AvailableOrder.tsx:63 ~ userDocument:", userDocument);
+  const driverManagement = Array.isArray(userDocument?.driverManagement)
+    ? userDocument?.driverManagement[0]
+    : "";
 
   return (
     <Card m={"24px auto"} key={order?._id.toString()}>
@@ -31,17 +34,6 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
           label={t("Delivery date")}
           readOnly
         />
-        <Button
-          target="_blank"
-          rel="noopener noreferrer"
-          to={`https://www.google.com/maps/search/?api=1&query=${order?.coords?.coordinates[0][1]},${order?.coords?.coordinates[0][0]}`}
-          component={Link}
-        >
-          {t("See on map")}
-        </Button>
-        <Text>
-          {t("Number of stores")} : {order?.orders?.length}
-        </Text>
       </Group>
 
       <Group
@@ -56,11 +48,10 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
         <ProposalModal
           orderId={order._id.toString()}
           proposal={order?.proposals?.find(
-            (proposal) =>
-              proposal?.managementId === userDocument?.driverManagement[0]
+            (proposal) => proposal?.managementId === driverManagement
           )}
         />
-        {userDocument?.driverManagement === order.acceptedProposal && (
+        {driverManagement === order.acceptedProposal && (
           <Group>
             <Button
               onClick={() => {
@@ -75,6 +66,14 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
             </Button>
           </Group>
         )}
+        <Button
+          target="_blank"
+          rel="noopener noreferrer"
+          to={`https://www.google.com/maps/search/?api=1&query=${order?.coords?.coordinates[0][1]},${order?.coords?.coordinates[0][0]}`}
+          component={Link}
+        >
+          {t("See on map")}
+        </Button>
       </Group>
     </Card>
   );

@@ -6,9 +6,10 @@ export const tarnsactionStatus = {
   paying: 'Paying',
   paid: 'Paid',
 };
-export const storeServiceFee = 0.01;
-export const deliveryServiceFee = 0.15;
-export const customerServiceFee = 0.02;
+export const storeServiceFee = 0.0;
+export const deliveryServiceFee = 0.0;
+export const customerServiceFee = 0.03;
+export const baseServiceFee = 2.5;
 export const STORE_STATUS_PENDING = 'pending';
 export const STORE_STATUS_ACCEPTED = 'accepted';
 export const STORE_STATUS_PAID = 'paid';

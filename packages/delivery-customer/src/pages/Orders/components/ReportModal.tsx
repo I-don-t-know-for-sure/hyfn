@@ -1,8 +1,16 @@
-import { Button, Menu, Modal, Stack, TextInput, Textarea, UnstyledButton } from '@mantine/core';
-import { FullTextEditor } from 'components/FullTextEditor';
-import { t } from 'util/i18nextFix';;
-import React, { useState } from 'react';
-import { useReportOrder } from '../hooks/useReportOrder';
+import {
+  Button,
+  Menu,
+  Modal,
+  Stack,
+  TextInput,
+  Textarea,
+  UnstyledButton,
+} from "@mantine/core";
+
+import { t } from "util/i18nextFix";
+import React, { useState } from "react";
+import { useReportOrder } from "../hooks/useReportOrder";
 
 interface ReportModalProps {
   orderId: string;
@@ -10,7 +18,7 @@ interface ReportModalProps {
 
 const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
   const [opened, setOpened] = useState(false);
-  const [report, setReport] = useState('');
+  const [report, setReport] = useState("");
   const { mutate: submitReport } = useReportOrder();
   return (
     <>
@@ -21,7 +29,11 @@ const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
         }}
       >
         <Stack>
-          <Textarea label={t('Your Report')} value={report} onChange={(e) => setReport(e.target.value)} />
+          <Textarea
+            label={t("Your Report")}
+            value={report}
+            onChange={(e) => setReport(e.target.value)}
+          />
           {/* <FullTextEditor value={textEditor} setValue={setTextEditor} /> */}
           <Button
             mt={14}
@@ -30,7 +42,7 @@ const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
               submitReport({ orderId, report: { report } });
             }}
           >
-            {t('Submit')}
+            {t("Submit")}
           </Button>
         </Stack>
       </Modal>
@@ -38,15 +50,15 @@ const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
         variant="subtle"
         color="red"
         onClick={() => {
-          console.log('open');
+          console.log("open");
 
           setOpened(true);
         }}
         sx={{
-          color: 'red',
+          color: "red",
         }}
       >
-        {t('Report')}
+        {t("Report")}
       </Button>
       {/* <Menu.Item
         color="red"

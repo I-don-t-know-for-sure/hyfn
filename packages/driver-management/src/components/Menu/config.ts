@@ -37,19 +37,19 @@ export const useConfigData = () => {
     {
       label: t("Orders"),
       icon: MdReceipt,
-      items: [
-        {
-          label: t("Active orders"),
-          link: "/activeOrders",
-        },
+      // items: [
+      //   {
+      //     label: t("Active "),
+      //     link: "/activeOrders",
+      //   },
 
-        {
-          label: t("Order history"),
-          link: "/orderHistory",
-        },
-      ],
+      //   {
+      //     label: t("Order history"),
+      //     link: "/orderHistory",
+      //   },
+      // ],
+      link: `/orders`,
     },
-
     {
       label: t("Management Information"),
       link: "/management",

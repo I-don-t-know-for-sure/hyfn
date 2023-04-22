@@ -8,27 +8,44 @@ import {
   Stack,
   Text,
   UnstyledButton,
-  useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { usePrevious } from "@mantine/hooks";
+
 import { commonQuestions } from "config/constents";
 import { t } from "i18next";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FooterLinks } from "./components/Footer";
+import { FooterCentered } from "./components/Footer";
+
+import HtmlRenderer from "components/HtmlReader";
 import { useUser } from "contexts/userContext/User";
 
 interface LandingPageProps {}
 
 const LandingPage: React.FC<LandingPageProps> = ({}) => {
-  // const navigate = useNavigate();
-  // const { loggedIn } = useUser();
-  // useEffect(() => {
-  //   if (loggedIn) {
-  //     navigate("/home", { replace: true });
-  //   }
-  // }, [loggedIn]);
+  const navigate = useNavigate();
+  const { loggedIn } = useUser();
+  useEffect(() => {
+    if (loggedIn) {
+      navigate("/home", { replace: true });
+    }
+  }, [loggedIn]);
+  // create a useEffect that checks for changes in the url and if the url has #pricing we should do something
+  const { hash } = useLocation();
+
+  const [value, setValue] = useState<null | string>("2");
+
+  console.log("🚀 ~ file: LandingPage.tsx:44 ~ pathname:", hash);
+  useEffect(() => {
+    // check if pathname has #pricing
+    if (hash.includes("#pricing")) {
+      setValue("2");
+    }
+    // check if value is not #pricing and remove #pricing from pathname
+    if (value !== "#pricing") {
+      window.location.hash = "";
+    }
+  }, [hash, value]);
 
   return (
     <Stack
@@ -68,7 +85,7 @@ const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 },
               })}
             >
-              {t("Order anything for delivery or pickup today")}
+              {t("Order anything for delivery or pickup")}
             </Text>
             <Text size={"2.8vw"}>
               {t(
@@ -78,6 +95,8 @@ const LandingPage: React.FC<LandingPageProps> = ({}) => {
           </Box>
           <Stack align="center">
             <Button
+              component={Link}
+              to={"/signup"}
               sx={{
                 borderRadius: "18px",
                 width: "40vw",
@@ -100,11 +119,25 @@ const LandingPage: React.FC<LandingPageProps> = ({}) => {
       <Card
         sx={{
           minHeight: "290px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space",
+          alignItems: "center",
+          alignContent: "center",
         }}
       >
         <Stack spacing={15}>
           <Box>
-            <Text weight={700} size={"6vw"} sx={{ fontFamily: "sans-serif" }}>
+            <Text
+              weight={700}
+              sx={{
+                fontFamily: "sans-serif",
+                fontSize: "6vw",
+                [useMantineTheme().fn.largerThan("lg")]: {
+                  fontSize: "4vw",
+                },
+              }}
+            >
               {t("Sell on hyfn")}
             </Text>
             <Text size={"2.8vw"} sx={{ fontFamily: "sans-serif" }}>
@@ -115,6 +148,9 @@ const LandingPage: React.FC<LandingPageProps> = ({}) => {
           </Box>
           <Stack align="center">
             <Button
+              component={Link}
+              to={"https://store.hyfn.xyz/signup"}
+              target="_blank"
               sx={{
                 borderRadius: "18px",
                 width: "40vw",
@@ -140,87 +176,48 @@ const LandingPage: React.FC<LandingPageProps> = ({}) => {
             {t("Common questions")}
           </Text>
         </Container>
-        <Accordion>
-          {commonQuestions.map((commonQuestion, index) => {
-            return (
-              <Accordion.Item value={commonQuestion.question + index}>
-                <Accordion.Control>{commonQuestion.question}</Accordion.Control>
-                <Accordion.Panel>{commonQuestion.answer}</Accordion.Panel>
-              </Accordion.Item>
-            );
-          })}
-        </Accordion>
+        <Group position="center">
+          <Accordion
+            value={value}
+            onChange={setValue}
+            sx={(theme) => ({
+              width: theme.fn.largerThan("md") ? "70%" : "100%",
+            })}
+          >
+            {commonQuestions.map((commonQuestion, index) => {
+              return (
+                <Accordion.Item value={`${index}`}>
+                  <Accordion.Control>
+                    {commonQuestion.question}
+                  </Accordion.Control>
+                  <Accordion.Panel>
+                    <HtmlRenderer htmlString={commonQuestion.answer} />
+                  </Accordion.Panel>
+                </Accordion.Item>
+              );
+            })}
+          </Accordion>
+        </Group>
       </Stack>
-      <FooterLinks
-        data={
+      <FooterCentered
+        links={[
           {
-            data: [
-              {
-                title: "About",
-                links: [
-                  {
-                    label: "Features",
-                    link: "#",
-                  },
-                  {
-                    label: "Pricing",
-                    link: "#",
-                  },
-                  {
-                    label: "Support",
-                    link: "#",
-                  },
-                  {
-                    label: "Forums",
-                    link: "#",
-                  },
-                ],
-              },
-              {
-                title: "Project",
-                links: [
-                  {
-                    label: "Contribute",
-                    link: "#",
-                  },
-                  {
-                    label: "Media assets",
-                    link: "#",
-                  },
-                  {
-                    label: "Changelog",
-                    link: "#",
-                  },
-                  {
-                    label: "Releases",
-                    link: "#",
-                  },
-                ],
-              },
-              {
-                title: "Community",
-                links: [
-                  {
-                    label: "Join Discord",
-                    link: "#",
-                  },
-                  {
-                    label: "Follow on Twitter",
-                    link: "#",
-                  },
-                  {
-                    label: "Email newsletter",
-                    link: "#",
-                  },
-                  {
-                    label: "GitHub discussions",
-                    link: "#",
-                  },
-                ],
-              },
-            ],
-          }.data
-        }
+            label: "Become a partner store",
+            link: import.meta.env.VITE_APP_STORE_APP_URL,
+          },
+          {
+            label: "Pricing",
+            link: "#pricing",
+          },
+          {
+            label: "Privacy",
+            link: "#",
+          },
+          {
+            label: "Terms",
+            link: "#",
+          },
+        ]}
       />
     </Stack>
   );

@@ -31,41 +31,16 @@ export const mainFunction = async ({ arg, client, event }: MainFunctionProps) =>
     //   });
     // console.log([result]);
     // return [result] || [];
-  } else {
-    const db = client.db('base');
-    if (lastDoc) {
-      const orders = await db
-        .collection(`orders`)
-        .find({
-          $and: [
-            {
-              _id: { $gt: new ObjectId(lastDoc) },
-              city,
-              // coords: {
-              //   $near: {
-              //     $geometry: {
-              //       type: 'Point',
-              //       coordinates: [userCoords[1], userCoords[0]],
-              //     },
-              //     $maxDistance: 2000,
-              //   },
-              // },
-              status: { $elemMatch: { userType: 'driver', _id: '' } },
-              orderType: ORDER_TYPE_DELIVERY,
-              canceled: { $exists: false },
-            },
-          ],
-        })
-        .limit(20)
-        .toArray();
-      return orders || [];
-    }
-    console.log('false');
+  }
+  const db = client.db('base');
+  if (lastDoc) {
     const orders = await db
       .collection(`orders`)
       .find({
         $and: [
           {
+            _id: { $gt: new ObjectId(lastDoc) },
+            city,
             // coords: {
             //   $near: {
             //     $geometry: {
@@ -75,7 +50,6 @@ export const mainFunction = async ({ arg, client, event }: MainFunctionProps) =>
             //     $maxDistance: 2000,
             //   },
             // },
-            city,
             status: { $elemMatch: { userType: 'driver', _id: '' } },
             orderType: ORDER_TYPE_DELIVERY,
             canceled: { $exists: false },
@@ -84,14 +58,40 @@ export const mainFunction = async ({ arg, client, event }: MainFunctionProps) =>
       })
       .limit(20)
       .toArray();
-    console.log('🚀 ~ file: findOrders.js:53 ~ mainFunction ~ orders', orders);
-    console.log('🚀 ~ file: findOrders.js:53 ~ mainFunction ~ orders', orders);
-    if (!orders) {
-      return [];
-    }
-    console.log('anything');
     return orders || [];
   }
+  console.log('false');
+  const orders = await db
+    .collection(`orders`)
+    .find({
+      $and: [
+        {
+          // coords: {
+          //   $near: {
+          //     $geometry: {
+          //       type: 'Point',
+          //       coordinates: [userCoords[1], userCoords[0]],
+          //     },
+          //     $maxDistance: 2000,
+          //   },
+          // },
+          city,
+          status: { $elemMatch: { userType: 'driver', _id: '' } },
+          orderType: ORDER_TYPE_DELIVERY,
+          canceled: { $exists: false },
+        },
+      ],
+    })
+    .limit(20)
+    .toArray();
+  console.log('🚀 ~ file: findOrders.js:53 ~ mainFunction ~ orders', orders);
+  console.log('🚀 ~ file: findOrders.js:53 ~ mainFunction ~ orders', orders);
+  if (!orders) {
+    return [];
+  }
+  console.log('anything');
+  return orders || [];
+
   // Ensures that the client will close when you finish/error
 };
 export const handler = async (event) => {
