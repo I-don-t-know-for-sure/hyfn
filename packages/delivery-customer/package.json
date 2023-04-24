@@ -46,6 +46,7 @@
     "customer-backend": "*",
     "dayjs": "^1.11.7",
     "embla-carousel-react": "^7.0.9",
+    "firebase": "^9.20.0",
     "hyfn-client": "*",
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
@@ -94,8 +95,10 @@
     "@vitejs/plugin-react": "^3.1.0",
     "typescript": "^4.9.3",
     "vite": "^4.1.0",
+    "vite-plugin-pwa": "^0.14.7",
     "vite-plugin-svgr": "^2.4.0",
-    "vite-tsconfig-paths": "^4.0.5"
+    "vite-tsconfig-paths": "^4.0.5",
+    "workbox-window": "^6.5.4"
   },
   "imports": {
     "src/*": "./src/*"

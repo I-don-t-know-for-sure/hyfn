@@ -25,3 +25,4 @@ envVaraibles.ts
 envVaraibles.js
 output.txt
 .env
+**/dev-dist/**/*

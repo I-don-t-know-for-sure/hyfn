@@ -1,3 +1,5 @@
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken } from "firebase/messaging";
 import { useEffect } from "react";
 
 import "./App.css";
@@ -28,6 +30,7 @@ import ManageAddresses from "./pages/Addresses/Addresses";
 import CreateCustomer from "./pages/CreateCustomer/CreateCustomer";
 import { Amplify } from "aws-amplify";
 import LandingPage from "pages/LandingPage/LandingPage";
+import { log } from "console";
 
 function App() {
   console.log("🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_REGION:", {
@@ -56,7 +59,85 @@ function App() {
   );
   console.log("update");
 
-  useEffect(() => {}, []);
+  const firebaseConfig = {
+    apiKey: "AIzaSyABU1k2F8JNz8fh9J4rgjvkDPO4gPA4PC0",
+    authDomain: "delivery-driver-d2f7d.firebaseapp.com",
+    projectId: "delivery-driver-d2f7d",
+    storageBucket: "delivery-driver-d2f7d.appspot.com",
+    messagingSenderId: "325762176723",
+    appId: "1:325762176723:web:3f7bfeff68347945f42626",
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  const messaging = getMessaging(app);
+
+  if ("Notification" in window) {
+    // if (Notification.permission !== "granted") {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        // Permission has been granted, you can now display notifications
+        // console.log("Notification permission granted.");
+        // Call the messaging.getToken() method here to retrieve the registration token
+        // and send push notifications to the device.
+        console.log("dbcjbdhcbdhcbdbhcbd");
+        getToken(messaging, {
+          vapidKey:
+            "BOZjfn3Jxe4QjMf4Bws0kN5VUgVXm9Yxg2J8sp1SKO2JBwNNPKS6vt1wWsVxpe1F6inXOEHCtYxNSyiV6trHjiU",
+        })
+          .then((currentToken) => {
+            if (currentToken) {
+              console.log("Device token:", currentToken);
+              // send the token to your server to associate it with the user
+            } else {
+              console.log("No registration token available.");
+            }
+          })
+          .catch((error) => {
+            console.log(
+              "An error occurred while retrieving the device token.",
+              error
+            );
+          });
+      } else {
+        // Permission has not been granted, you cannot display notifications
+      }
+    });
+    // }
+    // Notification.requestPermission().then((permission) => {
+    //   console.log(
+    //     "🚀 ~ file: App.tsx:78 ~ Notification.requestPermission ~ permission:",
+    //     permission
+    //   );
+    //   if (permission === "granted") {
+    //     // console.log("Notification permission granted.");
+    //     // // Call the messaging.getToken() method here to retrieve the registration token
+    //     // // and send push notifications to the device.
+    //     // getToken(messaging, {
+    //     //   vapidKey:
+    //     //     "BOZjfn3Jxe4QjMf4Bws0kN5VUgVXm9Yxg2J8sp1SKO2JBwNNPKS6vt1wWsVxpe1F6inXOEHCtYxNSyiV6trHjiU",
+    //     // })
+    //     //   .then((currentToken) => {
+    //     //     if (currentToken) {
+    //     //       console.log("Device token:", currentToken);
+    //     //       // send the token to your server to associate it with the user
+    //     //     } else {
+    //     //       console.log("No registration token available.");
+    //     //     }
+    //     //   })
+    //     //   .catch((error) => {
+    //     //     console.log(
+    //     //       "An error occurred while retrieving the device token.",
+    //     //       error
+    //     //     );
+    //     //   });
+    //   } else {
+    //     console.log("Unable to get permission to notify.");
+    //   }
+    // });
+  }
+  // get device token
 
   console.log("🚀 ~ file: App.tsx:26 ~ test3:", test3);
   console.log("🚀 ~ file: App.tsx:26 ~ test3:", test3);
