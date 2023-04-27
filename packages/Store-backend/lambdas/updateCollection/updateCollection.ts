@@ -1,4 +1,15 @@
-export const updateCollectionHandler = async ({ arg, client, session }: MainFunctionProps) => {
+('use strict');
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { ObjectId } from 'mongodb';
+interface UpdateCollectionProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
+export const updateCollectionHandler = async ({
+  arg,
+  client,
+  session,
+  userId,
+}: UpdateCollectionProps) => {
   // const arg = event;
   const {
     textInfo,
@@ -11,14 +22,20 @@ export const updateCollectionHandler = async ({ arg, client, session }: MainFunc
     addedStoreFrontProducts,
     removedStoreFrontProducts,
   } = arg[0];
-  const { country, city, id } = arg[1];
+  // const { country, city, id } = arg[1];
   const collectionId = arg[2];
   let result = 'success';
   const mongo = client.db('base');
+  // const storeDoc = await client
+  //   .db('generalData')
+  //   .collection('storeInfo')
+  //   .findOne({ _id: new ObjectId(id) }, { session });
   const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
-    .findOne({ _id: new ObjectId(id) }, { session });
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const id = storeDoc._id.toString();
   const oldCol = storeDoc.collections.find((collection) => collection._id === collectionId);
   if (collectionType === 'manual') {
     await mongo.collection(`products`).updateMany(
@@ -186,90 +203,11 @@ export const updateCollectionHandler = async ({ arg, client, session }: MainFunc
     console.log(updateQuery);
     await client.db('base').collection('products').bulkWrite(updateQuery, { session });
   }
-  // if (addedStoreFrontProducts.length > 0 && isActive) {
-  //   let storeFrontProducts = [];
-  //   const length =
-  //     addedStoreFrontProducts.length > 20
-  //       ? 20
-  //       : addedStoreFrontProducts.length;
-  //   for (let i = 0; i < length; i++) {
-  //     const { value } = addedStoreFrontProducts[i];
-  //     const product = await findOne(
-  //       { _id: new ObjectId(value) },
-  //       {
-  //         session,
-  //         projection: {
-  //           textInfo: 1,
-  //           pricing: 1,
-  //           _id: 1,
-  //           isActive: 1,
-  //           "options.hasOptions": 1,
-  //           images: 1,
-  //           measurementSystem: 1,
-  //         },
-  //       },
-  //       client.db("base").collection("products")
-  //     );
-  //     if (product.isActive) {
-  //       storeFrontProducts.push(product);
-  //     }
-  //   }
-  //   console.log(storeFrontProducts, "hereeeeeeeeeeeeeeee");
-  //   await client
-  //     .db("base")
-  //     .collection("storeFronts")
-  //     .updateOne(
-  //       { _id: new ObjectId(id) },
-  //       {
-  //         $push: {
-  //           [`${textInfo.title}.products`]: {
-  //             $each: storeFrontProducts,
-  //           },
-  //         },
-  //       },
-  //       { session }
-  //     );
-  // }
-  // if (removedStoreFrontProducts.length > 0 && isActive) {
-  //   const key = Object.keys(storeFront).find(
-  //     (key) => storeFront[key]?.collectionId === collectionId
-  //   );
-  //   if (!key) {
-  //     result = [];
-  //   } else {
-  //     console.log(key, "keys ssssss");
-  //     const { products } = storeFront[key];
-  //     const storeFrontProducts = products?.filter((product) => {
-  //       const isProductInRemoveList = removedStoreFrontProducts.find(
-  //         ({ value }) => value === product._id.toString()
-  //       );
-  //       return !isProductInRemoveList;
-  //     });
-  //     console.log(storeFrontProducts, "dhdhdhdhdhdh");
-  //     await client
-  //       .db("base")
-  //       .collection("storeFronts")
-  //       .updateOne(
-  //         { _id: new ObjectId(id) },
-  //         {
-  //           $set: {
-  //             [`${textInfo.title}.products`]: storeFrontProducts,
-  //           },
-  //         },
-  //         { session }
-  //       );
-  //   }
-  // }
+
   return result;
   // Ensures that the client will close when you finish/error
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
 };
-interface UpdateCollectionProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapperWithSession({
     event,

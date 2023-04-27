@@ -1,14 +1,10 @@
-import { randomId } from '@mantine/hooks';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { USER_DOCUMENT } from 'config/constents';
-import { useCart } from 'contexts/cartContext/Provider';
-import { useLocation } from 'contexts/locationContext/LocationContext';
-import { useUser } from 'contexts/userContext/User';
-import { t } from 'util/i18nextFix';;
-import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useCart } from "contexts/cartContext/Provider";
 
-import fetchUtil from 'util/fetch';
+import { useUser } from "contexts/userContext/User";
+
+import { useMutation, useQueryClient } from "react-query";
+
+import fetchUtil from "util/fetch";
 
 export const useUpdateOrderProducts = () => {
   const { cart } = useCart();
@@ -33,6 +29,6 @@ export const useUpdateOrderProducts = () => {
       onSuccess: () => {
         queryClient.invalidateQueries([userId]);
       },
-    },
+    }
   );
 };

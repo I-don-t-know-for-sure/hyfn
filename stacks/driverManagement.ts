@@ -40,6 +40,9 @@ export function managementApiStack({ stack }: StackContext) {
         environment: {
           kmsKeyARN: keyArn,
           /////////////////////////////
+          clientEmail: config[""]["firebaseAdminSDK-client_email"],
+          projectId: config[""]["firebaseAdminSDK-project_id"],
+          privateKey: config[""]["firebaseAdminSDK-private_key"],
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
@@ -74,6 +77,11 @@ export function managementApiStack({ stack }: StackContext) {
         function: {
           handler:
             pathToLambdas + "getPaymentRequests/getPaymentRequests.handler",
+        },
+      },
+      "POST /addEmployee": {
+        function: {
+          handler: pathToLambdas + "addEmployee/addEmployee.handler",
         },
       },
       "POST /getAllDrivers": {

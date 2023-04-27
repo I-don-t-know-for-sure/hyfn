@@ -10,6 +10,7 @@ export const useValidateManagementLocalCardTransaction = () => {
           import.meta.env.VITE_APP_BASE_URL
         }/validateManagmentLocalCardTransaction`,
       });
+
       return result;
     } catch (error) {
       console.log(

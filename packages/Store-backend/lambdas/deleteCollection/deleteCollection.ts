@@ -2,20 +2,22 @@ export const deleteCollectionHandler = async ({
   client,
   session,
   arg,
-  event,
+  userId,
 }: MainFunctionProps) => {
   var result;
-  const { id, city, country } = arg[0];
+
   const collectionId = arg[1];
   const mongo = client.db('base');
   console.log(JSON.stringify(arg), 'he');
   const storeDoc = await client
     .db('generalData')
-    .collection(`storeInfo`)
-    .findOne({ _id: new ObjectId(id) }, {});
-  console.log('he');
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const id = storeDoc._id.toString();
+
   const oldCol = storeDoc.collections.find((collection) => collection._id === collectionId);
-  console.log('he');
+
   await mongo.collection(`products`).updateMany(
     { storeId: id },
     {

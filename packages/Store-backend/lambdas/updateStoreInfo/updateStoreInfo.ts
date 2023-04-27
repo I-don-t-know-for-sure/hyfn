@@ -1,15 +1,27 @@
-export const updateStoreInfoHandler = async ({ arg, client, session }: MainFunctionProps) => {
+export const updateStoreInfoHandler = async ({
+  arg,
+  client,
+  session,
+  userId: merchantId,
+}: MainFunctionProps) => {
   var result;
-  const { storeFrontId, id, city, country } = arg[0];
+  // const { storeFrontId, id, city, country } = arg[0];
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: merchantId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const country = storeDoc.country;
+
   const newInfo = arg[1];
   const { imgaeObj, userId, balance, ...newStore } = newInfo;
-  const { userId: merchantId } = arg[arg.length - 1];
+  // const { userId: merchantId } = arg[arg.length - 1];
   const mongo = client.db('base');
   const storeCollection = client.db('generalData').collection(`storeInfo`);
   const storeFrontCollection = mongo.collection(`storeFronts`);
-  const storeDoc = await storeCollection.findOne({
-    userId: merchantId,
-  });
+  // const storeDoc = await storeCollection.findOne({
+  //   userId: merchantId,
+  // });
   const coordsArray = newStore.coords.split(',');
   console.log(JSON.stringify(coordsArray));
   if (Array.isArray(coordsArray)) {

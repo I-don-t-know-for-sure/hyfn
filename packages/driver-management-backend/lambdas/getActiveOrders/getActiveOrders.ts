@@ -10,7 +10,7 @@ export const getActiveOrdersHandler = async ({ arg, client, userId }: MainFuncti
   const userDocument = await client
     .db('generalData')
     .collection('driverManagement')
-    .findOne({ userId }, { projection: { _id: 1 } });
+    .findOne({ usersIds: userId }, { projection: { _id: 1 } });
   const { _id } = userDocument;
   console.log(
     '🚀 ~ file: getActiveOrders.ts:9 ~ getActiveOrdersHandler ~ lastDoc:',

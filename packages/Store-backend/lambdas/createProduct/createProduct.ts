@@ -1,5 +1,10 @@
-export const createProductHandler = async ({ arg, client }) => {
-  // await subscriptionCheck({ storedoc: userDocument, client, session, storeId: userDocument._id });
+('use strict');
+interface CreateProductProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+
+export const createProductHandler = async ({ arg, client, userId }: CreateProductProps) => {
   var result;
   const product = arg[0];
   const {
@@ -13,22 +18,18 @@ export const createProductHandler = async ({ arg, client }) => {
     imagesURLs,
     collections,
   } = product;
-  const { storeFrontId, id, country, city } = arg[1];
+
   console.log(product, 'vbvbvbvbvv');
   const images = imagesURLs;
   const mongo = client;
-  const storeDoc = await mongo
-    .db(`generalData`)
-    .collection(`storeInfo`)
-    .findOne({ _id: new ObjectId(id) }, {});
-  // if (storeDoc.userId !== privateId) {
-  //   throw "unathenticated request";
-  // }
-  // const storeFrontDoc = await findOne(
-  //   { _id: new ObjectId(storeFrontId) },
-  //   { session },
-  //   mongo.db("base").collection(`storeFronts`)
-  // );
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const id = storeDoc._id.toString();
+  const city = storeDoc.city;
+
   console.log(JSON.stringify(collections));
   const modifiedOptions = options?.options?.map((option) => {
     option?.optionValues;
@@ -88,67 +89,6 @@ export const createProductHandler = async ({ arg, client }) => {
           },
           {}
         );
-      // createIndex({collection: 'products', database: country, index: 'productSearch', mappings: {
-      // dynamic: false,
-      // fields: {
-      //   textInfo: {
-      //     type: 'document',
-      //     fields: {
-      //       title: {
-      //         type: 'document',
-      //         dynamic: true
-      //       },
-      //       description: {
-      //         type: 'document',
-      //         dynamic: true
-      //       }
-      //     }
-      //   }
-      // }
-      // }})
-      //   client.index(`${country}_${city}_products`).addDocument({
-      //     id: newProduct.insertedId,
-      //     title: textInfo.title,
-      //     description: textInfo.description,
-      //     price: pricing.price,
-      //     storeId: id,
-      //   });
-      // if (isActive) {
-      //   console.log("here", storeFrontId);
-      //   await [...collections, ...reducedCollections].map(
-      //     async (storeFront) => {
-      //       const { label } = storeFront;
-      //       if (!(storeFront[`${label}`]?.products?.length > 20)) {
-      //         await mongo
-      //           .db("base")
-      //           .collection(`storeFronts`)
-      //           .updateOne(
-      //             { _id: new ObjectId(storeFrontId) },
-      //             {
-      //               $push: {
-      //                 [`${label}.products`]: {
-      //                   textInfo,
-      //                   _id: newProduct.insertedId,
-      //                   pricing,
-      //                   measurementSystem,
-      //                   images: images,
-      //                   hasOptions: options.hasOptions,
-      //                 },
-      //               },
-      //             },
-      //             { session }
-      //           );
-      //       }
-      //       // client.index(`${country}_${city}_products`).addDocument({
-      //       //   id: newProduct.insertedId,
-      //       //   title: textInfo.title,
-      //       //   description: textInfo.description,
-      //       //   price: pricing.price,
-      //       //   storeId: id,
-      //       // });
-      //     }
-      //   );
-      // }
     }
     const newProduct = await mongo
       .db('base')
@@ -169,55 +109,7 @@ export const createProductHandler = async ({ arg, client }) => {
         },
         {}
       );
-    // if (isActive) {
-    //   console.log("here", storeFrontId);
-    //   await [...collections].map(async (storeFront) => {
-    //     const { label, value } = storeFront;
-    //     if (!(storeFront[`${label}`]?.products?.length > 0)) {
-    //       await mongo
-    //         .db("base")
-    //         .collection(`storeFronts`)
-    //         .updateOne(
-    //           { _id: new ObjectId(storeFrontId) },
-    //           {
-    //             $set: {
-    //               [`${label}.collectionName`]: label,
-    //               [`${label}.collectionId`]: value,
-    //             },
-    //           },
-    //           { session }
-    //         );
-    //     }
-    //     // if (!(storeFront[`${label}`]?.products?.length > 20)) {
-    //     //   await mongo
-    //     //     .db("base")
-    //     //     .collection(`storeFronts`)
-    //     //     .updateOne(
-    //     //       { _id: new ObjectId(storeFrontId) },
-    //     //       {
-    //     //         $push: {
-    //     //           [`${label}.products`]: {
-    //     //             textInfo,
-    //     //             _id: newProduct.insertedId,
-    //     //             pricing,
-    //     //             measurementSystem,
-    //     //             images: images,
-    //     //             hasOptions: options.hasOptions,
-    //     //           },
-    //     //         },
-    //     //       },
-    //     //       { session }
-    //     //     );
-    //     // }
-    //   });
-    //   //   client.index(`${country}_${city}_products`).addDocument({
-    //   //     id: newProduct.insertedId,
-    //   //     title: textInfo.title,
-    //   //     description: textInfo.description,
-    //   //     price: pricing.price,
-    //   //     storeId: id,
-    //   //   });
-    // }
+
     result = newProduct.insertedId.toString();
   } else {
     const newProduct = await mongo
@@ -244,12 +136,6 @@ export const createProductHandler = async ({ arg, client }) => {
   console.log(result);
   return result;
 };
-interface CreateProductProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx, callback) => {
   const transactionOptions = {
     readPreference: 'primary',

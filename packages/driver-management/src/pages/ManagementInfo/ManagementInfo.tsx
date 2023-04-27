@@ -22,6 +22,7 @@ import { useUser } from "contexts/userContext/User";
 import { MAXIMUM_MANAGEMENT_CUT } from "hyfn-types";
 import { useAddLocalCardKeys } from "./hooks/useAddLocalCardKeys";
 import { useDisableLocalCardKeys } from "./hooks/useDisableLocalCardKeys";
+import { useAddEmployee } from "./hooks/useAddEmployee";
 
 interface ManagementInfoProps {}
 
@@ -43,7 +44,7 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
       secretKey: "",
     },
   });
-
+  const [employeeId, setEmployeeId] = useState<string>("");
   const [editing, setEditing] = useState(false);
   const { userDocument, isLoading } = useUser();
   useEffect(() => {
@@ -68,6 +69,7 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
   const { mutate } = useUpdateManagerInfo();
   const { mutate: addLocalCardKeys } = useAddLocalCardKeys();
   const { mutate: disableLocalCardKeys } = useDisableLocalCardKeys();
+  const { mutate: addEmployee } = useAddEmployee();
 
   return (
     <Container mt={12}>
@@ -182,6 +184,18 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
                 {t("Add keys")}
               </Button>
             )}
+          </Stack>
+        </Paper>
+        <Paper>
+          <Stack align="center">
+            <TextInput
+              label={t("Add employee")}
+              value={employeeId}
+              onChange={(e) => setEmployeeId(e.target.value)}
+            />
+            <Button onClick={() => addEmployee({ employeeId })}>
+              {t("Add employee")}
+            </Button>
           </Stack>
         </Paper>
       </Stack>

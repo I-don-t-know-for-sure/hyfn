@@ -1,4 +1,4 @@
-export const handlerHandler = async ({ arg, client, session, event }: MainFunctionProps) => {
+export const handlerHandler = async ({ arg, client, session, userId }: MainFunctionProps) => {
   // const arg = event;
   var result;
   console.log('12');
@@ -11,7 +11,12 @@ export const handlerHandler = async ({ arg, client, session, event }: MainFuncti
     addedProductsArray,
     addedStoreFrontProducts,
   } = arg[0];
-  const { country, city, id } = arg[1];
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const id = storeDoc._id.toString();
   // const { accessToken, userId } = arg[arg.length - 1];
   // await argValidations(arg);
   // await mainValidateFunction(client, accessToken, userId);

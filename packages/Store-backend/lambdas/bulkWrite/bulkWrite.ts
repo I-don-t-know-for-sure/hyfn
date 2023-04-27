@@ -1,7 +1,18 @@
-export const bulkWriteHandler = async ({ event, arg, client }) => {
+('use strict');
+interface BulkWriteProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+export const bulkWriteHandler = async ({ event, arg, client, userId }: BulkWriteProps) => {
   var result;
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const storeId = storeDoc._id.toString();
 
-  const { productsArray, storeId } = arg[0];
+  const { productsArray } = arg[0];
   const objKeysExample = ['name', 'price', 'barcode'];
   const objKeysDetailed = ['title', 'description', 'price', 'prevPrice', 'costPerItem'];
   // input.data.pop();
@@ -71,11 +82,6 @@ export const bulkWriteHandler = async ({ event, arg, client }) => {
   await client.db('base').collection('products').insertMany(outputArray);
   return result;
 };
-interface BulkWriteProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx, callback) => {
   return await mainWrapper({ ctx, callback, event, mainFunction: bulkWriteHandler });
 };

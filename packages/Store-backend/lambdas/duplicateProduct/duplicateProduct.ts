@@ -1,11 +1,24 @@
-export const duplicateProductHandler = async ({ arg, client }) => {
+('use strict');
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { ObjectId } from 'mongodb';
+interface DuplicateProductProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
+export const duplicateProductHandler = async ({ arg, client, userId }: DuplicateProductProps) => {
   var result;
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const storeId = storeDoc._id.toString();
   const { times, productId, country } = arg[0];
+
   const product = await client
     .db('base')
     .collection('products')
     .findOne(
-      { _id: new ObjectId(productId) },
+      { _id: new ObjectId(productId), storeId },
       {
         projection: {
           _id: 0,
@@ -48,12 +61,6 @@ export const duplicateProductHandler = async ({ arg, client }) => {
   await client.db('base').collection('products').insertMany(products, {});
   return result;
 };
-interface DuplicateProductProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapper({
     event,

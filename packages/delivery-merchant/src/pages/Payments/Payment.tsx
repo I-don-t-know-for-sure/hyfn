@@ -45,6 +45,7 @@ import { useDisableLocalCardKeys } from "./hooks/useDisableLocalCardKeys";
 import { useUpdateLocalCardSettings } from "./hooks/useUpdateLocalCardSettings";
 import PaymentModal from "./components/PaymentModal";
 import { useUpdateSubscription } from "./hooks/useUpdateSubscription";
+import { useAddEmployee } from "./hooks/useAddEmployee";
 
 interface PaymentsProps {}
 
@@ -62,7 +63,8 @@ const Payments: React.FC<PaymentsProps> = () => {
   const { mutate: addLocalCardAPIkey } = useAddLocalCardAPIKeys();
   const { mutate: updateLocalCardSetting } = useUpdateLocalCardSettings();
   const { mutate: updateSubscription } = useUpdateSubscription();
-
+  const { mutate: addEmployee } = useAddEmployee();
+  const [employeeId, setEmployeeId] = useState<string>("");
   const form = useForm({
     initialValues: {
       ownerFirstName: "",
@@ -267,6 +269,22 @@ const Payments: React.FC<PaymentsProps> = () => {
                   }}
                 >
                   {t("Update subscription")}
+                </Button>
+              </Stack>
+            </Card>
+            <Card>
+              <Stack>
+                <TextInput
+                  label={t("Add employee")}
+                  value={employeeId}
+                  onChange={(e) => setEmployeeId(e.target.value)}
+                />
+                <Button
+                  onClick={() => {
+                    addEmployee({ employeeId });
+                  }}
+                >
+                  {t("Add employee")}
                 </Button>
               </Stack>
             </Card>

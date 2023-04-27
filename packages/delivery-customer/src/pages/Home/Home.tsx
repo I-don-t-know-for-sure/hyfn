@@ -23,6 +23,7 @@ import { t } from "../../util/i18nextFix";
 
 import { useLocation } from "../../contexts/locationContext/LocationContext";
 import { z } from "zod";
+import { useSendNotification } from "./hooks/useSendNotification";
 
 // yarn add https://github.com/MyOrg/my-lib.git#branch
 
@@ -38,7 +39,7 @@ const Home: React.FC = () => {
       nearby,
       city,
     });
-
+  const { mutate } = useSendNotification();
   // useEffect(() => {
   //   console.log(
   //     window.innerHeight + window.scrollY >= document.body.offsetHeight
@@ -242,6 +243,13 @@ const Home: React.FC = () => {
           </Container>
         )
       )}
+      <Button
+        onClick={() => {
+          mutate();
+        }}
+      >
+        {t("test")}
+      </Button>
     </Box>
   );
 };

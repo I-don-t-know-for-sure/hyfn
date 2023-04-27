@@ -6,19 +6,30 @@ import { ObjectId } from 'mongodb';
 interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const openAndCloseStoreHandler = async ({ arg, client, session }: MainFunctionProps) => {
+export const openAndCloseStoreHandler = async ({
+  arg,
+  client,
+  session,
+  userId,
+}: MainFunctionProps) => {
   var result;
-  const storeId = arg[0];
+
   const country = arg[1];
   const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
-    .findOne(
-      {
-        _id: new ObjectId(storeId),
-      },
-      { session }
-    );
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const storeId = storeDoc._id.toString();
+  // const storeDoc = await client
+  //   .db('generalData')
+  //   .collection('storeInfo')
+  //   .findOne(
+  //     {
+  //       _id: new ObjectId(storeId),
+  //     },
+  //     { session }
+  //   );
   if (!storeDoc.monthlySubscriptionPaid) {
     await client
       .db('base')

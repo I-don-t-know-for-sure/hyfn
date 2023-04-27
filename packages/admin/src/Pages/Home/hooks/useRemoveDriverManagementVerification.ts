@@ -7,7 +7,9 @@ export const useRemoveDriverManagementVerification = () => {
       try {
         const result = await fetchUtil({
           reqData: [{ driverManagement }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/removeDriverManagementVerification`,
+          url: `${
+            import.meta.env.VITE_APP_BASE_URL
+          }/removeDriverManagementVerification`,
         });
         return result;
       } catch (error) {

@@ -1,3 +1,9 @@
+('use strict');
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { currencies, gibbrish } from '../resources';
+interface CreateStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 export const createStoreDocumentHandler = async ({
   arg,
   client,
@@ -21,8 +27,8 @@ export const createStoreDocumentHandler = async ({
   // Step 3: Use withTransaction to start a transaction, execute the callback, and commit (or abort on error)
   // Note: The callback for withTransaction MUST be async and/or return a Promise.
   //    const isIndexed = await client.db("base").collection("stores").findOne({_id: 'collectionInfo'})
-  const storeFronts = await mongo.db('base').collection(`storeFronts`);
-  const customUserData = await mongo.db('generalData').collection('storeInfo');
+  const storeFronts = mongo.db('base').collection(`storeFronts`);
+  const customUserData = mongo.db('generalData').collection('storeInfo');
   const coordsArray = coords.split(',');
   if (Array.isArray(coordsArray)) {
     if (coordsArray.length === 2) {
@@ -53,6 +59,14 @@ export const createStoreDocumentHandler = async ({
           _id: newStoreDoc.insertedId,
           currency: currencies[country],
           userId: userId,
+          ////////
+          usersIds: [userId],
+          users: {
+            [userId]: {
+              userType: 'owner',
+            },
+          },
+          /////////
           storeDoc: {
             id: newStoreDoc.insertedId.toString(),
             storeFrontId: newStoreDoc.insertedId.toString(),
@@ -72,12 +86,6 @@ export const createStoreDocumentHandler = async ({
     }
   }
 };
-interface CreateStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
-import { currencies, gibbrish } from '../resources';
 export const handler = async (event, ctx, callback) => {
   const transactionOptions = {
     readPreference: 'primary',

@@ -4,15 +4,15 @@
     // "strictNullChecks": true,
     "sourceMap": false,
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     // "strict": true,
     "target": "es5",
     "baseUrl": "./",
     "rootDir": "./",
-"declaration": false,
+    "declaration": false,
     "outDir": ".build",
     "moduleResolution": "node",
     "lib": ["es2015"],
-   
 
     // "paths": {
     //     "hyfn-types": ["../hyfn-types"]
@@ -20,20 +20,16 @@
     // "paths": {
     //     "hyfn-types-prod": ["./lambdas/common/src"]
     //   },
-      "skipLibCheck": true,
-      
+    "skipLibCheck": true
+  },
+  // "references": [
+  //   { "path": "../hyfn-types" },
 
-      
-    },
-    // "references": [
-    //   { "path": "../hyfn-types" },
+  // ],
 
-    // ],
-
-"include": [
-  "./lambdas/**/*", 
-  // "serverlessss.ts", 
- 
-],
-  "exclude": ["./node_modules",]
+  "include": [
+    "./lambdas/**/*"
+    // "serverlessss.ts",
+  ],
+  "exclude": ["./node_modules"]
 }

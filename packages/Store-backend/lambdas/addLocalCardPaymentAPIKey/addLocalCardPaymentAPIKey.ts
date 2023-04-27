@@ -1,16 +1,19 @@
 interface AddLocalCardPaymentAPIKeyProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-const { HmacSHA256 } = require('crypto-js');
-const { default: axios } = require('axios');
-const { calculateFreeMonth } = require('../common/calculateFreeMonth');
+import { HmacSHA256 } from 'crypto-js';
+import axios from 'axios';
+import { calculateFreeMonth } from '../common/calculateFreeMonth';
 import { KMS } from 'aws-sdk';
 import { encryptData, hex_to_ascii, MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 const dataServicesURL = process.env.moalmlatDataService;
+
 const addLocalCardPaymentAPIKey = async ({ client, arg, session, userId }: MainFunctionProps) => {
   const { TerminalId, MerchantId, secretKey } = arg[0];
   const userDocument = await client.db('generalData').collection('storeInfo').findOne({ userId });
+  if (!userDocument) throw new Error('document not found');
+
   const { _id } = userDocument;
   const storeId = _id.toString();
   const encryptedSecretkey = await encryptData(secretKey, process.env.kmsKeyARN || '', new KMS());

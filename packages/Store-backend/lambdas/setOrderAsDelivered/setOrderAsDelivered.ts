@@ -1,7 +1,11 @@
 export const setOrderAsDeliveredHandler = async ({ arg, client, userId }: MainFunctionProps) => {
   const { orderId, country } = arg[0];
-  const userDocument = await client.db('generalData').collection('storeInfo').findOne({ userId });
-  const storeId = userDocument?._id?.toString();
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const storeId = storeDoc._id.toString();
   console.log('🚀 ~ file: setOrderAsDelivered.js:10 ~ mainFunction ~ storeId', storeId);
   const orderDoc = await client
     .db('base')

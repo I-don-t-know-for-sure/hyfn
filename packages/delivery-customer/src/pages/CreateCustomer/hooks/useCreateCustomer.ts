@@ -1,8 +1,7 @@
+import { useUser } from "../../../contexts/userContext/User";
+import { useMutation } from "react-query";
 
-import { useUser } from '../../../contexts/userContext/User';
-import { useMutation, useQueryClient } from 'react-query';
-
-import fetchUtil from '../../../util/fetch';
+import fetchUtil from "../../../util/fetch";
 
 export const useCreateCustomer = () => {
   const { userId, refetch } = useUser();
@@ -11,7 +10,6 @@ export const useCreateCustomer = () => {
     async (customerInfo: any) => {
       try {
         // showNotification({
-
         // })
         const result = await fetchUtil({
           reqData: [{ ...customerInfo, customerId: userId }],
@@ -27,6 +25,6 @@ export const useCreateCustomer = () => {
         // await queryClient.invalidateQueries([USER_DOCUMENT]);
         refetch();
       },
-    },
+    }
   );
 };

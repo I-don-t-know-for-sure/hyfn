@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import fetchUtil from "../../../utils/fetch";
 
 export const useGetDriverManagement = ({

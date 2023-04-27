@@ -10,10 +10,11 @@ import {
   MultiSelect,
   Paper,
   Select,
+  Stack,
   Text,
   TextInput,
 } from "@mantine/core";
-
+import { CopyButton } from "hyfn-client";
 import { Store } from "config/types";
 
 import { t } from "utils/i18nextFix";
@@ -25,6 +26,7 @@ import { useCreateStore } from "./hooks/useCreateStore";
 import { useForm } from "@mantine/form";
 import { useUser } from "contexts/userContext/User";
 import { useNavigate } from "react-router";
+import { Helmet } from "react-helmet";
 
 interface StoreInfoProps {}
 
@@ -45,7 +47,7 @@ const CreateStore: React.FC<StoreInfoProps> = ({}) => {
   const form = useForm({
     initialValues: initialInfo,
   });
-  const { loggedIn, userDocument } = useUser();
+  const { loggedIn, userDocument, userId } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,164 +88,182 @@ const CreateStore: React.FC<StoreInfoProps> = ({}) => {
         alignItems: "center",
       }}
     >
-      {/* <Helmet>
+      <Stack>
+        {/* <Helmet>
         <title>{t("Create Store")}</title>
-      </Helmet> */}
+        </Helmet>
+      */}
+        <Card>
+          <Stack>
+            <Text>
+              {t(
+                "If you are a store employee, copy your user ID and give it to the admin. if  you are a store owner, you can create your store here"
+              )}
+            </Text>
+            <CopyButton value={userId} />
+          </Stack>
+        </Card>
 
-      <form
-        onSubmit={form.onSubmit(async (values) => {
-          mutate({ ...values, storeInfoFilled: true });
-        })}
-      >
-        <Paper
-        // sx={{
-        //   margin: ' 12px auto ',
-        // }}
+        <form
+          onSubmit={form.onSubmit(async (values) => {
+            mutate({ ...values, storeInfoFilled: true });
+          })}
         >
-          <TextInput
-            type="text"
-            required
-            label={t("Store Name")}
-            {...form.getInputProps("storeName")}
-          />
-
-          <TextInput
-            type="text"
-            required
-            label={t("Descripe what you serve in 4 words at most")}
-            {...form.getInputProps("description")}
-          />
-        </Paper>
-
-        <Paper
-        // sx={{
-        //   margin: ' 12px auto ',
-        // }}
-        >
-          <Group grow>
+          <Paper
+          // sx={{
+          //   margin: ' 12px auto ',
+          // }}
+          >
             <TextInput
-              type="number"
+              type="text"
               required
-              label={t("store Phone")}
-              {...form.getInputProps("storePhone")}
+              label={t("Store Name")}
+              {...form.getInputProps("storeName")}
             />
-          </Group>
-        </Paper>
-        <Paper
-        // sx={{
-        //   margin: ' 12px auto ',
-        // }}
-        >
-          <Group spacing={"sm"} position={"center"} grow={true}>
-            <Select
-              label={t("Country")}
-              data={countries}
-              required
-              aria-label="Country"
-              {...form.getInputProps("country")}
-            />
-            <Select
-              label={t("City")}
-              data={form.values.country ? cities[`${form.values.country}`] : []}
-              required
-              aria-label="City"
-              {...form.getInputProps("city")}
-            />
-          </Group>
-          <Group>
+
             <TextInput
-              style={{
-                width: "75%",
+              type="text"
+              required
+              label={t("Descripe what you serve in 4 words at most")}
+              {...form.getInputProps("description")}
+            />
+          </Paper>
+
+          <Paper
+          // sx={{
+          //   margin: ' 12px auto ',
+          // }}
+          >
+            <Group grow>
+              <TextInput
+                type="number"
+                required
+                label={t("store Phone")}
+                {...form.getInputProps("storePhone")}
+              />
+            </Group>
+          </Paper>
+          <Paper
+          // sx={{
+          //   margin: ' 12px auto ',
+          // }}
+          >
+            <Group spacing={"sm"} position={"center"} grow={true}>
+              <Select
+                label={t("Country")}
+                data={countries}
+                required
+                aria-label="Country"
+                {...form.getInputProps("country")}
+              />
+              <Select
+                label={t("City")}
+                data={
+                  form.values.country ? cities[`${form.values.country}`] : []
+                }
+                required
+                aria-label="City"
+                {...form.getInputProps("city")}
+              />
+            </Group>
+            <Group>
+              <TextInput
+                style={{
+                  width: "75%",
+                }}
+                label={t("coords")}
+                {...form.getInputProps("coords")}
+                required
+              />
+              <Button
+                // mt={28}
+                variant="outline"
+                onClick={() => {
+                  navigator.geolocation.getCurrentPosition(success, err);
+                }}
+              >
+                {t("current coords")}
+              </Button>
+            </Group>
+            <TextInput
+              label={t("Address")}
+              {...form.getInputProps("address")}
+            />
+            <MultiSelect
+              label={t("Store Type")}
+              required
+              data={[
+                { value: "restaurant", label: t("Restaurant") },
+                { value: "grocery", label: t("Grocery") },
+                { value: "clothes", label: t("Clothes") },
+                { value: "shoes", label: t("Shoes") },
+
+                { value: "stationery", label: t("Stationery") },
+                // { value: 'electronics', label: t('Electronics') },
+                // {
+                //   value: 'repair and spare parts',
+                //   label: t('Repair and spare parts'),
+                // },
+                // {
+                //   value: 'construction materials',
+                //   label: t('construction materials'),
+                // },
+                // { value: 'furniture', label: t('furniture') },
+                {
+                  value: "bakery",
+                  label: t("Bakery"),
+                },
+                {
+                  value: "sweets",
+                  label: t("Sweets"),
+                },
+                {
+                  value: "watches, jewwlry, and accessories",
+                  label: t("Watches, jewwlry, and accessories"),
+                },
+                {
+                  value: "mother and child accessories",
+                  label: t("Mother and child accessories"),
+                },
+                {
+                  value: "cleaning meterials",
+                  label: t("Cleaning meterials"),
+                },
+                { value: "games", label: t("Games") },
+                // { value: 'meat store', label: t('Meat store') },
+              ]}
+              aria-label="Store Type"
+              onChange={(e) => {
+                if (e.includes("restaurant")) {
+                  form.setFieldValue("storeType", ["restaurant"]);
+                  return;
+                }
+                form.setFieldValue("storeType", e);
               }}
-              label={t("coords")}
-              {...form.getInputProps("coords")}
-              required
+              value={form.values.storeType}
             />
+          </Paper>
+          <Group
+            sx={{
+              display: "flex",
+              flexDirection: "row-reverse",
+              height: "150px",
+            }}
+          >
             <Button
-              // mt={28}
-              variant="outline"
-              onClick={() => {
-                navigator.geolocation.getCurrentPosition(success, err);
-              }}
+              disabled={isMutateLoading}
+              fullWidth
+              // sx={{
+              //   maxWidth: '450px',
+              // }}
+              // m={'0px auto'}
+              type="submit"
             >
-              {t("current coords")}
+              {t("Submit store Info")}
             </Button>
           </Group>
-          <TextInput label={t("Address")} {...form.getInputProps("address")} />
-          <MultiSelect
-            label={t("Store Type")}
-            required
-            data={[
-              { value: "restaurant", label: t("Restaurant") },
-              { value: "grocery", label: t("Grocery") },
-              { value: "clothes", label: t("Clothes") },
-              { value: "shoes", label: t("Shoes") },
-
-              { value: "stationery", label: t("Stationery") },
-              // { value: 'electronics', label: t('Electronics') },
-              // {
-              //   value: 'repair and spare parts',
-              //   label: t('Repair and spare parts'),
-              // },
-              // {
-              //   value: 'construction materials',
-              //   label: t('construction materials'),
-              // },
-              // { value: 'furniture', label: t('furniture') },
-              {
-                value: "bakery",
-                label: t("Bakery"),
-              },
-              {
-                value: "sweets",
-                label: t("Sweets"),
-              },
-              {
-                value: "watches, jewwlry, and accessories",
-                label: t("Watches, jewwlry, and accessories"),
-              },
-              {
-                value: "mother and child accessories",
-                label: t("Mother and child accessories"),
-              },
-              {
-                value: "cleaning meterials",
-                label: t("Cleaning meterials"),
-              },
-              { value: "games", label: t("Games") },
-              // { value: 'meat store', label: t('Meat store') },
-            ]}
-            aria-label="Store Type"
-            onChange={(e) => {
-              if (e.includes("restaurant")) {
-                form.setFieldValue("storeType", ["restaurant"]);
-                return;
-              }
-              form.setFieldValue("storeType", e);
-            }}
-            value={form.values.storeType}
-          />
-        </Paper>
-        <Group
-          sx={{
-            display: "flex",
-            flexDirection: "row-reverse",
-            height: "150px",
-          }}
-        >
-          <Button
-            disabled={isMutateLoading}
-            fullWidth
-            // sx={{
-            //   maxWidth: '450px',
-            // }}
-            // m={'0px auto'}
-            type="submit"
-          >
-            {t("Submit store Info")}
-          </Button>
-        </Group>
-      </form>
+        </form>
+      </Stack>
     </Container>
   );
 };

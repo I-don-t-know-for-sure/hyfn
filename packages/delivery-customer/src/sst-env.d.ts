@@ -4,6 +4,12 @@ interface ImportMetaEnv {
   readonly VITE_APP_BUCKET_URL: string
   readonly VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL: string
   readonly VITE_APP_STORE_APP_URL: string
+  readonly VITE_APP_FIREBASE_API_KEY: string
+  readonly VITE_APP_FIREBASE_AUTH_DOMAIN: string
+  readonly VITE_APP_FIREBASE_MESSAGING_SENDER_ID: string
+  readonly VITE_APP_FIREBASE_PROJECT_ID: string
+  readonly VITE_APP_FIREBASE_APP_ID: string
+  readonly VITE_APP_FIREBASE_STORAGE_BUCKET: string
   readonly VITE_APP_PAYMENT_APP_URL: string
   readonly VITE_APP_COGNITO_IDENTITY_POOL_ID: string
   readonly VITE_APP_COGNITO_REGION: string

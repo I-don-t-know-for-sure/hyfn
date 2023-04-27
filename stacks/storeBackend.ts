@@ -107,7 +107,7 @@ export function storeApiStack({ stack }: StackContext) {
     },
   });
 
-  const eventBus = new EventBus(stack, "Bus", {
+  /* const eventBus = new EventBus(stack, "Bus", {
     rules: {
       backgroundRemoval: {
         pattern: {
@@ -160,7 +160,7 @@ export function storeApiStack({ stack }: StackContext) {
         },
       },
     }
-  );
+  ); */
 
   /*  const generateProductDescription = new Function(
     stack,
@@ -210,12 +210,15 @@ export function storeApiStack({ stack }: StackContext) {
         environment: {
           kmsKeyARN: keyArn,
           //////////////////////////
+          clientEmail: config[""]["firebaseAdminSDK-client_email"],
+          projectId: config[""]["firebaseAdminSDK-project_id"],
+          privateKey: config[""]["firebaseAdminSDK-private_key"],
           chat_gpt_api_key: config[stage].chat_gpt_api_key,
           generateProductDescriptionUrl: generateDescription.url || "",
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketArn: s3Bucket.bucketArn,
-          backgroundRemovalEventBus: eventBus.eventBusName,
+          /*  backgroundRemovalEventBus: eventBus.eventBusName,
           backgroundRemovalEventBusDetailType:
             "background_removal" + stack.stage,
           backgroundRemovalEventBusSource: "background_removal" + stack.stage,
@@ -224,7 +227,7 @@ export function storeApiStack({ stack }: StackContext) {
           generateProductDescriptionEventBusDetailType:
             "generate_product_description" + stack.stage,
           generateProductDescriptionEventBusSource:
-            "generate_product_description" + stack.stage,
+            "generate_product_description" + stack.stage, */
           bucketName: imagesBucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,
@@ -260,6 +263,12 @@ export function storeApiStack({ stack }: StackContext) {
             pathToLambdas +
             "generateDescriptionClient/generateDescriptionClient.handler",
           functionName: "generateDescriptionClient" + stack.stage,
+        },
+      },
+      "POST /addEmployee": {
+        function: {
+          handler: pathToLambdas + "addEmployee/addEmployee.handler",
+          functionName: "addEmployee" + stack.stage,
         },
       },
       "POST /updateSubscibtion": {

@@ -1,10 +1,23 @@
+('use strict');
+import { mainWrapper, MainFunctionProps } from 'hyfn-server';
+import { ObjectId } from 'mongodb';
+import { USER_TYPE_STORE, STORE_STATUS_PENDING, STORE_STATUS_ACCEPTED } from 'hyfn-types';
+interface SetProductAsNotFoundProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
 export const setProductAsNotFoundHandler = async ({ arg, client, userId }: MainFunctionProps) => {
   var result;
   const { productKey, orderId } = arg[0];
-  const { _id: storeId, country } = await client
+  // const { _id: storeId, country } = await client
+  //   .db('generalData')
+  //   .collection('storeInfo')
+  //   .findOne({ userId }, { projection: { _id: 1, country: 1 } });
+  const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
-    .findOne({ userId }, { projection: { _id: 1, country: 1 } });
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const storeId = storeDoc._id;
   const orderDoc = await client
     .db('base')
     .collection('orders')
@@ -49,13 +62,6 @@ export const setProductAsNotFoundHandler = async ({ arg, client, userId }: MainF
   result = 'success';
   return result;
 };
-interface SetProductAsNotFoundProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { mainWrapper, MainFunctionProps } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
-import { USER_TYPE_STORE, STORE_STATUS_PENDING, STORE_STATUS_ACCEPTED } from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setProductAsNotFoundHandler });
 };

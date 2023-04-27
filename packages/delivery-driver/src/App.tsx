@@ -18,7 +18,12 @@ import { Amplify, Auth } from "aws-amplify";
 
 import Proposals from "Pages/Proposals/Proposals";
 import Map from "Pages/Home/HomeWithMap";
-
+import { useEffect } from "react";
+import { useUser } from "contexts/userContext/User";
+import { useLocalStorage } from "@mantine/hooks";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken } from "firebase/messaging";
+import fetchUtil from "utils/fetch";
 function App() {
   Amplify.configure({
     Auth: {
@@ -33,37 +38,84 @@ function App() {
       bucket: import.meta.env.VITE_APP_BUCKET,
       identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
     },
-    // VITE_APP_MAP_NAME: mapName,
-    //   VITE_APP_MAP_REGION: mapRegion,
-    //   VITE_APP_MAP_STYLE: mapStyle,
-    // geo: {
-    //   AmazonLocationService: {
-    //     maps: {
-    //       items: {
-    //         [import.meta.env.VITE_APP_MAP_NAME]: {
-    //           // REQUIRED - Amazon Location Service Map resource name
-    //           style: import.meta.env.VITE_APP_MAP_STYLE, // REQUIRED - String representing the style of map resource
-    //         },
-    //       },
-    //       default: import.meta.env.VITE_APP_MAP_NAME, // REQUIRED - Amazon Location Service Map resource name to set as default
-    //     },
-
-    //     region: import.meta.env.VITE_APP_MAP_REGION, // REQUIRED - Amazon Location Service Region
-    //   },
-    // },
   });
-  console.log("🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_REGION:", {
-    region: import.meta.env.VITE_APP_COGNITO_REGION,
-    userPoolId: import.meta.env.VITE_APP_USER_POOL_ID,
-    identityPoolId: import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID,
-    userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID,
+  const { loggedIn } = useUser();
+  const [notificationTokenSent, setNotificationTokenSent] = useLocalStorage({
+    key: "notificationTokenSent",
+    defaultValue: false,
   });
-  console.log(
-    "🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_IDENTITY_POOL_ID:",
-    import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID
-  );
-  console.log("update");
+  useEffect(() => {
+    console.log("update");
+    if (loggedIn && !notificationTokenSent) {
+      if ("Notification" in window) {
+        if (
+          Notification.permission !== "granted" ||
+          (Notification.permission === "granted" && !notificationTokenSent)
+        ) {
+          Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              // Permission has been granted, you can now display notifications
+              // console.log("Notification permission granted.");
+              // Call the messaging.getToken() method here to retrieve the registration token
+              // and send push notifications to the device.
+              const firebaseConfig = {
+                apiKey: import.meta.env.VITE_APP_FIREBASE_API_KEY,
+                authDomain: import.meta.env.VITE_APP_FIREBASE_AUTH_DOMAIN,
+                projectId: import.meta.env.VITE_APP_FIREBASE_PROJECT_ID,
+                storageBucket: import.meta.env.VITE_APP_FIREBASE_STORAGE_BUCKET,
+                messagingSenderId: import.meta.env
+                  .VITE_APP_FIREBASE_MESSAGING_SENDER_ID,
+                appId: import.meta.env.VITE_APP_FIREBASE_APP_ID,
+              };
 
+              // Initialize Firebase
+              const app = initializeApp(firebaseConfig);
+
+              const messaging = getMessaging(app);
+              console.log("dbcjbdhcbdhcbdbhcbd");
+              getToken(messaging, {
+                vapidKey: import.meta.env.VITE_APP_VAPID_KEY,
+              })
+                .then((currentToken) => {
+                  if (currentToken) {
+                    console.log("Device token:", currentToken);
+                    // send the token to your server to associate it with the user
+                    fetchUtil({
+                      reqData: [{ notificationToken: currentToken }],
+                      url: `${
+                        import.meta.env.VITE_APP_BASE_URL
+                      }/updateNotificationTokens`,
+                    })
+                      .then((res) => {
+                        console.log(
+                          "🚀 ~ file: App.tsx:117 ~ .then ~ res:",
+                          res
+                        );
+                        if (res === "success") setNotificationTokenSent(true);
+                      })
+                      .catch((err) => {
+                        setNotificationTokenSent(false);
+                      });
+                  } else {
+                    console.log("No registration token available.");
+                  }
+                })
+                .catch((error) => {
+                  console.log(
+                    "An error occurred while retrieving the device token.",
+                    error
+                  );
+                  setNotificationTokenSent(false);
+                });
+            } else {
+              // Permission has not been granted, you cannot display notifications
+              setNotificationTokenSent(false);
+            }
+          });
+        }
+      }
+    }
+  }, [loggedIn, notificationTokenSent]);
   return (
     <BrowserRouter>
       <Menu>

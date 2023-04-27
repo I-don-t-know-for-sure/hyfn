@@ -44,10 +44,7 @@ import { useCart } from "../../contexts/cartContext/Provider";
 import { BsMoonStars, BsSun } from "react-icons/bs";
 import BottomNav from "./components/BottomNav";
 
-import {
-  useLocation,
-  useUpdateLocation,
-} from "../../contexts/locationContext/LocationContext";
+import { useLocation } from "../../contexts/locationContext/LocationContext";
 import {
   AiOutlineArrowDown,
   AiOutlineMinus,

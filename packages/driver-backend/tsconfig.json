@@ -21,6 +21,6 @@
   //   { "path": "../hyfn-types" }
   // ],
 
-  "include": ["./lambdas/**/*", "./serverless.ts"],
+  "include": ["./lambdas/**/*"],
   "exclude": ["./node_modules"]
 }

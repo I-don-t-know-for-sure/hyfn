@@ -47,7 +47,9 @@ export function customerApiStack({ stack }: StackContext) {
         environment: {
           kmsKeyARN: keyArn,
           // /////////////////
-
+          clientEmail: config[""]["firebaseAdminSDK-client_email"],
+          projectId: config[""]["firebaseAdminSDK-project_id"],
+          privateKey: config[""]["firebaseAdminSDK-private_key"],
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
@@ -85,6 +87,20 @@ export function customerApiStack({ stack }: StackContext) {
             pathToLambdas + "cancelTransaction/cancelTransaction.handler",
         },
       },
+      "POST /sendNotification": {
+        function: {
+          functionName: "sendNotification" + stack.stage,
+          handler: pathToLambdas + "sendNotification/sendNotification.handler",
+        },
+      },
+      "POST /updateNotificationTokens": {
+        function: {
+          functionName: "updateNotificationTokens" + stack.stage,
+          handler:
+            pathToLambdas +
+            "updateNotificationTokens/updateNotificationTokens.handler",
+        },
+      },
       "POST /confirmPickup": {
         function: {
           functionName: "confirmPickup" + stack.stage,
@@ -116,11 +132,10 @@ export function customerApiStack({ stack }: StackContext) {
             pathToLambdas + "setOrderAsDelivered/setOrderAsDelivered.handler",
         },
       },
-      "POST /refreshOrderDocument": {
+      "POST /getOrderDocument": {
         function: {
-          functionName: "refreshOrderDocument" + stack.stage,
-          handler:
-            pathToLambdas + "refreshOrderDocument/refreshOrderDocument.handler",
+          functionName: "getOrderDocument" + stack.stage,
+          handler: pathToLambdas + "getOrderDocument/getOrderDocument.handler",
         },
       },
       "POST /setProductAsNotFound": {
@@ -181,10 +196,10 @@ export function customerApiStack({ stack }: StackContext) {
             "getCollectionProducts/getCollectionProducts.handler",
         },
       },
-      "POST /refreshBalance": {
+      "POST /getBalance": {
         function: {
-          functionName: "refreshBalance" + stack.stage,
-          handler: pathToLambdas + "refreshBalance/refreshBalance.handler",
+          functionName: "getBalance" + stack.stage,
+          handler: pathToLambdas + "getBalance/getBalance.handler",
         },
       },
       "POST /getDriverInfo": {

@@ -1,7 +1,19 @@
-export const deleteProductHandler = async ({ arg, client, event }) => {
+import { ObjectId } from 'mongodb';
+import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { deleteImages } from '../common/utils/deleteImages';
+interface DeleteProductProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
+export const deleteProductHandler = async ({ arg, client, userId }: DeleteProductProps) => {
   const mongo = client;
   var result = 'initial';
-  const { id, country, city } = arg[0];
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const id = storeDoc._id.toString();
+
   const productId = arg[1];
   const db = mongo.db('base');
   const product = await db.collection(`products`).findOne({ _id: new ObjectId(productId) }, {});
@@ -9,48 +21,9 @@ export const deleteProductHandler = async ({ arg, client, event }) => {
     await deleteImages(product.images);
   }
   await db.collection(`products`).deleteOne({ storeId: id, _id: new ObjectId(productId) });
-  // const storeFront = await findOne(
-  //   { _id: new ObjectId(id) },
-  //   { session },
-  //   db.collection(`storeFronts`)
-  // );
-  // for (let i = 0; i < product.collections?.length; i++) {
-  //   const collection = product.collections[i];
-  //   console.log("happened");
-  //   if (storeFront[`${collection.label}`].products?.length > 1) {
-  //     console.log(storeFront);
-  //     await db.collection(`storeFronts`).updateOne(
-  //       { _id: new ObjectId(id) },
-  //       {
-  //         $pull: {
-  //           [`${collection.label}.products`]: {
-  //             _id: new ObjectId(productId),
-  //           },
-  //         },
-  //       },
-  //       {
-  //         session,
-  //       }
-  //     );
-  //     continue;
-  //   }
-  //   await db.collection(`storeFronts`).updateOne(
-  //     { _id: new ObjectId(id) },
-  //     {
-  //       $unset: { [`${collection.label}`]: "" },
-  //     },
-  //     { session }
-  //   );
-  // }
-  // await session.abortTransaction();
+
   return result;
 };
-interface DeleteProductProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-const ObjectId = require('mongodb').ObjectId;
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
-import { deleteImages } from '../common/utils/deleteImages';
 export const handler = async (event, ctx) => {
   // await argValidations(arg);
   return await mainWrapperWithSession({

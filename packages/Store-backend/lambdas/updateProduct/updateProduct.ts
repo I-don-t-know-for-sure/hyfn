@@ -6,7 +6,12 @@ import { removeBackgrounds } from '../common/functions/removeBackgrounds';
 interface UpdateProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const updateProductHandler = async ({ arg, client, session }: MainFunctionProps) => {
+export const updateProductHandler = async ({
+  arg,
+  client,
+  session,
+  userId,
+}: UpdateProductProps) => {
   const product = arg[0];
 
   const {
@@ -18,18 +23,25 @@ export const updateProductHandler = async ({ arg, client, session }: MainFunctio
     options,
     isActive,
     imagesURLs: urls,
-    removeBackgroundImages,
+
     collections,
   } = product;
-  const { id, country, city } = arg[1];
+  // const { id, country, city } = arg[1];
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const id = storeDoc._id.toString();
+  const city = storeDoc.city;
   const productId = arg[2];
   const deletedImages = arg[3];
   var returnValue = 'initial';
   const mongo = client;
-  const storeDoc = await client
-    .db('generalData')
-    .collection('storeInfo')
-    .findOne({ _id: new ObjectId(id) }, { session });
+  // const storeDoc = await client
+  //   .db('generalData')
+  //   .collection('storeInfo')
+  //   .findOne({ _id: new ObjectId(id) }, { session });
   const oldProductDoc = await mongo
     .db('base')
     .collection(`products`)
@@ -42,6 +54,9 @@ export const updateProductHandler = async ({ arg, client, session }: MainFunctio
   console.log(storeDoc);
   const updatedImages = oldProductDoc?.images?.filter(
     (image) => !deletedImages?.some((deletedImage) => deletedImage === image)
+  );
+  const whiteBackgroundImages = oldProductDoc?.whiteBackgroundImages?.filter(
+    (oldWhiteImage) => !deletedImages.includes(oldWhiteImage)
   );
   if (deletedImages?.length > 0) {
     await deleteImages(deletedImages);
@@ -64,10 +79,6 @@ export const updateProductHandler = async ({ arg, client, session }: MainFunctio
   // });
   const imagesURLs = images;
   if (storeDoc.collections?.length >= 1) {
-    // await mongo.db("base").collection(`products`).updateOne({_id: new ObjectId(productId)}, {
-    //  textInfo, pricing, inventory,measurementSystem, weightInKilo,, options, isActive, imagesURLs, collections
-    //})
-
     const automatedCollections = storeDoc?.collections?.filter((collection) => {
       return collection.collectionType === 'automated';
     });
@@ -144,6 +155,7 @@ export const updateProductHandler = async ({ arg, client, session }: MainFunctio
           weightInKilo,
           options,
           measurementSystem,
+          whiteBackgroundImages,
           isActive,
           collections,
           storeId: id,

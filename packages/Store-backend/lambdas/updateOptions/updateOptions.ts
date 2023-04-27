@@ -1,4 +1,10 @@
-export const updateOptionsHandler = async ({ arg, client }) => {
+('use strict');
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { ObjectId } from 'mongodb';
+interface UpdateOptionsProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
+export const updateOptionsHandler = async ({ arg, client, userId }: UpdateOptionsProps) => {
   var result;
   const { storeId, country, productsArray } = arg[0];
   const validatedArray = productsArray;
@@ -26,12 +32,6 @@ export const updateOptionsHandler = async ({ arg, client }) => {
   await client.db('base').collection('products').bulkWrite(updateQuery);
   return result;
 };
-interface UpdateOptionsProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-('use strict');
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: updateOptionsHandler });
 };

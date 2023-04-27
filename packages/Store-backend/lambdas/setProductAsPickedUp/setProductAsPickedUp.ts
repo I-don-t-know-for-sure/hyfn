@@ -1,10 +1,26 @@
-export const setProductAsPickedUpHandler = async ({ arg, client, userId }: MainFunctionProps) => {
+import { mainWrapper, MainFunctionProps } from 'hyfn-server';
+import { ObjectId } from 'mongodb';
+import { STORE_STATUS_ACCEPTED, STORE_STATUS_PENDING, USER_TYPE_STORE } from 'hyfn-types';
+interface SetProductAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
+}
+export const setProductAsPickedUpHandler = async ({
+  arg,
+  client,
+  userId,
+}: SetProductAsPickedUpProps) => {
   var result;
   const { QTYFound, productKey, orderId } = arg[0];
-  const { _id, country } = await client
+  // const { _id, country } = await client
+  //   .db('generalData')
+  //   .collection('storeInfo')
+  //   .findOne({ userId }, { projection: { _id: 1, country: 1 } });
+  const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
-    .findOne({ userId }, { projection: { _id: 1, country: 1 } });
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const _id = storeDoc._id;
   const orderDoc = await client
     .db('base')
     .collection('orders')
@@ -48,12 +64,6 @@ export const setProductAsPickedUpHandler = async ({ arg, client, userId }: MainF
   result = 'success';
   return result;
 };
-interface SetProductAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
-import { mainWrapper, MainFunctionProps } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
-import { STORE_STATUS_ACCEPTED, STORE_STATUS_PENDING, USER_TYPE_STORE } from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setProductAsPickedUpHandler });
 };

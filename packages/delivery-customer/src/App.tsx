@@ -30,7 +30,10 @@ import ManageAddresses from "./pages/Addresses/Addresses";
 import CreateCustomer from "./pages/CreateCustomer/CreateCustomer";
 import { Amplify } from "aws-amplify";
 import LandingPage from "pages/LandingPage/LandingPage";
-import { log } from "console";
+
+import { useUser } from "contexts/userContext/User";
+import { useLocalStorage } from "@mantine/hooks";
+import fetchUtil from "util/fetch";
 
 function App() {
   console.log("🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_REGION:", {
@@ -53,91 +56,84 @@ function App() {
       identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
     },
   });
-  console.log(
-    "🚀 ~ file: App.tsx:100 ~ App ~ VITE_APP_COGNITO_IDENTITY_POOL_ID:",
-    import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID
-  );
-  console.log("update");
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyABU1k2F8JNz8fh9J4rgjvkDPO4gPA4PC0",
-    authDomain: "delivery-driver-d2f7d.firebaseapp.com",
-    projectId: "delivery-driver-d2f7d",
-    storageBucket: "delivery-driver-d2f7d.appspot.com",
-    messagingSenderId: "325762176723",
-    appId: "1:325762176723:web:3f7bfeff68347945f42626",
-  };
+  const { loggedIn } = useUser();
+  const [notificationTokenSent, setNotificationTokenSent] = useLocalStorage({
+    key: "notificationTokenSent",
+    defaultValue: false,
+  });
+  useEffect(() => {
+    console.log("update");
+    if (loggedIn && !notificationTokenSent) {
+      if ("Notification" in window) {
+        if (
+          Notification.permission !== "granted" ||
+          (Notification.permission === "granted" && !notificationTokenSent)
+        ) {
+          Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              // Permission has been granted, you can now display notifications
+              // console.log("Notification permission granted.");
+              // Call the messaging.getToken() method here to retrieve the registration token
+              // and send push notifications to the device.
+              const firebaseConfig = {
+                apiKey: import.meta.env.VITE_APP_FIREBASE_API_KEY,
+                authDomain: import.meta.env.VITE_APP_FIREBASE_AUTH_DOMAIN,
+                projectId: import.meta.env.VITE_APP_FIREBASE_PROJECT_ID,
+                storageBucket: import.meta.env.VITE_APP_FIREBASE_STORAGE_BUCKET,
+                messagingSenderId: import.meta.env
+                  .VITE_APP_FIREBASE_MESSAGING_SENDER_ID,
+                appId: import.meta.env.VITE_APP_FIREBASE_APP_ID,
+              };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+              // Initialize Firebase
+              const app = initializeApp(firebaseConfig);
 
-  const messaging = getMessaging(app);
-
-  if ("Notification" in window) {
-    // if (Notification.permission !== "granted") {
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        // Permission has been granted, you can now display notifications
-        // console.log("Notification permission granted.");
-        // Call the messaging.getToken() method here to retrieve the registration token
-        // and send push notifications to the device.
-        console.log("dbcjbdhcbdhcbdbhcbd");
-        getToken(messaging, {
-          vapidKey:
-            "BOZjfn3Jxe4QjMf4Bws0kN5VUgVXm9Yxg2J8sp1SKO2JBwNNPKS6vt1wWsVxpe1F6inXOEHCtYxNSyiV6trHjiU",
-        })
-          .then((currentToken) => {
-            if (currentToken) {
-              console.log("Device token:", currentToken);
-              // send the token to your server to associate it with the user
+              const messaging = getMessaging(app);
+              console.log("dbcjbdhcbdhcbdbhcbd");
+              getToken(messaging, {
+                vapidKey: import.meta.env.VITE_APP_VAPID_KEY,
+              })
+                .then((currentToken) => {
+                  if (currentToken) {
+                    console.log("Device token:", currentToken);
+                    // send the token to your server to associate it with the user
+                    fetchUtil({
+                      reqData: [{ notificationToken: currentToken }],
+                      url: `${
+                        import.meta.env.VITE_APP_BASE_URL
+                      }/updateNotificationTokens`,
+                    })
+                      .then((res) => {
+                        console.log(
+                          "🚀 ~ file: App.tsx:117 ~ .then ~ res:",
+                          res
+                        );
+                        if (res === "success") setNotificationTokenSent(true);
+                      })
+                      .catch((err) => {
+                        setNotificationTokenSent(false);
+                      });
+                  } else {
+                    console.log("No registration token available.");
+                  }
+                })
+                .catch((error) => {
+                  console.log(
+                    "An error occurred while retrieving the device token.",
+                    error
+                  );
+                  setNotificationTokenSent(false);
+                });
             } else {
-              console.log("No registration token available.");
+              // Permission has not been granted, you cannot display notifications
+              setNotificationTokenSent(false);
             }
-          })
-          .catch((error) => {
-            console.log(
-              "An error occurred while retrieving the device token.",
-              error
-            );
           });
-      } else {
-        // Permission has not been granted, you cannot display notifications
+        }
       }
-    });
-    // }
-    // Notification.requestPermission().then((permission) => {
-    //   console.log(
-    //     "🚀 ~ file: App.tsx:78 ~ Notification.requestPermission ~ permission:",
-    //     permission
-    //   );
-    //   if (permission === "granted") {
-    //     // console.log("Notification permission granted.");
-    //     // // Call the messaging.getToken() method here to retrieve the registration token
-    //     // // and send push notifications to the device.
-    //     // getToken(messaging, {
-    //     //   vapidKey:
-    //     //     "BOZjfn3Jxe4QjMf4Bws0kN5VUgVXm9Yxg2J8sp1SKO2JBwNNPKS6vt1wWsVxpe1F6inXOEHCtYxNSyiV6trHjiU",
-    //     // })
-    //     //   .then((currentToken) => {
-    //     //     if (currentToken) {
-    //     //       console.log("Device token:", currentToken);
-    //     //       // send the token to your server to associate it with the user
-    //     //     } else {
-    //     //       console.log("No registration token available.");
-    //     //     }
-    //     //   })
-    //     //   .catch((error) => {
-    //     //     console.log(
-    //     //       "An error occurred while retrieving the device token.",
-    //     //       error
-    //     //     );
-    //     //   });
-    //   } else {
-    //     console.log("Unable to get permission to notify.");
-    //   }
-    // });
-  }
-  // get device token
+    }
+  }, [loggedIn, notificationTokenSent]);
 
   console.log("🚀 ~ file: App.tsx:26 ~ test3:", test3);
   console.log("🚀 ~ file: App.tsx:26 ~ test3:", test3);

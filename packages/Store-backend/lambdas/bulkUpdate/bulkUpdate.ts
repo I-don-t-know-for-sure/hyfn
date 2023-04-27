@@ -5,23 +5,22 @@ import { deleteImages } from '../common/utils/deleteImages';
 interface BulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const bulkUpdateHandler = async ({
-  arg,
-  client,
-  session,
-  event,
-  ctx,
-  callback,
-}: MainFunctionProps) => {
+export const bulkUpdateHandler = async ({ arg, client, userId }: MainFunctionProps) => {
   var result;
 
   console.log('🚀 ~ file: bulkUpdate.js ~ line 26 ~ export const handler= ~ arg', arg);
-  const { storeId, country, productsArray } = arg[0];
+  const { productsArray } = arg[0];
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+
   const validatedArray = productsArray;
   let storeFront = await client
     .db('base')
     .collection('storeFronts')
-    .findOne({ _id: new ObjectId(storeId) }, {});
+    .findOne({ _id: new ObjectId(storeDoc._id.toString()) }, {});
   console.log(JSON.stringify(storeFront), 'begining');
   // schema validations
   let updateQuery = [];

@@ -23,5 +23,7 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#2e8900",
-  "required_features": ["geolocation"]
+  "required_features": [
+    "geolocation"
+  ]
 }

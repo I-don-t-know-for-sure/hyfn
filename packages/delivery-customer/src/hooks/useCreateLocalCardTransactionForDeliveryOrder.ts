@@ -1,7 +1,7 @@
-import { useUser } from 'contexts/userContext/User';
-import { useMutation, useQueryClient } from 'react-query';
+import { useUser } from "contexts/userContext/User";
+import { useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from 'util/fetch';
+import fetchUtil from "util/fetch";
 
 export const useCreateLocalCardTransactionForDeliveryOrder = () => {
   const queryClient = useQueryClient();
@@ -9,16 +9,27 @@ export const useCreateLocalCardTransactionForDeliveryOrder = () => {
 
   return useMutation(
     async ({ orderId }: { orderId: string }) => {
-      return await fetchUtil({
-        reqData: [{ orderId, customerId: userDocument._id }],
+      try {
+        const result = await fetchUtil({
+          reqData: [{ orderId, customerId: userDocument._id }],
 
-        url: `${import.meta.env.VITE_APP_BASE_URL}/createServiceFeeCardTransaction`,
-      });
+          url: `${
+            import.meta.env.VITE_APP_BASE_URL
+          }/createServiceFeeCardTransaction`,
+        });
+
+        return result;
+      } catch (error) {
+        console.log(
+          "🚀 ~ file: useCreateLocalCardTransactionForDeliveryOrder.ts:15 ~ error:",
+          error
+        );
+      }
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['transactions']);
+        queryClient.invalidateQueries(["transactions"]);
       },
-    },
+    }
   );
 };

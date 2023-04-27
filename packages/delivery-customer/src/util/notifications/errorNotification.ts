@@ -1,6 +1,6 @@
 import { randomId } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import { t } from 'util/i18nextFix';;
+import { t } from "util/i18nextFix";
 import { Notification } from "./types";
 
 export const successfulNotification = ({

@@ -3,16 +3,23 @@ import cp from "child_process";
 
 import fs from "fs";
 (function () {
-  const envs = ["development", "staging", "production"];
+  const envs = ["development", "staging", "production", ""];
   var result = {};
   for (const env of envs) {
     const cmd = cp.spawn(
-      `aws ssm get-parameters-by-path --with-decryption --path /hyfn/backend/${env}`,
+      `aws ssm get-parameters-by-path --with-decryption  --path /hyfn/backend${
+        env === "" ? "" : "/" + env
+      } --query 'Parameters[*].{Name:Name, Value:Value}' `,
       { shell: true }
     );
 
     cmd.stdout.on("data", (d) => {
-      const parameters = JSON.parse(d).Parameters;
+      console.log(
+        "🚀 ~ file: fetch-envs.js:34 ~ cmd.stdout.on ~ d:",
+        d.toString()
+      );
+
+      const parameters = JSON.parse(d.toString());
 
       result = parameters.reduce((accu, parameter) => {
         const parameterNameList = parameter.Name.split("/");
@@ -34,6 +41,7 @@ import fs from "fs";
       console.log(` onebhbdch22222 ${d.Parameters}`)
     );
     cmd.on("exit", async () => {
+      console.log(result);
       fs.writeFile(
         `envVaraibles.ts`,
         `export const config = ${JSON.stringify(result)}`,

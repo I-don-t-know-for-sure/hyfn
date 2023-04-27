@@ -1,5 +1,4 @@
-import { showNotification } from "@mantine/notifications";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useMutation } from "react-query";
 import fetchUtil from "../../../utils/fetch";
 
@@ -14,12 +13,6 @@ export const useCreateStore = () => {
       return result;
     } catch (e) {
       console.error(e);
-      showNotification({
-        title: t("Error"),
-        message: t("An Error occurred"),
-        // color: 'red',
-        autoClose: true,
-      });
     }
   });
 };
