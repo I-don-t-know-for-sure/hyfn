@@ -92,10 +92,10 @@ interface PaySubscriptionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
-  return await mainWrapperWithSession({
+  return await mainWrapper({
     event,
     ctx,
     mainFunction: paySubscriptionHandler,

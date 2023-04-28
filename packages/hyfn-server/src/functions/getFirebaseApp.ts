@@ -16,4 +16,4 @@ const firebaseApp = () => {
   return app;
 };
 
-export default firebaseApp();
+export default firebaseApp;

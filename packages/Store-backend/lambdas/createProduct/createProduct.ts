@@ -2,7 +2,7 @@
 interface CreateProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
 export const createProductHandler = async ({ arg, client, userId }: CreateProductProps) => {
   var result;
@@ -142,7 +142,7 @@ export const handler = async (event, ctx, callback) => {
     readConcern: { level: 'local' },
     writeConcern: { w: 'majority' },
   };
-  return await mainWrapperWithSession({
+  return await mainWrapper({
     mainFunction: createProductHandler,
     ctx,
     callback,

@@ -1,13 +1,14 @@
 interface CancelTransactionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 
 export const cancelTransaction = async ({ arg, client }: CancelTransactionProps) => {
   const session = client.startSession();
-  try {
-    await session.withTransaction(async () => {
+  const result = await withTransaction({
+    session,
+    fn: async () => {
       const { transactionId } = arg[0];
       const transactionDoc = await client
         .db('generalData')
@@ -40,10 +41,10 @@ export const cancelTransaction = async ({ arg, client }: CancelTransactionProps)
           },
           { session }
         );
-    });
-  } finally {
-    await session.endSession();
-  }
+    },
+  });
+  await session.endSession();
+  return result;
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: cancelTransaction });

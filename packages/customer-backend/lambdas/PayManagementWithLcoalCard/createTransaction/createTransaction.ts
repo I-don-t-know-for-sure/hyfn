@@ -1,66 +1,84 @@
-interface CreateTransactionProps extends Omit<MainFunctionProps, "arg"> {
-    arg: any;
+interface CreateTransactionProps extends Omit<MainFunctionProps, 'arg'> {
+  arg: any;
 }
 import { KMS } from 'aws-sdk';
-import { MainFunctionProps, createLocalCardConfigurationObject, decryptData, mainWrapper, mainWrapperWithSession, } from 'hyfn-server';
+import {
+  MainFunctionProps,
+  createLocalCardConfigurationObject,
+  decryptData,
+  mainWrapper,
+} from 'hyfn-server';
 import { ORDER_TYPE_PICKUP, TRANSACTION_TYPE_DRIVER_MANAGMENT } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
 interface CreateManagementLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg'> {
-    arg: any[];
+  arg: any[];
 }
-export const createManagementLocalCardTransaction = async ({ arg, client, userId, session, }: CreateManagementLocalCardTransactionProps) => {
-    const { orderId, country } = arg[0];
-    const userDoc = await client
+export const createManagementLocalCardTransaction = async ({
+  arg,
+  client,
+  userId,
+}: CreateManagementLocalCardTransactionProps) => {
+  const session = client.startSession();
+  try {
+    await session.withTransaction(async () => {
+      const { orderId, country } = arg[0];
+      const userDoc = await client
         .db('generalData')
         .collection('customerInfo')
         .findOne({ customerId: userId }, { session });
-    if (userDoc.transactionId) {
+      if (userDoc.transactionId) {
         throw new Error('there is a transaction in progress');
-    }
-    const orderDoc = await client
+      }
+      const orderDoc = await client
         .db('base')
         .collection('orders')
         .findOne({ _id: new ObjectId(orderId) }, { session });
-    if (orderDoc.delivered) {
+      if (orderDoc.delivered) {
         throw new Error('Order delivered');
-    }
-    if (orderDoc.deliveryFeePaid) {
+      }
+      if (orderDoc.deliveryFeePaid) {
         throw new Error('delivery fee already paid');
-    }
-    if (orderDoc.orderType === ORDER_TYPE_PICKUP) {
+      }
+      if (orderDoc.orderType === ORDER_TYPE_PICKUP) {
         throw new Error('order type is pick up');
-    }
-    const managementDoc = await client
+      }
+      const managementDoc = await client
         .db('generalData')
         .collection('driverManagement')
         .findOne({ _id: new ObjectId(orderDoc.driverManagement) }, { session });
-    const transactionId = new ObjectId();
-    const { TerminalId, MerchantId, secretKey: encryptedSecretKey } = managementDoc.localCardKeys;
-    await client
+      const transactionId = new ObjectId();
+      const { TerminalId, MerchantId, secretKey: encryptedSecretKey } = managementDoc.localCardKeys;
+      await client
         .db('generalData')
         .collection('customerInfo')
-        .updateOne({ customerId: userId }, {
-        $set: {
-            transactionId: transactionId,
+        .updateOne(
+          { customerId: userId },
+          {
+            $set: {
+              transactionId: transactionId,
+            },
+          }
+        );
+      await client.db('generalData').collection('transactions').insertOne(
+        {
+          _id: transactionId,
+          storeId: orderDoc.driverManagement,
+          customerId: userDoc._id.toString(),
+          amount: orderDoc.deliveryFee,
+          validated: false,
+          type: TRANSACTION_TYPE_DRIVER_MANAGMENT,
+          country: country,
+          orderId: orderId,
         },
-    });
-    await client.db('generalData').collection('transactions').insertOne({
-        _id: transactionId,
-        storeId: orderDoc.driverManagement,
-        customerId: userDoc._id.toString(),
-        amount: orderDoc.deliveryFee,
-        validated: false,
-        type: TRANSACTION_TYPE_DRIVER_MANAGMENT,
-        country: country,
-        orderId: orderId,
-    }, { session });
-    const kmsKeyARN = process.env.kmsKeyARN || '';
-    const secretKey = await decryptData({
+        { session }
+      );
+      const kmsKeyARN = process.env.kmsKeyARN || '';
+      const secretKey = await decryptData({
         data: encryptedSecretKey,
         kmsKeyARN,
         kmsClient: new KMS(),
-    });
-    const transactionObject = createLocalCardConfigurationObject({
+      });
+      const transactionObject = createLocalCardConfigurationObject({
         amount: orderDoc.deliveryFee,
         includeLocalCardTransactionFeeToPrice: true,
         MerchantId,
@@ -68,12 +86,16 @@ export const createManagementLocalCardTransaction = async ({ arg, client, userId
         secretKey,
         TerminalId,
         transactionId,
+      });
+      return { configurationObject: transactionObject };
     });
-    return { configurationObject: transactionObject };
+  } finally {
+    await session.endSession();
+  }
 };
 export const handler = async (event) => {
-    return await mainWrapperWithSession({
-        event,
-        mainFunction: createManagementLocalCardTransaction,
-    });
+  return await mainWrapper({
+    event,
+    mainFunction: createManagementLocalCardTransaction,
+  });
 };

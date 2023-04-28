@@ -1,7 +1,7 @@
 export const updateStoreInfoHandler = async ({
   arg,
   client,
-  session,
+
   userId: merchantId,
 }: MainFunctionProps) => {
   var result;
@@ -68,9 +68,9 @@ interface UpdateStoreInfoProps extends Omit<MainFunctionProps, 'arg'> {
 ('use strict');
 import { ObjectId } from 'mongodb';
 import { currencies } from '../resources';
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx) => {
-  return await mainWrapperWithSession({
+  return await mainWrapper({
     event,
     ctx,
     mainFunction: updateStoreInfoHandler,

@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { MainFunctionProps, mainWrapperWithSession } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { deleteImages } from '../common/utils/deleteImages';
 interface DeleteProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
@@ -26,7 +26,7 @@ export const deleteProductHandler = async ({ arg, client, userId }: DeleteProduc
 };
 export const handler = async (event, ctx) => {
   // await argValidations(arg);
-  return await mainWrapperWithSession({
+  return await mainWrapper({
     event,
     ctx,
     mainFunction: deleteProductHandler,

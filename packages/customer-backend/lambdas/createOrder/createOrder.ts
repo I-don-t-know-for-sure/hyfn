@@ -3,15 +3,16 @@ interface CreateOrderProps extends Omit<MainFunctionProps, 'arg'> {}
 import { ObjectId } from 'mongodb';
 import { ORDER_TYPE_PICKUP, STORE_STATUS_NOT_SET } from 'hyfn-types';
 import { smallerEq } from 'mathjs';
-import { insertOne, mainWrapper, MainFunctionProps } from 'hyfn-server';
+import { insertOne, mainWrapper, MainFunctionProps, withTransaction } from 'hyfn-server';
 
 interface CreateOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
 const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps) => {
   const session = client.startSession();
-  try {
-    session.withTransaction(async () => {
+  const result = await withTransaction({
+    session,
+    fn: async () => {
       const userInfo = await client
         .db('generalData')
         .collection('customerInfo')
@@ -151,10 +152,10 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
       // }
       console.log('there is a result');
       return { message: 'success' };
-    });
-  } finally {
-    await session.endSession();
-  }
+    },
+  });
+  await session.endSession();
+  return result;
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: createOrder });

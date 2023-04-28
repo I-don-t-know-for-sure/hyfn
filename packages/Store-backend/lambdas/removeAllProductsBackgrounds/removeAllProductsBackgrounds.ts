@@ -1,4 +1,4 @@
-import { MainFunctionProps, mainWrapper, mainWrapperWithSession } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { sendRemoveBackgroundsEventBus } from '../common/functions/removeBackgrounds';
 

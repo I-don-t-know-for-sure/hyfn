@@ -47,9 +47,9 @@ export function customerApiStack({ stack }: StackContext) {
         environment: {
           kmsKeyARN: keyArn,
           // /////////////////
-          clientEmail: config[""]["firebaseAdminSDK-client_email"],
-          projectId: config[""]["firebaseAdminSDK-project_id"],
-          privateKey: config[""]["firebaseAdminSDK-private_key"],
+          // clientEmail: config[""]["firebaseAdminSDK-client_email"],
+          // projectId: config[""]["firebaseAdminSDK-project_id"],
+          // privateKey: config[""]["firebaseAdminSDK-private_key"],
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
