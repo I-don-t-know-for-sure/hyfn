@@ -72,24 +72,7 @@ const createStoreLocalCardTransaction = async ({
       if (storeOrder.orderStatus === STORE_STATUS_PAID) {
         throw new Error('store is paid');
       }
-      // if (!storeDoc.storeType.includes(STORE_TYPE_RESTAURANT)) {
-      //   if (storeOrder?.readyForPayment?.ready !== true) {
-      //     throw new Error('store not ready yet');
-      //   }
-      // }
-      // if (!storeDoc.storeType.includes(STORE_TYPE_RESTAURANT)) {
-      //   const storeReady = storeOrder.orderStatus === STORE_STATUS_READY_FOR_PAYMENT;
-      //   if (!storeReady) {
-      //     throw new Error('store not ready yet');
-      //   }
-      // }
-      // if (!storeDoc.storeType.includes(STORE_TYPE_RESTAURANT)) {
-      //   const storeReady = storeOrder.orderStatus === ORDER_STATUS_READY;
-      //   if (!storeReady) {
-      //     throw new Error('store not ready yet');
-      //   }
-      // }
-      // if (storeDoc.storeType.includes(STORE_TYPE_RESTAURANT)) {
+
       const now = new Date();
       const accepted = storeOrder.orderStatus === STORE_STATUS_ACCEPTED;
       if (!accepted) {
@@ -131,44 +114,14 @@ const createStoreLocalCardTransaction = async ({
         storeOrder,
       });
       const amountToPay = add(amountToPayForProducts, 0);
-      console.log(
-        '🚀 ~ file: createStoreLocalCardTransaction.ts:127 ~ createStoreLocalCardTransaction ~ amountToPayForProducts:',
-        amountToPayForProducts
-      );
-      // const { amountToPay, amountToReturnToCustomer, originalCost } = storeDoc.storeType.includes(
-      //   STORE_TYPE_RESTAURANT
-      // )
-      //   ? {
-      //       amountToPay: orderDoc.orderCost,
-      //       amountToReturnToCustomer: 0,
-      //       originalCost: orderDoc.orderCost,
-      //     }
-      //   : calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({
-      //       storeOrder,
-      //     });
-      console.log(
-        '🚀 ~ file: createStoreLocalCardTransaction.js ~ line 36 ~ createStoreLocalCardTransaction ~ amountToPay',
-        amountToPay
-      );
+
       const { TerminalId, MerchantId, secretKey: encryptedSecretKey } = storeDoc.localCardAPIKey;
-      console.log(
-        '🚀 ~ file: createStoreLocalCardTransaction.js ~ line 48 ~ createStoreLocalCardTransaction ~ encryptedSecretKey',
-        encryptedSecretKey
-      );
-      console.log(
-        '🚀 ~ file: createStoreLocalCardTransaction.js ~ line 48 ~ createStoreLocalCardTransaction ~ encryptedSecretKey',
-        encryptedSecretKey
-      );
+
       const kmsKeyARN = process.env.kmsKeyARN || '';
       const secretKey = await decryptData({ data: encryptedSecretKey, kmsKeyARN, kmsClient });
-      console.log(
-        '🚀 ~ file: createStoreLocalCardTransaction.js ~ line 53 ~ createStoreLocalCardTransaction ~ secretKey',
-        secretKey
-      );
-      // get order document to calculate the amount
+
       const transactionId = new ObjectId();
-      // const now = new Date();
-      // calculate the amount for the transaction
+
       const insertTransaction = await client.db('generalData').collection('transactions').insertOne(
         {
           _id: transactionId,

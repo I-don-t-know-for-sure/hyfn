@@ -10,6 +10,13 @@ export const hyfnPlusSubscriptionPrice = 10;
 export const descriptionGenerationPricePerImage = 0.1;
 export const backgroundRemovalPerImage = 0.1;
 
+/// customer payment
+
+export const subscriptionPayment = "subscriptionPayment";
+export const serviceFeePayment = "serviceFeePayment";
+export const managementPayment = "managementPayment";
+export const storePayment = "storePayment";
+
 export const measurementSystem = [
   { label: "Kilo", value: "Kilo" },
   { label: "Liter", value: "Liter" },

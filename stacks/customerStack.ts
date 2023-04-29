@@ -88,6 +88,18 @@ export function customerApiStack({ stack }: StackContext) {
           functionName: "createSubscriptionTransaction" + stack.stage,
         },
       },
+      "POST /createTransaction": {
+        function: {
+          handler: pathToLambdas + "localCard/createTransaction.handler",
+          functionName: "createTransaction" + stack.stage,
+        },
+      },
+      "POST /validateTransaction": {
+        function: {
+          handler: pathToLambdas + "localCard/validateTransaction.handler",
+          functionName: "validateTransaction" + stack.stage,
+        },
+      },
       "POST /cancelTransaction": {
         function: {
           functionName: "cancelTransaction" + stack.stage,
