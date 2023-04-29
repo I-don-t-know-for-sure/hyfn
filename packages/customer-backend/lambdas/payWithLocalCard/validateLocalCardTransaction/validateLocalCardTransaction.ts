@@ -1,6 +1,3 @@
-interface ValidateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg'> {
-  arg: any;
-}
 import { ObjectId } from 'mongodb';
 import { adminName } from '../../common/constants';
 import { getAdminLocalCardCreds } from '../../common/getAdminLocalCardCreds';
@@ -12,8 +9,6 @@ interface validateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg
 export const validateLocalCardTransaction = async ({
   arg,
   client,
-
-  event,
 }: validateLocalCardTransactionProps) => {
   const session = client.startSession();
   const result = await withTransaction({
@@ -61,28 +56,31 @@ export const validateLocalCardTransaction = async ({
         amount: transaction.amount,
       });
       console.log('herehh');
+      // create a date and add the number of months from the transaction
+      const date = new Date();
+      date.setMonth(date.getMonth() + transaction.months);
+
       if (isValidated) {
-        // TODO increase user balance
-        // await updateOne({
-        //   query: { _id: new ObjectId(transaction.customerId) },
-        //   update: {
-        //     $inc: { balance: Math.abs(parseFloat(transaction.amount)) },
-        //   },
-        //   options: {
-        //     session,
-        //   },
-        //   collection: client.db('generalData').collection('customerInfo'),
-        // });
         await client
           .db('generalData')
           .collection('customerInfo')
           .updateOne(
             { _id: new ObjectId(transaction.customerId) },
             {
-              $set: {
-                transactionId: undefined,
-              },
-              $inc: { balance: Math.abs(parseFloat(transaction.amount)) },
+              ...(transaction.type === 'subscription'
+                ? {
+                    $set: {
+                      transactionId: undefined,
+                      subscribedToHyfnPlus: true,
+                      expirationDate: date,
+                    },
+                  }
+                : {
+                    $set: {
+                      transactionId: undefined,
+                    },
+                    $inc: { balance: Math.abs(parseFloat(transaction.amount)) },
+                  }),
             },
             {
               session,

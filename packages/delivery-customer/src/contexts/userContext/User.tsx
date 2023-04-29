@@ -1,16 +1,13 @@
-import { useLocalStorage } from '@mantine/hooks';
-import assert from 'assert';
-import { Auth } from 'aws-amplify';
-import { LOGGED_IN, USER_DOCUMENT, USER_ID } from 'config/constents';
+import { useLocalStorage } from "@mantine/hooks";
 
-import { useGetUserDocument } from 'hooks/useGetUserDocument';
-import { useGetUserId } from 'hooks/useGetUserId';
-import { useRefreshBalance } from 'hooks/useRefreshBalance';
-import { isUndefined } from 'mathjs';
+import { Auth } from "aws-amplify";
+import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "config/constents";
 
-import { createContext, useContext, useEffect } from 'react';
-import { useQueryClient } from 'react-query';
-import { useLocation, useNavigate } from 'react-router';
+import { useGetUserDocument } from "hooks/useGetUserDocument";
+import { useGetUserId } from "hooks/useGetUserId";
+
+import { createContext, useContext, useEffect } from "react";
+import { useQueryClient } from "react-query";
 
 export const UserContext = createContext(undefined);
 
@@ -31,19 +28,29 @@ interface UserControl {
 }
 
 const UserProvider: React.FC = ({ children }) => {
-  const [userDocument, setUserDocument] = useLocalStorage({ key: USER_DOCUMENT });
-  const [userId, setUserId] = useLocalStorage({ key: USER_ID, defaultValue: '' });
-  const [loggedIn, setLoggedIn] = useLocalStorage({ key: LOGGED_IN, defaultValue: false });
+  const [userDocument, setUserDocument] = useLocalStorage({
+    key: USER_DOCUMENT,
+  });
+  const [userId, setUserId] = useLocalStorage({
+    key: USER_ID,
+    defaultValue: "",
+  });
+  const [loggedIn, setLoggedIn] = useLocalStorage({
+    key: LOGGED_IN,
+    defaultValue: false,
+  });
 
   useGetUserId({ loggedIn, setUserId });
 
-  const { data, isLoading, isFetched, refetch } = useGetUserDocument({ userId });
+  const { data, isLoading, isFetched, refetch } = useGetUserDocument({
+    userId,
+  });
   const queryClient = useQueryClient();
   useEffect(() => {
-    console.log('🚀 ~ file: User.tsx:11 ~ data', data);
+    console.log("🚀 ~ file: User.tsx:11 ~ data", data);
 
     if (isFetched && !isLoading) {
-      if (typeof data === 'object' && data !== null && data !== undefined) {
+      if (typeof data === "object" && data !== null && data !== undefined) {
         if (Object.keys(data).length === 0) {
           setUserDocument(undefined);
           return;
@@ -53,11 +60,17 @@ const UserProvider: React.FC = ({ children }) => {
     }
   }, [isLoading, isFetched, data]);
 
-  const signIn = async ({ email, password }: { email: string; password: string }) => {
+  const signIn = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     // try {
     // the actual required field is username but we gave username and email have the same value
     const user = await Auth.signIn(email, password);
-    console.log('🚀 ~ file: User.tsx:50 ~ signIn ~ user', user);
+    console.log("🚀 ~ file: User.tsx:50 ~ signIn ~ user", user);
     setUserId(user.username);
     setLoggedIn(true);
     await queryClient.resetQueries();
@@ -67,7 +80,13 @@ const UserProvider: React.FC = ({ children }) => {
     // }
   };
 
-  const signUp = async ({ email, password }: { email: string; password: string }) => {
+  const signUp = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     // try {
     const { user } = await Auth.signUp({
       username: email,
@@ -82,23 +101,35 @@ const UserProvider: React.FC = ({ children }) => {
         enabled: true,
       },
     });
-    console.log('🚀 ~ file: User.tsx:75 ~ signUp ~ user', user);
+    console.log("🚀 ~ file: User.tsx:75 ~ signUp ~ user", user);
     // setUserId(user)
     // } catch (error) {
     //   console.log('error signing up:', error);
     // }
   };
 
-  const resendConfirmationEmail = async ({ username }: { username: string }) => {
+  const resendConfirmationEmail = async ({
+    username,
+  }: {
+    username: string;
+  }) => {
     // try {
     await Auth.resendSignUp(username);
-    console.log('code resent successfully');
+    console.log("code resent successfully");
     // } catch (err) {
     //   console.log('error resending code: ', err);
     // }
   };
 
-  const confirmSignUp = async ({ email, code, navigate }: { email: string; code: string; navigate: any }) => {
+  const confirmSignUp = async ({
+    email,
+    code,
+    navigate,
+  }: {
+    email: string;
+    code: string;
+    navigate: any;
+  }) => {
     // try {
     await Auth.confirmSignUp(email, code);
     // const user = await Auth.currentAuthenticatedUser()
@@ -107,7 +138,7 @@ const UserProvider: React.FC = ({ children }) => {
     // setUserId(user.username)
     refetch();
     setLoggedIn(true);
-    navigate('/', { replace: true });
+    navigate("/", { replace: true });
 
     // } catch (error) {
     //   console.log('error confirming sign up', error);
@@ -117,7 +148,7 @@ const UserProvider: React.FC = ({ children }) => {
   const signOut = async () => {
     // try {
     setLoggedIn(false);
-    setUserId('');
+    setUserId("");
     await Auth.signOut();
     await queryClient.resetQueries();
     refetch();
@@ -130,7 +161,11 @@ const UserProvider: React.FC = ({ children }) => {
     console.log();
   };
 
-  const sendPasswordChangeConfirmationCode = async ({ email }: { email: string }) => {
+  const sendPasswordChangeConfirmationCode = async ({
+    email,
+  }: {
+    email: string;
+  }) => {
     // try {
     const data = await Auth.forgotPassword(email);
     console.log(data);
@@ -180,7 +215,7 @@ const UserProvider: React.FC = ({ children }) => {
 export const useUser = () => {
   const user: UserControl = useContext(UserContext);
   if (!user) {
-    throw new Error('call inside the component tree');
+    throw new Error("call inside the component tree");
   }
 
   return user;

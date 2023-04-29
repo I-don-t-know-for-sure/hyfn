@@ -47,9 +47,9 @@ export function customerApiStack({ stack }: StackContext) {
         environment: {
           kmsKeyARN: keyArn,
           // /////////////////
-          // clientEmail: config[""]["firebaseAdminSDK-client_email"],
-          // projectId: config[""]["firebaseAdminSDK-project_id"],
-          // privateKey: config[""]["firebaseAdminSDK-private_key"],
+          clientEmail: config[""]["firebaseAdminSDK-client_email"],
+          projectId: config[""]["firebaseAdminSDK-project_id"],
+          privateKey: config[""]["firebaseAdminSDK-private_key"],
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
@@ -78,6 +78,14 @@ export function customerApiStack({ stack }: StackContext) {
         function: {
           functionName: "getStoreFronts" + stack.stage,
           handler: pathToLambdas + "getStoreFronts/getStoreFronts.handler",
+        },
+      },
+      "POST /createSubscriptionTransaction": {
+        function: {
+          handler:
+            pathToLambdas +
+            "payWithLocalCard/createSubscriptionTransaction/createSubscriptionTransaction.handler",
+          functionName: "createSubscriptionTransaction" + stack.stage,
         },
       },
       "POST /cancelTransaction": {

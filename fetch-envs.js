@@ -26,12 +26,16 @@ import fs from "fs";
         const parameterName = `${
           parameterNameList[parameterNameList.length - 1]
         }`;
+        const value =
+          parameterName === "firebaseAdminSDK-private_key"
+            ? parameter.Value.replace(/\\n/g, "\n")
+            : parameter.Value;
 
         return {
           ...accu,
           [env]: {
             ...accu[env],
-            [parameterName]: parameter.Value,
+            [parameterName]: value,
           },
         };
       }, result);

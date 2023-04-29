@@ -265,6 +265,7 @@ export function storeApiStack({ stack }: StackContext) {
           functionName: "generateDescriptionClient" + stack.stage,
         },
       },
+
       "POST /addEmployee": {
         function: {
           handler: pathToLambdas + "addEmployee/addEmployee.handler",

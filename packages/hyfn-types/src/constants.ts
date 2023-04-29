@@ -5,6 +5,8 @@ export const chatTranslateBefore = "translate the following";
 export const chatTranslateAfter =
   'to arabic if its not already in arabic, if its already in arabic return "." and keep it in html';
 
+export const hyfnPlusSubscriptionPrice = 10;
+
 export const descriptionGenerationPricePerImage = 0.1;
 export const backgroundRemovalPerImage = 0.1;
 
