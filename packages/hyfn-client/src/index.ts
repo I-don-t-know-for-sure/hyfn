@@ -2,6 +2,7 @@ import { NotificationProps } from "@mantine/notifications";
 
 export * from "./components";
 export * from "./hooks";
+export * from "./functions";
 export const loadingNotification: NotificationProps = {
   title: "",
   loading: true,

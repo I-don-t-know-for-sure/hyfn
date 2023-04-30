@@ -73,7 +73,7 @@ export const validateLocalCardTransaction = async ({
   }
 
   const isValidated = await isLocalCardTransactionValidated({
-    includeLocalCardTransactionFeeToPrice: false,
+    includeLocalCardTransactionFeeToPrice: true,
     MerchantId,
     secretKey,
     TerminalId,
@@ -84,8 +84,13 @@ export const validateLocalCardTransaction = async ({
     throw new Error('transaction not validated');
   }
   const session = client.startSession();
+
   const result = await withTransaction({
     session,
+    options: {
+      writeConcern: { w: 'majority' },
+      readConcern: { level: 'linearizable' },
+    },
     fn: async () => {
       const transaction = await client
         .db('generalData')
@@ -302,5 +307,6 @@ export const handler = async (event) => {
   return await mainWrapper({
     event,
     mainFunction: validateLocalCardTransaction,
+    validateUser: false,
   });
 };
