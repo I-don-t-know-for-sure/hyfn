@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ORDER_STATUS_READY, STORE_STATUS_PREPARING } from '../common/constants';
+import { ORDER_STATUS_READY, STORE_STATUS_PREPARING } from 'hyfn-types';
 interface SetOrderAsReadyProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -38,7 +38,7 @@ export const setOrderAsReadyHandler = async ({ arg, client, userId }: SetOrderAs
       {
         $set: {
           ['orders.$[store].orderStatus']: ORDER_STATUS_READY,
-          // ['status.$[store].status']: ORDER_STATUS_READY,
+          ['status.$[store].status']: ORDER_STATUS_READY,
         },
       },
       {

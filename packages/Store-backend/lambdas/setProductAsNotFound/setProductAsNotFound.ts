@@ -32,10 +32,10 @@ export const setProductAsNotFoundHandler = async ({ arg, client, userId }: MainF
     );
   const storeOrder = orderDoc.orders.find((store) => store._id.toString() === storeId.toString());
   if (
-    storeOrder.orderStatus !== STORE_STATUS_PENDING &&
-    storeOrder.orderStatus !== STORE_STATUS_ACCEPTED
+    storeOrder.orderStatus !== STORE_STATUS_PENDING
+    // storeOrder.orderStatus !== STORE_STATUS_ACCEPTED
   ) {
-    throw new Error('can not edit order products after payment');
+    throw new Error('can not edit order products after being accepted');
   }
   await client
     .db('base')

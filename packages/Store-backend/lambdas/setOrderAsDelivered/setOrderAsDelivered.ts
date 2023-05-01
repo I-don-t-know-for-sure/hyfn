@@ -35,6 +35,7 @@ export const setOrderAsDeliveredHandler = async ({ arg, client, userId }: MainFu
       {
         $set: {
           ['status.$[store].status']: ORDER_STATUS_DELIVERED,
+          ['orders.$[store].orderStatus']: ORDER_STATUS_DELIVERED,
         },
       },
       {
@@ -48,11 +49,7 @@ interface SetOrderAsDeliveredProps extends Omit<MainFunctionProps, 'arg'> {
 }
 const { ObjectId } = require('mongodb');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import {
-  STORE_STATUS_READY,
-  ORDER_STATUS_DELIVERED,
-  STORE_TYPE_RESTAURANT,
-} from '../common/constants';
+import { STORE_STATUS_READY, ORDER_STATUS_DELIVERED, STORE_TYPE_RESTAURANT } from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setOrderAsDeliveredHandler });
 };

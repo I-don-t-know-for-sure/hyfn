@@ -40,7 +40,7 @@ export const setOrderAsPreparingHandler = async ({
       {
         $set: {
           ['orders.$[store].orderStatus']: ORDER_STATUS_PREPARING,
-          // ['status.$[store].status']: ORDER_STATUS_PREPARING,
+          ['status.$[store].status']: ORDER_STATUS_PREPARING,
         },
       },
       {

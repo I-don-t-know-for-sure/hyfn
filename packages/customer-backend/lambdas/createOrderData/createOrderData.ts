@@ -1,24 +1,18 @@
 ('use strict');
 
-import axios from 'axios';
-import { ObjectId } from 'mongodb';
-import { getCustomerInfo } from '../common/getCustomerInfo';
-
-import { mainWrapper } from 'hyfn-server/src';
-import { MainFunctionProps } from 'hyfn-server/src';
+import { mainWrapper } from 'hyfn-server';
+import { MainFunctionProps } from 'hyfn-server';
 import { z } from 'zod';
 import { updateAllOrder } from './functions/updateAllOrder';
-const inputValidation = z.object({});
-const accessSession = z.object({});
+
 interface CreateOrderDataProps extends Omit<MainFunctionProps, 'args'> {
   arg: any[];
 }
 export const createOrderData = async ({ arg, client, userId }: CreateOrderDataProps) => {
-  const customerDoc = await getCustomerInfo({
-    client,
-    options: { projection: {}, session: undefined },
-    userId,
-  });
+  const customerDoc = await client
+    .db('generalData')
+    .collection('customerInfo')
+    .findOne({ customerId: userId }, {});
   // const arg = event;
   const orderCart = arg[0];
   const buyerInfo = arg[1];
@@ -57,7 +51,7 @@ export const createOrderData = async ({ arg, client, userId }: CreateOrderDataPr
   //   }
   // check this out when free // customerDoc?.order?.orders?.length !== orderCart?.length || diffrent
 
-  await updateAllOrder(arg, client);
+  await updateAllOrder({ arg, client, customerDoc });
   // }
   return JSON.stringify('success');
   // Ensures that the client will close when you finish/error

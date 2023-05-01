@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { adminName } from '../common/constants';
+
 import { getAdminLocalCardCreds } from '../common/getAdminLocalCardCreds';
 import {
   decryptData,
@@ -128,6 +128,18 @@ export const validateLocalCardTransaction = async ({
               session,
             }
           );
+        await client
+          .db('generalData')
+          .collection('transactions')
+          .updateOne(
+            { _id: new ObjectId(transactionId) },
+            {
+              $set: {
+                validated: true,
+              },
+            },
+            { session }
+          );
         return 'transaction approved';
       }
 
@@ -204,9 +216,7 @@ export const validateLocalCardTransaction = async ({
           [`orders.$[store].paymentDate`]: new Date(),
           // ['status.$[store].status']: ORDER_STATUS_DELIVERED,
         } as any;
-        if (!orderDoc) {
-          throw '';
-        }
+
         if (orderDoc.orderType === ORDER_TYPE_PICKUP) {
           const storesNotPaid = orderDoc.orders.some((store) => {
             return !store.paid;
@@ -233,7 +243,7 @@ export const validateLocalCardTransaction = async ({
               ],
             }
           );
-        // updateOne({ updateOneResult: updateOrderDoc });
+
         await client
           .db('generalData')
           .collection('transactions')
@@ -244,30 +254,7 @@ export const validateLocalCardTransaction = async ({
             },
             { session }
           );
-        // if (transaction.amountToReturnToCustomer && transaction.amountToReturnToCustomer > 0.0) {
-        /*  const customerInfoUpdate = await client
-          .db('generalData')
-          .collection('customerInfo')
-          .updateOne(
-            {
-              _id: new ObjectId(transaction.customerId),
-            },
-            {
-              $set: {
-                transactionId: undefined,
-              },
-              ...(transaction.amountToReturnToCustomer && transaction.amountToReturnToCustomer > 0.0
-                ? {
-                    $inc: {
-                      balance: Math.abs(transaction.amountToReturnToCustomer),
-                    },
-                  }
-                : {}),
-            },
-            { session }
-          ); */
 
-        // }
         const storeInfoUpdate = await client
           .db('generalData')
           .collection('storeInfo')

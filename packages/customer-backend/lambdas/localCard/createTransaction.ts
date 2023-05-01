@@ -169,13 +169,10 @@ const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCa
         if (storePaid) {
           throw new Error('Store already paid');
         }
-        const {
-          amountToPay: amountToPayForProducts,
-          amountToReturnToCustomer,
-          originalCost,
-        } = calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({
-          storeOrder,
-        });
+        const { amountToPay: amountToPayForProducts } =
+          calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({
+            storeOrder,
+          });
         const amountToPay = add(amountToPayForProducts, 0);
 
         const { TerminalId, MerchantId, secretKey: encryptedSecretKey } = storeDoc.localCardAPIKey;
@@ -202,10 +199,11 @@ const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCa
               // amountToReturnToCustomer,
               transactionDate: now,
               validated: false,
+              type,
             },
             { session }
           );
-        // insertOne({ insertOneResult: insertTransaction });
+
         await client
           .db('generalData')
           .collection('customerInfo')
@@ -242,7 +240,7 @@ const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCa
               session,
             }
           );
-        // updateOne({ updateOneResult: updateOrder });
+
         const configurationObject = createLocalCardConfigurationObject({
           includeLocalCardTransactionFeeToPrice: storeDoc.includeLocalCardFeeToPrice,
           amount: amountToPay as number,
@@ -270,7 +268,7 @@ const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCa
       storeId: adminName,
       transactionDate: now,
       validated: false,
-      type: 'subscription',
+      type,
       numberOfMonths,
     });
     await client
@@ -351,7 +349,7 @@ const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCa
             customerId: userDoc._id.toString(),
             amount: orderDoc.deliveryFee,
             validated: false,
-            type: TRANSACTION_TYPE_DRIVER_MANAGMENT,
+            type,
             country: country,
             orderId: orderId,
           },

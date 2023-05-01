@@ -5,7 +5,7 @@ export const updateStoreInfoHandler = async ({
   userId: merchantId,
 }: MainFunctionProps) => {
   var result;
-  // const { storeFrontId, id, city, country } = arg[0];
+
   const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
@@ -15,13 +15,11 @@ export const updateStoreInfoHandler = async ({
 
   const newInfo = arg[1];
   const { imgaeObj, userId, balance, ...newStore } = newInfo;
-  // const { userId: merchantId } = arg[arg.length - 1];
+
   const mongo = client.db('base');
   const storeCollection = client.db('generalData').collection(`storeInfo`);
   const storeFrontCollection = mongo.collection(`storeFronts`);
-  // const storeDoc = await storeCollection.findOne({
-  //   userId: merchantId,
-  // });
+
   const coordsArray = newStore.coords.split(',');
   console.log(JSON.stringify(coordsArray));
   if (Array.isArray(coordsArray)) {
@@ -53,7 +51,7 @@ export const updateStoreInfoHandler = async ({
                 ? newStore.city
                 : 'gibbrish',
             description: newStore.description,
-            coords: coords,
+            ...(storeDoc.opened ? {} : { coords: coords }),
           },
         },
         {}
@@ -74,10 +72,5 @@ export const handler = async (event, ctx) => {
     event,
     ctx,
     mainFunction: updateStoreInfoHandler,
-    sessionPrefrences: {
-      readPreference: 'primary',
-      readConcern: { level: 'local' },
-      writeConcern: { w: 'majority' },
-    },
   });
 };

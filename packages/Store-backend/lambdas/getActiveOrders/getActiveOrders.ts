@@ -1,5 +1,5 @@
 export const getActiveOrdersHandler = async ({ arg, client }) => {
-  const { status, city, country, id, lastDoc } = arg[0];
+  const { id, lastDoc } = arg[0];
   const db = client.db('base');
   if (lastDoc) {
     const orders = await db

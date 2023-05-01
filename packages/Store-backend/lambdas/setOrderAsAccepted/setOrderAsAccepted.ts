@@ -41,7 +41,7 @@ export const setOrderAsAcceptedHandler = async ({ arg, client }: MainFunctionPro
         $set: {
           ['orders.$[store].orderStatus']: ORDER_STATUS_ACCEPTED,
           ['orders.$[store].paymentWindowCloseAt']: now.toJSON(),
-          // ['status.$[store].status']: ORDER_STATUS_ACCEPTED,
+          ['status.$[store].status']: ORDER_STATUS_ACCEPTED,
         },
       },
       {
@@ -62,7 +62,7 @@ import {
   STORE_STATUS_PENDING,
   PAYMENT_WINDOW,
   ORDER_TYPE_DELIVERY,
-} from '../common/constants';
+} from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setOrderAsAcceptedHandler });
 };

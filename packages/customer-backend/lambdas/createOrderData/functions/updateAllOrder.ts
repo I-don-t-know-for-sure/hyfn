@@ -6,9 +6,17 @@ import {
 } from 'hyfn-types';
 import { calculateOrderCost } from 'lambdas/common/utils';
 import { add, largerEq, multiply, smallerEq } from 'mathjs';
-import { ObjectId } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 
-export const updateAllOrder = async (arg, client) => {
+export const updateAllOrder = async ({
+  arg,
+  client,
+  customerDoc,
+}: {
+  arg: any;
+  client: MongoClient;
+  customerDoc: any;
+}) => {
   const orderCart = arg[0];
   const buyerInfo = arg[1];
   const deliveryDate = buyerInfo.deliveryDate;
@@ -156,7 +164,8 @@ export const updateAllOrder = async (arg, client) => {
               duration: 0,
               distance: 0,
               deliveryFee: 0,
-              serviceFee: serviceFee,
+              serviceFeePaid: customerDoc.subscribedToHyfnPlus ? true : false,
+              serviceFee: customerDoc.subscribedToHyfnPlus ? 0 : serviceFee,
               totalCost: totalCost,
               orderCost: orderCostAfterFee,
               originalDeliveryFee: 0,
@@ -196,7 +205,9 @@ export const updateAllOrder = async (arg, client) => {
               orderType: orderCart[0].orderType,
               buyerCoords: [buyerInfo.customerCoords[1], buyerInfo.customerCoords[0]],
               buyerAddress: buyerInfo.customerAddress,
-              serviceFee: serviceFee,
+
+              serviceFeePaid: customerDoc.subscribedToHyfnPlus ? true : false,
+              serviceFee: customerDoc.subscribedToHyfnPlus ? 0 : serviceFee,
               storeServiceFee: storePickupFee,
               duration: 0,
               distance: 0,

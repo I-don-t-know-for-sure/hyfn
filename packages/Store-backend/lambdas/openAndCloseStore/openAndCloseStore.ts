@@ -1,6 +1,12 @@
-import { log } from 'console';
 import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
-import { gibbrish } from 'hyfn-types';
+import {
+  ORDER_STATUS_ACCEPTED,
+  ORDER_STATUS_PAID,
+  ORDER_STATUS_PENDING,
+  ORDER_STATUS_PREPARING,
+  USER_TYPE_STORE,
+  gibbrish,
+} from 'hyfn-types';
 import { ObjectId } from 'mongodb';
 ('use strict');
 interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {
@@ -11,29 +17,45 @@ export const openAndCloseStoreHandler = async ({
   client,
 
   userId,
-}: MainFunctionProps) => {
+}: OpenAndCloseStoreProps) => {
+  const storeDoc = await client
+    .db('generalData')
+    .collection('storeInfo')
+    .findOne({ usersIds: userId }, {});
+  if (!storeDoc) throw new Error('store not found');
+  const activeOrders = await client
+    .db('base')
+    .collection('orders')
+    .find(
+      {
+        status: {
+          $elemMatch: {
+            _id: new ObjectId(storeDoc._id.toString()),
+            userType: USER_TYPE_STORE,
+            status: {
+              $or: [
+                { $eq: ORDER_STATUS_ACCEPTED },
+                { $eq: ORDER_STATUS_PAID },
+                { $eq: ORDER_STATUS_PENDING },
+                { $eq: ORDER_STATUS_PREPARING },
+              ],
+            },
+          },
+        },
+      },
+      {}
+    )
+    .limit(1)
+    .toArray();
+  if (activeOrders) throw new Error('you have active orders');
   const session = client.startSession();
   const response = await withTransaction({
     session,
     fn: async () => {
       var result;
 
-      const country = arg[1];
-      const storeDoc = await client
-        .db('generalData')
-        .collection('storeInfo')
-        .findOne({ usersIds: userId }, {});
-      if (!storeDoc) throw new Error('store not found');
       const storeId = storeDoc._id.toString();
-      // const storeDoc = await client
-      //   .db('generalData')
-      //   .collection('storeInfo')
-      //   .findOne(
-      //     {
-      //       _id: new ObjectId(storeId),
-      //     },
-      //     { session }
-      //   );
+
       if (!storeDoc.monthlySubscriptionPaid) {
         await client
           .db('base')
@@ -64,23 +86,6 @@ export const openAndCloseStoreHandler = async ({
           );
         throw new Error('you must pay the monthly subscription first');
       }
-      console.log(storeDoc.localCardAPIKeyFilled || storeDoc.sadadFilled);
-      console.log(storeDoc.monthlySubscriptionPaid);
-      console.log(
-        storeDoc.storeOwnerInfoFilled
-
-        // storeTrustsTwoDrivers &&
-      );
-      console.log(
-        storeDoc.storeInfoFilled
-
-        // storeTrustsTwoDrivers &&
-      );
-      console.log(
-        // storeTrustsTwoDrivers &&
-        !storeDoc.opened,
-        'hbhbhbhbhhbbhbhb'
-      );
 
       if (
         storeDoc.storeInfoFilled &&
@@ -163,10 +168,5 @@ export const handler = async (event, ctx) => {
     event,
     ctx,
     mainFunction: openAndCloseStoreHandler,
-    sessionPrefrences: {
-      readPreference: 'primary',
-      readConcern: { level: 'local' },
-      writeConcern: { w: 'majority' },
-    },
   });
 };

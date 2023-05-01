@@ -1,7 +1,12 @@
 interface CreateOrderProps extends Omit<MainFunctionProps, 'arg'> {}
 ('use strict');
 import { ObjectId } from 'mongodb';
-import { ORDER_TYPE_PICKUP, STORE_STATUS_NOT_SET } from 'hyfn-types';
+import {
+  ORDER_STATUS_ACCEPTED,
+  ORDER_STATUS_PENDING,
+  ORDER_TYPE_PICKUP,
+  STORE_STATUS_NOT_SET,
+} from 'hyfn-types';
 import { smallerEq } from 'mathjs';
 import { insertOne, mainWrapper, MainFunctionProps, withTransaction } from 'hyfn-server';
 
@@ -86,7 +91,7 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
         storesArray.push(storeDoc);
       }
       const status = order.orders.map((store) => {
-        return { _id: store._id, status: STORE_STATUS_NOT_SET, userType: 'store' };
+        return { _id: store._id, status: ORDER_STATUS_PENDING, userType: 'store' };
       });
       console.log({
         orders: order.orders,

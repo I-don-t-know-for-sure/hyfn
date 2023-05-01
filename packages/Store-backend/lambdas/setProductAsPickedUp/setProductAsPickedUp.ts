@@ -34,10 +34,10 @@ export const setProductAsPickedUpHandler = async ({
   console.log('🚀 ~ file: setProductAsPickedUp.ts:37 ~ mainFunction ~ orderDoc:', orderDoc);
   const storeOrder = orderDoc.orders.find((store) => store._id.toString() === _id.toString());
   if (
-    storeOrder.orderStatus !== STORE_STATUS_PENDING &&
-    storeOrder.orderStatus !== STORE_STATUS_ACCEPTED
+    storeOrder.orderStatus !== STORE_STATUS_PENDING
+    // storeOrder.orderStatus !== STORE_STATUS_ACCEPTED
   ) {
-    throw new Error('can not edit order products after payment');
+    throw new Error('can not edit order products after being accepted');
   }
   await client
     .db('base')

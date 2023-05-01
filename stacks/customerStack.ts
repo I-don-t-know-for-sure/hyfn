@@ -293,8 +293,7 @@ export function customerApiStack({ stack }: StackContext) {
         function: {
           functionName: "getTransactionsList" + stack.stage,
           handler:
-            pathToLambdas +
-            "payWithLocalCard/getTransactionsList/getTransactionsList.handler",
+            pathToLambdas + "getTransactionsList/getTransactionsList.handler",
         },
       },
       "POST /validateLocalCardTransaction": {
