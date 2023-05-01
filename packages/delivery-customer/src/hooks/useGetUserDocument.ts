@@ -1,10 +1,5 @@
-import { useLocalStorage } from '@mantine/hooks';
-import { Auth } from 'aws-amplify';
-import { USER_DOCUMENT } from 'config/constents';
-
-import { useUser } from 'contexts/userContext/User';
-import { useQuery } from 'react-query';
-import fetchUtil from 'util/fetch';
+import { useQuery } from "react-query";
+import fetchUtil from "util/fetch";
 
 export const useGetUserDocument = ({
   userId,
@@ -15,7 +10,7 @@ export const useGetUserDocument = ({
 }) => {
   return useQuery([userId], async () => {
     try {
-      console.log('shshshshjcdjcbdjcbdhcbhdbchbhd');
+      console.log("shshshshjcdjcbdjcbdhcbhdbchbhd");
 
       if (!userId) {
         return false;
@@ -24,7 +19,10 @@ export const useGetUserDocument = ({
         reqData: [userId],
         url: `${import.meta.env.VITE_APP_BASE_URL}/getCustomerData`,
       });
-      console.log('🚀 ~ file: useGetUserDocument.ts:21 ~ returnuseQuery ~ userDoc', userDoc);
+      console.log(
+        "🚀 ~ file: useGetUserDocument.ts:21 ~ returnuseQuery ~ userDoc",
+        userDoc
+      );
       if (setUserDocument) {
         setUserDocument(userDoc);
       }

@@ -1,6 +1,6 @@
 import { randomId } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { USER_DOCUMENT } from "config/constants";
+
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useMutation, useQueryClient } from "react-query";

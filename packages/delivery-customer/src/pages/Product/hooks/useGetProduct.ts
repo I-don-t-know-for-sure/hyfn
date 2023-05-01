@@ -1,12 +1,12 @@
-import { randomId } from '@mantine/hooks';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { PRODUCT } from 'config/constents';
-import { useCustomerData } from 'contexts/customerData/CustomerDataProvider';
-import { t } from 'util/i18nextFix';;
-import { useMutation, useQuery } from 'react-query';
+import { randomId } from "@mantine/hooks";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { PRODUCT } from "hyfn-types";
+import { useCustomerData } from "contexts/customerData/CustomerDataProvider";
+import { t } from "util/i18nextFix";
+import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from 'util/fetch';
-import Product from '../Product';
+import fetchUtil from "util/fetch";
+import Product from "../Product";
 
 export const useGetProduct = (
   locationInfo: {
@@ -15,7 +15,7 @@ export const useGetProduct = (
     country: string;
     productId: string;
   },
-  withStoreDoc: boolean,
+  withStoreDoc: boolean
 ) => {
   return useQuery(
     [PRODUCT, locationInfo.productId],
@@ -29,6 +29,6 @@ export const useGetProduct = (
         console.error(e);
       }
     },
-    {},
+    {}
   );
 };

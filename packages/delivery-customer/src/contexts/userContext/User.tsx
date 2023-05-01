@@ -1,7 +1,7 @@
 import { useLocalStorage } from "@mantine/hooks";
 
 import { Auth } from "aws-amplify";
-import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "config/constents";
+import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "hyfn-types";
 
 import { useGetUserDocument } from "hooks/useGetUserDocument";
 import { useGetUserId } from "hooks/useGetUserId";
@@ -124,11 +124,11 @@ const UserProvider: React.FC = ({ children }) => {
   const confirmSignUp = async ({
     email,
     code,
-    navigate,
-  }: {
+  }: // navigate,
+  {
     email: string;
     code: string;
-    navigate: any;
+    // navigate: any;
   }) => {
     // try {
     await Auth.confirmSignUp(email, code);
@@ -138,7 +138,7 @@ const UserProvider: React.FC = ({ children }) => {
     // setUserId(user.username)
     refetch();
     setLoggedIn(true);
-    navigate("/", { replace: true });
+    // navigate("/", { replace: true });
 
     // } catch (error) {
     //   console.log('error confirming sign up', error);

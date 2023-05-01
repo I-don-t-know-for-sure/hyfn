@@ -44,7 +44,7 @@ import {
   ORDER_TYPE_DELIVERY,
   ORDER_TYPE_PICKUP,
   STORE_TYPE_RESTAURANT,
-} from "../../config/constents";
+} from "hyfn-types";
 import { useNavigate, useLocation as useRouteLocation } from "react-router-dom";
 import { useCreateLocalCardTransaction } from "../../hooks/useCreateLocalCardTransaction";
 
@@ -497,13 +497,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
       ) : (
         ((orderChanged && !isLoading) || !orderChanged) && (
           <Box mt={16}>
-            {orderType === ORDER_TYPE_DELIVERY && (
-              <Center m={"sm"}>
-                <Text color={"orange"}>
-                  {t("Orders are not optimized for city-to-city deliveries")}
-                </Text>
-              </Center>
-            )}
             <Box
               sx={{
                 display: "flex",
@@ -513,15 +506,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
               <Text>{t("Subtotal")}</Text>
               <Text>{`${currency || "LYD"} ${orderCost}`}</Text>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>{t("Delivery")}</Text>
-              <Text>{`${currency || "LYD"} ${deliveryFee}`}</Text>
-            </Box>
+
             <Box
               sx={{
                 display: "flex",

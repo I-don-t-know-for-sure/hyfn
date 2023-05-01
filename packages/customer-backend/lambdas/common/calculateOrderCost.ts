@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { deliveryServiceFee, storeAndCustomerServiceFee, storeServiceFee } from './constants';
+import { deliveryServiceFee, storeAndCustomerServiceFee, storeServiceFee } from 'hyfn-types';
 import { convertObjectToArray } from './convertObjectToArray';
 export const calculateOrdercost = async ({ orderArray, orderObject, coordinates, buyerCoords }) => {
   console.log(

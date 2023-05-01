@@ -101,7 +101,7 @@ const SignUp: React.FC = () => {
                   await confirmSignUp({
                     email: form.values.email,
                     code: verificationCode,
-                    navigate,
+                    // navigate,
                   });
                 } catch (error) {
                   const { status, message, name, code } = error as {
@@ -127,8 +127,8 @@ const SignUp: React.FC = () => {
                 setException({ exception: false, code: "", message: "" });
 
                 showNotification({
-                  title: t("Signing up"),
-                  message: t("In progress"),
+                  title: "",
+                  message: "",
                   loading: true,
                   autoClose: false,
                   id,
@@ -142,8 +142,8 @@ const SignUp: React.FC = () => {
                 setSignUpSuccess(true);
                 setCustomerInfo({ email, ...rest });
                 updateNotification({
-                  title: t("Check your Email for confirmation Email"),
-                  message: t("Signed up successfully"),
+                  title: "",
+                  message: "",
                   color: "green",
                   loading: false,
                   autoClose: false,

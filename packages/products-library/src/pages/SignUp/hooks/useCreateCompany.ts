@@ -1,6 +1,6 @@
 import { showNotification } from "@mantine/notifications";
-import { USER_DOCUMENT } from "config/constants";
-import { t } from 'utils/i18nextFix';
+import { USER_DOCUMENT } from "hyfn-types";
+import { t } from "utils/i18nextFix";
 import { useMutation, useQueryClient } from "react-query";
 
 import fetchUtil from "utils/fetch";

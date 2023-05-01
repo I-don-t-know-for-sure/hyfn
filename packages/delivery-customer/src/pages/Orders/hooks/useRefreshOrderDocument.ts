@@ -1,5 +1,5 @@
 import { showNotification } from "@mantine/notifications";
-import { ACTIVE_ORDERS } from "config/constents";
+import { ACTIVE_ORDERS } from "hyfn-types";
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { t } from "util/i18nextFix";
 import { useQuery, useQueryClient } from "react-query";

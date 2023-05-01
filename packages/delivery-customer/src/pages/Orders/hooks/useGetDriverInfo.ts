@@ -1,8 +1,14 @@
-import { GET_DRIVER_INFO } from 'config/constents';
-import { useQuery } from 'react-query';
-import fetchUtil from 'util/fetch';
+import { GET_DRIVER_INFO } from "hyfn-types";
+import { useQuery } from "react-query";
+import fetchUtil from "util/fetch";
 
-export const useGetDriverInfo = ({ driverId, opened }: { driverId: string; opened: boolean }) => {
+export const useGetDriverInfo = ({
+  driverId,
+  opened,
+}: {
+  driverId: string;
+  opened: boolean;
+}) => {
   return useQuery(
     [GET_DRIVER_INFO],
     async () => {
@@ -14,6 +20,6 @@ export const useGetDriverInfo = ({ driverId, opened }: { driverId: string; opene
     },
     {
       enabled: !!(driverId && opened),
-    },
+    }
   );
 };

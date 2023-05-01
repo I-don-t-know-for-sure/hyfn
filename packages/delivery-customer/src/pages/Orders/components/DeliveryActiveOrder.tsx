@@ -25,7 +25,7 @@ import {
   ORDER_TYPE_DELIVERY,
   STORE_STATUS_PENDING,
   STORE_TYPE_RESTAURANT,
-} from "../../../config/constents";
+} from "hyfn-types";
 import { useRefreshOrderDocument } from "../hooks/useRefreshOrderDocument";
 import PayStoreForPickupOrder from "./PayStoreForPickupOrder";
 import ProposalsModal from "./ProposalsModal";

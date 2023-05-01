@@ -25,7 +25,7 @@ import { useFixedComponent } from "../../contexts/fixedComponentContext/FixedCom
 import { randomId } from "@mantine/hooks";
 import { t } from "../../util/i18nextFix";
 import { useGetProduct } from "./hooks/useGetProduct";
-import { storeServiceFee } from "../../config/constents";
+import { storeServiceFee } from "hyfn-types";
 import { ImageModal } from "hyfn-client";
 import { useImage } from "contexts/imageContext/ImageProvider";
 import HtmlRenderer from "components/HtmlReader";

@@ -14,7 +14,7 @@ import {
   STORE_TYPE_RESTAURANT,
   storeAndCustomerServiceFee,
   storeServiceFee,
-} from "config/constents";
+} from "hyfn-types";
 import { paymentMethods } from "config/data";
 import { t } from "util/i18nextFix";
 import { useCreateLocalCardTransaction } from "pages/Orders/hooks/payStoreWithLocalCard/useCreateLocalCardTransaction";

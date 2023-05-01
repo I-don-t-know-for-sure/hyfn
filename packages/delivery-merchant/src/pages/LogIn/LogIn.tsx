@@ -1,33 +1,42 @@
-import { Alert, Box, Button, Card, Container, Group, Stack, TextInput, UnstyledButton } from '@mantine/core'
-import { useForm } from '@mantine/form'
-import { randomId, useLocalStorage } from '@mantine/hooks'
-import { showNotification, updateNotification } from '@mantine/notifications'
-import { useConfigData } from 'components/Menu/config'
-import Translation from 'components/Translation'
-import { useUser } from 'contexts/userContext/User'
-import { t } from 'utils/i18nextFix'
-import { userInfo } from 'os'
-import { useCreateStore } from 'pages/SignUp/hooks/useCreateStore'
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router'
-import { Link } from 'react-router-dom'
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Container,
+  Group,
+  Stack,
+  TextInput,
+  UnstyledButton,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { randomId, useLocalStorage } from "@mantine/hooks";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { useConfigData } from "components/Menu/config";
+import Translation from "components/Translation";
+import { useUser } from "contexts/userContext/User";
+import { t } from "utils/i18nextFix";
+
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 interface LogInProps {}
 
 const LogIn: React.FC<LogInProps> = () => {
   const initialValues: { email: string; password: string } = {
-    email: '',
-    password: '',
-  }
+    email: "",
+    password: "",
+  };
   const form = useForm({
     initialValues: initialValues,
-  })
+  });
 
-  const location = useLocation()
-  const [confirmed, setConfirmed] = useState(true)
+  const location = useLocation();
+  const [confirmed, setConfirmed] = useState(true);
 
-  const [email, setEmail] = useState('')
-  const locationState = location.state as { firstTimer: boolean }
+  const [email, setEmail] = useState("");
+  const locationState = location.state as { firstTimer: boolean };
   // const { logIn, user, resendConfirmationEmail } = useRealmApp()
   const {
     signIn,
@@ -37,61 +46,65 @@ const LogIn: React.FC<LogInProps> = () => {
 
     sendPasswordChangeConfirmationCode,
     changePasswordAndConfirmCode,
-  } = useUser()
-  const [changingPassword, setChangingPassword] = useState(false)
-  const navigate = useNavigate()
-  const { lngs } = useConfigData()
-  const [exception, setException] = useState({ exception: false, message: '', code: '' })
-  const [verificationCode, setVerificationCode] = useState('')
+  } = useUser();
+  const [changingPassword, setChangingPassword] = useState(false);
+  const navigate = useNavigate();
+  const { lngs } = useConfigData();
+  const [exception, setException] = useState({
+    exception: false,
+    message: "",
+    code: "",
+  });
+  const [verificationCode, setVerificationCode] = useState("");
   const changePasswordForm = useForm({
     initialValues: {
-      confirmationCode: '',
-      newPassword: '',
+      confirmationCode: "",
+      newPassword: "",
     },
-  })
+  });
 
   useEffect(() => {
     if (loggedIn) {
-      console.log(loggedIn)
+      console.log(loggedIn);
 
-      navigate('/', { replace: true })
+      navigate("/", { replace: true });
     }
-  }, [loggedIn])
+  }, [loggedIn]);
   useEffect(() => {
     if (loggedIn) {
       if (locationState?.firstTimer) {
         showNotification({
           id: randomId(),
-          title: t('signup successful'),
-          message: t('just login now'),
+          title: "",
+          message: "",
           autoClose: 3000,
-        })
+        });
 
-        navigate('/createstore', { replace: true })
+        navigate("/createstore", { replace: true });
 
-        return
+        return;
       }
-      navigate('/', { replace: true })
+      navigate("/", { replace: true });
     }
-  }, [loggedIn, locationState])
+  }, [loggedIn, locationState]);
 
   return (
     <Container
       sx={{
-        height: '80vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        height: "80vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
         // alignItems: 'center',
       }}
     >
       {exception.exception && (
-        <Alert title={t(exception.code)} color={'red'}>
+        <Alert title={t(exception.code)} color={"red"}>
           {t(exception.message)}
         </Alert>
       )}
       <Card
-        shadow={'md'}
+        shadow={"md"}
         // m={'0px auto'}
         // sx={{
         //   width: '380px',
@@ -104,30 +117,39 @@ const LogIn: React.FC<LogInProps> = () => {
                 try {
                   if (
                     !String(form.values.email).match(
-                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                     )
                   ) {
                     showNotification({
-                      message: t('does not match email pattern'),
-                      color: 'red',
-                    })
-                    return
+                      message: "",
+                      color: "red",
+                    });
+                    return;
                   }
                   await changePasswordAndConfirmCode({
                     email: form.values.email,
                     newPassword: values.newPassword,
                     code: values.confirmationCode,
-                  })
-                  setChangingPassword(false)
+                  });
+                  setChangingPassword(false);
                 } catch (error) {
-                  console.log('🚀 ~ file: LogIn.tsx:113 ~ onSubmit={changePasswordForm.onSubmit ~ error', error)
+                  console.log(
+                    "🚀 ~ file: LogIn.tsx:113 ~ onSubmit={changePasswordForm.onSubmit ~ error",
+                    error
+                  );
                 }
               })}
             >
               <Stack>
-                <TextInput label={t('Confirmation code')} {...changePasswordForm.getInputProps('confirmationCode')} />
-                <TextInput label={t('New Password')} {...changePasswordForm.getInputProps('newPassword')} />
-                <Button type="submit">{t('Change')}</Button>
+                <TextInput
+                  label={t("Confirmation code")}
+                  {...changePasswordForm.getInputProps("confirmationCode")}
+                />
+                <TextInput
+                  label={t("New Password")}
+                  {...changePasswordForm.getInputProps("newPassword")}
+                />
+                <Button type="submit">{t("Change")}</Button>
               </Stack>
             </form>
           </Container>
@@ -135,8 +157,8 @@ const LogIn: React.FC<LogInProps> = () => {
         {!confirmed && !changingPassword && (
           <Container
             sx={{
-              flexDirection: 'column',
-              width: '100%',
+              flexDirection: "column",
+              width: "100%",
             }}
             mb={16}
           >
@@ -144,110 +166,129 @@ const LogIn: React.FC<LogInProps> = () => {
               <form
                 onSubmit={async (e) => {
                   try {
-                    e.preventDefault()
-                    await confirmSignUp({ email: form.values.email, code: verificationCode, navigate })
+                    e.preventDefault();
+                    await confirmSignUp({
+                      email: form.values.email,
+                      code: verificationCode,
+                    });
                   } catch (error) {
-                    const { code, message } = error as { code: string; message: string }
-                    console.log(message, 'shshshsh')
-                    setException({ exception: true, message, code })
+                    const { code, message } = error as {
+                      code: string;
+                      message: string;
+                    };
+                    console.log(message, "shshshsh");
+                    setException({ exception: true, message, code });
                   }
                 }}
               >
                 <TextInput
                   mb={16}
-                  sx={{ width: '100%' }}
-                  label={t('Confirmation code')}
+                  sx={{ width: "100%" }}
+                  label={t("Confirmation code")}
                   value={verificationCode}
                   onChange={(e) => {
-                    setVerificationCode(e.target.value)
+                    setVerificationCode(e.target.value);
                   }}
                 />
                 <Button fullWidth type="submit">
-                  {t('Confirm account')}
+                  {t("Confirm account")}
                 </Button>
               </form>
               <Button
                 fullWidth
                 // mt={4}
                 onClick={async () => {
-                  const id = randomId()
+                  const id = randomId();
                   try {
                     showNotification({
-                      message: t('sending confirmation email'),
+                      message: "",
                       autoClose: false,
                       id,
-                    })
-                    resendConfirmationEmail({ username: form.values.email })
+                    });
+                    resendConfirmationEmail({ username: form.values.email });
                     updateNotification({
-                      message: t('email was sent'),
+                      message: "",
                       id,
                       autoClose: true,
-                      color: 'green',
-                    })
+                      color: "green",
+                    });
                   } catch (error) {
                     updateNotification({
-                      message: t('an error occured'),
+                      message: "",
                       id,
                       autoClose: true,
-                      color: 'red',
-                    })
+                      color: "red",
+                    });
                   }
                 }}
               >
-                {t('Resend Confirmation email')}
+                {t("Resend Confirmation email")}
               </Button>
             </Stack>
           </Container>
-        )}{' '}
+        )}{" "}
         {confirmed && !changingPassword && (
           <form
             onSubmit={form.onSubmit(async (values) => {
-              const id = randomId()
+              const id = randomId();
               try {
                 showNotification({
-                  title: t('Logging in'),
-                  message: '',
+                  title: "",
+                  message: "",
                   id,
                   loading: true,
 
                   autoClose: false,
-                })
-                const trimmedEmail = values.email.trim()
-                await signIn({ email: trimmedEmail, password: values.password, navigate })
+                });
+                const trimmedEmail = values.email.trim();
+                await signIn({
+                  email: trimmedEmail,
+                  password: values.password,
+                  navigate,
+                });
                 updateNotification({
-                  title: t('Successful'),
-                  message: t('Logged in'),
+                  title: "",
+                  message: "",
                   id,
                   loading: false,
 
                   autoClose: true,
-                })
+                });
               } catch (e) {
-                console.error(e)
+                console.error(e);
                 updateNotification({
-                  title: t('Error'),
-                  message: t('An Error occurred'),
-                  color: 'red',
+                  title: "",
+                  message: "",
+                  color: "red",
                   autoClose: true,
                   id,
-                })
+                });
 
-                const { message } = e as { message: string }
-                if (message.includes('User is not confirmed')) {
-                  setConfirmed(false)
-                  setEmail(form.values.email)
+                const { message } = e as { message: string };
+                if (message.includes("User is not confirmed")) {
+                  setConfirmed(false);
+                  setEmail(form.values.email);
                 }
               }
             })}
           >
-            <TextInput label={t('Email')} required {...form.getInputProps('email')} />
-            <TextInput label={t('Password')} required type="password" {...form.getInputProps('password')} />
+            <TextInput
+              label={t("Email")}
+              required
+              {...form.getInputProps("email")}
+            />
+            <TextInput
+              label={t("Password")}
+              required
+              type="password"
+              {...form.getInputProps("password")}
+            />
             <Box
               sx={{
-                marginTop: '12px',
-                display: 'flex',
-                flexDirection: 'row-reverse',
-                width: '100%',
+                marginTop: "12px",
+                display: "flex",
+                flexDirection: "row-reverse",
+                width: "100%",
               }}
             >
               <Button
@@ -258,7 +299,7 @@ const LogIn: React.FC<LogInProps> = () => {
                 //   maxWidth: '400px',
                 // }}
               >
-                {t('LogIn')}
+                {t("LogIn")}
               </Button>
             </Box>
           </form>
@@ -266,43 +307,45 @@ const LogIn: React.FC<LogInProps> = () => {
       </Card>
       <Group
         sx={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <Group>
-          <Link to="/signup">{t('Signup')}</Link>
+          <Link to="/signup">{t("Signup")}</Link>
           <UnstyledButton
             onClick={async () => {
-              console.log(form.values.email)
+              console.log(form.values.email);
 
               const validated = String(form.values.email).match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              )
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+              );
               if (!validated) {
                 showNotification({
-                  message: t('Not email pattern'),
-                  color: 'red',
-                })
-                return
+                  message: "",
+                  color: "red",
+                });
+                return;
               }
               try {
-                await sendPasswordChangeConfirmationCode({ email: form.values.email })
-                setChangingPassword(true)
+                await sendPasswordChangeConfirmationCode({
+                  email: form.values.email,
+                });
+                setChangingPassword(true);
               } catch (error) {
-                console.log('🚀 ~ file: LogIn.tsx:259 ~ error', error)
+                console.log("🚀 ~ file: LogIn.tsx:259 ~ error", error);
               }
             }}
           >
-            {t('Forgot password')}
+            {t("Forgot password")}
           </UnstyledButton>
         </Group>
         <Translation lngs={lngs} />
       </Group>
     </Container>
-  )
-}
-export default LogIn
+  );
+};
+export default LogIn;

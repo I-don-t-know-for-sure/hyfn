@@ -41,7 +41,7 @@ import { useRefreshOrderDocument } from "./hooks/useRefreshOrderDocument";
 import TextToCopy from "./components/TextToCopy";
 import InstructionsModal from "./components/InstructionsModak";
 import CopyButton from "components/CopyButton";
-import { STORE_STATUS_PENDING, STORE_TYPE_RESTAURANT } from "config/constants";
+import { STORE_STATUS_PENDING, STORE_TYPE_RESTAURANT } from "hyfn-types";
 import RestuarantOrder from "./components/RestuarantOrder";
 
 interface ActiveOrderProps {}

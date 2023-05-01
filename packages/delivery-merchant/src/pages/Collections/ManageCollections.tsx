@@ -29,7 +29,7 @@ import { t } from "utils/i18nextFix";
 
 import fetchUtil from "utils/fetch";
 // import { Helmet } from 'react-helmet-async'
-import { collections } from "config/constants";
+import { collections } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 
 interface ManageCollectionsProps {}

@@ -38,7 +38,7 @@ import { useLeaveOrder } from "../hooks/useLeaveOrder";
 import OrderActionMenu from "./OrderActionMenu";
 
 import CopyButton from "components/CopyButton";
-import { STORE_STATUS_PENDING, STORE_TYPE_RESTAURANT } from "config/constants";
+import { STORE_STATUS_PENDING, STORE_TYPE_RESTAURANT } from "hyfn-types";
 import DeliveryFeePaidModal from "./DeliveryFeePaidModal";
 import { ShowInMapButton } from "hyfn-client";
 import { Link } from "react-router-dom";

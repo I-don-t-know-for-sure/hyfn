@@ -89,7 +89,7 @@ export const validateLocalCardTransaction = async ({
     session,
     options: {
       writeConcern: { w: 'majority' },
-      readConcern: { level: 'linearizable' },
+      readConcern: { level: 'majority' },
     },
     fn: async () => {
       const transaction = await client
@@ -105,7 +105,7 @@ export const validateLocalCardTransaction = async ({
       }
       const type = transaction.type;
 
-      if (type === subscriptionPayment || type === serviceFeePayment) {
+      if (type === subscriptionPayment) {
         // create a date and add the number of months from the transaction
         const date = new Date();
         date.setMonth(date.getMonth() + transaction.months);
@@ -115,22 +115,59 @@ export const validateLocalCardTransaction = async ({
           .collection('customerInfo')
           .updateOne(
             { _id: new ObjectId(transaction.customerId) },
+
             {
-              ...(transaction.type === 'subscription'
-                ? {
-                    $set: {
-                      transactionId: undefined,
-                      subscribedToHyfnPlus: true,
-                      expirationDate: date,
-                    },
-                  }
-                : {
-                    $set: {
-                      transactionId: undefined,
-                    },
-                    $inc: { balance: Math.abs(parseFloat(transaction.amount)) },
-                  }),
+              $set: {
+                transactionId: undefined,
+                subscribedToHyfnPlus: true,
+                expirationDate: date,
+              },
             },
+
+            {
+              session,
+            }
+          );
+        return 'transaction approved';
+      }
+
+      if (type === serviceFeePayment) {
+        await client
+          .db('base')
+          .collection('orders')
+          .updateOne(
+            { _id: new ObjectId(transaction.orderId) },
+            {
+              $set: {
+                serviceFeePaid: true,
+              },
+            },
+            { session }
+          );
+        await client
+          .db('generalData')
+          .collection('transactions')
+          .updateOne(
+            { _id: new ObjectId(transactionId) },
+            {
+              $set: {
+                validated: true,
+              },
+            },
+            { session }
+          );
+        await client
+          .db('generalData')
+          .collection('customerInfo')
+          .updateOne(
+            { _id: new ObjectId(transaction.customerId) },
+
+            {
+              $set: {
+                transactionId: undefined,
+              },
+            },
+
             {
               session,
             }
@@ -208,7 +245,7 @@ export const validateLocalCardTransaction = async ({
             { session }
           );
         // if (transaction.amountToReturnToCustomer && transaction.amountToReturnToCustomer > 0.0) {
-        const customerInfoUpdate = await client
+        /*  const customerInfoUpdate = await client
           .db('generalData')
           .collection('customerInfo')
           .updateOne(
@@ -228,8 +265,8 @@ export const validateLocalCardTransaction = async ({
                 : {}),
             },
             { session }
-          );
-        // updateOne({ updateOneResult: customerInfoUpdate });
+          ); */
+
         // }
         const storeInfoUpdate = await client
           .db('generalData')

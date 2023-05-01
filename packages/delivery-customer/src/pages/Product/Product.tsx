@@ -28,7 +28,7 @@ import Image from "../../components/Image";
 import { useFixedComponent } from "../../contexts/fixedComponentContext/FixedComponentProvider";
 import { t } from "../../util/i18nextFix";
 import { useGetProduct } from "./hooks/useGetProduct";
-import { storeServiceFee } from "../../config/constents";
+import { storeServiceFee } from "hyfn-types";
 import { useImage } from "contexts/imageContext/ImageProvider";
 import { calculatePrecision, calculateStep } from "./functions";
 import HtmlRenderer from "components/HtmlReader";

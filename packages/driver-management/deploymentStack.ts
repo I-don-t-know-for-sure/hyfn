@@ -3,6 +3,7 @@ import { getStage } from "../../stacks/getStage";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
+import { config } from "../../envVaraibles";
 
 const localhost = "http://localhost:";
 
@@ -40,6 +41,14 @@ export function managementApp({ stack }: StackContext) {
       VITE_APP_COGNITO_IDENTITY_POOL_ID:
         Fn.importValue(`managementCognitoIdentityPoolId-${stack.stage}`) || "",
       VITE_APP_COGNITO_REGION: stack.region,
+      VITE_APP_FIREBASE_API_KEY: config[""]["firebaseApiKey"],
+      VITE_APP_FIREBASE_AUTH_DOMAIN: config[""]["firebaseAuthDomain"],
+      VITE_APP_FIREBASE_MESSAGING_SENDER_ID:
+        config[""]["firebaseMessagingSenderId"],
+      VITE_APP_FIREBASE_PROJECT_ID: config[""]["firebaseProjectId"],
+      VITE_APP_FIREBASE_APP_ID: config[""]["firebaseAppId"],
+      VITE_APP_FIREBASE_STORAGE_BUCKET: config[""]["firebaseStorageBucket"],
+      VITE_APP_VAPID_KEY: config[""]["vapidKey"],
       VITE_APP_USER_POOL_ID: Fn.importValue(
         `managementUserPoolId-${stack.stage}`
       ),

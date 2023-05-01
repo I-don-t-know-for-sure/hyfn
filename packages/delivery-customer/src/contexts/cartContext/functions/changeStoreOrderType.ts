@@ -1,11 +1,3 @@
-import { showNotification } from "@mantine/notifications";
-import {
-  ORDER_TYPE_DELIVERY,
-  ORDER_TYPE_PICKUP,
-  STORE_TYPE_RESTAURANT,
-} from "../../../config/constents";
-import { t } from "../../../util/i18nextFix";
-
 export const changeStoreOrderType = ({
   setCartInfo,
   orderType,

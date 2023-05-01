@@ -11,8 +11,8 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { t } from 'utils/i18nextFix';
-import { DRIVER_VERIFICATION } from "../../config/constants";
+import { t } from "utils/i18nextFix";
+import { DRIVER_VERIFICATION } from "hyfn-types";
 import { useSetDriverAsVerified } from "./hooks/useSetDriverAsVerified";
 
 interface DriverVerificationProps {}
@@ -39,10 +39,18 @@ const DriverVerification: React.FC<DriverVerificationProps> = ({}) => {
                 <Stack spacing={"sm"}>
                   <Group grow>
                     <Image
-                      src={`${import.meta.env.VITE_APP_BUCKET_URL}/${DRIVER_VERIFICATION}/${unverifiedDriver.passportPic[0]}`}
+                      src={`${
+                        import.meta.env.VITE_APP_BUCKET_URL
+                      }/${DRIVER_VERIFICATION}/${
+                        unverifiedDriver.passportPic[0]
+                      }`}
                     />
                     <Image
-                      src={`${import.meta.env.VITE_APP_BUCKET_URL}/${DRIVER_VERIFICATION}/${unverifiedDriver.passportPic[0]}`}
+                      src={`${
+                        import.meta.env.VITE_APP_BUCKET_URL
+                      }/${DRIVER_VERIFICATION}/${
+                        unverifiedDriver.passportPic[0]
+                      }`}
                     />
                   </Group>
                   <TextInput

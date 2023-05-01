@@ -1,19 +1,13 @@
-interface CreateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg'> {
+interface CreateLocalCardTransactionForWalletProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
+
 import { ObjectId } from 'mongodb';
-import { HmacSHA256 } from 'crypto-js';
-import { adminName, subscriptionCost, TRANSACTION_TYPE_SUBSCRIPTION } from '../resources';
+import { adminName, TRANSACTION_TYPE_WALLET } from '../resources';
 import { getAdminLocalCardCreds } from '../common/getAdminLocalCardCreds';
-import {
-  createLocalCardConfigurationObject,
-  hex_to_ascii,
-  MainFunctionProps,
-  mainWrapper,
-} from 'hyfn-server';
-const createLocalCardTransaction = async ({ arg, client }) => {
-  const { userId, numberOfMonths } = arg[0];
-  const amount = numberOfMonths * subscriptionCost;
+import { createLocalCardConfigurationObject, MainFunctionProps, mainWrapper } from 'hyfn-server';
+const createLocalCardTransactionForWallet = async ({ arg, client }) => {
+  const { userId, amount } = arg[0];
   if (amount === undefined) {
     throw 'order data not found';
   }
@@ -26,7 +20,7 @@ const createLocalCardTransaction = async ({ arg, client }) => {
       amount,
       storeId: adminName,
       transactionDate: now,
-      transactionType: TRANSACTION_TYPE_SUBSCRIPTION,
+      type: TRANSACTION_TYPE_WALLET,
       validated: false,
     },
     {}
@@ -36,19 +30,18 @@ const createLocalCardTransaction = async ({ arg, client }) => {
     '🚀 ~ file: createLocalCardTransaction.js:30 ~ createLocalCardTransaction ~ secretKey',
     secretKey
   );
-
   const configurationObject = createLocalCardConfigurationObject({
-    amount,
     includeLocalCardTransactionFeeToPrice: true,
-    MerchantId,
-    now,
     secretKey,
+    now,
+    MerchantId,
     TerminalId,
+    amount,
     transactionId,
   });
   return { configurationObject };
 };
 
 export const handler = async (event) => {
-  return await mainWrapper({ event, mainFunction: createLocalCardTransaction });
+  return await mainWrapper({ event, mainFunction: createLocalCardTransactionForWallet });
 };

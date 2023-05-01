@@ -19,6 +19,7 @@ import { useValidateStoreLocalCardTransaction } from "pages/Orders/hooks/payStor
 import { TRANSACTION_TYPE_DRIVER_MANAGMENT, adminName } from "hyfn-types";
 import CancelTransactionModal from "./CancelTransactionModal";
 import { useValidateManagementLocalCardTransaction } from "hooks/useValidateManagementLocalCardTransaction";
+import { useValidateTransaction } from "hooks/useValidateTransaction";
 
 interface TransactionListProps {
   menu?: boolean;
@@ -31,11 +32,12 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
     isLoading,
     fetchNextPage,
   } = useGetTransactions({ enabled: opened });
-  const { mutate: validateTransaction } = useValidateLocalCardTransaction();
-  const { mutate: validateStoreLocalCardTransaction } =
-    useValidateStoreLocalCardTransaction();
-  const { mutate: validateManagementLocalCardTransaction } =
-    useValidateManagementLocalCardTransaction();
+  // const { mutate: validateTransaction } = useValidateLocalCardTransaction();
+  // const { mutate: validateStoreLocalCardTransaction } =
+  //   useValidateStoreLocalCardTransaction();
+  // const { mutate: validateManagementLocalCardTransaction } =
+  //   useValidateManagementLocalCardTransaction();
+  const { mutate: validateTransaction } = useValidateTransaction();
   console.log("🚀 ~ file: TransactionList.tsx ~ line 8 ~ data", transactions);
   return (
     <>
@@ -89,24 +91,28 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                       {!transaction.validated && (
                         <Button
                           onClick={() => {
-                            if (
-                              transaction.type ===
-                              TRANSACTION_TYPE_DRIVER_MANAGMENT
-                            ) {
-                              validateManagementLocalCardTransaction({
-                                transactionId: transaction._id,
-                              });
-                              return;
-                            }
-                            if (transaction.storeId !== adminName) {
-                              validateStoreLocalCardTransaction({
-                                transactionId: transaction._id,
-                              });
-                              return;
-                            }
                             validateTransaction({
                               transactionId: transaction._id,
                             });
+
+                            // if (
+                            //   transaction.type ===
+                            //   TRANSACTION_TYPE_DRIVER_MANAGMENT
+                            // ) {
+                            //   validateManagementLocalCardTransaction({
+                            //     transactionId: transaction._id,
+                            //   });
+                            //   return;
+                            // }
+                            // if (transaction.storeId !== adminName) {
+                            //   validateStoreLocalCardTransaction({
+                            //     transactionId: transaction._id,
+                            //   });
+                            //   return;
+                            // }
+                            // validateTransaction({
+                            //   transactionId: transaction._id,
+                            // });
                           }}
                           mt={16}
                         >

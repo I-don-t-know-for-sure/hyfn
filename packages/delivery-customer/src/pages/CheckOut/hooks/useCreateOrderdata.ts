@@ -1,4 +1,4 @@
-import { USER_DOCUMENT } from "config/constents";
+import { USER_DOCUMENT } from "hyfn-types";
 
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useUser } from "contexts/userContext/User";

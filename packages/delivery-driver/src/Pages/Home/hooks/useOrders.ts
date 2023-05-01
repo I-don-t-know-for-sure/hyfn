@@ -1,7 +1,7 @@
 import { randomId } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { Auth } from "aws-amplify";
-import { orders } from "config/constants";
+import { orders } from "hyfn-types";
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useUser } from "contexts/userContext/User";
 

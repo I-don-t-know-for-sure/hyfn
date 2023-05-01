@@ -1,26 +1,3 @@
-// import { Button, Modal } from "@mantine/core";
-// import { currencies } from "config/constants";
-// import { useUser } from "contexts/userContext/User";
-// import React, { useState } from "react";
-
-// interface BalanceModalProps {
-//   balance: number;
-// }
-
-// const BalanceModal: React.FC<BalanceModalProps> = ({ balance }) => {
-//   const [opened, setOpened] = useState(false);
-//   const { userDocument } = useUser();
-//   return (
-//     <>
-//       <Modal opened={opened} onClose={() => setOpened(false)}></Modal>
-//       <Button variant="subtle">
-//         {` ${currencies[userDocument.country]} ${balance}`}
-//       </Button>
-//     </>
-//   );
-// };
-
-// export default BalanceModal;
 import {
   ActionIcon,
   Badge,
@@ -40,7 +17,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { Tab } from "@mantine/core/lib/Tabs/Tab/Tab";
-import { currencies } from "config/constants";
+import { currencies } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { usePayWithLocalCard } from "hooks/usePayWithLocalCard";
 import { t } from "utils/i18nextFix";

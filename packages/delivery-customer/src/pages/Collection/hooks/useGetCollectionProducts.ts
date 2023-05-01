@@ -1,4 +1,4 @@
-import { COLLECTION } from "../../../config/constents";
+import { COLLECTION } from "hyfn-types";
 import { useInfiniteQuery, useQuery } from "react-query";
 
 import fetchUtil from "../../../util/fetch";

@@ -11,7 +11,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 
-import { commonQuestions } from "config/constents";
+import { commonQuestions } from "hyfn-types";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";

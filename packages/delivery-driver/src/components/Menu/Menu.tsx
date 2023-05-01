@@ -47,9 +47,7 @@ import { useForm } from "@mantine/form";
 import { useTranslation } from "react-i18next";
 import { useUserCheck } from "hooks/useUserCheck";
 import TransactionList from "components/TransactionList";
-import { useGetUserInfo } from "hooks/useGetUserInfo";
-import { Auth } from "aws-amplify";
-import { USER_DOCUMENT } from "config/constants";
+
 import { useQueryClient } from "react-query";
 import { useUser } from "contexts/userContext/User";
 import CreateAccountModal from "components/CreateAccountModal";

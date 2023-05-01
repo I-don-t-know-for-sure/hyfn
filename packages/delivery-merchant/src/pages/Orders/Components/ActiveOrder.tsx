@@ -20,7 +20,7 @@ import {
   ORDER_TYPE_DELIVERY,
   STORE_STATUS_READY,
   STORE_TYPE_RESTAURANT,
-} from "config/constants";
+} from "hyfn-types";
 import { t } from "utils/i18nextFix";
 import InstructionsModal from "./InstructionsModak";
 import SetProductAsInactiveButton from "./setProductAsInactive";

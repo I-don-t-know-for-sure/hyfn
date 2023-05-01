@@ -20,8 +20,6 @@ import {
   STORE_TYPE_RESTAURANT,
   TRANSACTION_TYPE_MANAGMENT,
   LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT,
-  serviceFeePayment,
-  managementPayment,
 } from "hyfn-types";
 import { add, equal, largerEq } from "mathjs";
 import TransactionList from "components/TransactionList";
@@ -31,8 +29,6 @@ import { t } from "util/i18nextFix";
 import PayWithLocalCardButton from "./PayWithLocalCardButton";
 import { useCreateLocalCardTransaction } from "pages/Orders/hooks/payStoreWithLocalCard/useCreateLocalCardTransaction";
 import { useCreateManagementLocalCardTransaction } from "hooks/useCreateManagmentLocalCardTransaction";
-import { useCreateTransaction } from "hooks/useCreateTransaction";
-import { useLocation } from "contexts/locationContext/LocationContext";
 
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   label: string;
@@ -65,8 +61,11 @@ const PayModal: React.FC<PayModalProps> = ({
   storeProducts,
   order,
 }) => {
-  const { mutate: createTransaction } = useCreateTransaction();
-  const [{ country }] = useLocation();
+  const createLocalCardTransaction = useCreateServiceFeeCardTransaction();
+  const createStoreLocalCardTransaction = useCreateLocalCardTransaction();
+  const createManagementLocalCardTransaction =
+    useCreateManagementLocalCardTransaction();
+
   const [opened, setOpened] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(
     paymentMethodsArray[0].value
@@ -140,24 +139,13 @@ const PayModal: React.FC<PayModalProps> = ({
                   order.serviceFee
                 )}`}</Text>
                 {!!add(orderSaleFee, order.serviceFee) && (
-                  <Button
-                    onClick={() => {
-                      createTransaction({
-                        type: serviceFeePayment,
-                        country,
-                        orderId,
-                      });
-                    }}
-                  >
-                    {t("Pay")}
-                  </Button>
-                  // <PayWithLocalCardButton
-                  //   createLocalCardTransaction={createLocalCardTransaction}
-                  //   flag={LOCAL_CARD_TRANSACTION_FLAG_SERVICE_FEE}
-                  //   // isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
-                  //   orderId={orderId}
-                  //   storeId={storeId}
-                  // />
+                  <PayWithLocalCardButton
+                    createLocalCardTransaction={createLocalCardTransaction}
+                    flag={LOCAL_CARD_TRANSACTION_FLAG_SERVICE_FEE}
+                    // isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
+                    orderId={orderId}
+                    storeId={storeId}
+                  />
                 )}
               </Stack>
             </Group>
@@ -166,26 +154,15 @@ const PayModal: React.FC<PayModalProps> = ({
               <Stack spacing={2}>
                 <Text>{`${store.currency} ${order.deliveryFee}`}</Text>
                 {!!order.deliveryFee && (
-                  <Button
-                    onClick={() => {
-                      createTransaction({
-                        type: managementPayment,
-                        country,
-                        orderId,
-                      });
-                    }}
-                  >
-                    {t("Pay")}
-                  </Button>
-                  // <PayWithLocalCardButton
-                  //   createLocalCardTransaction={
-                  //     createManagementLocalCardTransaction
-                  //   }
-                  //   flag={LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT}
-                  //   isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
-                  //   orderId={orderId}
-                  //   storeId={storeId}
-                  // />
+                  <PayWithLocalCardButton
+                    createLocalCardTransaction={
+                      createManagementLocalCardTransaction
+                    }
+                    flag={LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT}
+                    isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
+                    orderId={orderId}
+                    storeId={storeId}
+                  />
                 )}
               </Stack>
             </Group>
@@ -196,25 +173,13 @@ const PayModal: React.FC<PayModalProps> = ({
               <Stack spacing={2}>
                 <Text>{`${store.currency} ${orderTotalAfterFee}`}</Text>
                 {!!orderTotalAfterFee && (
-                  <Button
-                    onClick={() => {
-                      createTransaction({
-                        type: serviceFeePayment,
-                        country,
-                        orderId,
-                        storeId,
-                      });
-                    }}
-                  >
-                    {t("Pay")}
-                  </Button>
-                  // <PayWithLocalCardButton
-                  //   createLocalCardTransaction={createStoreLocalCardTransaction}
-                  //   flag={LOCAL_CARD_TRANSACTION_FLAG_STORE}
-                  //   //   isBalanceEnough={equal(orderSaleFee, balance) as boolean}
-                  //   orderId={orderId}
-                  //   storeId={storeId}
-                  // />
+                  <PayWithLocalCardButton
+                    createLocalCardTransaction={createStoreLocalCardTransaction}
+                    flag={LOCAL_CARD_TRANSACTION_FLAG_STORE}
+                    //   isBalanceEnough={equal(orderSaleFee, balance) as boolean}
+                    orderId={orderId}
+                    storeId={storeId}
+                  />
                 )}
               </Stack>
             </Group>

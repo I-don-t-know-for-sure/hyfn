@@ -1,7 +1,7 @@
 import { AspectRatio, Box, Text, UnstyledButton } from "@mantine/core";
 import Image from "components/Image";
 import ProductControler from "components/ProductControler";
-import { storeServiceFee } from "config/constents";
+import { storeServiceFee } from "hyfn-types";
 
 import React from "react";
 

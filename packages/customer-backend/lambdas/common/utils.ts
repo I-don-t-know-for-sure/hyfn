@@ -107,7 +107,7 @@ export const getStore = async (store, client) => {
     .findOne({ _id: new ObjectId(store._id) });
   return { ...storeDoc };
 };
-export const updateAllOrder = async (arg, client) => {
+/* export const updateAllOrder = async (arg, client) => {
   const orderCart = arg[0];
   const buyerInfo = arg[1];
   const deliveryDate = buyerInfo.deliveryDate;
@@ -353,103 +353,8 @@ export const updateAllOrder = async (arg, client) => {
     //     );
     return;
   }
-};
-export const updateOrderProducts = async (arg, client) => {
-  console.log('🚀 ~ file: utils.js ~ line 277 ~ updateOrderProducts ~ arg', arg);
-  const orderCart = arg[0];
-  const customerInfo = arg[1];
-  const metchesOrder = orderCart[0];
-  const { country, city } = metchesOrder;
-  const customerDoc = await client
-    .db('generalData')
-    .collection('customerInfo')
-    .findOne(
-      {
-        _id: new ObjectId(customerInfo.customerId),
-      },
-      {}
-    );
-  console.log(customerDoc, customerInfo, 'orderProducts');
-  const orders = customerDoc.order.orders;
-  // for(let i = 0; i < orderCart)
-  const newOrder: any[] = [];
-  for (let i = 0; i < orderCart?.length; i++) {
-    const newStoreAddedProducts: any[] = [];
-    const store = orderCart[i];
-    if (store._id !== orders[i]._id) {
-      return 'should update all order';
-    }
-    console.log(JSON.stringify(orderCart));
-    for (let x = 0; x < orderCart[i]?.addedProducts?.length; x++) {
-      if (
-        orderCart[i].addedProducts[x]._id !== orders[i]?.addedProducts[x]?._id ||
-        !orders[i]?.addedProducts[x]?._id
-      ) {
-        const productToBeAdded = store.addedProducts[x];
-        const newProduct = await client
-          .db('base')
-          .collection('products')
-          .findOne(
-            {
-              _id: new ObjectId(productToBeAdded._id),
-            },
-            {}
-          );
-        if (!newProduct) throw 'product does not exist';
-        if (newProduct?.country !== productToBeAdded?.country) throw 'product invalid or something';
-        newStoreAddedProducts.push({
-          ...newProduct,
-          qty: productToBeAdded.qty,
-        });
-      } else {
-        newStoreAddedProducts.push({
-          ...store.addedProducts[x],
-        });
-      }
-    }
-    newOrder.push({
-      ...orderCart[i],
-      addedProducts: newStoreAddedProducts,
-    });
-  }
-  console.log(newOrder);
-  const orderCost = newOrder.reduce((accu, store) => {
-    const storeTotal = store.addedProducts?.reduce(
-      (acc, product) => acc + product.pricing.price * product.qty,
-      0
-    );
-    return accu + storeTotal;
-  }, 0);
-  const deliveryFee = customerDoc?.order?.deliveryDetails?.deliveryFee;
-  // order cost after our fee
-  const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
-  // delivery fee after our fee
-  const deliveryFeeAfterFee = deliveryFee - deliveryFee * deliveryServiceFee;
-  // our service fee
-  const serviceFee = orderCost * storeAndCustomerServiceFee + deliveryFee * deliveryServiceFee;
-  // total cost of the order
-  const totalCost = orderCostAfterFee + serviceFee + deliveryFeeAfterFee;
-  await client
-    .db('generalData')
-    .collection(`customerInfo`)
-    .updateOne(
-      { _id: new ObjectId(customerInfo.customerId) },
-      {
-        $set: {
-          order: {
-            deliveryDetails: {
-              ...customerDoc?.order.deliveryDetails,
-              orderCost: orderCostAfterFee,
-            },
-            orders: newOrder,
-            serviceFee,
-            totalCost,
-          },
-        },
-      },
-      {}
-    );
-};
+}; */
+
 export const getCountryInfo = () => {
   const countries = ['Libya'];
   const cities = [
@@ -551,7 +456,7 @@ export const getCountryInfoRightOne = () => {
     },
   ];
 };
-function calculateOrderCost(storesArray) {
+export function calculateOrderCost(storesArray) {
   return storesArray.reduce((accu, store, currentIndex) => {
     const storeTotal = store.addedProducts?.reduce((acc, product) => {
       const productValuesPrice = calculateProductOptionsValue(product);

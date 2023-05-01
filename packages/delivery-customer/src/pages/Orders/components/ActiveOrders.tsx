@@ -10,7 +10,7 @@ import { useGetActiveOrders } from "../hooks/useGetActiveOrders";
 import { useSetOrderToPickup } from "../hooks/useSetOrderToPickUp";
 
 import DeliveryActiveOrder from "./DeliveryActiveOrder";
-import { ORDER_TYPE_DELIVERY } from "../../../config/constents";
+
 import PickupActiveOrder from "./PickupActiveOrder";
 import { useSetProductAsPickedUp } from "../hooks/useSetProductAsPickedUp";
 import { useSetProductAsNotFound } from "../hooks/useSetProductAsNotFound";

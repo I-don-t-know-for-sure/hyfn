@@ -1,14 +1,12 @@
-import { randomId } from '@mantine/hooks';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { ACTIVE_ORDERS } from '../../../config/constents';
-import { useLocation } from '../../../contexts/locationContext/LocationContext';
-import { useUser } from '../../../contexts/userContext/User';
+import { randomId } from "@mantine/hooks";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { ACTIVE_ORDERS } from "hyfn-types";
+import { useLocation } from "../../../contexts/locationContext/LocationContext";
+import { useUser } from "../../../contexts/userContext/User";
 
+import { useInfiniteQuery } from "react-query";
 
-
-import { useInfiniteQuery } from 'react-query';
-
-import fetchUtil from '../../../util/fetch';
+import fetchUtil from "../../../util/fetch";
 
 export const useGetActiveOrders = () => {
   const [location] = useLocation();
@@ -35,6 +33,6 @@ export const useGetActiveOrders = () => {
       keepPreviousData: true,
       getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
       enabled: !isLoading,
-    },
+    }
   );
 };

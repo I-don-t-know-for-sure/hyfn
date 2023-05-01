@@ -1,6 +1,6 @@
 import { Checkbox, Select, TextInput } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { measurementSystem } from "config/constants";
+import { measurementSystem } from "hyfn-types";
 import React, { useEffect, useRef, useState } from "react";
 import { ActionTypes } from "../BulkUpdateTable";
 import DescriptionModal from "./DescriptionModal";

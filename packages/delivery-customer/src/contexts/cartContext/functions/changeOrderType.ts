@@ -3,7 +3,7 @@ import {
   ORDER_TYPE_DELIVERY,
   ORDER_TYPE_PICKUP,
   STORE_TYPE_RESTAURANT,
-} from "../../../config/constents";
+} from "hyfn-types";
 import { t } from "../../../util/i18nextFix";
 
 export const changeOrderType = (orderType, setCartInfo: any) => {

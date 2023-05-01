@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import Image from "../../../components/Image";
 import ProductControler from "../../../components/ProductControler";
-import { storeServiceFee } from "../../../config/constents";
+import { storeServiceFee } from "hyfn-types";
 import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";

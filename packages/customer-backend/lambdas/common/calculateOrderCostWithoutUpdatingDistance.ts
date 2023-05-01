@@ -1,4 +1,4 @@
-import { deliveryServiceFee, storeAndCustomerServiceFee, storeServiceFee } from './constants';
+import { deliveryServiceFee, storeAndCustomerServiceFee, storeServiceFee } from 'hyfn-types';
 import { convertObjectToArray } from './convertObjectToArray';
 export const calculateOrderCostWithoutUpdatingDistance = async ({
   orderArray,

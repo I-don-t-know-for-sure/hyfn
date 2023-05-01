@@ -53,7 +53,7 @@ export const storeTypes = [
   { value: "games", label: "Games" },
 ];
 export const GET_DRIVER_INFO = "getDriverInfo";
-export const MINIMUM_AMOUNT_TO_CHECKOUT = 10;
+export const MINIMUM_AMOUNT_TO_CHECKOUT = 50;
 
 export const commonQuestions = [
   {

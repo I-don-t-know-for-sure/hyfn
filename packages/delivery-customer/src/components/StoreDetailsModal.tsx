@@ -11,20 +11,25 @@ import {
   Text,
   TextInput,
   Tooltip,
-} from '@mantine/core';
-import { storeTypes } from 'config/constents';
+} from "@mantine/core";
+import { storeTypes } from "hyfn-types";
 
-import { useLocation } from 'contexts/locationContext/LocationContext';
-import { t } from 'util/i18nextFix';;
-import React, { useState } from 'react';
-import { BsInfoCircle } from 'react-icons/bs';
+import { useLocation } from "contexts/locationContext/LocationContext";
+import { t } from "util/i18nextFix";
+import React, { useState } from "react";
+import { BsInfoCircle } from "react-icons/bs";
 
 interface StoreDetailsModalProps {
   storeDetails: any;
 }
 
-const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({ storeDetails }) => {
-  console.log('🚀 ~ file: StoreDetailsModal.tsx:13 ~ storeDetails', storeDetails);
+const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
+  storeDetails,
+}) => {
+  console.log(
+    "🚀 ~ file: StoreDetailsModal.tsx:13 ~ storeDetails",
+    storeDetails
+  );
   const [opened, setOpened] = useState(false);
   // const [{ coords }] = useLocation();
 
@@ -40,8 +45,12 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({ storeDetails }) =
 
             <CopyButton value={coords} timeout={2000}>
               {({ copied, copy }) => (
-                <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                  <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy}>
+                <Tooltip
+                  label={copied ? "Copied" : "Copy"}
+                  withArrow
+                  position="right"
+                >
+                  <ActionIcon color={copied ? "teal" : "gray"} onClick={copy}>
                     {copied ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +64,11 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({ storeDetails }) =
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        ></path>
                         <path
                           d="M5 12l5 5l10 -10"
                           style={{
@@ -76,7 +89,11 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({ storeDetails }) =
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        ></path>
                         <path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"></path>
                         <path
                           d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"
@@ -95,13 +112,21 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({ storeDetails }) =
       >
         <Stack>
           <Group grow>
-            <TextInput readOnly value={storeDetails.storeName} label={t('Store Name')} />
-            <TextInput readOnly value={storeDetails.storePhone} label={t('Store Phone')} />
+            <TextInput
+              readOnly
+              value={storeDetails.storeName}
+              label={t("Store Name")}
+            />
+            <TextInput
+              readOnly
+              value={storeDetails.storePhone}
+              label={t("Store Phone")}
+            />
           </Group>
 
           <MultiSelect
             sx={{
-              width: '100%',
+              width: "100%",
             }}
             data={storeTypes}
             value={storeDetails.storeType}
@@ -112,14 +137,14 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({ storeDetails }) =
       <ActionIcon
         onClick={() => setOpened(true)}
         sx={{
-          width: 'fit-content',
-          hight: 'fit-content',
+          width: "fit-content",
+          hight: "fit-content",
         }}
       >
-        {t('More info')}
+        {t("More info")}
         <BsInfoCircle
           style={{
-            marginLeft: '4px',
+            marginLeft: "4px",
           }}
         />
       </ActionIcon>

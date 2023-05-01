@@ -1,4 +1,4 @@
-import { transactions } from "config/constants";
+import { transactions } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { useInfiniteQuery } from "react-query";
 

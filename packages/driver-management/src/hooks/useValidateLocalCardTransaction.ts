@@ -4,7 +4,7 @@ import {
   errorNotificatin,
   progressNotification,
   successNotification,
-} from "config/constants";
+} from "hyfn-types";
 import { useMutation } from "react-query";
 
 import fetchUtil from "utils/fetch";
@@ -16,7 +16,9 @@ export const useValidateLocalCardTransaction = () => {
       showNotification({ ...progressNotification, id, message: "" });
       const result = await fetchUtil({
         reqData: [{ transactionId }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/validateLocalCardTransaction`,
+        url: `${
+          import.meta.env.VITE_APP_BASE_URL
+        }/validateLocalCardTransaction`,
       });
       updateNotification({ ...successNotification, id, message: "" });
       return result;

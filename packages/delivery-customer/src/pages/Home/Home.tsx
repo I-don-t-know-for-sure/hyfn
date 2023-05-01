@@ -243,13 +243,6 @@ const Home: React.FC = () => {
           </Container>
         )
       )}
-      <Button
-        onClick={() => {
-          mutate();
-        }}
-      >
-        {t("test")}
-      </Button>
     </Box>
   );
 };

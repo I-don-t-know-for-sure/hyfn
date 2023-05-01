@@ -15,17 +15,18 @@ import {
 import Image from "components/Image";
 import InstructionsModal from "components/InstructionsModal";
 import ProductControler from "components/ProductControler";
-import {
-  MINIMUM_AMOUNT_TO_CHECKOUT,
-  ORDER_TYPE_DELIVERY,
-  ORDER_TYPE_PICKUP,
-  storeServiceFee,
-} from "config/constents";
+
 import { useCart } from "contexts/cartContext/Provider";
 import { t } from "util/i18nextFix";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { add, multiply, subtract } from "mathjs";
+import {
+  MINIMUM_AMOUNT_TO_CHECKOUT,
+  ORDER_TYPE_DELIVERY,
+  ORDER_TYPE_PICKUP,
+  storeServiceFee,
+} from "hyfn-types";
 
 interface InCartStoreProps {
   inCartStore: any;

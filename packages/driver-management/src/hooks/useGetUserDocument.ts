@@ -1,7 +1,3 @@
-import { useLocalStorage } from "@mantine/hooks";
-import { Auth } from "aws-amplify";
-import { USER_DOCUMENT } from "config/constants";
-import { useUser } from "contexts/userContext/User";
 import { useQuery } from "react-query";
 import fetchUtil from "utils/fetch";
 

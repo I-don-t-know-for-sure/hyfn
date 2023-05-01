@@ -1,4 +1,4 @@
-import { Button, Group, Modal, TextInput } from "@mantine/core";
+import { Button, Group, Modal, Stack, TextInput } from "@mantine/core";
 import { useLocation } from "contexts/locationContext/LocationContext";
 import React, { useState } from "react";
 import { t } from "util/i18nextFix";
@@ -24,21 +24,23 @@ const ProposalsModal: React.FC<ProposalsModalProps> = ({
       <Modal opened={opened} onClose={() => setOpened(false)}>
         {proposals.map((proposal) => {
           return (
-            <Group>
+            <Stack>
               <TextInput label={t("Price")} value={proposal?.price} readOnly />
-              <ManagementInfoModal managementId={proposal.managementId} />
-              <Button
-                onClick={() => {
-                  acceptProposal({
-                    country,
-                    driverManagementId: proposal.managementId,
-                    orderId,
-                  });
-                }}
-              >
-                {t("Accept")}
-              </Button>
-            </Group>
+              <Group grow>
+                <ManagementInfoModal managementId={proposal.managementId} />
+                <Button
+                  onClick={() => {
+                    acceptProposal({
+                      country,
+                      driverManagementId: proposal.managementId,
+                      orderId,
+                    });
+                  }}
+                >
+                  {t("Accept")}
+                </Button>
+              </Group>
+            </Stack>
           );
         })}
       </Modal>

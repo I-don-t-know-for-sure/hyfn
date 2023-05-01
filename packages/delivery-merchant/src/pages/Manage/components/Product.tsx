@@ -24,7 +24,7 @@ import { t } from "utils/i18nextFix";
 
 import { useCreateProduct } from "../hooks/useCreateProduct";
 import { useUser } from "contexts/userContext/User";
-import { currencies } from "config/constants";
+import { currencies } from "hyfn-types";
 
 interface ProductProps {}
 /*

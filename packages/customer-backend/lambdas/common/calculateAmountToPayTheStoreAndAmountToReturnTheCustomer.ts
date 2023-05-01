@@ -46,7 +46,7 @@
 //   };
 // }
 import { add, multiply, subtract } from 'mathjs';
-import { ORDER_TYPE_PICKUP, storeAndCustomerServiceFee, storeServiceFee } from './constants';
+import { ORDER_TYPE_PICKUP, storeAndCustomerServiceFee, storeServiceFee } from 'hyfn-types';
 import { calculateProductOptionsValue } from './utils';
 export function calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({ storeOrder }) {
   var orderCost = 0;

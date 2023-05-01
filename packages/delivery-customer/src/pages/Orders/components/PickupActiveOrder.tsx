@@ -28,10 +28,7 @@ import { useRefreshOrderDocument } from "../hooks/useRefreshOrderDocument";
 import TextToCopy from "./TextToCopy";
 import { useSetOrderAsDelivered } from "../hooks/useSetOrderAsDelivered";
 
-import {
-  STORE_STATUS_PENDING,
-  STORE_TYPE_RESTAURANT,
-} from "../../../config/constents";
+import { STORE_STATUS_PENDING, STORE_TYPE_RESTAURANT } from "hyfn-types";
 
 interface PickupActiveOrderProps {
   order: any;

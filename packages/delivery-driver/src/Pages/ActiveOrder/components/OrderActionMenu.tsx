@@ -1,25 +1,29 @@
-import { ActionIcon, Menu } from '@mantine/core'
+import { ActionIcon, Menu } from "@mantine/core";
 
-import { t } from 'utils/i18nextFix'
-import React, { useState } from 'react'
-import { BsThreeDotsVertical } from 'react-icons/bs'
+import { t } from "utils/i18nextFix";
+import React, { useState } from "react";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
-import { useReportOrder } from '../hooks/useReportOrder'
+import { useReportOrder } from "../hooks/useReportOrder";
 
-import ReportModal from './ReportModal'
-import { ORDER_TYPE_DELIVERY } from 'config/constants'
-import { useLeaveOrder } from '../hooks/useLeaveOrder'
+import ReportModal from "./ReportModal";
+import { ORDER_TYPE_DELIVERY } from "hyfn-types";
+import { useLeaveOrder } from "../hooks/useLeaveOrder";
 
 interface OrderActionMenuProps {
-  orderId: string
-  orderType: string
-  isOrderTakenByDriver: boolean
+  orderId: string;
+  orderType: string;
+  isOrderTakenByDriver: boolean;
 }
 
-const OrderActionMenu: React.FC<OrderActionMenuProps> = ({ orderId, orderType, isOrderTakenByDriver }) => {
-  const [opened, setOpened] = useState(false)
-  const { mutate: leaveOrder } = useLeaveOrder()
-  const { mutate: reportOrder } = useReportOrder()
+const OrderActionMenu: React.FC<OrderActionMenuProps> = ({
+  orderId,
+  orderType,
+  isOrderTakenByDriver,
+}) => {
+  const [opened, setOpened] = useState(false);
+  const { mutate: leaveOrder } = useLeaveOrder();
+  const { mutate: reportOrder } = useReportOrder();
 
   return (
     <Menu closeOnClickOutside={false}>
@@ -31,14 +35,14 @@ const OrderActionMenu: React.FC<OrderActionMenuProps> = ({ orderId, orderType, i
       <Menu.Dropdown>
         <Menu.Item
           sx={{
-            textAlign: 'center',
+            textAlign: "center",
           }}
-          color={'orange'}
+          color={"orange"}
           onClick={() => {
-            leaveOrder({ orderId })
+            leaveOrder({ orderId });
           }}
         >
-          {t('Cancel')}
+          {t("Cancel")}
         </Menu.Item>
         {/* <Menu.Item
           color={'red'}
@@ -54,11 +58,13 @@ const OrderActionMenu: React.FC<OrderActionMenuProps> = ({ orderId, orderType, i
           //   reportOrder({ orderId });
           // }}
         > */}
-        {orderType === ORDER_TYPE_DELIVERY && isOrderTakenByDriver && <ReportModal orderId={orderId} />}
+        {orderType === ORDER_TYPE_DELIVERY && isOrderTakenByDriver && (
+          <ReportModal orderId={orderId} />
+        )}
         {/* </Menu.Item> */}
       </Menu.Dropdown>
     </Menu>
-  )
-}
+  );
+};
 
-export default OrderActionMenu
+export default OrderActionMenu;

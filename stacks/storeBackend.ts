@@ -265,6 +265,15 @@ export function storeApiStack({ stack }: StackContext) {
           functionName: "generateDescriptionClient" + stack.stage,
         },
       },
+      "POST /updateNotificationTokens": {
+        function: {
+          handler:
+            pathToLambdas +
+            "updateNotificationTokens/updateNotificationTokens.handler",
+          // functionName:
+          //   "updateNotificationTokens" + stack.stackName + stack.stage,
+        },
+      },
 
       "POST /addEmployee": {
         function: {
@@ -357,7 +366,7 @@ export function storeApiStack({ stack }: StackContext) {
             pathToLambdas + "setOrderAsPreparing/setOrderAsPreparing.handler",
         },
       },
-      "POST /createLocalCardTransaction": {
+      /*  "POST /createLocalCardTransaction": {
         function: {
           handler:
             pathToLambdas +
@@ -370,7 +379,13 @@ export function storeApiStack({ stack }: StackContext) {
             pathToLambdas +
             "payWithLocalCard/createLocalCardTransactionForWallet.handler",
         },
+      }, */
+      "POST /createTransaction": {
+        function: {
+          handler: pathToLambdas + "payWithLocalCard/createTransaction.handler",
+        },
       },
+
       "POST /getProductFromBarcode": {
         function: {
           handler:

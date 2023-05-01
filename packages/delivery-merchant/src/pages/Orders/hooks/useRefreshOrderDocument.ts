@@ -1,5 +1,5 @@
 import { showNotification } from "@mantine/notifications";
-import { ACTIVE_ORDERS } from "config/constants";
+import { ACTIVE_ORDERS } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 // import { useLocation } from 'contexts/locationContext/LocationContext';
 import { t } from "utils/i18nextFix";

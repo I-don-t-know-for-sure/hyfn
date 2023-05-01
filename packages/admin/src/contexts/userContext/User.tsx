@@ -6,7 +6,7 @@ import { useQueryClient } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import { useGetUserId } from "../../hooks/useGetUserId";
 import { useGetUserDocument } from "../../hooks/useGetUserDocument";
-import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "../../config/constants";
+import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "hyfn-types";
 
 export const UserContext = createContext(undefined);
 

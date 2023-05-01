@@ -3,10 +3,11 @@
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
 import { getCustomerInfo } from '../common/getCustomerInfo';
-import { updateAllOrder, updateOrderProducts } from '../common/utils';
+
 import { mainWrapper } from 'hyfn-server/src';
 import { MainFunctionProps } from 'hyfn-server/src';
 import { z } from 'zod';
+import { updateAllOrder } from './functions/updateAllOrder';
 const inputValidation = z.object({});
 const accessSession = z.object({});
 interface CreateOrderDataProps extends Omit<MainFunctionProps, 'args'> {
@@ -45,24 +46,19 @@ export const createOrderData = async ({ arg, client, userId }: CreateOrderDataPr
   //   {},
   // );
   const orders = customerDoc?.order?.orders;
-  if (customerDoc.order) {
-    var diffrent = false;
-    // or stores are diffrent
-    for (let i = 0; i < orderCart?.length; i++) {
-      const store = orderCart[i];
-      if (store._id !== orders[i]?._id) {
-        diffrent = true;
-      }
-    }
-    // check this out when free // customerDoc?.order?.orders?.length !== orderCart?.length || diffrent
-    if (true) {
-      await updateAllOrder(arg, client);
-    } else {
-      await updateOrderProducts(arg, client);
-    }
-  } else {
-    await updateAllOrder(arg, client);
-  }
+  // if (customerDoc.order) {
+  //   var diffrent = false;
+  //   // or stores are diffrent
+  //   for (let i = 0; i < orderCart?.length; i++) {
+  //     const store = orderCart[i];
+  //     if (store._id !== orders[i]?._id) {
+  //       diffrent = true;
+  //     }
+  //   }
+  // check this out when free // customerDoc?.order?.orders?.length !== orderCart?.length || diffrent
+
+  await updateAllOrder(arg, client);
+  // }
   return JSON.stringify('success');
   // Ensures that the client will close when you finish/error
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration

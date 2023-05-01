@@ -21,7 +21,7 @@ import { useSetOrderAsReady } from "../hooks/useSetOrderAsReady";
 import { useSetOrderAsDelivered } from "../hooks/useSetOrderAsDelivered";
 import { useUser } from "contexts/userContext/User";
 // import { Helmet } from "react-helmet-async";
-import { USER_TYPE_DRIVER } from "config/constants";
+import { USER_TYPE_DRIVER } from "hyfn-types";
 
 import { ActiveOrder } from "./ActiveOrder";
 import { useSetOrderAsAccepted } from "../hooks/useSetOrderAsAccepted";

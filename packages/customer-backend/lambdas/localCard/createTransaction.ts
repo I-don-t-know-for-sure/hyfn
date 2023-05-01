@@ -57,6 +57,16 @@ const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCa
   }
 
   if (type === serviceFeePayment) {
+    if (orderDoc.orders.find((storeOrder) => storeOrder.orderStatus !== STORE_STATUS_ACCEPTED)) {
+      throw new Error('order not accepted yet');
+    }
+
+    if (customerDoc._id.toString() !== orderDoc.userId) {
+      throw new Error('user id does not match');
+    }
+    if (orderDoc?.serviceFeePaid) {
+      throw new Error('service fee already paid');
+    }
     const amount = orderDoc.serviceFee;
 
     const transactionId = new ObjectId();
@@ -69,6 +79,7 @@ const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCa
         customerId,
         amount: amount,
         storeId: adminName,
+        orderId,
         transactionDate: now,
         validated: false,
         type,
@@ -188,7 +199,7 @@ const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCa
               amount: amountToPay,
               paymentMethod: paymentMethods.localCard,
               // amount to return to customer if there were products that were not found in the store. the amount is the service fee for the products
-              amountToReturnToCustomer,
+              // amountToReturnToCustomer,
               transactionDate: now,
               validated: false,
             },

@@ -1,12 +1,20 @@
-import { STORES } from 'config/constents';
-import { useLocation } from 'contexts/locationContext/LocationContext';
-import { useUser } from 'contexts/userContext/User';
+import { STORES } from "hyfn-types";
+import { useLocation } from "contexts/locationContext/LocationContext";
+import { useUser } from "contexts/userContext/User";
 
-import { useInfiniteQuery, useQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from "react-query";
 
-import fetchUtil from 'util/fetch';
+import fetchUtil from "util/fetch";
 
-const useGetStores = ({ filter, nearby, city }: { filter?: any; nearby?: boolean; city: string }) => {
+const useGetStores = ({
+  filter,
+  nearby,
+  city,
+}: {
+  filter?: any;
+  nearby?: boolean;
+  city: string;
+}) => {
   const [location] = useLocation();
   const { userDocument } = useUser();
   // const { data } = useRefreshCustomUserData();
@@ -14,7 +22,7 @@ const useGetStores = ({ filter, nearby, city }: { filter?: any; nearby?: boolean
 
   return useInfiniteQuery(
     [STORES, nearby, filter, city],
-    async ({ pageParam = '' }) => {
+    async ({ pageParam = "" }) => {
       return await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/getStoreFronts`,
         reqData: [{ ...location, nearby }, { filter }, pageParam],
@@ -24,7 +32,7 @@ const useGetStores = ({ filter, nearby, city }: { filter?: any; nearby?: boolean
       keepPreviousData: true,
       getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
       enabled: !!userDocument,
-    },
+    }
   );
 };
 

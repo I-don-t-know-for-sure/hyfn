@@ -1,8 +1,7 @@
 import { useLocalStorage } from "@mantine/hooks";
 import { Auth } from "aws-amplify";
-import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "config/constants";
+import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "hyfn-types";
 import { useGetUserDocument } from "hooks/useGetUserDocument";
-// import { LOGGED_IN, USER_DOCUMENT, USER_ID } from 'config/constants'
 
 import { useGetUserId } from "hooks/useGetUserId";
 
