@@ -23,12 +23,12 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
         .collection('customerInfo')
         .findOne({ customerId }, { session });
       if (!userInfo) {
-        throw new Error('jdjcb');
+        throw new Error('user document not found');
       }
       const userId = userInfo._id.toString();
-      console.log(JSON.stringify(userInfo));
+
       const { order, name, balance = 0 } = userInfo;
-      console.log(balance);
+
       const { country, city } = order.orders[0];
       const {
         storeServiceFee,
@@ -45,34 +45,17 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
         orderType,
         deliveryDate,
       } = order;
-      console.log(
-        '🚀 ~ file: createOrder.ts:48 ~ mainFunction ~ dateObject:',
-        new Date(deliveryDate)
-      );
-      console.log('🚀 ~ file: createOrder.js:45 ~ mainFunction ~ serviceFee', serviceFee);
+
       const fixedBuyerCoords = [buyerCoords[0], buyerCoords[1]];
       const fixedGeometryCoordinates = coords.coordinates.map((coords) => [coords[0], coords[1]]);
       const fixedGeometry = {
         ...coords,
         coordinates: fixedGeometryCoordinates,
       };
-      const isbalenceEnough = smallerEq(serviceFee, balance);
-      console.log('🚀 ~ file: createOrder.js:63 ~ mainFunction ~ isbalenceEnough', isbalenceEnough);
+
       // Math.abs(parseFloat(balance).toFixed(3)) >= Math.abs(parseFloat(serviceFee).toFixed(3));
-      console.log(Math.abs(parseFloat(balance)), 'hbdchbdchbdhcbbcdhbcdh');
-      console.log(Math.abs(parseFloat(serviceFee)), 'gdgcvdcvdgvcdvcgdvgvc');
-      // if (!isbalenceEnough && orderType === ORDER_TYPE_PICKUP) {
-      //   throw new Error('balance not enough');
-      // }
-      console.log('hhdh');
+
       const mongo = client.db('base');
-      // if (storeDoc.subscriptionInfo.expirationDate < new Date()) {
-      //   console.log(
-      //     '🚀 ~ file: utils.js:152 ~ updateAllOrder ~ subscriptionInfo',
-      //     storeDoc.subscriptionInfo
-      //   );
-      //   throw new Error('expired subscription');
-      // }
       const storesArray: any[] = [];
       for (let i = 0; i < order.orders?.length; i++) {
         const store = order.orders[i];
@@ -85,7 +68,10 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
         if (!storeDoc) {
           throw new Error('cd');
         }
-        if (!storeDoc.opened) {
+        if (storeDoc.subscriptionInfo.expirationDate < new Date()) {
+          throw new Error('store subscription expired');
+        }
+        if (!storeDoc.opened || !storeDoc.acceptingOrders) {
           throw new Error(`${storeDoc.storeName} is closed`);
         }
         storesArray.push(storeDoc);
@@ -108,6 +94,7 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
       //   return { ...accu, [current._id]: current };
       // }, {});
       // console.log(ordersObject);
+
       const insertOrderResult = await mongo.collection(`orders`).insertOne(
         {
           orders: order.orders,
@@ -139,7 +126,7 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
         },
         { session }
       );
-      insertOne({ insertOneResult: insertOrderResult });
+
       // if (orderType === ORDER_TYPE_PICKUP) {
       //   const updateCustomerResult = await client
       //     .db('generalData')

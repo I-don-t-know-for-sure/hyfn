@@ -1,12 +1,8 @@
-import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
 import { PRODUCT } from "hyfn-types";
-import { useCustomerData } from "contexts/customerData/CustomerDataProvider";
-import { t } from "util/i18nextFix";
+
 import { useMutation, useQuery } from "react-query";
 
 import fetchUtil from "util/fetch";
-import Product from "../Product";
 
 export const useGetProduct = (
   locationInfo: {

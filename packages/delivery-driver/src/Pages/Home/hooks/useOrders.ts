@@ -1,5 +1,5 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { Auth } from "aws-amplify";
 import { orders } from "hyfn-types";
 import { useLocation } from "contexts/locationContext/LocationContext";
@@ -43,13 +43,6 @@ export const useGetOrders = () => {
 
         return result;
       } catch (e) {
-        updateNotification({
-          message: t("An Error occurred"),
-          id,
-          color: "red",
-          loading: false,
-          autoClose: true,
-        });
         console.error(e);
       }
     },

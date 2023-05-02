@@ -9,8 +9,6 @@ export const useCreateCustomer = () => {
   return useMutation(
     async (customerInfo: any) => {
       try {
-        // showNotification({
-        // })
         const result = await fetchUtil({
           reqData: [{ ...customerInfo, customerId: userId }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/createUserDocument`,

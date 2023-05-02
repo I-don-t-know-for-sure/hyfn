@@ -1,5 +1,5 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useUser } from "contexts/userContext/User";
 import { useMutation } from "react-query";
@@ -15,14 +15,6 @@ export const useTakeOrder = () => {
     ["takeOrder"],
     async ({ orderId }: { orderId: string }) => {
       try {
-        console.log("hshshshs");
-        showNotification({
-          title: t("In progress"),
-          message: t("Processing"),
-          loading: true,
-          autoClose: false,
-          id,
-        });
         const result = await fetchUtil({
           reqData: [
             {
@@ -33,24 +25,9 @@ export const useTakeOrder = () => {
           ],
           url: `${import.meta.env.VITE_APP_BASE_URL}/takeOrder`,
         });
-        updateNotification({
-          message: t("Success"),
-          id,
-          color: "green",
-          loading: false,
-          autoClose: true,
-        });
-        console.log(result, "hfhfh");
 
         return result;
       } catch (e: any) {
-        updateNotification({
-          message: t("An Error occurred"),
-          id,
-          color: "red",
-          loading: false,
-          autoClose: true,
-        });
         console.error(e);
       }
     }

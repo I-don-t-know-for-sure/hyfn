@@ -1,7 +1,7 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { useUser } from "contexts/userContext/User";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useInfiniteQuery, useMutation } from "react-query";
 
 import fetchUtil from "utils/fetch";
@@ -21,13 +21,7 @@ export const useGetBrands = () => {
 
         return result;
       } catch (error) {
-        showNotification({
-          title: t("Error"),
-          message: t("An Error occurred"),
-          id,
-          autoClose: true,
-          color: "red",
-        });
+        console.log("🚀 ~ file: useGetBrands.ts:24 ~ error:", error);
       }
     },
     {

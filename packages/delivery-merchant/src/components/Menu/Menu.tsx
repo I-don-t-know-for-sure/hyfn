@@ -39,6 +39,7 @@ import { useUserCheck } from "hooks/useUserCheck";
 import useGetStoreInfo from "hooks/useGetStoreInfo";
 import { useUser } from "contexts/userContext/User";
 import TransactionList from "components/TransactionList";
+import { useStopAcceptingOrders } from "hooks/useStopAcceptingOrders";
 
 const StyledNav: React.FC = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
@@ -133,15 +134,16 @@ const Menu: React.FC = ({ children }) => {
   const theme = useMantineTheme();
   const { i18n } = useTranslation();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { mutate: stopAcceptingOrders } = useStopAcceptingOrders();
   const dark = colorScheme === "dark";
   const { links, lngs, list: avatarList } = useConfigData();
   const storeName = loggedIn ? userDocument?.storeName : "";
   const { mutate: openAdnCloseStore } = useStoreStateControl();
+
   useEffect(() => {
     scrollTo({ x: 0, y: 0 });
   }, [location]);
   const sales = data?.sales?.toFixed(2);
-  console.log("🚀 ~ file: Menu.tsx:138 ~ data", data);
 
   const [fixedComponent] = useFixedComponent();
   const FixedComponenet =
@@ -216,17 +218,7 @@ const Menu: React.FC = ({ children }) => {
                     </Text>
                   </Box>
                 </AvatarMenu.Target>
-                {/* {avatarList.map((avatarItem) => {
-                const Icon = avatarItem.icon;
-                return (
-                  <AvatarMenu.Item
-                  onClick={async () => await avatarItem.fn()}
-                  icon={<Icon />}
-                  >
-                  {avatarItem.label}
-                  </AvatarMenu.Item>
-                  );
-                })} */}
+
                 <AvatarMenu.Dropdown>
                   <AvatarMenu.Item
                     onClick={() => {
@@ -234,6 +226,14 @@ const Menu: React.FC = ({ children }) => {
                     }}
                   >
                     {userDocument?.opened ? t("Close store") : t("Open store")}
+                  </AvatarMenu.Item>
+
+                  <AvatarMenu.Item
+                    onClick={async () => {
+                      stopAcceptingOrders();
+                    }}
+                  >
+                    {t("Stop accepting orders")}
                   </AvatarMenu.Item>
                   <AvatarMenu.Item
                     onClick={async () => {

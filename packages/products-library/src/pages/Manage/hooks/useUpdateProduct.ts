@@ -1,5 +1,5 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { useUser } from "contexts/userContext/User";
 import useUploadImage from "hooks/useUploadImage";
 import { useMutation, useQueryClient } from "react-query";
@@ -28,13 +28,6 @@ export const useUpdateProduct = () => {
     }) => {
       try {
         const randomid = randomId();
-        showNotification({
-          id: randomid,
-          title: `updating ${product.textInfo.title}`,
-          message: `updating ${product.textInfo.title}`,
-          loading: true,
-          autoClose: false,
-        });
         const { deletedImages, files, ...rest } = product;
         const imagesURLs = await upload(files);
 
@@ -48,13 +41,6 @@ export const useUpdateProduct = () => {
               deletedImages,
             },
           ],
-        });
-        updateNotification({
-          id: randomid,
-          title: `${product.textInfo.title} updated`,
-          message: `${product.textInfo.title} updated`,
-          loading: false,
-          autoClose: 2000,
         });
         return res;
       } catch (e) {

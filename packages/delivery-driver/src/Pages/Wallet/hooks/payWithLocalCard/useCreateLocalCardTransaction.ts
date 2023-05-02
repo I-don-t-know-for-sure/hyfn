@@ -1,5 +1,5 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import {
   errorNotificatin,
   progressNotification,
@@ -16,15 +16,18 @@ export const useCreateLocalCardTransaction = () => {
   const id = randomId();
   return useMutation(async ({ amount }: { amount: number }) => {
     try {
-      showNotification({ ...progressNotification, message: "", id });
       const result = await fetchUtil({
         reqData: [{ amount, userId: user._id }],
         url: `${import.meta.env.VITE_APP_BASE_URL}/createLocalCardTransaction`,
       });
-      updateNotification({ ...successNotification, message: "", id });
+
       return result;
     } catch (error) {
-      updateNotification({ ...errorNotificatin, id, message: "" });
+      console.log(
+        "🚀 ~ file: useCreateLocalCardTransaction.ts:27 ~ returnuseMutation ~ error:",
+        error
+      );
+
       throw error;
     }
   });

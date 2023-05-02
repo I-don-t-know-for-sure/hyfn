@@ -1,5 +1,3 @@
-import { showNotification } from "@mantine/notifications";
-
 import { useTranslation } from "react-i18next";
 import { IconType } from "react-icons";
 import { AiFillHome, AiFillTag } from "react-icons/ai";

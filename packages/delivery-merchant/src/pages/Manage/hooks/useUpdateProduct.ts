@@ -1,5 +1,5 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { useUser } from "contexts/userContext/User";
 import useUploadImage from "hooks/useUploadImage";
 import { useMutation, useQueryClient } from "react-query";
@@ -31,13 +31,7 @@ export const useUpdateProduct = () => {
         console.log(product.productLibraryImages);
 
         const randomid = randomId();
-        showNotification({
-          id: randomid,
-          title: `updating ${product.textInfo.title}`,
-          message: `updating ${product.textInfo.title}`,
-          loading: true,
-          autoClose: false,
-        });
+
         const { deletedImages, productLibraryImages = [], ...rest } = product;
         if (product?.files?.length > 0) {
           const { generatedNames, generatedURLs } = await generateProductsUrls(
@@ -71,13 +65,7 @@ export const useUpdateProduct = () => {
             deletedImages,
           ],
         });
-        updateNotification({
-          id: randomid,
-          title: `${product.textInfo.title} updated`,
-          message: `${product.textInfo.title} updated`,
-          loading: false,
-          autoClose: 2000,
-        });
+
         return res;
       } catch (e) {
         console.error(e);

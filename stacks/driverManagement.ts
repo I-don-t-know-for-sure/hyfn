@@ -73,12 +73,7 @@ export function managementApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "addLocalCardKeys/addLocalCardKeys.handler",
         },
       },
-      "POST /getPaymentRequests": {
-        function: {
-          handler:
-            pathToLambdas + "getPaymentRequests/getPaymentRequests.handler",
-        },
-      },
+
       "POST /addEmployee": {
         function: {
           handler: pathToLambdas + "addEmployee/addEmployee.handler",
@@ -95,18 +90,7 @@ export function managementApiStack({ stack }: StackContext) {
             pathToLambdas + "replaceOrderDriver/replaceOrderDriver.handler",
         },
       },
-      "POST /cancelPaymentRequest": {
-        function: {
-          handler:
-            pathToLambdas + "cancelPaymentRequest/cancelPaymentRequest.handler",
-        },
-      },
-      "POST /createPaymentRequest": {
-        function: {
-          handler:
-            pathToLambdas + "createPaymentRequest/createPaymentRequest.handler",
-        },
-      },
+
       "POST /DisableLocalCardKeys": {
         function: {
           handler:
@@ -181,13 +165,7 @@ export function managementApiStack({ stack }: StackContext) {
             "removeDriverFromManagementDrivers/removeDriverFromManagementDrivers.handler",
         },
       },
-      "POST /createLocalCardTransaction": {
-        function: {
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/createLocalCardTransaction.handler",
-        },
-      },
+
       "POST /getTransactionsList": {
         function: {
           handler:
@@ -201,11 +179,7 @@ export function managementApiStack({ stack }: StackContext) {
             "payWithLocalCard/validateLocalCardTransaction.handler",
         },
       },
-      "POST /{proxy+}": {
-        function: {
-          handler: pathToLambdas + "getManagement/getManagement.handler",
-        },
-      },
+
       // "POST /createStoreDocument":
       //   "packages/store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
       // "POST /getStoreDocument":

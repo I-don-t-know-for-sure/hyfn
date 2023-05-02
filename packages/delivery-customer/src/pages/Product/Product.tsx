@@ -123,7 +123,6 @@ const Product: React.FC<ProductProps> = ({}) => {
       resetOrder();
       return;
     }
-    // showNotification({ message: 'wrong', color: 'red' });
   };
 
   const didSelectOptions = () => {

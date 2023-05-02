@@ -265,6 +265,13 @@ export function storeApiStack({ stack }: StackContext) {
           functionName: "generateDescriptionClient" + stack.stage,
         },
       },
+      "POST /stopAcceptingOrders": {
+        function: {
+          handler:
+            pathToLambdas + "stopAcceptingOrders/stopAcceptingOrders.handler",
+          functionName: "stopAcceptingOrders" + stack.stage,
+        },
+      },
       "POST /updateNotificationTokens": {
         function: {
           handler:

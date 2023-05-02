@@ -1,5 +1,5 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { orderHistory } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";

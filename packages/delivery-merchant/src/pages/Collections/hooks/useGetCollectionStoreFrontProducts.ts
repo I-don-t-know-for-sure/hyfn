@@ -1,4 +1,3 @@
-import { showNotification } from "@mantine/notifications";
 import { collectionStoreFrontProducts } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
@@ -34,12 +33,10 @@ export const useGetCollectionStoreFrontProducts = ({
         });
         return result;
       } catch (error) {
-        showNotification({
-          title: t("Error"),
-          message: t("An Error occurred"),
-          color: "red",
-          autoClose: true,
-        });
+        console.log(
+          "🚀 ~ file: useGetCollectionStoreFrontProducts.ts:37 ~ error:",
+          error
+        );
       }
     },
     { enabled: !!(collectionId && checked) }

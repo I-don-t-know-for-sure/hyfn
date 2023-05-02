@@ -6,12 +6,11 @@ import {
   useQuery,
   useQueryClient,
 } from "react-query";
-import { showNotification, updateNotification } from "@mantine/notifications";
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
 import fetchUtil from "utils/fetch";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useUser } from "contexts/userContext/User";
 
 export const useGetProductsForBulkUpdate = ({

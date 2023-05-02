@@ -80,12 +80,12 @@ export const STORE_STATUS_ACCEPTED = "accepted";
 export const STORE_STATUS_READY = "ready";
 export const ORDER_STATUS_READY = "ready";
 export const STORE_STATUS_PREPARING = "preparing";
+export const DRIVER_STATUS_PICKEDUP = "picked up";
 export const GETCURRENTUSERINFO = "GETCURRENTUSERINFO";
 export const USER_DOCUMENT = "userDocument";
 export const USER_ID = "userID";
 export const LOGGED_IN = "loggedIn";
 export const STORE_TYPE_RESTAURANT = "restaurant";
-
 export const storeTypes = [
   { value: "restaurant", label: "Restaurant" },
   { value: "grocery", label: "Grocery" },

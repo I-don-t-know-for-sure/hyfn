@@ -1,4 +1,3 @@
-import { showNotification } from "@mantine/notifications";
 import { ACTIVE_ORDERS } from "hyfn-types";
 import { useLocation } from "contexts/locationContext/LocationContext";
 
@@ -38,7 +37,7 @@ export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
 
         return;
       } catch (error) {
-        showNotification({ message: t("Error"), color: "red" });
+        console.log("🚀 ~ file: useRefreshOrderDocument.ts:40 ~ error:", error);
       }
     },
     {

@@ -1,4 +1,3 @@
-import { showNotification } from "@mantine/notifications";
 import { collectionProducts } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";

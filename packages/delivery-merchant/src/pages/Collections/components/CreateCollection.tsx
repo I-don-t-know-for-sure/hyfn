@@ -19,7 +19,7 @@ import { User } from "realm-web";
 import StatusCard from "./CollectionCard";
 import { t } from "utils/i18nextFix";
 import fetchUtil from "utils/fetch";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { randomId } from "@mantine/hooks";
 // import { Helmet } from 'react-helmet-async'
 
@@ -78,39 +78,16 @@ const CreateCollection: React.FC<CreateCollectionProps> = ({ requestType }) => {
           collection
         );
 
-        showNotification({
-          title: t("In Progress"),
-          message: `${t("Creating")} ${collection.collection.textInfo.title}`,
-          loading: true,
-          autoClose: true,
-          id,
-        });
         console.log(`${import.meta.env.VITE_APP_BASE_URL}/createCollection`);
 
         const result = await fetchUtil({
           url: `${import.meta.env.VITE_APP_BASE_URL}/createCollection`,
           reqData: [collection.collection, userDocument?.storeDoc],
         });
-        updateNotification({
-          title: t("Successful"),
-          message: ` ${collection.collection.textInfo.title} ${t(
-            "was created successfully"
-          )}`,
-          color: "green",
-          autoClose: true,
-          id,
-        });
+
         return result;
       } catch (error) {
         console.log(error);
-
-        updateNotification({
-          title: t("Error"),
-          message: t("An Error occurred"),
-          color: "red",
-          autoClose: true,
-          id,
-        });
       }
     },
     {

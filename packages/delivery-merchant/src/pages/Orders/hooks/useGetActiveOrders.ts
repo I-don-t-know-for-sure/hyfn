@@ -1,11 +1,9 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { ACTIVE_ORDERS } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
-import { t } from "utils/i18nextFix";
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
-import { useNavigate } from "react-router";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 import fetchUtil from "utils/fetch";
 

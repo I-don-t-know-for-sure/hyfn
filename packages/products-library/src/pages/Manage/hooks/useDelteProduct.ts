@@ -6,12 +6,11 @@ import {
   useQuery,
   useQueryClient,
 } from "react-query";
-import { showNotification, updateNotification } from "@mantine/notifications";
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
 import fetchUtil from "utils/fetch";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useUser } from "contexts/userContext/User";
 
 export const useDeleteProduct = () => {
@@ -28,31 +27,12 @@ export const useDeleteProduct = () => {
     "products",
     async ({ productId, title }: { productId: string; title: string }) => {
       try {
-        showNotification({
-          title: `${t("Deleting")} ${title}`,
-          message: t("Deleteing in progress"),
-          loading: true,
-          id: notificationId,
-        });
         const result = await fetchUtil({
           url: `${import.meta.env.VITE_APP_BASE_URL}/deleteProduct`,
           reqData: [userDocument._id, productId],
         });
-        updateNotification({
-          title: `${t("Done")}`,
-          message: t("Success"),
-          loading: false,
-          id: notificationId,
-        });
         return result;
       } catch (e) {
-        updateNotification({
-          title: `${t("Error")}`,
-          message: t("An Error occurred"),
-          loading: false,
-          color: "red",
-          id: notificationId,
-        });
         console.error(e);
       }
     },

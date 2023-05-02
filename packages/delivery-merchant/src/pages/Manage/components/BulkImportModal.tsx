@@ -1,54 +1,63 @@
-import { ActionIcon, Box, Button, Group, Input, Modal, Text, Title } from '@mantine/core'
-import { showNotification } from '@mantine/notifications'
-import { t } from 'utils/i18nextFix'
-import React, { CSSProperties, useEffect, useState } from 'react'
-import { useCSVReader } from 'react-papaparse'
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Group,
+  Input,
+  Modal,
+  Text,
+  Title,
+} from "@mantine/core";
 
-import { BiImport } from 'react-icons/bi'
-import { BsInfoCircle } from 'react-icons/bs'
-import InfoPopover from 'components/InfoPopover'
-import CSVDownloader from 'components/CSVParser'
-import { useBulkWrite } from '../hooks/useBulkWrite'
+import { t } from "utils/i18nextFix";
+import React, { CSSProperties, useEffect, useState } from "react";
+import { useCSVReader } from "react-papaparse";
+
+import { BiImport } from "react-icons/bi";
+import { BsInfoCircle } from "react-icons/bs";
+import InfoPopover from "components/InfoPopover";
+import CSVDownloader from "components/CSVParser";
+import { useBulkWrite } from "../hooks/useBulkWrite";
 interface BulkImportModalProps {}
 
 const BulkImportModal: React.FC<BulkImportModalProps> = () => {
-  const [opened, setOpened] = useState(false)
-  const { CSVReader } = useCSVReader()
-  const { mutate: bulkWrite } = useBulkWrite()
-  const [fileData, setFileData] = useState<any>([])
+  const [opened, setOpened] = useState(false);
+  const { CSVReader } = useCSVReader();
+  const { mutate: bulkWrite } = useBulkWrite();
+  const [fileData, setFileData] = useState<any>([]);
 
   const styles = {
     csvReader: {
-      display: 'flex',
-      flexDirection: 'row',
+      display: "flex",
+      flexDirection: "row",
       marginBottom: 10,
     } as CSSProperties,
     browseFile: {
-      width: '20%',
+      width: "20%",
     } as CSSProperties,
     acceptedFile: {
-      border: '1px solid #ccc',
+      border: "1px solid #ccc",
       height: 45,
       lineHeight: 2.5,
       paddingLeft: 10,
-      width: '80%',
+      width: "80%",
     } as CSSProperties,
     remove: {
       borderRadius: 0,
-      padding: '0 20px',
+      padding: "0 20px",
     } as CSSProperties,
     progressBarBackgroundColor: {
-      backgroundColor: 'red',
+      backgroundColor: "red",
     } as CSSProperties,
-  }
+  };
   return (
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} size="lg">
         <Group position="apart">
-          <Title mb={12}>{t('Bulk upload')}</Title>
+          <Title mb={12}>{t("Bulk upload")}</Title>
           <InfoPopover
             infoText={
-              'click download to get a smaple of how the csv file structure should be. note : that your csv file should have an added element in the end'
+              "click download to get a smaple of how the csv file structure should be. note : that your csv file should have an added element in the end"
             }
           />
         </Group>
@@ -58,31 +67,36 @@ const BulkImportModal: React.FC<BulkImportModalProps> = () => {
         <CSVReader
           onUploadAccepted={(input: any) => {
             try {
-              input.data.pop()
+              input.data.pop();
 
-              const results = input.data
-              const objKeys = results[0]
-              const outputArray = []
+              const results = input.data;
+              const objKeys = results[0];
+              const outputArray = [];
               for (let i = 1; i < results?.length; i++) {
-                const row = results[i]
-                let outputObject
+                const row = results[i];
+                let outputObject;
 
                 for (let x = 0; x < row.length; x++) {
-                  outputObject = { ...outputObject, [`${objKeys[x]}`]: row[x] }
+                  outputObject = { ...outputObject, [`${objKeys[x]}`]: row[x] };
                 }
-                outputArray.push(outputObject)
+                outputArray.push(outputObject);
               }
               if (outputArray?.length === 0) {
-                throw new Error('file empty')
+                throw new Error("file empty");
               }
 
-              setFileData(input)
+              setFileData(input);
             } catch (error) {
-              console.log(error)
+              console.log(error);
             }
           }}
         >
-          {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps }: any) => (
+          {({
+            getRootProps,
+            acceptedFile,
+            ProgressBar,
+            getRemoveFileProps,
+          }: any) => (
             <>
               {/* <div style={styles.csvReader}>
                 <button
@@ -102,17 +116,21 @@ const BulkImportModal: React.FC<BulkImportModalProps> = () => {
               <Box
                 {...getRootProps()}
                 sx={(theme) => ({
-                  margin: '4px auto',
-                  height: '60px',
-                  border: `1px ${theme.colors['gray'][5]} solid`,
-                  borderRadius: '4px',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  margin: "4px auto",
+                  height: "60px",
+                  border: `1px ${theme.colors["gray"][5]} solid`,
+                  borderRadius: "4px",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                 })}
               >
-                <Text>{acceptedFile ? acceptedFile.name : t('click here to pick a file')}</Text>
+                <Text>
+                  {acceptedFile
+                    ? acceptedFile.name
+                    : t("click here to pick a file")}
+                </Text>
               </Box>
 
               <ProgressBar style={styles.progressBarBackgroundColor} />
@@ -123,13 +141,13 @@ const BulkImportModal: React.FC<BulkImportModalProps> = () => {
         <Group position="apart" grow mt={22}>
           <Button
             onClick={() => {
-              bulkWrite(fileData)
+              bulkWrite(fileData);
             }}
             // sx={{
             //   width: "70%",
             // }}
           >
-            {t('Upload')}
+            {t("Upload")}
           </Button>
           <CSVDownloader />
         </Group>
@@ -138,7 +156,7 @@ const BulkImportModal: React.FC<BulkImportModalProps> = () => {
         <BiImport />
       </ActionIcon>
     </>
-  )
-}
+  );
+};
 
-export default BulkImportModal
+export default BulkImportModal;

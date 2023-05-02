@@ -145,7 +145,7 @@ export const updateAllOrder = async ({
     const serviceFee = add(baseServiceFee, multiply(orderCost, storeAndCustomerServiceFee));
 
     const totalCost = add(orderCostAfterFee, serviceFee);
-    console.log(orderCost, JSON.stringify(storesArray));
+
     await client
       .db('generalData')
       .collection(`customerInfo`)

@@ -171,7 +171,6 @@ const Menu: React.FC<ReactProps> = ({ children }) => {
               //   maxWidth: isMobile ? '120px' : '',
               // }}
               >
-                <BalanceModal />
                 <AvatarMenu.Target>
                   <Box
                     p={"xs"}

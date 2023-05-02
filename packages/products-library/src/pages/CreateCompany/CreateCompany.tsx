@@ -10,13 +10,13 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { useConfigData } from "components/Menu/config";
 
 import Translation from "components/Translation";
 import { useUser } from "contexts/userContext/User";
 
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useCreateCompany } from "pages/SignUp/hooks/useCreateCompany";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -84,30 +84,9 @@ const CreateCompany: React.FC = () => {
             try {
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { ...rest } = values;
-              showNotification({
-                title: t("Signing up"),
-                message: t(""),
-                id,
-                loading: true,
-                autoClose: false,
-              });
               mutate({ ...form.values, userId });
-              updateNotification({
-                title: t("Signup successful"),
-                message: t("Check your Email for comfirmation"),
-                color: "green",
-                autoClose: false,
-                id,
-              });
             } catch (e) {
               console.error(e);
-              updateNotification({
-                title: t("Error"),
-                message: t("An Error occurred"),
-                color: "red",
-                autoClose: true,
-                id,
-              });
             }
           })}
         >

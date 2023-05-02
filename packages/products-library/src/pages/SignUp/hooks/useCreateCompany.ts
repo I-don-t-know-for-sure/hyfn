@@ -1,4 +1,3 @@
-import { showNotification } from "@mantine/notifications";
 import { USER_DOCUMENT } from "hyfn-types";
 import { t } from "utils/i18nextFix";
 import { useMutation, useQueryClient } from "react-query";
@@ -19,12 +18,6 @@ export const useCreateCompany = () => {
         return result;
       } catch (e) {
         console.error(e);
-        showNotification({
-          title: t("Error"),
-          message: t("An Error occurred"),
-          color: "red",
-          autoClose: true,
-        });
       }
     },
     {

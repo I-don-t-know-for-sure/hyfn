@@ -6,7 +6,6 @@ import {
   useQuery,
   useQueryClient,
 } from "react-query";
-import { showNotification, updateNotification } from "@mantine/notifications";
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
@@ -33,11 +32,7 @@ export const useSearchProducts = (value: string) => {
         });
         return result;
       } catch (error) {
-        showNotification({
-          title: t("Error"),
-          message: t("An Error occurred"),
-          autoClose: true,
-        });
+        console.log("🚀 ~ file: useSearchProducts.ts:36 ~ error:", error);
       }
     },
     {

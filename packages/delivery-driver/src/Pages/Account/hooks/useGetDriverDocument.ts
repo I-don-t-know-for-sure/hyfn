@@ -1,5 +1,5 @@
 import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
+
 import { driverDoc } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 
@@ -22,14 +22,7 @@ export const useGetDriverDocument = () => {
         });
         return result;
       } catch (error) {
-        showNotification({
-          title: t("Error"),
-          message: t("An Error occurred"),
-
-          loading: false,
-          autoClose: true,
-          color: "red",
-        });
+        console.log("🚀 ~ file: useGetDriverDocument.ts:25 ~ error:", error);
       }
     },
     {

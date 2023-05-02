@@ -6,12 +6,11 @@ import {
   useQuery,
   useQueryClient,
 } from "react-query";
-import { showNotification, updateNotification } from "@mantine/notifications";
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
 import fetchUtil from "utils/fetch";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useUser } from "contexts/userContext/User";
 
 export const useSearchProducts = (value: string) => {
@@ -32,11 +31,7 @@ export const useSearchProducts = (value: string) => {
         });
         return result;
       } catch (error) {
-        showNotification({
-          title: t("Error"),
-          message: t("An Error occurred"),
-          autoClose: true,
-        });
+        console.log("🚀 ~ file: useSearchProducts.ts:35 ~ error:", error);
       }
     },
     {

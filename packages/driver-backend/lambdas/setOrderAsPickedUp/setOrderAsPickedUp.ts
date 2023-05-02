@@ -12,12 +12,15 @@ export const setOrderAsPickedUpHandler = async ({
     },
     {}
   );
-  const { orderIds } = driverDoc;
-  const driverTakenOrder = orderIds.find((id) => id === orderId);
-  if (!driverTakenOrder) {
+  const orderDoc = await client
+    .db('base')
+    .collection('orders')
+    .findOne({ _id: new ObjectId(orderId) }, {});
+
+  if (!orderDoc.status.find((status) => status._id === driverDoc._id.toString())) {
     throw new Error('driver did not take the order');
   }
-  console.log(driverDoc, orderId);
+
   await client
     .db('base')
     .collection('orders')
@@ -25,24 +28,12 @@ export const setOrderAsPickedUpHandler = async ({
       { '_id': new ObjectId(orderId), 'status._id': id },
       {
         $set: {
-          'status.$': { _id: id, status: 'picked up' },
+          'status.$': { _id: id, status: DRIVER_STATUS_PICKEDUP },
         },
       },
       {}
     );
-  // const session = client.startSession();
-  // await session.withTransaction(async () => {}, {
-  //   readPreference: "primary",
-  //   readConcern: { level: "local" },
-  //   writeConcern: { w: "majority" },
-  // });
-  // try {
-  // } catch (error) {
-  //   return new Error(error.message);
-  // } finally {
-  //   await session.endSession();
-  //   await client.close();
-  // }
+
   return 'success';
 };
 interface SetOrderAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
@@ -50,6 +41,7 @@ interface SetOrderAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { DRIVER_STATUS_PICKEDUP } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setOrderAsPickedUpHandler });

@@ -1,11 +1,11 @@
-import { randomId } from '@mantine/hooks';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { useLocation } from '../../../contexts/locationContext/LocationContext';
-import { useUser } from '../../../contexts/userContext/User';
+import { randomId } from "@mantine/hooks";
 
-import { t } from '../../../util/i18nextFix';;
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import fetchUtil from '../../../util/fetch';
+import { useLocation } from "../../../contexts/locationContext/LocationContext";
+import { useUser } from "../../../contexts/userContext/User";
+
+import { t } from "../../../util/i18nextFix";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import fetchUtil from "../../../util/fetch";
 
 export const useSetProductAsPickedUp = () => {
   const { userDocument: user } = useUser();
@@ -35,7 +35,7 @@ export const useSetProductAsPickedUp = () => {
               QTYFound,
               driver: user?._id,
             },
-          ]),
+          ])
         );
         console.log({
           country,
@@ -44,13 +44,6 @@ export const useSetProductAsPickedUp = () => {
           QTYFound,
 
           driverId: user?._id,
-        });
-        showNotification({
-          title: t('In progress'),
-          message: t('Processing'),
-          loading: true,
-          autoClose: false,
-          id,
         });
         const result = await fetchUtil({
           reqData: [
@@ -64,28 +57,18 @@ export const useSetProductAsPickedUp = () => {
           ],
           url: `${import.meta.env.VITE_APP_BASE_URL}/setProductAsPickedUp`,
         });
-        updateNotification({
-          message: t('Success'),
-          id,
-          color: 'green',
-          loading: false,
-          autoClose: true,
-        });
         return result;
       } catch (error) {
-        updateNotification({
-          message: t('An Error occurred'),
-          id,
-          color: 'red',
-          loading: false,
-          autoClose: true,
-        });
+        console.log(
+          "🚀 ~ file: useSetProductAsPickedUp.ts:62 ~ useSetProductAsPickedUp ~ error:",
+          error
+        );
       }
     },
     {
       onSettled(data, error, variables, context) {
-        queryClient.invalidateQueries(['activeOrder', user.orderId]);
+        queryClient.invalidateQueries(["activeOrder", user.orderId]);
       },
-    },
+    }
   );
 };

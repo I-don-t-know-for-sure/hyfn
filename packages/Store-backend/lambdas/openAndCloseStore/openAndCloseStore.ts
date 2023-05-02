@@ -67,6 +67,7 @@ export const openAndCloseStoreHandler = async ({
             {
               $set: {
                 opened: false,
+
                 city: gibbrish,
               },
             }
@@ -121,6 +122,7 @@ export const openAndCloseStoreHandler = async ({
             {
               $set: {
                 opened: true,
+                acceptingOrders: true,
               },
             },
             { session }
@@ -151,6 +153,7 @@ export const openAndCloseStoreHandler = async ({
           {
             $set: {
               opened: false,
+              acceptingOrders: false,
             },
           },
           { session }

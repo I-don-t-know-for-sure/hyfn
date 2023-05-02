@@ -6,7 +6,6 @@ import {
   useQuery,
   useQueryClient,
 } from "react-query";
-import { showNotification, updateNotification } from "@mantine/notifications";
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
@@ -23,13 +22,6 @@ export const useBulkUpdate = () => {
   const { mutate } = useGenerateProductDescription();
   return useMutation(async ({ productsArray }: { productsArray: any[] }) => {
     try {
-      showNotification({
-        title: t("inserting new products"),
-        message: t("In progress"),
-        id,
-        loading: true,
-        autoClose: false,
-      });
       const products = productsArray;
       console.log(
         "🚀 ~ file: useBulkUpdate.ts:17 ~ returnuseMutation ~ productsArray:",
@@ -135,26 +127,12 @@ export const useBulkUpdate = () => {
         url: `${import.meta.env.VITE_APP_BASE_URL}/bulkUpdate`,
       });
 
-      updateNotification({
-        title: t("Products were added successfully"),
-        message: t("Successful"),
-        id,
-        loading: false,
-        autoClose: true,
-      });
       return result;
     } catch (error) {
       console.log(
         "🚀 ~ file: useBulkUpdate.ts:137 ~ returnuseMutation ~ error:",
         error
       );
-      updateNotification({
-        title: t("Error"),
-        message: t("An Error occurred"),
-        id,
-        autoClose: true,
-        color: "red",
-      });
     }
   });
 };

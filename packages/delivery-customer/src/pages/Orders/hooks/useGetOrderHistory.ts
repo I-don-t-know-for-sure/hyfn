@@ -1,12 +1,11 @@
-import { randomId } from '@mantine/hooks';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { useLocation } from '../../../contexts/locationContext/LocationContext';
-import { useUser } from '../../../contexts/userContext/User';
+import { randomId } from "@mantine/hooks";
 
+import { useLocation } from "../../../contexts/locationContext/LocationContext";
+import { useUser } from "../../../contexts/userContext/User";
 
-import { useInfiniteQuery, useMutation } from 'react-query';
+import { useInfiniteQuery, useMutation } from "react-query";
 
-import fetchUtil from '../../../util/fetch';
+import fetchUtil from "../../../util/fetch";
 
 export const useGetOrderHistory = () => {
   const [location] = useLocation();
@@ -14,7 +13,7 @@ export const useGetOrderHistory = () => {
   const { userId, userDocument, isLoading, refetch } = useUser();
 
   return useInfiniteQuery(
-    ['orderHistory'],
+    ["orderHistory"],
     async ({ pageParam }) => {
       const result = await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/getOrderHistory`,
@@ -34,6 +33,6 @@ export const useGetOrderHistory = () => {
       keepPreviousData: true,
       getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
       enabled: !isLoading,
-    },
+    }
   );
 };
