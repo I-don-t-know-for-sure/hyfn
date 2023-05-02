@@ -252,31 +252,25 @@ export function storeApiStack({ stack }: StackContext) {
     routes: {
       "POST /getProductsForStore": {
         function: {
-          handler:
-            pathToLambdas + "getProductsForStore/getProductsForStore.handler",
+          handler: pathToLambdas + "getProductsForStore.handler",
           functionName: "getProductsForStore" + stack.stage,
         },
       },
       "POST /generateDescriptionClient": {
         function: {
-          handler:
-            pathToLambdas +
-            "generateDescriptionClient/generateDescriptionClient.handler",
+          handler: pathToLambdas + "generateDescriptionClient.handler",
           functionName: "generateDescriptionClient" + stack.stage,
         },
       },
       "POST /stopAcceptingOrders": {
         function: {
-          handler:
-            pathToLambdas + "stopAcceptingOrders/stopAcceptingOrders.handler",
+          handler: pathToLambdas + "stopAcceptingOrders.handler",
           functionName: "stopAcceptingOrders" + stack.stage,
         },
       },
       "POST /updateNotificationTokens": {
         function: {
-          handler:
-            pathToLambdas +
-            "updateNotificationTokens/updateNotificationTokens.handler",
+          handler: pathToLambdas + "updateNotificationTokens.handler",
           // functionName:
           //   "updateNotificationTokens" + stack.stackName + stack.stage,
         },
@@ -284,299 +278,261 @@ export function storeApiStack({ stack }: StackContext) {
 
       "POST /addEmployee": {
         function: {
-          handler: pathToLambdas + "addEmployee/addEmployee.handler",
+          handler: pathToLambdas + "addEmployee.handler",
           functionName: "addEmployee" + stack.stage,
         },
       },
       "POST /updateSubscibtion": {
         function: {
-          handler:
-            pathToLambdas + "updateSubscibtion/updateSubscibtion.handler",
+          handler: pathToLambdas + "updateSubscibtion.handler",
           functionName: "updateSubscibtion" + stack.stage,
         },
       },
       "POST /generateImageReaderPutUrl": {
         function: {
-          handler:
-            pathToLambdas +
-            "generateImageReaderPutUrl/generateImageReaderPutUrl.handler",
+          handler: pathToLambdas + "generateImageReaderPutUrl.handler",
           functionName: "generateImageReaderPutUrl" + stack.stage,
         },
       },
       "POST /removeAllProductsBackgrounds": {
         function: {
-          handler:
-            pathToLambdas +
-            "removeAllProductsBackgrounds/removeAllProductsBackgrounds.handler",
+          handler: pathToLambdas + "removeAllProductsBackgrounds.handler",
           functionName: "removeAllProductsBackgrounds" + stack.stage,
         },
       },
 
       "POST /setProductAsNotFound": {
         function: {
-          handler:
-            pathToLambdas + "setProductAsNotFound/setProductAsNotFound.handler",
+          handler: pathToLambdas + "setProductAsNotFound.handler",
         },
       },
       "POST /setProductAsPickedUp": {
         function: {
-          handler:
-            pathToLambdas + "setProductAsPickedUp/setProductAsPickedUp.handler",
+          handler: pathToLambdas + "setProductAsPickedUp.handler",
         },
       },
       "POST /updateLocalCardSettings": {
         function: {
-          handler:
-            pathToLambdas +
-            "updateLocalCardSettings/updateLocalCardSettings.handler",
+          handler: pathToLambdas + "updateLocalCardSettings.handler",
         },
       },
       "POST /disableLocalCardAPIKeys": {
         function: {
-          handler:
-            pathToLambdas +
-            "disableLocalCardAPIKeys/disableLocalCardAPIKeys.handler",
+          handler: pathToLambdas + "disableLocalCardAPIKeys.handler",
         },
       },
       "POST /setOrderAsAccepted": {
         function: {
-          handler:
-            pathToLambdas + "setOrderAsAccepted/setOrderAsAccepted.handler",
+          handler: pathToLambdas + "setOrderAsAccepted.handler",
         },
       },
       "POST /setOrderAsDelivered": {
         function: {
-          handler:
-            pathToLambdas + "setOrderAsDelivered/setOrderAsDelivered.handler",
+          handler: pathToLambdas + "setOrderAsDelivered.handler",
         },
       },
       "POST /getDriverInfo": {
         function: {
-          handler: pathToLambdas + "getDriverInfo/getDriverInfo.handler",
+          handler: pathToLambdas + "getDriverInfo.handler",
         },
       },
       "POST /addLocalCardPaymentAPIKey": {
         function: {
-          handler:
-            pathToLambdas +
-            "addLocalCardPaymentAPIKey/addLocalCardPaymentAPIKey.handler",
+          handler: pathToLambdas + "addLocalCardPaymentAPIKey.handler",
         },
       },
       "POST /setOrderAsReady": {
         function: {
-          handler: pathToLambdas + "setOrderAsReady/setOrderAsReady.handler",
+          handler: pathToLambdas + "setOrderAsReady.handler",
         },
       },
       "POST /setOrderAsPreparing": {
         function: {
-          handler:
-            pathToLambdas + "setOrderAsPreparing/setOrderAsPreparing.handler",
+          handler: pathToLambdas + "setOrderAsPreparing.handler",
         },
       },
       /*  "POST /createLocalCardTransaction": {
         function: {
           handler:
             pathToLambdas +
-            "payWithLocalCard/createLocalCardTransaction.handler",
+            "createLocalCardTransaction.handler",
         },
       },
       "POST /createLocalCardTransactionForWallet": {
         function: {
           handler:
             pathToLambdas +
-            "payWithLocalCard/createLocalCardTransactionForWallet.handler",
+            "createLocalCardTransactionForWallet.handler",
         },
       }, */
       "POST /createTransaction": {
         function: {
-          handler: pathToLambdas + "payWithLocalCard/createTransaction.handler",
+          handler: pathToLambdas + "createTransaction.handler",
         },
       },
 
       "POST /getProductFromBarcode": {
         function: {
-          handler:
-            pathToLambdas +
-            "getProductFromBarcode/getProductFromBarcode.handler",
+          handler: pathToLambdas + "getProductFromBarcode.handler",
         },
       },
       "POST /createCollection": {
         function: {
-          handler: pathToLambdas + "createCollectionWithActive/handler.handler",
+          handler: pathToLambdas + "createCollectionWithActive.handler",
         },
       },
       "POST /createStoreDocument": {
         function: {
-          handler:
-            pathToLambdas + "createStoreDocument/createStoreDocument.handler",
+          handler: pathToLambdas + "createStoreDocument.handler",
         },
       },
       "POST /createProduct": {
         function: {
-          handler: pathToLambdas + "createProduct/createProduct.handler",
+          handler: pathToLambdas + "createProduct.handler",
         },
       },
       "POST /getTransactionsList": {
         function: {
-          handler:
-            pathToLambdas + "payWithLocalCard/getTransactionsList.handler",
+          handler: pathToLambdas + "getTransactionsList.handler",
         },
       },
       "POST /validateLocalCardTransaction": {
         function: {
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/validateLocalCardTransaction.handler",
+          handler: pathToLambdas + "validateLocalCardTransaction.handler",
         },
       },
       "POST /deleteCollection": {
         function: {
-          handler: pathToLambdas + "deleteCollection/deleteCollection.handler",
+          handler: pathToLambdas + "deleteCollection.handler",
         },
       },
       "POST /updateStoreOwnerInfo": {
         function: {
-          handler:
-            pathToLambdas + "updateStoreOwnerInfo/updateStoreOwnerInfo.handler",
+          handler: pathToLambdas + "updateStoreOwnerInfo.handler",
         },
       },
       "POST /updateStoreInfo": {
         function: {
-          handler: pathToLambdas + "updateStoreInfo/updateStoreInfo.handler",
+          handler: pathToLambdas + "updateStoreInfo.handler",
         },
       },
       "POST /getAllCollections": {
         function: {
-          handler:
-            pathToLambdas + "getAllCollections/getAllCollections.handler",
+          handler: pathToLambdas + "getAllCollections.handler",
         },
       },
       "POST /getCollection": {
         function: {
-          handler: pathToLambdas + "getCollection/getCollection.handler",
+          handler: pathToLambdas + "getCollection.handler",
         },
       },
       "POST /getActiveOrders": {
         function: {
-          handler: pathToLambdas + "getActiveOrders/getActiveOrders.handler",
+          handler: pathToLambdas + "getActiveOrders.handler",
         },
       },
       "POST /updateCollection": {
         function: {
-          handler: pathToLambdas + "updateCollection/updateCollection.handler",
+          handler: pathToLambdas + "updateCollection.handler",
         },
       },
       "POST /updateProduct": {
         function: {
-          handler: pathToLambdas + "updateProduct/updateProduct.handler",
+          handler: pathToLambdas + "updateProduct.handler",
         },
       },
       "POST /getCollectionsForProduct": {
         function: {
-          handler:
-            pathToLambdas +
-            "getCollectionsForProduct/getCollectionsForProduct.handler",
+          handler: pathToLambdas + "getCollectionsForProduct.handler",
         },
       },
       "POST /deleteProduct": {
         function: {
-          handler: pathToLambdas + "deleteProduct/deleteProduct.handler",
+          handler: pathToLambdas + "deleteProduct.handler",
         },
       },
       "POST /getProduct": {
-        function: { handler: pathToLambdas + "getProduct/getProduct.handler" },
+        function: { handler: pathToLambdas + "getProduct.handler" },
       },
       "POST /getStoreDocument": {
         function: {
-          handler: pathToLambdas + "getStoreDocument/getStoreDocument.handler",
+          handler: pathToLambdas + "getStoreDocument.handler",
         },
       },
       "POST /updateProductState": {
         function: {
-          handler:
-            pathToLambdas + "updateProductState/updateProductState.handler",
+          handler: pathToLambdas + "updateProductState.handler",
         },
       },
       "POST /openAndCloseStore": {
         function: {
-          handler:
-            pathToLambdas + "openAndCloseStore/openAndCloseStore.handler",
+          handler: pathToLambdas + "openAndCloseStore.handler",
         },
       },
       "POST /updatePaymentSettings": {
         function: {
-          handler:
-            pathToLambdas +
-            "updatePaymentSettings/updatePaymentSettings.handler",
+          handler: pathToLambdas + "updatePaymentSettings.handler",
         },
       },
       "POST /paySubscription": {
         function: {
-          handler: pathToLambdas + "paySubscription/paySubscription.handler",
+          handler: pathToLambdas + "paySubscription.handler",
         },
       },
       "POST /getOrderHistory": {
         function: {
-          handler: pathToLambdas + "getOrderHistory/getOrderHistory.handler",
+          handler: pathToLambdas + "getOrderHistory.handler",
         },
       },
       "POST /generateImageURL": {
         function: {
-          handler: pathToLambdas + "generateImageURL/generateImageURL.handler",
+          handler: pathToLambdas + "generateImageURL.handler",
         },
       },
       "POST /rejectOrder": {
         function: {
-          handler: pathToLambdas + "rejectOrder/rejectOrder.handler",
+          handler: pathToLambdas + "rejectOrder.handler",
         },
       },
       "POST /searchProducts": {
         function: {
-          handler: pathToLambdas + "searchProducts/searchProducts.handler",
+          handler: pathToLambdas + "searchProducts.handler",
         },
       },
       "POST /bulkWrite": {
-        function: { handler: pathToLambdas + "bulkWrite/bulkWrite.handler" },
+        function: { handler: pathToLambdas + "bulkWrite.handler" },
       },
       "POST /getCollectionProducts": {
         function: {
-          handler:
-            pathToLambdas +
-            "getCollectionProducts/getCollectionProducts.handler",
+          handler: pathToLambdas + "getCollectionProducts.handler",
         },
       },
       "POST /getProductsForCollection": {
         function: {
-          handler:
-            pathToLambdas +
-            "getProductsForCollection/getProductsForCollection.handler",
+          handler: pathToLambdas + "getProductsForCollection.handler",
         },
       },
       "POST /bulkUpdate": {
-        function: { handler: pathToLambdas + "bulkUpdate/bulkUpdate.handler" },
+        function: { handler: pathToLambdas + "bulkUpdate.handler" },
       },
       "POST /updateOptions": {
         function: {
-          handler: pathToLambdas + "updateOptions/updateOptions.handler",
+          handler: pathToLambdas + "updateOptions.handler",
         },
       },
       "POST /getProductsForBulkUpdate": {
         function: {
-          handler:
-            pathToLambdas +
-            "getProductsForBulkUpdate/getProductsForBulkUpdate.handler",
+          handler: pathToLambdas + "getProductsForBulkUpdate.handler",
         },
       },
       "POST /duplicateProduct": {
         function: {
-          handler: pathToLambdas + "duplicateProduct/duplicateProduct.handler",
+          handler: pathToLambdas + "duplicateProduct.handler",
         },
       },
       "POST  /getCollectionStoreFrontProducts": {
         function: {
-          handler:
-            pathToLambdas +
-            "getCollectionStoreFrontProducts/getCollectionStoreFrontProducts.handler",
+          handler: pathToLambdas + "getCollectionStoreFrontProducts.handler",
         },
       },
     },

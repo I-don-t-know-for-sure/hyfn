@@ -1,4 +1,4 @@
-import { getStoreFronts } from './getStoreFronts/getStoreFronts';
+import { getStoreFronts } from './getStoreFronts';
 type LambdaHandlers = {
   createOrderData: {
     arg: Parameters<typeof getStoreFronts>['0']['arg'];

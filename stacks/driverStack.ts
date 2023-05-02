@@ -71,98 +71,92 @@ export function driverApiStack({ stack }: StackContext) {
     },
     routes: {
       "POST /findOrders": {
-        function: { handler: pathToLambdas + "findOrders/findOrders.handler" },
+        function: { handler: pathToLambdas + "findOrders.handler" },
       },
       "POST /getProposals": {
         function: {
-          handler: pathToLambdas + "getProposals/getProposals.handler",
+          handler: pathToLambdas + "getProposals.handler",
         },
       },
       "POST /createProposal": {
         function: {
-          handler: pathToLambdas + "createProposal/createProposal.handler",
+          handler: pathToLambdas + "createProposal.handler",
         },
       },
       "POST /updateProposal": {
         function: {
-          handler: pathToLambdas + "updateProposal/updateProposal.handler",
+          handler: pathToLambdas + "updateProposal.handler",
         },
       },
       "POST /deleteProposal": {
         function: {
-          handler: pathToLambdas + "deleteProposal/deleteProposal.handler",
+          handler: pathToLambdas + "deleteProposal.handler",
         },
       },
       "POST /setOrderAsDelivered": {
         function: {
-          handler:
-            pathToLambdas + "setOrderAsDelivered/setOrderAsDelivered.handler",
+          handler: pathToLambdas + "setOrderAsDelivered.handler",
         },
       },
       "POST /reportOrder": {
         function: {
-          handler: pathToLambdas + "reportOrder/reportOrder.handler",
+          handler: pathToLambdas + "reportOrder.handler",
         },
       },
       "POST /leaveOrder": {
-        function: { handler: pathToLambdas + "leaveOrder/leaveOrder.handler" },
+        function: { handler: pathToLambdas + "leaveOrder.handler" },
       },
       "POST /takeOrder": {
-        function: { handler: pathToLambdas + "takeOrder/takeOrder.handler" },
+        function: { handler: pathToLambdas + "takeOrder.handler" },
       },
       "POST /getActiveOrder": {
         function: {
-          handler: pathToLambdas + "getActiveOrder/getActiveOrder.handler",
+          handler: pathToLambdas + "getActiveOrder.handler",
         },
       },
       "POST /setOrderAsPickedUp": {
         function: {
-          handler:
-            pathToLambdas + "setOrderAsPickedUp/setOrderAsPickedUp.handler",
+          handler: pathToLambdas + "setOrderAsPickedUp.handler",
         },
       },
 
       "POST /payStore": {
-        function: { handler: pathToLambdas + "payStore/payStore.handler" },
+        function: { handler: pathToLambdas + "payStore.handler" },
       },
       "POST /setDeliveryFeePaid": {
         function: {
-          handler:
-            pathToLambdas + "setDeliveryFeePaid/setDeliveryFeePaid.handler",
+          handler: pathToLambdas + "setDeliveryFeePaid.handler",
         },
       },
       "POST /confirmPickup": {
         function: {
-          handler: pathToLambdas + "confirmPickup/confirmPickup.handler",
+          handler: pathToLambdas + "confirmPickup.handler",
         },
       },
       "POST /createDriverDocument": {
         function: {
-          handler:
-            pathToLambdas + "createDriverDocument/createDriverDocument.handler",
+          handler: pathToLambdas + "createDriverDocument.handler",
         },
       },
       "POST /updateDriverDocument": {
         function: {
-          handler:
-            pathToLambdas + "updateDriverDocument/updateDriverDocument.handler",
+          handler: pathToLambdas + "updateDriverDocument.handler",
         },
       },
       "POST /getDriverDocument": {
         function: {
-          handler:
-            pathToLambdas + "getDriverDocument/getDriverDocument.handler",
+          handler: pathToLambdas + "getDriverDocument.handler",
         },
       },
 
       "POST /getOrderHistory": {
         function: {
-          handler: pathToLambdas + "getOrderHistory/getOrderHistory.handler",
+          handler: pathToLambdas + "getOrderHistory.handler",
         },
       },
       "POST /generateImageUrl": {
         function: {
-          handler: pathToLambdas + "generateImageUrl/generateImageUrl.handler",
+          handler: pathToLambdas + "generateImageUrl.handler",
         },
       },
       /**

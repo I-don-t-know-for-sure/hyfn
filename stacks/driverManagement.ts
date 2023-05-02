@@ -70,113 +70,106 @@ export function managementApiStack({ stack }: StackContext) {
     routes: {
       "POST /addLocalCardKeys": {
         function: {
-          handler: pathToLambdas + "addLocalCardKeys/addLocalCardKeys.handler",
+          handler: pathToLambdas + "addLocalCardKeys.handler",
         },
       },
 
       "POST /addEmployee": {
         function: {
-          handler: pathToLambdas + "addEmployee/addEmployee.handler",
+          handler: pathToLambdas + "addEmployee.handler",
+        },
+      },
+      "POST /getTransactions": {
+        function: {
+          handler: pathToLambdas + "getTransactions.handler",
         },
       },
       "POST /getAllDrivers": {
         function: {
-          handler: pathToLambdas + "getAllDrivers/getAllDrivers.handler",
+          handler: pathToLambdas + "getAllDrivers.handler",
         },
       },
       "POST /replaceOrderDriver": {
         function: {
-          handler:
-            pathToLambdas + "replaceOrderDriver/replaceOrderDriver.handler",
+          handler: pathToLambdas + "replaceOrderDriver.handler",
         },
       },
 
       "POST /DisableLocalCardKeys": {
         function: {
-          handler:
-            pathToLambdas + "DisableLocalCardKeys/DisableLocalCardKeys.handler",
+          handler: pathToLambdas + "DisableLocalCardKeys.handler",
         },
       },
       "POST /reportOrder": {
         function: {
-          handler: pathToLambdas + "reportOrder/reportOrder.handler",
+          handler: pathToLambdas + "reportOrder.handler",
         },
       },
       "POST /searchDriverById": {
         function: {
-          handler: pathToLambdas + "searchDriverById/searchDriverById.handler",
+          handler: pathToLambdas + "searchDriverById.handler",
         },
       },
       "POST /getTrustedDrivers": {
         function: {
-          handler:
-            pathToLambdas + "getTrustedDrivers/getTrustedDrivers.handler",
+          handler: pathToLambdas + "getTrustedDrivers.handler",
         },
       },
       "POST /getManagement": {
         function: {
-          handler: pathToLambdas + "getManagement/getManagement.handler",
+          handler: pathToLambdas + "getManagement.handler",
         },
       },
 
       "POST /addDriverToManagementDrivers": {
         function: {
-          handler:
-            pathToLambdas +
-            "addDriverToManagementDrivers/addDriverToManagementDrivers.handler",
+          handler: pathToLambdas + "addDriverToManagementDrivers.handler",
         },
       },
       "POST /createManagement": {
         function: {
-          handler: pathToLambdas + "createManagement/createManagement.handler",
+          handler: pathToLambdas + "createManagement.handler",
         },
       },
       "POST /getActiveOrders": {
         function: {
-          handler: pathToLambdas + "getActiveOrders/getActiveOrders.handler",
+          handler: pathToLambdas + "getActiveOrders.handler",
         },
       },
       "POST /getDriverInfo": {
         function: {
-          handler: pathToLambdas + "getDriverInfo/getDriverInfo.handler",
+          handler: pathToLambdas + "getDriverInfo.handler",
         },
       },
       "POST /getOrderHistory": {
         function: {
-          handler: pathToLambdas + "getOrderHistory/getOrderHistory.handler",
+          handler: pathToLambdas + "getOrderHistory.handler",
         },
       },
       "POST /updateDriverBalance": {
         function: {
-          handler:
-            pathToLambdas + "updateDriverBalance/updateDriverBalance.handler",
+          handler: pathToLambdas + "updateDriverBalance.handler",
         },
       },
       "POST /updateManagementInfo": {
         function: {
-          handler:
-            pathToLambdas + "updateManagementInfo/updateManagementInfo.handler",
+          handler: pathToLambdas + "updateManagementInfo.handler",
         },
       },
       "POST /removeFromManagementDrivers": {
         function: {
-          handler:
-            pathToLambdas +
-            "removeDriverFromManagementDrivers/removeDriverFromManagementDrivers.handler",
+          handler: pathToLambdas + "removeDriverFromManagementDrivers.handler",
         },
       },
 
       "POST /getTransactionsList": {
         function: {
-          handler:
-            pathToLambdas + "payWithLocalCard/getTransactionsList.handler",
+          handler: pathToLambdas + "getTransactionsList.handler",
         },
       },
       "POST /validateLocalCardTransaction": {
         function: {
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/validateLocalCardTransaction.handler",
+          handler: pathToLambdas + "validateLocalCardTransaction.handler",
         },
       },
 

@@ -14,7 +14,7 @@ export const useGetTransactions = ({ enabled }: { enabled: boolean }) => {
 
       return await fetchUtil({
         reqData: [{ userId: userDocument._id, lastDoc: pageParam }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getTransactionsList`,
+        url: `${import.meta.env.VITE_APP_BASE_URL}/getTransactions`,
       });
     },
     {

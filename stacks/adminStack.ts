@@ -70,68 +70,55 @@ export function adminApiStack({ stack }: StackContext) {
     routes: {
       "POST /createAdminDocument": {
         function: {
-          handler:
-            pathToLambdas + "createAdminDocument/createAdminDocument.handler",
+          handler: pathToLambdas + "createAdminDocument.handler",
         },
       },
       "POST /getPaymentRequests": {
         function: {
-          handler:
-            pathToLambdas + "getPaymentRequests/getPaymentRequests.handler",
+          handler: pathToLambdas + "getPaymentRequests.handler",
         },
       },
       "POST /completePaymentRequest": {
         function: {
-          handler:
-            pathToLambdas +
-            "completePaymentRequest/completePaymentRequest.handler",
+          handler: pathToLambdas + "completePaymentRequest.handler",
         },
       },
       "POST /createPaymentRequestObject": {
         function: {
-          handler:
-            pathToLambdas +
-            "createPaymentRequestObject/createPaymentRequestObject.handler",
+          handler: pathToLambdas + "createPaymentRequestObject.handler",
         },
       },
       "POST /removeDriverManagementVerification": {
         function: {
-          handler:
-            pathToLambdas +
-            "removeDriverManagementVerification/removeDriverManagementVerification.handler",
+          handler: pathToLambdas + "removeDriverManagementVerification.handler",
         },
       },
       "POST /verifyDriverManagement": {
         function: {
-          handler:
-            pathToLambdas +
-            "verifyDriverManagement/verifyDriverManagement.handler",
+          handler: pathToLambdas + "verifyDriverManagement.handler",
         },
       },
       "POST /getDriverManagement": {
         function: {
-          handler:
-            pathToLambdas + "getDriverManagement/getDriverManagement.handler",
+          handler: pathToLambdas + "getDriverManagement.handler",
         },
       },
       "POST /getUnverifiedDrivers": {
         function: {
-          handler:
-            pathToLambdas + "getUnverifiedDrivers/getUnverifiedDrivers.handler",
+          handler: pathToLambdas + "getUnverifiedDrivers.handler",
         },
       },
       "POST /getReports": {
-        function: { handler: pathToLambdas + "getReports/getReports.handler" },
+        function: { handler: pathToLambdas + "getReports.handler" },
       },
       "POST /getAdminDocument": {
         function: {
-          handler: pathToLambdas + "getAdminDocument/getAdminDocument.handler",
+          handler: pathToLambdas + "getAdminDocument.handler",
         },
       },
       "POST /setDriverAsVerified": {
         function: {
-          handler:
-            pathToLambdas + "setDriverAsVerified/setDriverAsVerified.handler",
+          handler: pathToLambdas + "setDriverAsVerified.handler",
         },
       },
     },

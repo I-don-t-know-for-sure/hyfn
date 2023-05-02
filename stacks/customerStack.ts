@@ -77,257 +77,185 @@ export function customerApiStack({ stack }: StackContext) {
       "POST /getStoreFronts": {
         function: {
           functionName: "getStoreFronts" + stack.stage,
-          handler: pathToLambdas + "getStoreFronts/getStoreFronts.handler",
+          handler: pathToLambdas + "getStoreFronts.handler",
         },
       },
-      "POST /createSubscriptionTransaction": {
-        function: {
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/createSubscriptionTransaction/createSubscriptionTransaction.handler",
-          functionName: "createSubscriptionTransaction" + stack.stage,
-        },
-      },
+
       "POST /createTransaction": {
         function: {
-          handler: pathToLambdas + "localCard/createTransaction.handler",
+          handler: pathToLambdas + "createTransaction.handler",
           functionName: "createTransaction" + stack.stage,
         },
       },
       "POST /validateTransaction": {
         function: {
-          handler: pathToLambdas + "localCard/validateTransaction.handler",
+          handler: pathToLambdas + "validateTransaction.handler",
           functionName: "validateTransaction" + stack.stage,
         },
       },
       "POST /cancelTransaction": {
         function: {
           functionName: "cancelTransaction" + stack.stage,
-          handler:
-            pathToLambdas + "cancelTransaction/cancelTransaction.handler",
+          handler: pathToLambdas + "cancelTransaction.handler",
         },
       },
       "POST /sendNotification": {
         function: {
           functionName: "sendNotification" + stack.stage,
-          handler: pathToLambdas + "sendNotification/sendNotification.handler",
+          handler: pathToLambdas + "sendNotification.handler",
         },
       },
       "POST /updateNotificationTokens": {
         function: {
           functionName: "updateNotificationTokens" + stack.stage,
-          handler:
-            pathToLambdas +
-            "updateNotificationTokens/updateNotificationTokens.handler",
+          handler: pathToLambdas + "updateNotificationTokens.handler",
         },
       },
       "POST /confirmPickup": {
         function: {
           functionName: "confirmPickup" + stack.stage,
-          handler: pathToLambdas + "confirmPickup/confirmPickup.handler",
+          handler: pathToLambdas + "confirmPickup.handler",
         },
       },
       "POST /acceptProposal": {
         function: {
           functionName: "acceptProposal" + stack.stage,
-          handler: pathToLambdas + "acceptProposal/acceptProposal.handler",
+          handler: pathToLambdas + "acceptProposal.handler",
         },
       },
       "POST /getCustomerData": {
         function: {
           functionName: "getCustomerData" + stack.stage,
-          handler: pathToLambdas + "getCustomerData/getCustomerData.handler",
+          handler: pathToLambdas + "getCustomerData.handler",
         },
       },
       "POST /createOrder": {
         function: {
           functionName: "createOrder" + stack.stage,
-          handler: pathToLambdas + "createOrder/createOrder.handler",
+          handler: pathToLambdas + "createOrder.handler",
         },
       },
       "POST /setOrderAsDelivered": {
         function: {
           functionName: "setOrderAsDelivered" + stack.stage,
-          handler:
-            pathToLambdas + "setOrderAsDelivered/setOrderAsDelivered.handler",
+          handler: pathToLambdas + "setOrderAsDelivered.handler",
         },
       },
       "POST /getOrderDocument": {
         function: {
           functionName: "getOrderDocument" + stack.stage,
-          handler: pathToLambdas + "getOrderDocument/getOrderDocument.handler",
+          handler: pathToLambdas + "getOrderDocument.handler",
         },
       },
       "POST /setProductAsNotFound": {
         function: {
           functionName: "setProductAsNotFound" + stack.stage,
-          handler:
-            pathToLambdas + "setProductAsNotFound/setProductAsNotFound.handler",
+          handler: pathToLambdas + "setProductAsNotFound.handler",
         },
       },
       "POST /setProductAsPickedUp": {
         function: {
           functionName: "setProductAsPickedUp" + stack.stage,
-          handler:
-            pathToLambdas + "setProductAsPickedUp/setProductAsPickedUp.handler",
+          handler: pathToLambdas + "setProductAsPickedUp.handler",
         },
       },
       "POST /createOrderData": {
         function: {
           functionName: "createOrderData" + stack.stage,
-          handler: pathToLambdas + "createOrderData/createOrderData.handler",
+          handler: pathToLambdas + "createOrderData.handler",
         },
       },
       "POST /getProduct": {
         function: {
           functionName: "getProduct" + stack.stage,
-          handler: pathToLambdas + "getProduct/getProduct.handler",
+          handler: pathToLambdas + "getProduct.handler",
         },
       },
       "POST /payServiceFee": {
         function: {
           functionName: "payServiceFee" + stack.stage,
-          handler: pathToLambdas + "payServiceFee/payServiceFee.handler",
+          handler: pathToLambdas + "payServiceFee.handler",
         },
       },
       "POST /getStoreFront": {
         function: {
           functionName: "getStoreFront" + stack.stage,
-          handler: pathToLambdas + "getStoreFront/getStoreFront.handler",
+          handler: pathToLambdas + "getStoreFront.handler",
         },
       },
       "POST /getActiveOrders": {
         function: {
           functionName: "getActiveOrders" + stack.stage,
-          handler: pathToLambdas + "getActiveOrders/getActiveOrders.handler",
+          handler: pathToLambdas + "getActiveOrders.handler",
         },
       },
       "POST /getOrderHistory": {
         function: {
           functionName: "getOrderHistory" + stack.stage,
-          handler: pathToLambdas + "getOrderHistory/getOrderHistory.handler",
+          handler: pathToLambdas + "getOrderHistory.handler",
         },
       },
       "POST /getCollectionProducts": {
         function: {
           functionName: "getCollectionProducts" + stack.stage,
-          handler:
-            pathToLambdas +
-            "getCollectionProducts/getCollectionProducts.handler",
+          handler: pathToLambdas + "getCollectionProducts.handler",
         },
       },
       "POST /getBalance": {
         function: {
           functionName: "getBalance" + stack.stage,
-          handler: pathToLambdas + "getBalance/getBalance.handler",
+          handler: pathToLambdas + "getBalance.handler",
         },
       },
       "POST /getDriverInfo": {
         function: {
           functionName: "getDriverInfo" + stack.stage,
-          handler: pathToLambdas + "getDriverInfo/getDriverInfo.handler",
+          handler: pathToLambdas + "getDriverInfo.handler",
         },
       },
-      "POST /createManagementLocalCardTransaction": {
-        function: {
-          functionName: "createManagementLocalCardTransaction" + stack.stage,
 
-          handler:
-            pathToLambdas +
-            "PayManagementWithLcoalCard/createTransaction/createTransaction.handler",
-        },
-      },
-      "POST /validateManagmentLocalCardTransaction": {
-        functionName: "validateManagmentLocalCardTransaction" + stack.stage,
-        function: {
-          handler:
-            pathToLambdas +
-            "PayManagementWithLcoalCard/validateTransaction/validateTransaction.handler",
-        },
-      },
-      "POST /createLocalCardTransaction": {
-        function: {
-          functionName: "createLocalCardTransaction" + stack.stage,
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/createLocalCardTransaction/createLocalCardTransaction.handler",
-        },
-      },
-      "POST /createServiceFeeCardTransaction": {
-        functionName: "createServiceFeeCardTransaction" + stack.stage,
-        function: {
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/createServiceFeeCardTransaction/createServiceFeeCardTransaction.handler",
-        },
-      },
       "POST /cancelOrder": {
         function: {
           functionName: "cancelOrder" + stack.stage,
-          handler: pathToLambdas + "cancelOrder/cancelOrder.handler",
+          handler: pathToLambdas + "cancelOrder.handler",
         },
       },
       "POST /reportOrder": {
         function: {
           functionName: "reportOrder" + stack.stage,
-          handler: pathToLambdas + "reportOrder/reportOrder.handler",
+          handler: pathToLambdas + "reportOrder.handler",
         },
       },
-      "POST /createStoreLocalCardTransaction": {
-        function: {
-          functionName: "createStoreLocalCardTransaction" + stack.stage,
-          handler:
-            pathToLambdas +
-            "payStoreWithLocalCard/createStoreLocalCardTransaction/createStoreLocalCardTransaction.handler",
-        },
-      },
-      "POST /validateStoreLocalCardTransaction": {
-        function: {
-          functionName: "validateStoreLocalCardTransaction" + stack.stage,
-          handler:
-            pathToLambdas +
-            "payStoreWithLocalCard/validateTransaction/validateTransaction.handler",
-        },
-      },
+
       "POST /getTransactionsList": {
         function: {
           functionName: "getTransactionsList" + stack.stage,
-          handler:
-            pathToLambdas + "getTransactionsList/getTransactionsList.handler",
+          handler: pathToLambdas + "getTransactionsList.handler",
         },
       },
-      "POST /validateLocalCardTransaction": {
-        function: {
-          functionName: "validateLocalCardTransaction" + stack.stage,
-          handler:
-            pathToLambdas +
-            "payWithLocalCard/validateLocalCardTransaction/validateLocalCardTransaction.handler",
-        },
-      },
+
       "POST /createUserDocument": {
         function: {
           functionName: "createUserDocument" + stack.stage,
-          handler:
-            pathToLambdas + "createUserDocument/createUserDocument.handler",
+          handler: pathToLambdas + "createUserDocument.handler",
         },
       },
       "POST /getTransactions": {
         function: {
           functionName: "getTransactions" + stack.stage,
-          handler: pathToLambdas + "getTransactions/getTransactions.handler",
+          handler: pathToLambdas + "getTransactions.handler",
         },
       },
       "POST /updateUserDocument": {
         function: {
           functionName: "updateUserDocument" + stack.stage,
-          handler:
-            pathToLambdas + "updateUserDocument/updateUserDocument.handler",
+          handler: pathToLambdas + "updateUserDocument.handler",
         },
       },
       "POST /updateAddresses": {
         function: {
           functionName: "updateAddresses" + stack.stage,
-          handler: pathToLambdas + "updateAddresses/updateAddresses.handler",
+          handler: pathToLambdas + "updateAddresses.handler",
         },
       },
     },
