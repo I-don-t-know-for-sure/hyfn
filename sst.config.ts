@@ -29,6 +29,7 @@ export default {
   stacks(app) {
     // if (app.stage !== "production") {
     app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY);
+
     // }
     // app.stack(orgResources).stack(storeBackend).stack(storeFrontend);
     app

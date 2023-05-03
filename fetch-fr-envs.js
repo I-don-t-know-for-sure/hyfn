@@ -7,7 +7,7 @@ import fs from "fs";
   var result = {};
   for (const env of envs) {
     const cmd = cp.spawn(
-      `aws ssm get-parameters-by-path --with-decryption --path /hyfn/frontend/${env}`,
+      `aws ssm get-parameters-by-path --region eu-south-1 --with-decryption --path /hyfn/frontend/${env}`,
       { shell: true }
     );
 

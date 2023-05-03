@@ -5,9 +5,10 @@ import fs from "fs";
 (function () {
   const envs = ["development", "staging", "production", ""];
   var result = {};
+
   for (const env of envs) {
     const cmd = cp.spawn(
-      `aws ssm get-parameters-by-path --with-decryption  --path /hyfn/backend${
+      `aws ssm get-parameters-by-path --region eu-south-1 --with-decryption  --path /hyfn/backend${
         env === "" ? "" : "/" + env
       } --query 'Parameters[*].{Name:Name, Value:Value}' `,
       { shell: true }
