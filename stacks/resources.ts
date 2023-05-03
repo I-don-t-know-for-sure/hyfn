@@ -2,6 +2,8 @@ import { Bucket, Function, StackContext, toCdkDuration } from "sst/constructs";
 
 import * as kms from "aws-cdk-lib/aws-kms";
 import * as iam from "aws-cdk-lib/aws-iam";
+import * as s3 from "aws-cdk-lib/aws-s3";
+
 import { AnyPrincipal, Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput } from "aws-cdk-lib";
 const pathToLambdas = "packages/admin-backend/lambdas/";
@@ -28,12 +30,12 @@ export function imagesBucketStack({ stack }: StackContext) {
     },
   });
 
-  const bucketPolicy = new PolicyStatement({
-    actions: ["s3:GetObject", "s3:PutObject"],
-    resources: [`${s3Bucket.bucketArn}/*`],
-    principals: [new AnyPrincipal()],
-  });
-  s3Bucket.cdk.bucket.addToResourcePolicy(bucketPolicy as any);
+  // const bucketPolicy = new PolicyStatement({
+  //   actions: ["s3:GetObject", "s3:PutObject"],
+  //   resources: [`${s3Bucket.bucketArn}/*`],
+  //   principals: [new AnyPrincipal()],
+  // });
+  // s3Bucket.cdk.bucket.addToResourcePolicy(bucketPolicy as any);
 
   const resizeFunction = new Function(stack, "resizeFunction", {
     handler: "./packages/Store-backend/lambdas/imageResizeTrigger.handler",

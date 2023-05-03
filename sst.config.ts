@@ -36,15 +36,15 @@ export default {
       .stack(authBucketStack)
       .stack(kmsStack)
       .stack(storeCognitoStack)
-      .stack(storeApiStack)
-      .stack(customerCognitoStack)
-      .stack(customerApiStack)
-      .stack(adminCognitoStack)
-      .stack(adminApiStack)
-      .stack(managementCognitoStack)
-      .stack(managementApiStack)
-      .stack(driverCognitoStack)
-      .stack(driverApiStack);
+      .stack(storeApiStack);
+    // .stack(customerCognitoStack)
+    // .stack(customerApiStack)
+    // .stack(adminCognitoStack)
+    // .stack(adminApiStack)
+    // .stack(managementCognitoStack)
+    // .stack(managementApiStack)
+    // .stack(driverCognitoStack)
+    // .stack(driverApiStack);
     // .stack(libraryCognitoStack)
     // .stack(libraryApiStack)
   },
