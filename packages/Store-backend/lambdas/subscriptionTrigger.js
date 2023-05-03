@@ -1,7 +1,7 @@
 'use strict';
 // canceled
-import { getMongoClientWithIAMRole } from '../common/mongodb';
-import { getCountryInfo } from '../common/utils';
+import { getMongoClientWithIAMRole } from './common/mongodb';
+import { getCountryInfo } from './common/utils';
 export const handler = async (event, ctx) => {
   var result;
 

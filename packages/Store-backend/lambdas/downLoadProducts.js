@@ -1,9 +1,9 @@
 'use strict';
 
-import { mainValidateFunction } from '../common/authentication';
+import { mainValidateFunction } from './common/authentication';
 
 import aws from 'aws-sdk';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
+import { getMongoClientWithIAMRole } from './common/mongodb';
 
 export const handler = async (event, ctx) => {
   var result;

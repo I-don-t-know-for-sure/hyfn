@@ -13,8 +13,8 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { storeTypes } from "hyfn-types";
+import { t } from "i18next";
 
-import { t } from "util/i18nextFix";
 import React, { useState } from "react";
 import { BsInfoCircle } from "react-icons/bs";
 
@@ -140,12 +140,7 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
           hight: "fit-content",
         }}
       >
-        {t("More info")}
-        <BsInfoCircle
-          style={{
-            marginLeft: "4px",
-          }}
-        />
+        {t("Info")}
       </ActionIcon>
     </>
   );

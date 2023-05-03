@@ -65,7 +65,7 @@ interface UpdateStoreInfoProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { ObjectId } from 'mongodb';
-import { currencies } from '../resources';
+import { currencies } from 'hyfn-types';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx) => {
   return await mainWrapper({

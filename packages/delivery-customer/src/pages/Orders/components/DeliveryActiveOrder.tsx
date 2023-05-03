@@ -185,17 +185,15 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
         >
           <CopyButton justText value={order._id.toString()} />
         </Box>
-        {/* <Text>{order._id.toString()}</Text> */}
-        {order.orderType === ORDER_TYPE_DELIVERY && (
+
+        {order.orderType === ORDER_TYPE_DELIVERY && !order.acceptedProposal && (
           <ProposalsModal
             orderId={order._id.toString()}
             proposals={order?.proposals}
           />
         )}
       </Group>
-      {/* <Group mt={12} position="right">
-        {driver._id !== '' && <DriverInfoModal driverId={driver._id} />}
-      </Group> */}
+
       {Object.keys(order.orders).map((key) => {
         const store = order?.orders[key];
         console.log(store, "hshsshshhshss");

@@ -15,7 +15,7 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 import { useConfigData } from "components/Menu/config";
 import Translation from "components/Translation";
 import { useUser } from "contexts/userContext/User";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { userInfo } from "os";
 import { useCreateStore } from "pages/SignUp/hooks/useCreateStore";
 import React, { useEffect, useState } from "react";
@@ -75,8 +75,8 @@ const LogIn: React.FC<LogInProps> = () => {
       if (locationState?.firstTimer) {
         showNotification({
           id: randomId(),
-          title: t("signup successful"),
-          message: t("just login now"),
+          title: "",
+          message: "",
           autoClose: 3000,
         });
 
@@ -121,7 +121,7 @@ const LogIn: React.FC<LogInProps> = () => {
                     )
                   ) {
                     showNotification({
-                      message: t("does not match email pattern"),
+                      message: "",
                       color: "red",
                     });
                     return;
@@ -202,20 +202,20 @@ const LogIn: React.FC<LogInProps> = () => {
                   const id = randomId();
                   try {
                     showNotification({
-                      message: t("sending confirmation email"),
+                      message: "",
                       autoClose: false,
                       id,
                     });
                     resendConfirmationEmail({ username: form.values.email });
                     updateNotification({
-                      message: t("email was sent"),
+                      message: "",
                       id,
                       autoClose: true,
                       color: "green",
                     });
                   } catch (error) {
                     updateNotification({
-                      message: t("an error occured"),
+                      message: "",
                       id,
                       autoClose: true,
                       color: "red",
@@ -247,8 +247,8 @@ const LogIn: React.FC<LogInProps> = () => {
                   password: values.password,
                 });
                 updateNotification({
-                  title: t("Successful"),
-                  message: t("Logged in"),
+                  title: "",
+                  message: "",
                   id,
                   loading: false,
 
@@ -328,7 +328,7 @@ const LogIn: React.FC<LogInProps> = () => {
               );
               if (!validated) {
                 showNotification({
-                  message: t("Not email pattern"),
+                  message: "",
                   color: "red",
                 });
                 return;

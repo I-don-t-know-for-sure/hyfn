@@ -5,12 +5,7 @@ interface GenerateProductDescriptionProps extends Omit<MainFunctionProps, 'arg'>
 }
 import AWS from 'aws-sdk';
 import axios from 'axios';
-import {
-  chatAfterInfo,
-  chatBeforeInfo,
-  chatTranslateAfter,
-  chatTranslateBefore,
-} from '../resources';
+import { chatAfterInfo, chatBeforeInfo, chatTranslateAfter, chatTranslateBefore } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
 import { smaller } from 'mathjs';
 

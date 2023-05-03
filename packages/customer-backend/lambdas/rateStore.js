@@ -2,11 +2,11 @@
 import { ObjectId } from 'mongodb';
 
 import { updateRating, addRating } from './common/utils';
-import { mainValidateFunction } from '../common/authentication';
-import { findOne } from '../common/mongoUtils/findOne';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
-import { mainWrapperWithSession } from '../common/mainWrapperWithSession';
-import { insertOne } from '../common/mongoUtils/insertOne';
+import { mainValidateFunction } from './common/authentication';
+import { findOne } from './common/mongoUtils/findOne';
+import { getMongoClientWithIAMRole } from './common/mongodb';
+import { mainWrapperWithSession } from './common/mainWrapperWithSession';
+import { insertOne } from './common/mongoUtils/insertOne';
 export const handler = async (event) => {
   const mainFunction = async ({ arg, client }) => {
     var result = 'initial';

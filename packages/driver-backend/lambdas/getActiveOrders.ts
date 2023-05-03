@@ -1,23 +1,28 @@
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { USER_STATUS_DELIVERED } from 'hyfn-types';
+import { ObjectId } from 'mongodb';
 interface GetActiveOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 export const getActiveOrderHandler = async ({ arg, client }: MainFunctionProps) => {
   var result;
-  const { driverId, orderId, country } = arg[0];
+  const { driverId, orderId, country, lastDoc } = arg[0];
   // await argValidations(arg);
   result = await client
     .db('base')
     .collection('orders')
     .find(
-      { 'status.status': USER_STATUS_DELIVERED, 'status._id': driverId },
+      {
+        ...(lastDoc ? { _id: { $gt: new ObjectId(lastDoc) } } : {}),
+        'status.status': { $ne: USER_STATUS_DELIVERED },
+        'status._id': driverId,
+      },
       {
         // arrayFilters: [{ 'driver._id': id }]
       }
     )
-    .limit(5)
+    .limit(10)
     .toArray();
 
   //   const sameDriverId = result.status.find((status) => {

@@ -25,25 +25,20 @@ export function adminApiStack({ stack }: StackContext) {
   const { key } = use(kmsStack);
   const keyArn = key.keyArn;
   const imagesBucketName = s3Bucket.bucketName;
-  // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
-  // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
+
   const stage = getStage(stack.stage);
 
   const defaultFunction = new Function(stack, "admindefaultFunction", {
-    handler:
-      "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
   });
   const api = new Api(stack, "adminApi", {
     defaults: {
       function: {
+        timeout: stack.stage === "development" ? 30 : 10,
         role: defaultFunction.role,
         environment: {
           kmsKeyARN: keyArn,
-          // COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-          // COGNITO_REGION: stack.region,
-          // USER_POOL_ID: auth.userPoolId,
-          // USER_POOL_CLIENT_ID: auth.userPoolClientId,
-          // ///////////////////////////////////
+
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
@@ -152,13 +147,8 @@ export function adminApiStack({ stack }: StackContext) {
 }
 
 export function adminCognitoStack({ stack }: StackContext) {
-  // const { s3Bucket } = use(imagesBucketStack);
   const { authBucket } = use(authBucketStack);
   const authBucketArn = authBucket.bucketArn;
-
-  // const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
-
-  // const { site: paymentAppSite } = use(paymentApp);
 
   const stage = getStage(stack.stage);
 
@@ -203,30 +193,7 @@ export function adminCognitoStack({ stack }: StackContext) {
     exportName: "adminUserPoolClientId-" + stack.stage, // export name
   });
 
-  // const site = new StaticSite(stack, "admin_app", {
-  //   path: "./packages/admin",
-  //   buildOutput: "dist",
-  //   buildCommand: "yarn build",
-
-  //   environment: {
-  //     GENERATE_SOURCEMAP: "false",
-  //     VITE_APP_BUCKET_URL: `https://${s3Bucket.bucketName}.s3.${stack.region}.amazonaws.com`,
-
-  //     VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
-  //       frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
-  //     VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-  //     VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-  //     VITE_APP_COGNITO_REGION: stack.region,
-  //     VITE_APP_USER_POOL_ID: auth.userPoolId,
-  //     VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-  //     VITE_APP_BUCKET: authBucket.bucketName,
-  //     VITE_APP_BASE_URL: api.url,
-  //   },
-  // });
-
-  stack.addOutputs({
-    // adminSite: site.url || localhost + "3007",
-  });
+  stack.addOutputs({});
   return {
     auth,
   };

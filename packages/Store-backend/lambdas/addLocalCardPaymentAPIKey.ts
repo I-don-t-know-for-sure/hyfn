@@ -3,7 +3,7 @@ interface AddLocalCardPaymentAPIKeyProps extends Omit<MainFunctionProps, 'arg'> 
 }
 import { HmacSHA256 } from 'crypto-js';
 import axios from 'axios';
-import { calculateFreeMonth } from '../common/calculateFreeMonth';
+import { calculateFreeMonth } from './common/calculateFreeMonth';
 import { KMS } from 'aws-sdk';
 import {
   encryptData,

@@ -4,7 +4,7 @@ interface FindOrdersProps extends Omit<MainFunctionProps, 'arg'> {
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { ORDER_TYPE_DELIVERY, COLLECTION } from 'hyfn-types';
+import { ORDER_TYPE_DELIVERY, COLLECTION, USER_TYPE_DRIVER } from 'hyfn-types';
 export const mainFunction = async ({ arg, client, event }: MainFunctionProps) => {
   console.log('🚀 ~ file: findOrders.ts:7 ~ COLLECTION:', COLLECTION);
   // await findOrderValidations(arg);
@@ -50,7 +50,7 @@ export const mainFunction = async ({ arg, client, event }: MainFunctionProps) =>
             //     $maxDistance: 2000,
             //   },
             // },
-            status: { $elemMatch: { userType: 'driver', _id: '' } },
+            status: { $elemMatch: { userType: USER_TYPE_DRIVER, _id: '' } },
             orderType: ORDER_TYPE_DELIVERY,
             canceled: { $exists: false },
           },
@@ -84,12 +84,11 @@ export const mainFunction = async ({ arg, client, event }: MainFunctionProps) =>
     })
     .limit(20)
     .toArray();
-  console.log('🚀 ~ file: findOrders.js:53 ~ mainFunction ~ orders', orders);
-  console.log('🚀 ~ file: findOrders.js:53 ~ mainFunction ~ orders', orders);
+
   if (!orders) {
     return [];
   }
-  console.log('anything');
+
   return orders || [];
 
   // Ensures that the client will close when you finish/error

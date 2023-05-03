@@ -3,8 +3,8 @@ interface CreateLocalCardTransactionForWalletProps extends Omit<MainFunctionProp
 }
 
 import { ObjectId } from 'mongodb';
-import { adminName, TRANSACTION_TYPE_WALLET } from '../resources';
-import { getAdminLocalCardCreds } from '../common/getAdminLocalCardCreds';
+import { adminName, TRANSACTION_TYPE_WALLET } from 'hyfn-types';
+import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
 import { createLocalCardConfigurationObject, MainFunctionProps, mainWrapper } from 'hyfn-server';
 const createLocalCardTransactionForWallet = async ({ arg, client }) => {
   const { userId, amount } = arg[0];

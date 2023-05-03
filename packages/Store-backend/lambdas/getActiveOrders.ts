@@ -93,7 +93,7 @@ import {
   ORDER_TYPE_PICKUP,
   USER_TYPE_DRIVER,
   USER_TYPE_STORE,
-} from '../resources';
+} from 'hyfn-types';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getActiveOrdersHandler });

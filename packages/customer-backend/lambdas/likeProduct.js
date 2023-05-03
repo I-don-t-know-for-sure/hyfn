@@ -1,10 +1,10 @@
 'use strict';
 import { ObjectId } from 'mongodb';
 
-import { mainValidateFunction } from '../common/authentication';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
-import { findOne } from '../common/mongoUtils/findOne';
-import { insertOne } from '../common/mongoUtils/insertOne';
+import { mainValidateFunction } from './common/authentication';
+import { getMongoClientWithIAMRole } from './common/mongodb';
+import { findOne } from './common/mongoUtils/findOne';
+import { insertOne } from './common/mongoUtils/insertOne';
 export const handler = async (event) => {
   try {
     const client = await getMongoClientWithIAMRole();

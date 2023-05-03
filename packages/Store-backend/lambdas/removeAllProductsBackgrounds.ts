@@ -1,6 +1,6 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
-import { sendRemoveBackgroundsEventBus } from '../common/functions/removeBackgrounds';
+
+import { sendRemoveBackgroundsEventBus } from './common/functions/removeBackgrounds';
 
 import AWS, { S3 } from 'aws-sdk';
 

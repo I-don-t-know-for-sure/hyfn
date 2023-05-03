@@ -22,24 +22,20 @@ const pathToLambdas = "./packages/Store-backend/lambdas/";
 const localhost = "http://localhost:";
 
 export function storeApiStack({ stack }: StackContext) {
-  // const { s3Bucket } = use(imagesBucketStack);
-  // const { key } = use(kmsStack);
   const { auth } = use(storeCognitoStack);
   const { s3Bucket } = use(imagesBucketStack);
   const { key } = use(kmsStack);
   const keyArn = key.keyArn;
   const imagesBucketName = s3Bucket.bucketName;
-  // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
-  // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
+
   const stage = getStage(stack.stage);
 
   const defaultFunction = new Function(stack, "defaultFunction", {
-    handler:
-      "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
   });
 
   const removeBackgrounds = new Function(stack, "removeBackgrounds", {
-    handler: pathToLambdas + "setBackgroundWhite/setBackgroundWhite.handler",
+    handler: pathToLambdas + "setBackgroundWhite.handler",
     functionName: "setBackgroundWhite" + stack.stage,
     role: defaultFunction.role,
     timeout: 300,
@@ -76,9 +72,7 @@ export function storeApiStack({ stack }: StackContext) {
     functionName: "generateProductDescription" + stack.stage,
 
     url: true,
-    handler:
-      pathToLambdas +
-      "generateProductDescription/generateProductDescription.handler",
+    handler: pathToLambdas + "generateProductDescription.handler",
     environment: {
       kmsKeyARN: keyArn,
       //////////////////////////
@@ -107,106 +101,11 @@ export function storeApiStack({ stack }: StackContext) {
     },
   });
 
-  /* const eventBus = new EventBus(stack, "Bus", {
-    rules: {
-      backgroundRemoval: {
-        pattern: {
-          source: ["background_removal" + stack.stage],
-          detailType: ["background_removal" + stack.stage],
-        },
-
-        targets: {
-          setBackgroundWhite: {
-            function: {
-              role: defaultFunction.role,
-              timeout: 300,
-              handler:
-                pathToLambdas +
-                "setBackgroundWhite/setBackgroundWhiteEventBus.handler",
-              environment: {
-                url: removeBackgrounds.url || "",
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-  const generateProductDescriptionEventBus = new EventBus(
-    stack,
-    "generateProductDescriptionEventBus",
-    {
-      rules: {
-        backgroundRemoval: {
-          pattern: {
-            source: ["generate_product_description" + stack.stage],
-            detailType: ["generate_product_description" + stack.stage],
-          },
-
-          targets: {
-            uploadImagesToS3: {
-              function: {
-                role: defaultFunction.role,
-                timeout: 300,
-                handler:
-                  pathToLambdas +
-                  "generateProductDescription/generateProductDescriptionEventBus.handler",
-                environment: {
-                  url: generateDescription.url || "",
-                },
-              },
-            },
-          },
-        },
-      },
-    }
-  ); */
-
-  /*  const generateProductDescription = new Function(
-    stack,
-    "generateProductDescription",
-    {
-      handler:
-        pathToLambdas +
-        "generateProductDescription/generateProductDescription.handler",
-      functionName: "generateProductDescription" + stack.stage,
-      role: defaultFunction.role,
-      timeout: 300,
-      url: true,
-      environment: {
-        kmsKeyARN: keyArn,
-        //////////////////////////
-        chat_gpt_api_key: config[stage].chat_gpt_api_key,
-
-        MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
-        accessKeyId: config[stage].accessKeyId,
-        bucketName: imagesBucketName,
-        bucketArn: s3Bucket.bucketArn,
-
-        groupId: config[stage].groupId,
-        moalmlatDataService: config[stage].moalmlatDataService,
-        userPoolId: auth.userPoolId,
-        userPoolClientId: auth.userPoolClientId,
-        mongoPrivetKey: config[stage].mongoPrivetKey,
-        mongoPublicKey: config[stage].mongoPublicKey,
-        region: stack.region,
-        sadadURL: config[stage].sadadURL,
-        secretKey: config[stage].secretKey,
-        MerchantId: config[stage].MerchantId,
-        TerminalId: config[stage].TerminalId,
-        mongdbURLKey: config[stage].mongdbURLKey,
-
-        sadadApiKey: config[stage].sadadApiKey,
-
-        secretAccessKey: config[stage].secretAccessKey,
-      },
-    }
-  ); */
   const api = new Api(stack, "storeApi", {
     defaults: {
       function: {
         role: defaultFunction.role,
-        timeout: 60,
+        timeout: stack.stage === "development" ? 30 : 10,
         environment: {
           kmsKeyARN: keyArn,
           //////////////////////////
@@ -218,16 +117,7 @@ export function storeApiStack({ stack }: StackContext) {
           MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketArn: s3Bucket.bucketArn,
-          /*  backgroundRemovalEventBus: eventBus.eventBusName,
-          backgroundRemovalEventBusDetailType:
-            "background_removal" + stack.stage,
-          backgroundRemovalEventBusSource: "background_removal" + stack.stage,
-          generateProductDescriptionEventBus:
-            generateProductDescriptionEventBus.eventBusName,
-          generateProductDescriptionEventBusDetailType:
-            "generate_product_description" + stack.stage,
-          generateProductDescriptionEventBusSource:
-            "generate_product_description" + stack.stage, */
+
           bucketName: imagesBucketName,
           groupId: config[stage].groupId,
           moalmlatDataService: config[stage].moalmlatDataService,
@@ -253,19 +143,25 @@ export function storeApiStack({ stack }: StackContext) {
       "POST /getProductsForStore": {
         function: {
           handler: pathToLambdas + "getProductsForStore.handler",
-          functionName: "getProductsForStore" + stack.stage,
+          // functionName: "getProductsForStore" + stack.stage,
         },
       },
       "POST /generateDescriptionClient": {
         function: {
           handler: pathToLambdas + "generateDescriptionClient.handler",
-          functionName: "generateDescriptionClient" + stack.stage,
+          // functionName: "generateDescriptionClient" + stack.stage,
+        },
+      },
+      "POST /generateDescriptionClien": {
+        function: {
+          handler: pathToLambdas + "generateDescriptionClient.handler",
+          // functionName: "generateDescriptionClient" + stack.stage,
         },
       },
       "POST /stopAcceptingOrders": {
         function: {
           handler: pathToLambdas + "stopAcceptingOrders.handler",
-          functionName: "stopAcceptingOrders" + stack.stage,
+          // functionName: "stopAcceptingOrders" + stack.stage,
         },
       },
       "POST /updateNotificationTokens": {
@@ -279,25 +175,25 @@ export function storeApiStack({ stack }: StackContext) {
       "POST /addEmployee": {
         function: {
           handler: pathToLambdas + "addEmployee.handler",
-          functionName: "addEmployee" + stack.stage,
+          // functionName: "addEmployee" + stack.stage,
         },
       },
       "POST /updateSubscibtion": {
         function: {
           handler: pathToLambdas + "updateSubscibtion.handler",
-          functionName: "updateSubscibtion" + stack.stage,
+          // functionName: "updateSubscibtion" + stack.stage,
         },
       },
       "POST /generateImageReaderPutUrl": {
         function: {
           handler: pathToLambdas + "generateImageReaderPutUrl.handler",
-          functionName: "generateImageReaderPutUrl" + stack.stage,
+          // functionName: "generateImageReaderPutUrl" + stack.stage,
         },
       },
       "POST /removeAllProductsBackgrounds": {
         function: {
           handler: pathToLambdas + "removeAllProductsBackgrounds.handler",
-          functionName: "removeAllProductsBackgrounds" + stack.stage,
+          // functionName: "removeAllProductsBackgrounds" + stack.stage,
         },
       },
 
@@ -351,20 +247,7 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "setOrderAsPreparing.handler",
         },
       },
-      /*  "POST /createLocalCardTransaction": {
-        function: {
-          handler:
-            pathToLambdas +
-            "createLocalCardTransaction.handler",
-        },
-      },
-      "POST /createLocalCardTransactionForWallet": {
-        function: {
-          handler:
-            pathToLambdas +
-            "createLocalCardTransactionForWallet.handler",
-        },
-      }, */
+
       "POST /createTransaction": {
         function: {
           handler: pathToLambdas + "createTransaction.handler",
@@ -565,11 +448,6 @@ export function storeApiStack({ stack }: StackContext) {
 }
 
 export function storeCognitoStack({ stack }: StackContext) {
-  // const stage = getStage(stack.stage);
-  // const { s3Bucket } = use(imagesBucketStack);
-  // const { authBucket } = use(authBucketStack);
-  // const { site: paymentAppSite } = use(paymentApp);
-  // const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
   const { authBucket } = use(authBucketStack);
   const authBucketArn = authBucket.bucketArn;
 
@@ -615,35 +493,7 @@ export function storeCognitoStack({ stack }: StackContext) {
     value: auth.userPoolClientId || "",
     exportName: "storeUserPoolClientId-" + stack.stage, // export name
   });
-  // const site = new StaticSite(stack, "store_app", {
-  //   path: "./packages/delivery-merchant",
-  //   buildOutput: "dist",
-  //   buildCommand: "yarn build",
-  //   ...(stack.stage === "production"
-  //     ? {
-  //         customDomain: {
-  //           domainName: "store.hyfn.xyz",
-  //           domainAlias: "www.store.hyfn.xyz",
-  //           hostedZone: "hyfn.xyz",
-  //           // isExternalDomain: true,
-  //         },
-  //       }
-  //     : {}),
-  //   environment: {
-  //     GENERATE_SOURCEMAP: "false",
-  //     VITE_APP_BUCKET_URL: `https://${s3Bucket.bucketName}.s3.${stack.region}.amazonaws.com`,
-  //     // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
-  //     VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-  //     VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
-  //       frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
-  //     VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-  //     VITE_APP_COGNITO_REGION: stack.region,
-  //     VITE_APP_USER_POOL_ID: auth.userPoolId,
-  //     VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-  //     VITE_APP_BUCKET: authBucket.bucketName,
-  //     VITE_APP_BASE_URL: api.url,
-  //   },
-  // });
+
   stack.addOutputs({
     // storeSite: site.url || localhost + "3004",
     VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",

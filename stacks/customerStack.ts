@@ -26,8 +26,7 @@ export function customerApiStack({ stack }: StackContext) {
   const stage = getStage(stack.stage);
 
   const defaultFunction = new Function(stack, "customerdefaultFunction", {
-    handler:
-      "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
   });
   const { s3Bucket } = use(imagesBucketStack);
   const { key } = use(kmsStack);
@@ -42,7 +41,7 @@ export function customerApiStack({ stack }: StackContext) {
   const api = new Api(stack, "customerApi", {
     defaults: {
       function: {
-        timeout: 30,
+        timeout: stack.stage === "development" ? 30 : 10,
         role: defaultFunction.role,
         environment: {
           kmsKeyARN: keyArn,
@@ -171,12 +170,7 @@ export function customerApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getProduct.handler",
         },
       },
-      "POST /payServiceFee": {
-        function: {
-          functionName: "payServiceFee" + stack.stage,
-          handler: pathToLambdas + "payServiceFee.handler",
-        },
-      },
+
       "POST /getStoreFront": {
         function: {
           functionName: "getStoreFront" + stack.stage,
@@ -259,12 +253,6 @@ export function customerApiStack({ stack }: StackContext) {
         },
       },
     },
-    // routes: {
-    //   "POST /createStoreDocument":
-    //     "packages/store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
-    //   "POST /getStoreDocument":
-    //     "packages/store-backend/lambdas/getStoreDocument/getStoreDocument.handler",
-    // },
   });
   const permissions = new iam.PolicyStatement({
     actions: ["*"],
@@ -310,8 +298,6 @@ export function customerCognitoStack({ stack }: StackContext) {
   });
   const { authBucket } = use(authBucketStack);
   const authBucketArn = authBucket.bucketArn;
-  // const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
-  // const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
 
   auth.attachPermissionsForAuthUsers(stack, [
     // Allow access to the API
@@ -342,49 +328,8 @@ export function customerCognitoStack({ stack }: StackContext) {
     value: auth.userPoolClientId || "",
     exportName: "customerUserPoolClientId-" + stack.stage, // export name
   });
+  stack.addOutputs({});
   return {
     auth,
   };
-  // const site = new StaticSite(stack, "delivery-customer", {
-  //   path: "./packages/delivery-customer",
-  //   buildOutput: "dist",
-  //   buildCommand: "yarn build",
-
-  //   ...(stack.stage === "production"
-  //     ? {
-  //         customDomain: {
-  //           domainName: "hyfn.xyz",
-  //           domainAlias: "www.hyfn.xyz",
-  //           hostedZone: "hyfn.xyz",
-  //           // isExternalDomain: true,
-  //         },
-  //       }
-  //     : {}),
-  //   environment: {
-  //     GENERATE_SOURCEMAP: "false",
-  //     VITE_APP_BUCKET_URL: `https://${s3Bucket.bucketName}.s3.${stack.region}.amazonaws.com`,
-  //     VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
-  //       frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
-  //     // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
-  //     VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-  //     VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-  //     VITE_APP_COGNITO_REGION: stack.region,
-  //     VITE_APP_USER_POOL_ID: auth.userPoolId,
-  //     VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-  //     VITE_APP_BUCKET: authBucket.bucketName,
-
-  //     // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
-
-  //     VITE_APP_BASE_URL: api.url,
-  //   },
-  // });
-  stack.addOutputs({
-    // customerSite: site.url || localhost + "3000",
-    // VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-    // VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-    // VITE_APP_COGNITO_REGION: stack.region,
-    // VITE_APP_USER_POOL_ID: auth.userPoolId,
-    // VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-    // VITE_APP_BUCKET: authBucketName,
-  });
 }

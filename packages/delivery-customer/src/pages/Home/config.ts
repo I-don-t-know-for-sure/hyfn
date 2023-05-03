@@ -1,66 +1,47 @@
-import { t } from 'util/i18nextFix';;
+import { t } from "util/i18nextFix";
 
 const useHomeConfig = () => {
   return [
     {
-      image: '',
-      label: t('Groceries'),
-      value: 'grocery',
+      image: "",
+      label: t("Groceries"),
+      value: "grocery",
     },
     {
-      image: '',
-      label: t('Cleaning supplies'),
-      value: 'cleaning',
+      image: "",
+      label: t("Cleaning supplies"),
+      value: "cleaning",
     },
     {
-      image: '',
-      label: t('Makeup'),
-      value: 'makeup',
+      image: "",
+      label: t("Makeup"),
+      value: "makeup",
     },
     {
-      image: '',
-      label: t('Clothes'),
-      value: 'clothes',
+      image: "",
+      label: t("Clothes"),
+      value: "clothes",
     },
     {
-      image: '',
-      label: t('Restaurants'),
-      value: 'restaurant',
+      image: "",
+      label: t("Restaurants"),
+      value: "restaurant",
+    },
+
+    {
+      image: "",
+      label: t("Food Supplements"),
+      value: "food Supplements",
     },
     {
-      image: '',
-      label: t('Malls'),
-      value: 'mall',
+      image: "",
+      label: t("Meat store"),
+      value: "meats",
     },
     {
-      image: '',
-      label: t('Food Supplements'),
-      value: 'food Supplements',
-    },
-    {
-      image: '',
-      label: t('Meat store'),
-      value: 'meats',
-    },
-    {
-      image: '',
-      label: t('Pharmasies'),
-      value: 'pharmasy',
-    },
-    {
-      image: '',
-      label: t('clothes'),
-      value: '',
-    },
-    {
-      image: '',
-      label: t('clothes'),
-      value: '',
-    },
-    {
-      image: '',
-      label: t('clothes'),
-      value: '',
+      image: "",
+      label: t("Pharmasies"),
+      value: "pharmasy",
     },
   ];
 };

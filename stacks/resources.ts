@@ -36,21 +36,9 @@ export function imagesBucketStack({ stack }: StackContext) {
   s3Bucket.cdk.bucket.addToResourcePolicy(bucketPolicy as any);
 
   const resizeFunction = new Function(stack, "resizeFunction", {
-    handler:
-      "./packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",
+    handler: "./packages/Store-backend/lambdas/imageResizeTrigger.handler",
   });
-  // s3Bucket.addNotifications(stack, {
-  //   resizeFunction: {
 
-  //     function:
-  //       "./packages/Store-backend/lambdas/imageResizeTrigger/imageResizeTrigger.handler",
-  //     events: ["object_created_put"],
-  //     filters: [{ prefix: "initial/" }],
-  //   },
-  // });
-
-  // s3Bucket.cdk.bucket.addToResourcePolicy(policy as any);
-  // resizeFunction.addToRolePolicy(policy as any);
   s3Bucket.addNotifications(stack, {
     test: {
       function: resizeFunction,

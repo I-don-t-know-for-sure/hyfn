@@ -8,7 +8,7 @@ import Home from "./Pages/Home/Home";
 import LogIn from "Pages/Login/LogIn";
 
 import Account from "Pages/Account/Account";
-import ActiveOrder from "Pages/ActiveOrder/ActiveOrder";
+import ActiveOrders from "Pages/ActiveOrders/ActiveOrders";
 
 import ResetPassword from "Pages/ResetPassword/ResetPassword";
 import OrderHistory from "Pages/OrderHistory/OrderHistory";
@@ -179,10 +179,10 @@ function App() {
             />
 
             <Route
-              path="/activeorder"
+              path="/activeorders"
               element={
                 <Page>
-                  <ActiveOrder />
+                  <ActiveOrders />
                 </Page>
               }
             />

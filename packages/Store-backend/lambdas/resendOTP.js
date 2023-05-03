@@ -3,9 +3,9 @@
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
 
-import { mainValidateFunction } from '../common/authentication';
-import { mainWrapper } from '../common/mainWrapper';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
+import { mainValidateFunction } from './common/authentication';
+import { mainWrapper } from './common/mainWrapper';
+import { getMongoClientWithIAMRole } from './common/mongodb';
 import { findOne } from '../mongoUtils/findOne';
 export const handler = async (event, ctx) => {
   const mainFunction = async ({ arg, client }) => {

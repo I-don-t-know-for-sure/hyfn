@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "postinstall": "node ./fetch-envs.js && node ./fetch-fr-envs.js && tsc --build ./packages/hyfn-client && tsc --build ./packages/hyfn-types && tsc --build ./packages/hyfn-server ",
     "typecheck": "tsc --noEmit",
     "deploy-prod": "sst deploy --stage production",
     "deploy-staging": "sst deploy --stage staging",
@@ -23,7 +24,7 @@
     "aws-cdk-lib": "2.62.2",
     "colorette": "^2.0.19",
     "constructs": "10.1.156",
-    "sst": "^2.3.0",
+    "sst": "^2.8.3",
     "typescript": "^4.9.5"
   },
   "workspaces": [

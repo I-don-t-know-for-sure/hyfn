@@ -18,7 +18,6 @@ import { t } from "../../utils/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { useUpdateDriverDocument } from "./hooks/useUpdateDriverDocument";
 
-import Wallet from "Pages/Wallet/Wallet";
 import { useGetUserDocument } from "hooks/useGetUserDocument";
 import { useUser } from "contexts/userContext/User";
 

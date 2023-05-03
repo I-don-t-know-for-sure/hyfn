@@ -1,10 +1,8 @@
 'use strict';
 
 import { ObjectId } from 'mongodb';
-import { mainValidateFunction } from '../common/authentication';
-import { paymentMethods } from '../common/constants';
+
 import { mainWrapperWithSession } from '../common/mainWrapperWithSession';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
 
 import { findOne } from '../common/mongoUtils/findOne';
 import { updateOne } from '../common/mongoUtils/updateOne';

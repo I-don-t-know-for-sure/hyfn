@@ -1,6 +1,6 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
-import { generateProductDescription } from '../common/functions/generateProductDescription';
+import { generateProductDescription } from './common/functions/generateProductDescription';
 
 interface GenerateDescriptionClientProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];

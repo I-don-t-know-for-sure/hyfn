@@ -44,7 +44,7 @@ export const useConfigurationData = () => {
     {
       label: t("Proposals"),
       link: "/proposals",
-      svg: AiFillHome,
+      svg: MdReceipt,
     },
     {
       label: t("Order History"),
@@ -52,8 +52,8 @@ export const useConfigurationData = () => {
       svg: MdReceipt,
     },
     {
-      label: t("Active Order"),
-      link: "/activeorder",
+      label: t("Active Orders"),
+      link: "/activeorders",
       svg: MdReceipt,
     },
     {

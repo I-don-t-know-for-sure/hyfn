@@ -4,10 +4,10 @@ import { ObjectId } from 'mongodb';
 
 import { addRating } from './common/utils';
 
-import { findOne } from '../common/mongoUtils/findOne';
+import { findOne } from './common/mongoUtils/findOne';
 
-import { mainWrapperWithSession } from '../common/mainWrapperWithSession';
-import { updateOne } from '../common/mongoUtils/updateOne';
+import { mainWrapperWithSession } from './common/mainWrapperWithSession';
+import { updateOne } from './common/mongoUtils/updateOne';
 export const handler = async (event) => {
   const mainFunction = async ({ arg, session, client, event }) => {
     var result;

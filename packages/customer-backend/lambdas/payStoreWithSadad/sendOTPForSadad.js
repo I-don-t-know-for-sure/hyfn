@@ -2,7 +2,7 @@
 
 import { ObjectId } from 'mongodb';
 import { mainValidateFunction } from '../common/authentication';
-import { paymentMethods, tarnsactionStatus } from '../common/constants';
+import { paymentMethods, tarnsactionStatus } from 'hyfn-types';
 import { decryptData } from '../common/decrypt';
 import { simpleCrypto } from '../common/encryption';
 import { mainWrapperWithSession } from '../common/mainWrapperWithSession';

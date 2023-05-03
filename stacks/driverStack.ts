@@ -22,23 +22,20 @@ const pathToLambdas = "./packages/driver-backend/lambdas/";
 const localhost = "http://localhost:";
 
 export function driverApiStack({ stack }: StackContext) {
-  // const { s3Bucket } = use(imagesBucketStack);
-  // const { key } = use(kmsStack);
   const { auth } = use(driverCognitoStack);
   const stage = getStage(stack.stage);
   const defaultFunction = new Function(stack, "driverdefaultFunction", {
-    handler:
-      "./packages/Store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
+    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
   });
   const { s3Bucket } = use(imagesBucketStack);
   const { key } = use(kmsStack);
   const keyArn = key.keyArn;
   const imagesBucketName = s3Bucket.bucketName;
-  // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
-  // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
+
   const api = new Api(stack, "driverApi", {
     defaults: {
       function: {
+        timeout: stack.stage === "development" ? 30 : 10,
         role: defaultFunction.role,
         environment: {
           kmsKeyARN: keyArn,
@@ -70,12 +67,17 @@ export function driverApiStack({ stack }: StackContext) {
       },
     },
     routes: {
-      "POST /findOrders": {
-        function: { handler: pathToLambdas + "findOrders.handler" },
+      "POST /getAvailableOrders": {
+        function: { handler: pathToLambdas + "getAvailableOrders.handler" },
       },
       "POST /getProposals": {
         function: {
           handler: pathToLambdas + "getProposals.handler",
+        },
+      },
+      "POST /updateNotificationTokens": {
+        function: {
+          handler: pathToLambdas + "updateNotificationTokens.handler",
         },
       },
       "POST /createProposal": {
@@ -109,9 +111,9 @@ export function driverApiStack({ stack }: StackContext) {
       "POST /takeOrder": {
         function: { handler: pathToLambdas + "takeOrder.handler" },
       },
-      "POST /getActiveOrder": {
+      "POST /getActiveOrders": {
         function: {
-          handler: pathToLambdas + "getActiveOrder.handler",
+          handler: pathToLambdas + "getActiveOrders.handler",
         },
       },
       "POST /setOrderAsPickedUp": {
@@ -120,9 +122,6 @@ export function driverApiStack({ stack }: StackContext) {
         },
       },
 
-      "POST /payStore": {
-        function: { handler: pathToLambdas + "payStore.handler" },
-      },
       "POST /setDeliveryFeePaid": {
         function: {
           handler: pathToLambdas + "setDeliveryFeePaid.handler",
@@ -159,32 +158,6 @@ export function driverApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "generateImageUrl.handler",
         },
       },
-      /**
- * 
- *  "POST /generateImageUrl": {
-        function: {handler: pathToLambdas + 'generateImageUrl/generateImageUrl.handler',}
-        
-        url: {
-          cors: {
-            allowedHeaders: ['Content-Type'],
-            allowedMethods: ['POST'],
-          },
-        },
-      },
-      imageResizeTrigger: {
-        handler: '.build/lambdas/imageResizeTrigger/imageResizeTrigger.handler',
-        url: {
-          cors: {
-            allowedHeaders: ['Content-Type'],
-            allowedMethods: ['POST'],
-          },
-        },
-      },
- */
-      // "POST /createStoreDocument":
-      //   "packages/store-backend/lambdas/createStoreDocument/createStoreDocument.handler",
-      // "POST /getStoreDocument":
-      //   "packages/store-backend/lambdas/getStoreDocument/getStoreDocument.handler",
     },
   });
   const permissions = new iam.PolicyStatement({
@@ -216,11 +189,8 @@ export function driverApiStack({ stack }: StackContext) {
 }
 
 export function driverCognitoStack({ stack }: StackContext) {
-  // const authBucketArn = Fn.importValue(`authBucketArn-${stack.stage}`);
   const { authBucket } = use(authBucketStack);
   const authBucketArn = authBucket.bucketArn;
-
-  // const { site: paymentAppSite } = use(paymentApp);
 
   const stage = getStage(stack.stage);
   // Create a Cognito User Pool and Identity Pool
@@ -268,35 +238,6 @@ export function driverCognitoStack({ stack }: StackContext) {
     exportName: "driverUserPoolClientId-" + stack.stage, // export name
   });
 
-  // const site = new StaticSite(stack, "driverApp", {
-  //   path: "./packages/delivery-driver",
-  //   buildOutput: "dist",
-  //   buildCommand: "yarn build",
-  //   ...(stack.stage === "production"
-  //     ? {
-  //         customDomain: {
-  //           domainName: "driver.hyfn.xyz",
-  //           domainAlias: "www.driver.hyfn.xyz",
-  //           hostedZone: "hyfn.xyz",
-  //           // isExternalDomain: true,
-  //         },
-  //       }
-  //     : {}),
-  //   environment: {
-  //     GENERATE_SOURCEMAP: "false",
-  //     VITE_APP_BUCKET_URL: `https://${s3Bucket.bucketName}.s3.${stack.region}.amazonaws.com`,
-  //     VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
-  //       frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
-  //     // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
-  //     VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-  //     VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-  //     VITE_APP_COGNITO_REGION: stack.region,
-  //     VITE_APP_USER_POOL_ID: auth.userPoolId,
-  //     VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-  //     VITE_APP_BUCKET: authBucket.bucketName,
-  //     VITE_APP_BASE_URL: api.url,
-  //   },
-  // });
   stack.addOutputs({
     // managmentSite: site.url || localhost + "3002",
   });

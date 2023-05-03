@@ -4,29 +4,16 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
+import { config } from "../../envVaraibles";
 
 const localhost = "http://localhost:";
 
 export function driverApp({ stack }: StackContext) {
   const stage = getStage(stack.stage);
-  // const { api } = use(driverApiStack);
+
   const s3BucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const paymentAppUrl = Fn.importValue(`paymentAppUrl-${stack.stage}`);
-  // const mapName = Fn.importValue(`MapName${stack.stage}`);
-  // const mapRegion = Fn.importValue(`MapRegion${stack.stage}`);
-  // const mapStyle = Fn.importValue(`MapStyle${stack.stage}`);
-  // const parameter = ssm.StringParameter.valueFromLookup(stack as any, 'my-parameter');
 
-  // const cognitoIdentityPoolId = Fn.importValue(
-  //   `driverCognitoIdentityPoolId-${stack.stage}`
-  // );
-  // const cognitoRegion = Fn.importValue(`driverCognitoRegion-${stack.stage}`);
-  // const cognitoUserPoolId = Fn.importValue(`driverUserPoolId-${stack.stage}`);
-  // const cognitoUserPoolClientId = Fn.importValue(
-  //   `driverUserPoolClientId-${stack.stage}`
-  // );
-
-  // const { auth } = use(driverCognitoStack);
   const authBucketName = Fn.importValue(`authBucketName-${stack.stage}`);
   // const url = Fn.importValue(`driverApiUrl-${stack.stage}`);
   const site = new StaticSite(stack, "driver-app", {
@@ -59,7 +46,7 @@ export function driverApp({ stack }: StackContext) {
       VITE_APP_FIREBASE_APP_ID: config[""]["firebaseAppId"],
       VITE_APP_FIREBASE_STORAGE_BUCKET: config[""]["firebaseStorageBucket"],
       VITE_APP_VAPID_KEY: config[""]["vapidKey"],
-      // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
+
       VITE_APP_PAYMENT_APP_URL: paymentAppUrl,
       VITE_APP_COGNITO_IDENTITY_POOL_ID:
         Fn.importValue(`driverCognitoIdentityPoolId-${stack.stage}`) || "",
@@ -70,8 +57,6 @@ export function driverApp({ stack }: StackContext) {
       ),
       VITE_APP_BUCKET: authBucketName,
 
-      // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
-
       VITE_APP_BASE_URL: Fn.importValue(`driverApiUrl-${stack.stage}`),
     },
   });
@@ -80,13 +65,5 @@ export function driverApp({ stack }: StackContext) {
     value: site.url || localhost + "3009",
     exportName: "driverSiteUrl-" + stack.stage, // export name
   });
-  stack.addOutputs({
-    //   customerSite: site.url || localhost + "3000",
-    //   VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-    //   VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-    //   VITE_APP_COGNITO_REGION: stack.region,
-    //   VITE_APP_USER_POOL_ID: auth.userPoolId,
-    //   VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-    //   VITE_APP_BUCKET: authBucket.bucketName,
-  });
+  stack.addOutputs({});
 }

@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { deleteImages } from '../common/utils/deleteImages';
+import { deleteImages } from './common/utils/deleteImages';
 interface DeleteProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }

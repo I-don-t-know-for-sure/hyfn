@@ -1,7 +1,7 @@
 'use strict';
 
 import { ObjectId } from 'mongodb';
-import { paymentMethods } from '../common/constants';
+import { paymentMethods } from 'hyfn-types';
 import { mainWrapperWithSession } from '../common/mainWrapperWithSession';
 
 import { findOne } from '../common/mongoUtils/findOne';

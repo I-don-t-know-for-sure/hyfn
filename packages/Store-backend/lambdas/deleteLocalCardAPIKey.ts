@@ -2,7 +2,7 @@ interface DeleteLocalCardAPIKeyProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
-import { localCardKeysSchema, storeSchema } from '../resources';
+import { localCardKeysSchema, storeSchema } from 'hyfn-types';
 import { z } from 'zod';
 const deleteLocalCardAPIKey = async ({ client, arg }: MainFunctionProps) => {
   const session = client.startSession();

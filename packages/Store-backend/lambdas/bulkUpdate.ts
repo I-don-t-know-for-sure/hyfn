@@ -1,7 +1,7 @@
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { deleteImages } from '../common/utils/deleteImages';
+import { deleteImages } from './common/utils/deleteImages';
 interface BulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }

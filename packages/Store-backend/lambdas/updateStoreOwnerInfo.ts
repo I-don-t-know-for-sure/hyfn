@@ -79,7 +79,7 @@ import {
   sadadTestAmount,
   sadadTestBirthYear,
   sadadTestPhoneNumber,
-} from '../resources';
+} from 'hyfn-types';
 import axios from 'axios';
 import { encryptData, MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
 import { KMS } from 'aws-sdk';

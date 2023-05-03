@@ -15,9 +15,8 @@ const AcceptedProposals: React.FC<AcceptedProposalsProps> = ({}) => {
     isError,
     isFetched,
     isLoading,
-    isFetching,
+
     fetchNextPage,
-    refetch,
   } = useGetProposals({
     flag: ACCEPTED_PROPOSALS_FLAG,
     driverManagementId: userDocument.driverManagement[0],
@@ -25,7 +24,7 @@ const AcceptedProposals: React.FC<AcceptedProposalsProps> = ({}) => {
   return (
     <>
       <>
-        {isLoading || isFetching ? (
+        {isLoading ? (
           <Loader />
         ) : isError ? (
           <Text>{t("Error")}</Text>
@@ -42,50 +41,6 @@ const AcceptedProposals: React.FC<AcceptedProposalsProps> = ({}) => {
                   order !== null &&
                   order !== undefined && (
                     <AvailableOrder order={order} userDocument={userDocument} />
-                    // <Card m={"24px auto"} key={order?._id.toString()}>
-                    //   <Group>
-                    //     <Text>{order?._id.toString()}</Text>
-
-                    //     <CopyButton
-                    //       value={`${order?.coords?.coordinates[0][1]},${order?.coords?.coordinates[0][0]}`}
-                    //     />
-                    //     <Text>
-                    //       {t("Number of stores")} : {order?.orders?.length}
-                    //     </Text>
-                    //   </Group>
-
-                    //   <Group
-                    //     mb={2}
-                    //     m={"12px auto"}
-                    //     position="center"
-                    //     grow
-                    //     sx={{
-                    //       maxWidth: "400px",
-                    //     }}
-                    //   >
-                    //     <ProposalModal
-                    //       orderId={order._id.toString()}
-                    //       proposal={order?.proposals?.find(
-                    //         (proposal) =>
-                    //           proposal.managementId ===
-                    //           userDocument.driverManagement[0]
-                    //       )}
-                    //     />
-                    //   </Group>
-                    //   <Group>
-                    //     <Button
-                    //       onClick={() => {
-                    //         console.log(
-                    //           "sjnhdbchdbchdbchdbchbdchbhdbchdhbdhcbhdbchbdhcbhdcbhdbchbdho"
-                    //         );
-
-                    //         takeOrder({ orderId: order._id.toString() });
-                    //       }}
-                    //     >
-                    //       {t("Take order")}
-                    //     </Button>
-                    //   </Group>
-                    // </Card>
                   )
                 );
               })

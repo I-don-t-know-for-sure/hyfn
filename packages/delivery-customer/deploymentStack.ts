@@ -9,11 +9,7 @@ const localhost = "http://localhost:";
 
 export function customerApp({ stack }: StackContext) {
   const stage = getStage(stack.stage);
-  // const { s3Bucket } = use(imagesBucketStack);
-  // const { site: paymentSite } = use(paymentApp);
-  // const { auth } = use(customerCognitoStack);
-  // const { api } = use(customerApiStack);
-  // const { authBucket } = use(authBucketStack);
+
   const s3BucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
   const paymentAppUrl = Fn.importValue(`paymentAppUrl-${stack.stage}`);
   const cognitoIdentityPoolId = Fn.importValue(
@@ -66,8 +62,6 @@ export function customerApp({ stack }: StackContext) {
       VITE_APP_USER_POOL_ID: cognitoUserPoolId,
       VITE_APP_USER_POOL_CLIENT_ID: cognitoUserPoolClientId,
       VITE_APP_BUCKET: authBucketName,
-
-      // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
 
       VITE_APP_BASE_URL: url,
     },

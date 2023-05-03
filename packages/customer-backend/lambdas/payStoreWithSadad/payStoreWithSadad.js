@@ -1,7 +1,7 @@
 'use strict';
 
 import { ObjectId } from 'mongodb';
-import { tarnsactionStatus } from '../common/constants';
+import { tarnsactionStatus } from 'hyfn-types';
 
 import { decryptData } from '../common/decrypt';
 import { mainWrapperWithSession } from '../common/mainWrapperWithSession';

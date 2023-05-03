@@ -137,12 +137,11 @@ const Home: React.FC<HomeProps> = () => {
 
       {/* </div> */}
       <>
-        {isLoading || isFetching ? (
+        {isLoading ? (
           <Loader />
         ) : isError ? (
           <Text>{t("Error")}</Text>
         ) : (
-          isFetched &&
           orders && (
             <>
               <Stack

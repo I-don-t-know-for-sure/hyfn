@@ -1,6 +1,6 @@
 ('use strict');
 import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
-import { currencies, gibbrish } from '../resources';
+import { currencies, gibbrish } from 'hyfn-types';
 interface CreateStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }

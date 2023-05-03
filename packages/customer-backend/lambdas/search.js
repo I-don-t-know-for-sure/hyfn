@@ -1,7 +1,7 @@
 'use strict';
 
-import { mainValidateFunction } from '../common/authentication';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
+import { mainValidateFunction } from './common/authentication';
+import { getMongoClientWithIAMRole } from './common/mongodb';
 export const handler = async (event) => {
   var result;
   const client = await getMongoClientWithIAMRole();

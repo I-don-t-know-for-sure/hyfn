@@ -28,7 +28,7 @@ export const useGetOrders = () => {
         console.log(coords);
 
         const result = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/findOrders`,
+          url: `${import.meta.env.VITE_APP_BASE_URL}/getAvailableOrders`,
           reqData: [
             // [32.432, 13.432],
             coords,

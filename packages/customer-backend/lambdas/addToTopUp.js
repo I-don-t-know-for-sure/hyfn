@@ -2,9 +2,9 @@
 
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
-import { mainValidateFunction } from '../common/authentication';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
-import { updateOne } from '../common/mongoUtils/updateOne';
+import { mainValidateFunction } from './common/authentication';
+import { getMongoClientWithIAMRole } from './common/mongodb';
+import { updateOne } from './common/mongoUtils/updateOne';
 
 export const handler = async (event) => {
   var result;

@@ -16,7 +16,7 @@ import { useConfigData } from "components/Menu/config";
 import Translation from "components/Translation";
 import { useUser } from "contexts/userContext/User";
 import usePersistState from "hooks/usePersistState";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -25,7 +25,6 @@ import { getCountryInfo } from "utils/countryInfo";
 import { useCreateStore } from "./hooks/useCreateStore";
 
 const SignUp: React.FC = () => {
-  // const { logIn, registerUser, user } = useRealmApp()
   const { signUp, loggedIn, confirmSignUp } = useUser();
 
   const [storeInfo, setStoreInfo] = useLocalStorage<any>({
@@ -80,8 +79,8 @@ const SignUp: React.FC = () => {
       }}
     >
       {exception.exception && (
-        <Alert title={t("User Already Exists")} color={"red"}>
-          {t("An account with this information already exists")}
+        <Alert title={exception.code} color={"red"}>
+          {exception.message}
         </Alert>
       )}
       <Card
@@ -144,7 +143,7 @@ const SignUp: React.FC = () => {
 
                 const { email, password } = values;
                 showNotification({
-                  title: t("Signing up"),
+                  title: "",
                   message: t(""),
                   id,
                   loading: true,
@@ -157,8 +156,8 @@ const SignUp: React.FC = () => {
                 setSignUpSuccess(true);
                 setStoreInfo({ email });
                 updateNotification({
-                  title: t("Signup successful"),
-                  message: t("Check your Email for comfirmation"),
+                  title: "",
+                  message: "",
                   color: "green",
                   autoClose: false,
                   id,
@@ -174,8 +173,8 @@ const SignUp: React.FC = () => {
                 setException({ exception: true, code, message });
 
                 updateNotification({
-                  title: t("Error"),
-                  message: t("An Error occurred"),
+                  title: "",
+                  message: "",
                   color: "red",
                   autoClose: true,
                   id,

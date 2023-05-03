@@ -19,7 +19,7 @@ interface GetProductProps extends Omit<MainFunctionProps, 'arg'> {
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { subscriptionCheck } from '../common/subscriptionCheck';
+
 export const handler = async (event, ctx, callback) => {
   return await mainWrapper({ event, ctx, mainFunction: getProductHandler });
 };

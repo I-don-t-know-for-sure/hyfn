@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ORDER_STATUS_PREPARING, STORE_STATUS_ACCEPTED, STORE_STATUS_PAID } from '../resources';
+import { ORDER_STATUS_PREPARING, STORE_STATUS_ACCEPTED, STORE_STATUS_PAID } from 'hyfn-types';
 interface SetOrderAsPreparingProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }

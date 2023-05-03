@@ -3,7 +3,7 @@ interface LeaveOrderProps extends Omit<MainFunctionProps, 'arg'> {
 }
 import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { DRIVER_STATUS_NOT_SET, USER_TYPE_DRIVER } from '../common/constants';
+import { DRIVER_STATUS_NOT_SET, USER_TYPE_DRIVER } from 'hyfn-types';
 export const leaveOrderHandler = async ({ arg, client, userId }: MainFunctionProps) => {
   const session = client.startSession();
   const result = await withTransaction({

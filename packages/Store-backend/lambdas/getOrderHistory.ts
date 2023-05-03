@@ -40,7 +40,7 @@ interface GetOrderHistoryProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { ObjectId } from 'mongodb';
-import { ORDER_STATUS_DELIVERED } from '../resources';
+import { ORDER_STATUS_DELIVERED } from 'hyfn-types';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getOrderHistoryHandler });

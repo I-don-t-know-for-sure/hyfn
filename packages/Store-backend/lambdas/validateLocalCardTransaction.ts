@@ -7,8 +7,8 @@ import {
   TRANSACTION_TYPE_WALLET,
   TRANSACTION_TYPE_SUBSCRIPTION,
   subscriptionCost,
-} from '../resources';
-import { getAdminLocalCardCreds } from '../common/getAdminLocalCardCreds';
+} from 'hyfn-types';
+import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
 import {
   isLocalCardTransactionValidated,
   MainFunctionProps,

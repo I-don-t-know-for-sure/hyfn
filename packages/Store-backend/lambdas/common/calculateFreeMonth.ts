@@ -1,5 +1,5 @@
 import { addMonths } from './addMonths';
-import { FREE_Month } from './constants';
+import { FREE_Month } from 'hyfn-types';
 export function calculateFreeMonth({ storeDoc }: { storeDoc: any }) {
   // const today = new Date();
   // today.setHours(today.getHours() + 2);

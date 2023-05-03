@@ -3,45 +3,39 @@ import { randomId } from "@mantine/hooks";
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useUser } from "contexts/userContext/User";
 
-import { t } from "utils/i18nextFix";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 import fetchUtil from "utils/fetch";
-import ActiveOrder from "../ActiveOrder";
+import ActiveOrder from "../ActiveOrders";
 
-export const useGetActiveOrder = () => {
+export const useGetActiveOrders = () => {
   const { userDocument: user, refetch, isLoading } = useUser();
   const [{ country }] = useLocation();
 
-  return useQuery(
+  return useInfiniteQuery(
     [ActiveOrder, user?.orderId],
-    async () => {
-      console.log(
-        JSON.stringify([
-          {
-            driverId: user?._id,
-            orderId: user?.orderId,
-            country,
-          },
-        ])
-      );
+    async ({ pageParam }) => {
       console.log("🚀 ~ file: useGetActiveOrder.ts:29 ~ user", user);
-      if (!user.orderId) {
-        return "document not found";
-      }
+      // if (!user.orderId) {
+      //   return "document not found";
+      // }
       return await fetchUtil({
         reqData: [
           {
             driverId: user?._id,
             orderId: user?.orderId,
             country,
+            lastDoc: pageParam,
           },
         ],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getActiveOrder`,
+        url: `${import.meta.env.VITE_APP_BASE_URL}/getActiveOrders`,
       });
     },
     {
       enabled: !isLoading,
+
+      keepPreviousData: true,
+      getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
     }
   );
 };

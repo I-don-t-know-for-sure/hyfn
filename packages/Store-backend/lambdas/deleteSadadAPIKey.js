@@ -1,10 +1,10 @@
 'use strict';
 
-import { mainValidateFunction } from '../common/authentication';
+import { mainValidateFunction } from './common/authentication';
 import { ObjectId } from 'mongodb';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
-import { mainWrapperWithSession } from '../common/mainWrapperWithSession';
-import { updateOne } from '../common/mongoUtils/updateOne';
+import { getMongoClientWithIAMRole } from './common/mongodb';
+import { mainWrapperWithSession } from './common/mainWrapperWithSession';
+import { updateOne } from './common/mongoUtils/updateOne';
 export const handler = async (event, ctx) => {
   const mainFunction = async ({ arg, client, session }) => {
     var result;

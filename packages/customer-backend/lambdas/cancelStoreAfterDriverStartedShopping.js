@@ -1,16 +1,16 @@
 'use strict';
 
 import { ObjectId } from 'mongodb';
-import { mainValidateFunction } from '../common/authentication';
+import { mainValidateFunction } from '/authentication';
 
-import { findOne } from '../common/mongoUtils/findOne';
+import { findOne } from '/mongoUtils/findOne';
 import deepEqual from 'deep-equal';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
+import { getMongoClientWithIAMRole } from '/mongodb';
 import { calculateOrdercost } from './common/calculateOrderCost';
-import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP } from '../common/constants';
+import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP } from 'hyfn-types';
 import { calculateOrderCostWithoutUpdatingDistance } from './common/calculateOrderCostWithoutUpdatingDistance';
-import { updateOne } from '../common/mongoUtils/updateOne';
-import { deleteOne } from '../common/mongoUtils/deleteOne';
+import { updateOne } from '/mongoUtils/updateOne';
+import { deleteOne } from '/mongoUtils/deleteOne';
 export const handler = async (event) => {
   var result;
   const client = await getMongoClientWithIAMRole();

@@ -104,30 +104,6 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
                 {...form.getInputProps("managementAddress")}
               />
 
-              {/* <NumberInput
-                min={0}
-                max={MAXIMUM_MANAGEMENT_CUT}
-                precision={2}
-                step={0.05}
-                withAsterisk={false}
-                label={t("Management cut")}
-                {...form.getInputProps("managementCut")}
-                rightSection={
-                  <Center mr={40}>
-                    <ActionIcon
-                      sx={(theme) => ({
-                        width: "60px",
-                        color: theme.primaryColor,
-                      })}
-                      onClick={() => {
-                        form.setFieldValue("managementCut", 1);
-                      }}
-                    >
-                      <Text>{t("100%")}</Text>
-                    </ActionIcon>
-                  </Center>
-                }
-              /> */}
               <Button type={"submit"}>{t("Update management")}</Button>
             </Stack>
           </form>
@@ -187,7 +163,7 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
           </Stack>
         </Paper>
         <Paper>
-          <Stack align="center">
+          <Stack>
             <TextInput
               label={t("Add employee")}
               value={employeeId}

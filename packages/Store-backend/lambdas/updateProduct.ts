@@ -1,8 +1,8 @@
 ('use strict');
 import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { deleteImages } from '../common/utils/deleteImages';
-import { removeBackgrounds } from '../common/functions/removeBackgrounds';
+import { deleteImages } from './common/utils/deleteImages';
+import { removeBackgrounds } from './common/functions/removeBackgrounds';
 interface UpdateProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }

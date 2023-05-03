@@ -2,10 +2,10 @@
 
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
-import { mainValidateFunction } from '../common/authentication';
-import { mainWrapperWithSession } from '../common/mainWrapperWithSession';
-import client from '../common/mongodb';
-import { updateOne } from '../common/mongoUtils/updateOne';
+import { mainValidateFunction } from './common/authentication';
+import { mainWrapperWithSession } from './common/mainWrapperWithSession';
+import client from './common/mongodb';
+import { updateOne } from './common/mongoUtils/updateOne';
 export const handler = async (event) => {
   const mainFunction = async ({ arg, session, client, event }) => {
     var result;

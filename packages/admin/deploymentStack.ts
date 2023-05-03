@@ -19,23 +19,12 @@ export function adminApp({ stack }: StackContext) {
     buildOutput: "dist",
     buildCommand: "yarn build",
 
-    // ...(stack.stage === "production"
-    //   ? {
-    //       customDomain: {
-    //         domainName: "hyfn.xyz",
-    //         domainAlias: "www.hyfn.xyz",
-    //         hostedZone: "hyfn.xyz",
-    //         // isExternalDomain: true,
-    //       },
-    //     }
-    //   : {}),
-
     environment: {
       GENERATE_SOURCEMAP: "false",
       VITE_APP_BUCKET_URL: `https://${s3BucketName}.s3.${stack.region}.amazonaws.com`,
       VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL:
         frConfig[stage].MOAMALAT_PAYMEN_GATEWAY_URL,
-      // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
+
       VITE_APP_PAYMENT_APP_URL: paymentAppUrl,
       VITE_APP_COGNITO_IDENTITY_POOL_ID: Fn.importValue(
         `adminCognitoIdentityPoolId-${stack.stage}`
@@ -47,8 +36,6 @@ export function adminApp({ stack }: StackContext) {
       ),
       VITE_APP_BUCKET: authBucketName,
 
-      // VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL=
-
       VITE_APP_BASE_URL: Fn.importValue(`adminApiUrl-${stack.stage}`),
     },
   });
@@ -57,13 +44,5 @@ export function adminApp({ stack }: StackContext) {
     value: site.url || localhost + 3006,
     exportName: "adminSiteUrl-" + stack.stage, // export name
   });
-  stack.addOutputs({
-    //   customerSite: site.url || localhost + "3000",
-    //   VITE_APP_PAYMENT_APP_URL: paymentAppSite.url || localhost + "3002",
-    //   VITE_APP_COGNITO_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId || "",
-    //   VITE_APP_COGNITO_REGION: stack.region,
-    //   VITE_APP_USER_POOL_ID: auth.userPoolId,
-    //   VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-    //   VITE_APP_BUCKET: authBucket.bucketName,
-  });
+  stack.addOutputs({});
 }

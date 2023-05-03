@@ -28,7 +28,7 @@ export const updateNotificationTokensHandler = async ({
       }
     );
 
-  const app: app.App = firebaseApp;
+  const app: app.App = firebaseApp();
   app.messaging().subscribeToTopic(notificationToken, 'orders');
   return 'success';
 };

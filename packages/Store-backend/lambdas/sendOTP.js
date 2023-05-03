@@ -2,12 +2,12 @@
 
 const axios = require('axios');
 import { ObjectId } from 'mongodb';
-import { mainValidateFunction } from '../common/authentication';
-import { mainWrapperWithSession } from '../common/mainWrapperWithSession';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
+import { mainValidateFunction } from './common/authentication';
+import { mainWrapperWithSession } from './common/mainWrapperWithSession';
+import { getMongoClientWithIAMRole } from './common/mongodb';
 import { findOne } from '../mongoUtils/findOne';
-import { updateOne } from '../common/mongoUtils/updateOne';
-import { insertOne } from '../common/mongoUtils/insertOne';
+import { updateOne } from './common/mongoUtils/updateOne';
+import { insertOne } from './common/mongoUtils/insertOne';
 
 export const handler = async (event, ctx) => {
   const mainFunction = async ({ arg, client, session }) => {

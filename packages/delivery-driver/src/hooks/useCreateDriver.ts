@@ -12,20 +12,14 @@ export const useCreateDriver = () => {
   return useMutation(async (driverInfo: any) => {
     try {
       const user = await Auth.currentUserInfo();
-      // const passportPicKey = await uploadImage([driverInfo.passportPic])
-      // const passportAndFacePicKey = await uploadImage([driverInfo.passportAndFacePic])
 
       await fetchUtil({
         reqData: [{ ...driverInfo }, user.attributes.sub],
         url: `${import.meta.env.VITE_APP_BASE_URL}/createDriverDocument`,
-        user,
       });
       refetch();
     } catch (e) {
       console.error(e);
-      // if (user) {
-      //   await logOut()
-      // }
     }
   });
 };

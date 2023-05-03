@@ -6,7 +6,7 @@ import {
   ORDER_TYPE_DELIVERY,
   ORDER_TYPE_PICKUP,
   USER_TYPE_DRIVER,
-} from '../common/constants';
+} from 'hyfn-types';
 import { findOne, mainWrapper, updateOne, MainFunctionProps, withTransaction } from 'hyfn-server';
 
 interface CancelOrderProps extends Omit<MainFunctionProps, 'arg'> {

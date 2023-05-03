@@ -2,12 +2,12 @@
 
 import { ObjectId } from 'mongodb';
 
-import { mainValidateFunction } from '../common/authentication';
+import { mainValidateFunction } from './common/authentication';
 import { rateDriver } from './common/utils';
-import { findOne } from '../common/mongoUtils/findOne';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
+import { findOne } from './common/mongoUtils/findOne';
+import { getMongoClientWithIAMRole } from './common/mongodb';
 import deepEqual from 'deep-equal';
-import { updateOne } from '../common/mongoUtils/updateOne';
+import { updateOne } from './common/mongoUtils/updateOne';
 export const handler = async (event) => {
   try {
     var result;
