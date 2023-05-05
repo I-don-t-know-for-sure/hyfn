@@ -86,6 +86,12 @@ export function customerApiStack({ stack }: StackContext) {
           functionName: "createTransaction" + stack.stage,
         },
       },
+      "POST /testNewDb": {
+        function: {
+          handler: pathToLambdas + "testNewDb.handler",
+          functionName: "testNewDb" + stack.stage,
+        },
+      },
       "POST /validateTransaction": {
         function: {
           handler: pathToLambdas + "validateTransaction.handler",

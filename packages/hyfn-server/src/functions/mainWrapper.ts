@@ -6,6 +6,7 @@ import { cognitoAuthentication } from "./cognitoAuthentication";
 
 import { _200, _402 } from "./api_Respones";
 import { MainWrapperProps } from "./types";
+import { getPostgresClient } from "./getPostgresClient";
 // import { mainValidateFunction } from './authentication';
 export const mainWrapper = async ({
   event,
@@ -35,6 +36,7 @@ export const mainWrapper = async ({
       event,
       userId,
       accessToken,
+      db: await getPostgresClient(),
     });
     result = _200(result);
   } catch (error: any) {

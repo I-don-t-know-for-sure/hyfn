@@ -1,3 +1,4 @@
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { MongoClient } from "mongodb";
 
 export interface MainFunctionProps {
@@ -9,6 +10,7 @@ export interface MainFunctionProps {
   session?: any;
   ctx?: any;
   callback?: any;
+  db?: NodePgDatabase;
 }
 
 export interface MainWrapperProps {

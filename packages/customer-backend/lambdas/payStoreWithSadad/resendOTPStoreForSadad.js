@@ -3,10 +3,8 @@
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
 
-import { mainValidateFunction } from '../common/authentication';
 import { findOne } from '../common/mongoUtils/findOne';
-import { simpleCrypto } from '../common/encryption';
-import { getMongoClientWithIAMRole } from '../common/mongodb';
+
 import { decryptData } from '../common/decrypt';
 import { mainWrapper } from '../common/mainWrapper';
 import { updateOne } from '../common/mongoUtils/updateOne';

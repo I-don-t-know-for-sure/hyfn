@@ -1,0 +1,727 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "id": "f7490af6-5020-41d4-973a-a88d507a9335",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "driverManagements": {
+      "name": "driverManagements",
+      "schema": "",
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "managementName": {
+          "name": "managementName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "managementPhone": {
+          "name": "managementPhone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "managementAddress": {
+          "name": "managementAddress",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "country": {
+          "name": "country",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usersIds": {
+          "name": "usersIds",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "users": {
+          "name": "users",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verified": {
+          "name": "verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "drivers": {
+      "name": "drivers",
+      "schema": "",
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "driverName": {
+          "name": "driverName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "driverPhone": {
+          "name": "driverPhone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tarnsportationMethod": {
+          "name": "tarnsportationMethod",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verified": {
+          "name": "verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "balance": {
+          "name": "balance",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "driverManagement": {
+          "name": "driverManagement",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notificationToken": {
+          "name": "notificationToken",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usedBalance": {
+          "name": "usedBalance",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notificationTokens": {
+          "name": "notificationTokens",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "orderId": {
+          "name": "orderId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "localCardKeys": {
+      "name": "localCardKeys",
+      "schema": "",
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "TerminalId": {
+          "name": "TerminalId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "MerchantId": {
+          "name": "MerchantId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "secretKey": {
+          "name": "secretKey",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inUse": {
+          "name": "inUse",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "orders": {
+      "name": "orders",
+      "schema": "",
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeStatus": {
+          "name": "storeStatus",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customerStatus": {
+          "name": "customerStatus",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "driverStatus": {
+          "name": "driverStatus",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "StorePickupConfirmation": {
+          "name": "StorePickupConfirmation",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paymentWindowCloseAt": {
+          "name": "paymentWindowCloseAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "addedProducts": {
+          "name": "addedProducts",
+          "type": "json[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buyerCoords": {
+          "name": "buyerCoords",
+          "type": "numeric[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "orderCost": {
+          "name": "orderCost",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeServiceFee": {
+          "name": "storeServiceFee",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deliveryFee": {
+          "name": "deliveryFee",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "orderDate": {
+          "name": "orderDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "deliveryDate": {
+          "name": "deliveryDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "serviceFee": {
+          "name": "serviceFee",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "serviceFeePaid": {
+          "name": "serviceFeePaid",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "orderType": {
+          "name": "orderType",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposals": {
+          "name": "proposals",
+          "type": "json[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "coords": {
+          "name": "coords",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "confirmationCode": {
+          "name": "confirmationCode",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposalsIds": {
+          "name": "proposalsIds",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acceptedProposal": {
+          "name": "acceptedProposal",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "driverManagement": {
+          "name": "driverManagement",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "managementFee": {
+          "name": "managementFee",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "products": {
+      "name": "products",
+      "schema": "",
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "textInfo": {
+          "name": "textInfo",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pricing": {
+          "name": "pricing",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "options": {
+          "name": "options",
+          "type": "json[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "measurementSystem": {
+          "name": "measurementSystem",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "collections": {
+          "name": "collections",
+          "type": "json[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "collectionsIds": {
+          "name": "collectionsIds",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "images": {
+          "name": "images",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "store": {
+      "name": "store",
+      "schema": "",
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeType": {
+          "name": "storeType",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeName": {
+          "name": "storeName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storePhone": {
+          "name": "storePhone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "country": {
+          "name": "country",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeInfoFilled": {
+          "name": "storeInfoFilled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "currency": {
+          "name": "currency",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usersIds": {
+          "name": "usersIds",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "users": {
+          "name": "users",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeDoc": {
+          "name": "storeDoc",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "opened": {
+          "name": "opened",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "balance": {
+          "name": "balance",
+          "type": "numeric(3, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "coords": {
+          "name": "coords",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notificationToken": {
+          "name": "notificationToken",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeOwnerInfoFilled": {
+          "name": "storeOwnerInfoFilled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "ownerLastName": {
+          "name": "ownerLastName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ownerFirstName": {
+          "name": "ownerFirstName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ownerPhoneNumber": {
+          "name": "ownerPhoneNumber",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sadadFilled": {
+          "name": "sadadFilled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "localCardAPIKeyFilled": {
+          "name": "localCardAPIKeyFilled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "monthlySubscriptionPaid": {
+          "name": "monthlySubscriptionPaid",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "subscriptionInfo": {
+          "name": "subscriptionInfo",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "localCardAPIKey": {
+          "name": "localCardAPIKey",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acceptingOrders": {
+          "name": "acceptingOrders",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "collections": {
+          "name": "collections",
+          "type": "json[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "transactions": {
+      "name": "transactions",
+      "schema": "",
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "customerId": {
+          "name": "customerId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transactionDate": {
+          "name": "transactionDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "validated": {
+          "name": "validated",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
