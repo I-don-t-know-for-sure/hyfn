@@ -4,28 +4,31 @@ export const addProductToCart = (
   setCartInfo: any,
   city?: string,
   country?: string,
-  orderType?: string,
+  orderType?: string
 ) => {
-  console.log('🚀 ~ file: addProductToCart.ts ~ line 9 ~ data', data);
-  console.log('🚀 ~ file: addProductToCart.ts ~ line 9 ~ product', product);
-  console.log('🚀 ~ file: addProductToCart.ts ~ line 9 ~ setCartInfo', setCartInfo);
-  console.log('🚀 ~ file: addProductToCart.ts ~ line 9 ~ city', city);
-  console.log('🚀 ~ file: addProductToCart.ts ~ line 9 ~ country', country);
-  console.log('🚀 ~ file: addProductToCart.ts ~ line 9 ~ orderType', orderType);
+  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ data", data);
+  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ product", product);
+  console.log(
+    "🚀 ~ file: addProductToCart.ts ~ line 9 ~ setCartInfo",
+    setCartInfo
+  );
+  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ city", city);
+  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ country", country);
+  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ orderType", orderType);
 
   setCartInfo((state) => {
     const prevState = state;
     const proto = {
       storeName: data?.storeName,
       image: data?.image,
-      _id: data._id.toString(),
+      id: data.id,
       city,
       country,
       storeType: data.storeType,
       coords: data.coords,
-      orderType: orderType || 'Delivery',
+      orderType: orderType || "Delivery",
       addedProducts: {
-        [product._id.toString()]: {
+        [product.id]: {
           ...product,
           qty: 1,
         },
@@ -33,21 +36,21 @@ export const addProductToCart = (
     };
 
     if (Object.keys(prevState)?.length === 0) {
-      return { [data._id.toString()]: proto };
+      return { [data.id]: proto };
     }
 
-    const targetedStore = prevState[data._id.toString()];
+    const targetedStore = prevState[data.id];
 
     if (!targetedStore) {
-      return { ...prevState, [data._id.toString()]: proto };
+      return { ...prevState, [data.id]: proto };
     }
 
     if (targetedStore) {
-      // const isDefined = targetedStore?.addedProducts.hasOwnProperty(product._id.toString())
+      // const isDefined = targetedStore?.addedProducts.hasOwnProperty(product.id)
       // if(isDefined){
 
       // }
-      const oldProduct = targetedStore?.addedProducts[product._id.toString()];
+      const oldProduct = targetedStore?.addedProducts[product.id];
 
       if (oldProduct) {
         const newProduct = {
@@ -57,11 +60,11 @@ export const addProductToCart = (
 
         const newState = {
           ...prevState,
-          [targetedStore._id]: {
-            ...prevState[targetedStore._id],
+          [targetedStore.id]: {
+            ...prevState[targetedStore.id],
             addedProducts: {
-              ...prevState[targetedStore._id].addedProducts,
-              [newProduct._id]: newProduct,
+              ...prevState[targetedStore.id].addedProducts,
+              [newProduct.id]: newProduct,
             },
           },
         };
@@ -73,14 +76,14 @@ export const addProductToCart = (
           ...targetedStore,
           addedProducts: {
             ...targetedStore.addedProducts,
-            [product._id.toString()]: {
+            [product.id]: {
               ...product,
               qty: 1,
             },
           },
         };
 
-        const newState = { ...prevState, [newStore._id]: newStore };
+        const newState = { ...prevState, [newStore.id]: newStore };
 
         return newState;
       }

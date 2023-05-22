@@ -16,10 +16,7 @@ export const useGetDriverManagement = ({
         });
         return result;
       } catch (error) {
-        console.log(
-          "🚀 ~ file: useGetDriverManagement.ts:8 ~ returnuseMutation ~ error",
-          error
-        );
+        console.error(error);
         throw new Error("error");
       }
     },

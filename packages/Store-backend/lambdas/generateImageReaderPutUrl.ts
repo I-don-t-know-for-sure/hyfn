@@ -11,7 +11,6 @@ export const generateImageReaderPutUrlHandler = async ({
   client,
   userId,
 }: GenerateImageReaderPutUrlProps) => {
-  // Create an S3 client
   const s3 = new AWS.S3({
     signatureVersion: 'v4',
   });
@@ -25,14 +24,12 @@ export const generateImageReaderPutUrlHandler = async ({
     const imageKey = new ObjectId().toString();
     const key = 'image-reader/' + imageKey;
 
-    // Create a PutObjectCommand with the bucket, key, and any additional options
-
     const params = {
       Bucket: bucket,
       Key: key,
       Expires: 60,
     };
-    // Create a presigned URL that allows a client to put the object
+
     const signedUrl = await s3.getSignedUrlPromise('putObject', params);
 
     console.log(`Presigned URL to put object: ${signedUrl}`);
@@ -40,22 +37,6 @@ export const generateImageReaderPutUrlHandler = async ({
     imageKeys.push(imageKey);
     imageURLs.push(signedUrl);
   }
-  // Set the bucket and key of the S3 object you want to put
-  // const bucket = process.env.bucketName;
-  // const imageKey = new ObjectId().toString();
-  // const key = 'image-reader/' + imageKey;
-
-  // // Create a PutObjectCommand with the bucket, key, and any additional options
-
-  // const params = {
-  //   Bucket: bucket,
-  //   Key: key,
-  //   Expires: 60,
-  // };
-  // // Create a presigned URL that allows a client to put the object
-  // const signedUrl = await s3.getSignedUrlPromise('putObject', params);
-
-  // console.log(`Presigned URL to put object: ${signedUrl}`);
 
   return { generatedURLs: imageURLs, generatedNames: imageKeys };
 };

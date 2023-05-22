@@ -1,41 +1,28 @@
-export const getTrustedDriversHandler = async ({ arg, client, userId }: MainFunctionProps) => {
-    const userDocument = await client
-        .db('generalData')
-        .collection('driverManagement')
-        .findOne({ userId }, {
-        projection: {
-            _id: 1,
-        },
-    });
-    const { _id } = userDocument;
-    const driverManagementId = _id.toString();
-    const { storeId, lastDoc } = arg[0];
-    if (lastDoc) {
-        const result = await client
-            .db('generalData')
-            .collection('driverData')
-            .find({
-            $and: [{ _id: { $gt: new ObjectId(lastDoc) }, driverManagement: driverManagementId }],
-        })
-            .limit(20)
-            .toArray();
-        return result;
-    }
-    const result = await client
-        .db('generalData')
-        .collection('driverData')
-        .find({ driverManagement: driverManagementId })
-        .limit(20)
-        .toArray();
-    return result;
+export const getTrustedDriversHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
+  const userDocument = await db
+    .selectFrom('driverManagements')
+    .select('id')
+    .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]`)
+    .executeTakeFirstOrThrow();
+  const { id } = userDocument;
+  const driverManagementId = id;
+  const { storeId, lastDoc } = arg[0];
+
+  const drivers = await db
+    .selectFrom('drivers')
+    .selectAll()
+    .where('driverManagement', '=', driverManagementId)
+    .execute();
+  return drivers;
 };
 interface GetTrustedDriversProps extends Omit<MainFunctionProps, 'arg'> {
-    arg: any;
+  arg: any;
 }
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
+import { sql } from 'kysely';
+
 export const handler = async (event) => {
-    const result = await mainWrapper({ event, mainFunction: getTrustedDriversHandler });
-    return result;
+  const result = await mainWrapper({ event, mainFunction: getTrustedDriversHandler });
+  return result;
 };

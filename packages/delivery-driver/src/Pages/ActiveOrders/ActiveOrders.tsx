@@ -58,8 +58,8 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
   const { mutate: leaveOrder } = useLeaveOrder();
   // const orderId =
   //   typeof order === "object"
-  //     ? Object.hasOwn(order, "_id")
-  //       ? order?._id.toString()
+  //     ? Object.hasOwn(order, "id")
+  //       ? order?.id
   //       : ""
   //     : "";
   // const { refetch, isLoading: isRefreshOrderLoading } = useRefreshOrderDocument({
@@ -88,7 +88,7 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
             return;
           }
           return page?.map((order) => {
-            const orderId = order._id.toString();
+            const orderId = order.id;
 
             return (
               <Card m={"24px auto"}>
@@ -145,13 +145,14 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                         <Text weight={700}>{t("Order Status")}</Text> :
                         <Badge
                           color={
-                            order?.orders[0]?.orderStatus ===
-                            STORE_STATUS_PENDING
+                            order?.storeStatus[
+                              order?.storeStatus.length - 1
+                            ] === STORE_STATUS_PENDING
                               ? "red"
                               : "green"
                           }
                         >
-                          {order?.orders[0]?.orderStatus}
+                          {order?.storeStatus[order?.storeStatus.length - 1]}
                         </Badge>
                       </Group>
 
@@ -165,7 +166,7 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                     <CopyButton value={orderId} />
                     {/* <Button
                   onClick={() => {
-                    leaveOrder({ orderId: order._id.toString() })
+                    leaveOrder({ orderId: order.id })
                   }}
                   >
                   {t('Leave Order')}
@@ -183,10 +184,10 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
               </Group> */}
                 </Group>
 
-                {order?.orders?.map((store) => {
+                {order?.stores?.map((store) => {
                   return (
                     <Box
-                      key={store._id.toString()}
+                      key={store.id}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -217,11 +218,11 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                     /> */}
                         <ShowInMapButton
                           component={Link}
-                          coords={`${order.buyerCoords[1]},${order.buyerCoords[0]}`}
+                          coords={`${order.customerLat},${order.customerLong}`}
                           label={t("Map")}
                         />
                         <PickupOrderModal
-                          orderId={order._id.toString()}
+                          orderId={order.id}
                           pickedUp={store.orderStatus === ORDER_STATUS_PICKED}
                         />
                       </Group>
@@ -244,14 +245,14 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {store.addedProducts.map((product, index) => {
+                          {order.addedProducts.map((product, index) => {
                             console.log(product);
 
                             return (
                               <tr key={index}>
                                 {/* <td>{index + 1}</td> */}
                                 <td>
-                                  <Text>{product.textInfo.title}</Text>
+                                  <Text>{product.title}</Text>
                                 </td>
                                 <td>{product.qty}</td>
                                 <td>
@@ -269,10 +270,8 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                                   />
                                 </td>
                                 <td>
-                                  {product.options.hasOptions ? (
-                                    <OptionsModal
-                                      options={product.options.options}
-                                    />
+                                  {product.hasOptions ? (
+                                    <OptionsModal options={product.options} />
                                   ) : (
                                     <Text weight={700}>{t("No options")}</Text>
                                   )}

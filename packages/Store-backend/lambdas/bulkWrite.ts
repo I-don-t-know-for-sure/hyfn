@@ -18,7 +18,7 @@ export const bulkWriteHandler = async ({ event, arg, client, userId }: BulkWrite
   // input.data.pop();
   const results = productsArray.data;
   const objKeys = results[0];
-  console.log('🚀 ~ file: bulkWrite.js:20 ~ mainFunction ~ objKeys:', objKeys);
+
   objKeys.forEach((key) => {
     const found = objKeysExample.find((example) => {
       return example === key;
@@ -37,7 +37,7 @@ export const bulkWriteHandler = async ({ event, arg, client, userId }: BulkWrite
         };
         continue;
       }
-      console.log(`${row[x]}`);
+
       if (objKeys[x] === 'price') {
         outputObject = {
           ...outputObject,

@@ -1,38 +1,42 @@
 ('use strict');
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import {
+  MainFunctionProps,
+  buildJson,
+  mainWrapper,
+  tOrderProducts,
+  tOrders,
+  tStores,
+} from 'hyfn-server';
 import { USER_STATUS_DELIVERED } from 'hyfn-types';
+import { sql } from 'kysely';
 import { ObjectId } from 'mongodb';
 interface GetActiveOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const getActiveOrderHandler = async ({ arg, client }: MainFunctionProps) => {
+export const getActiveOrderHandler = async ({ arg, client, db, userId }: MainFunctionProps) => {
   var result;
   const { driverId, orderId, country, lastDoc } = arg[0];
-  // await argValidations(arg);
-  result = await client
-    .db('base')
-    .collection('orders')
-    .find(
-      {
-        ...(lastDoc ? { _id: { $gt: new ObjectId(lastDoc) } } : {}),
-        'status.status': { $ne: USER_STATUS_DELIVERED },
-        'status._id': driverId,
-      },
-      {
-        // arrayFilters: [{ 'driver._id': id }]
-      }
-    )
-    .limit(10)
-    .toArray();
 
-  //   const sameDriverId = result.status.find((status) => {
-  //     return status._id === driverId;
-  //   });
-  //   if (sameDriverId) {
-  return result;
-  //   } else {
-  // throw new Error('not same driver');
-  //   }
+  const driver = await db
+    .selectFrom('drivers')
+    .select('id')
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
+  const orders = await db
+    .selectFrom('orders')
+    .innerJoin('orderProducts', 'orderProducts.orderId', 'orders.id')
+    .innerJoin('stores', 'stores.id', 'orders.storeId')
+    .select(buildJson(tOrderProducts, '*').as('addedProducts'))
+    .selectAll('orders')
+    .select(buildJson(tStores, '*').as('stores'))
+    .where('orders.driverId', '=', driver.id)
+    // .where(sql`${tOrders.orderStatus}[-1] <> all (array[${sql.join(['delivered', 'canceled'])}])`)
+
+    .groupBy('orders.id')
+    .limit(5)
+    .execute();
+
+  return orders;
 };
 // import { ObjectId } from 'mongodb';
 export const handler = async (event) => {

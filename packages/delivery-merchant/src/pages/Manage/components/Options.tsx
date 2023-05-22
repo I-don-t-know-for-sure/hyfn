@@ -38,7 +38,7 @@ const Options: React.FC<OptionsProps> = ({
 
     if (isNewValueEmpty && isPrevValueEmpty) {
       setProductInfo((prevState: ProductInfo): ProductInfo => {
-        const updatedOptions = productInfo.options.options.map((option) => {
+        const updatedOptions = productInfo.options.map((option) => {
           if (option.key !== value.key) return option;
           const newOptionValues = value.optionValues.map((oldOptionValue) => {
             if (optionValue.key !== oldOptionValue.key) return oldOptionValue;
@@ -56,10 +56,7 @@ const Options: React.FC<OptionsProps> = ({
 
         return {
           ...prevState,
-          options: {
-            ...prevState.options,
-            options: updatedOptions,
-          },
+          options: updatedOptions,
         };
       });
     }
@@ -71,14 +68,14 @@ const Options: React.FC<OptionsProps> = ({
     value: Option
   ) => {
     const newName = e.currentTarget.value;
-    const newOptions = productInfo.options.options.map((option) => {
+    const newOptions = productInfo.options.map((option) => {
       if (option.key !== value.key) return option;
       return { ...value, optionName: newName };
     });
     setProductInfo((prevState: ProductInfo): ProductInfo => {
       return {
         ...prevState,
-        options: { ...prevState.options, options: newOptions },
+        options: newOptions,
       };
     });
   };
@@ -88,7 +85,7 @@ const Options: React.FC<OptionsProps> = ({
     productInfo: ProductInfo,
     value: Option
   ) => {
-    const newOptions = productInfo.options.options.map((option) => {
+    const newOptions = productInfo.options.map((option) => {
       if (option.key !== value.key) return option;
       const optionValuesLength = option.optionValues.length;
       const theNewCount =
@@ -111,7 +108,7 @@ const Options: React.FC<OptionsProps> = ({
     setProductInfo((prevState: ProductInfo): ProductInfo => {
       return {
         ...prevState,
-        options: { ...prevState.options, options: newOptions },
+        options: newOptions,
       };
     });
   };
@@ -120,7 +117,7 @@ const Options: React.FC<OptionsProps> = ({
     productInfo: ProductInfo,
     value: Option
   ) => {
-    const newOptions = productInfo.options.options.map((option) => {
+    const newOptions = productInfo.options.map((option) => {
       if (option.key !== value.key) return option;
 
       const optionValuesLength = option.optionValues.length;
@@ -144,13 +141,13 @@ const Options: React.FC<OptionsProps> = ({
     setProductInfo((prevState: ProductInfo): ProductInfo => {
       return {
         ...prevState,
-        options: { ...prevState.options, options: newOptions },
+        options: newOptions,
       };
     });
   };
 
   const handleIsRequiredChange = (productInfo: ProductInfo, value: Option) => {
-    const newOptions = productInfo.options.options.map((option) => {
+    const newOptions = productInfo.options.map((option) => {
       if (option.key !== value.key) return option;
 
       return {
@@ -162,7 +159,7 @@ const Options: React.FC<OptionsProps> = ({
     setProductInfo((prevState: ProductInfo): ProductInfo => {
       return {
         ...prevState,
-        options: { ...prevState.options, options: newOptions },
+        options: newOptions,
       };
     });
   };
@@ -184,7 +181,7 @@ const Options: React.FC<OptionsProps> = ({
       index === value.optionValues.length - 1
     ) {
       setProductInfo((prevState: ProductInfo): ProductInfo => {
-        const updatedOptions = productInfo.options.options.map((option) => {
+        const updatedOptions = productInfo.options.map((option) => {
           if (option.key !== value.key) return option;
           const newOptionValues = value.optionValues.map((oldOptionValue) => {
             if (optionValue.key !== oldOptionValue.key) return oldOptionValue;
@@ -201,16 +198,13 @@ const Options: React.FC<OptionsProps> = ({
 
         return {
           ...prevState,
-          options: {
-            ...prevState.options,
-            options: updatedOptions,
-          },
+          options: updatedOptions,
         };
       });
       return;
     }
 
-    const updatedOptions = productInfo.options.options.map((option) => {
+    const updatedOptions = productInfo.options.map((option) => {
       if (option.key !== value.key) return option;
       const newOptionValues = value.optionValues.map((oldOptionValue) => {
         if (optionValue.key !== oldOptionValue.key) return oldOptionValue;
@@ -221,10 +215,7 @@ const Options: React.FC<OptionsProps> = ({
     setProductInfo((prevState: ProductInfo): ProductInfo => {
       return {
         ...prevState,
-        options: {
-          ...prevState.options,
-          options: updatedOptions,
-        },
+        options: updatedOptions,
       };
     });
   };
@@ -239,7 +230,7 @@ const Options: React.FC<OptionsProps> = ({
     const newValue = e;
 
     setProductInfo((prevState: ProductInfo): ProductInfo => {
-      const updatedOptions = productInfo.options.options.map((option) => {
+      const updatedOptions = productInfo.options.map((option) => {
         if (option.key !== value.key) return option;
         const newOptionValues = value.optionValues.map((oldOptionValue) => {
           if (optionValue.key !== oldOptionValue.key) return oldOptionValue;
@@ -257,10 +248,7 @@ const Options: React.FC<OptionsProps> = ({
 
       return {
         ...prevState,
-        options: {
-          ...prevState.options,
-          options: updatedOptions,
-        },
+        options: updatedOptions,
       };
     });
 
@@ -288,7 +276,7 @@ const Options: React.FC<OptionsProps> = ({
     optionValue: { value: string; key: string },
     value: Option
   ) => {
-    const updatedOptions = productInfo.options.options.map((option) => {
+    const updatedOptions = productInfo.options.map((option) => {
       if (option.key !== value.key) return option;
       const newOptionValues = value.optionValues.filter((oldOptionValue) => {
         return optionValue.key !== oldOptionValue.key;
@@ -299,10 +287,7 @@ const Options: React.FC<OptionsProps> = ({
     setProductInfo((prevState: ProductInfo): ProductInfo => {
       return {
         ...prevState,
-        options: {
-          ...prevState.options,
-          options: updatedOptions,
-        },
+        options: updatedOptions,
       };
     });
   };
@@ -312,35 +297,32 @@ const Options: React.FC<OptionsProps> = ({
 
     value: Option
   ) => {
-    if (productInfo?.options?.options?.length === 1) {
+    if (productInfo?.options?.length === 1) {
       setProductInfo((prevState: ProductInfo): ProductInfo => {
         return {
           ...prevState,
-          options: {
-            hasOptions: false,
-            options: [],
-          },
+          hasOptions: false,
+
+          options: [],
         };
       });
     }
-    const updatedOptions = productInfo.options.options.filter((option) => {
+    const updatedOptions = productInfo.options.filter((option) => {
       return option.key !== value.key;
     });
     setProductInfo((prevState: ProductInfo): ProductInfo => {
       return {
         ...prevState,
-        options: {
-          ...prevState.options,
-          options: updatedOptions,
-        },
+        options: updatedOptions,
       };
     });
   };
 
-  if (productInfo.options?.hasOptions && productInfo.options?.options) {
+  console.log("🚀 ~ file: Options.tsx:321 ~ options:", productInfo.options);
+  if (productInfo.hasOptions && productInfo.options) {
     return (
       <Box>
-        {productInfo.options?.options.map((value) => (
+        {productInfo.options?.map((value) => (
           <Card.Section
             sx={{
               minHeight: "230px",
@@ -540,7 +522,7 @@ const Options: React.FC<OptionsProps> = ({
                   }}
                   onClick={() => {
                     setProductInfo((prevState) => {
-                      const updatedOptions = productInfo.options.options.map(
+                      const updatedOptions = productInfo.options.map(
                         (option) => {
                           if (option.key !== value.key) return option;
 
@@ -555,10 +537,8 @@ const Options: React.FC<OptionsProps> = ({
                       );
                       return {
                         ...prevState,
-                        options: {
-                          ...prevState.options,
-                          options: updatedOptions,
-                        },
+
+                        options: updatedOptions,
                       };
                     });
                   }}
@@ -579,22 +559,18 @@ const Options: React.FC<OptionsProps> = ({
               setProductInfo((prevState: ProductInfo): ProductInfo => {
                 return {
                   ...prevState,
-                  options: {
+
+                  options: [
                     ...prevState.options,
-                    options: [
-                      ...prevState.options.options,
-                      {
-                        minimumNumberOfOptionsForUserToSelect: 0,
-                        maximumNumberOfOptionsForUserToSelect: 1,
-                        isRequired: false,
-                        optionName: "",
-                        key: randomId(),
-                        optionValues: [
-                          { value: "", key: randomId(), price: 0 },
-                        ],
-                      },
-                    ],
-                  },
+                    {
+                      minimumNumberOfOptionsForUserToSelect: 0,
+                      maximumNumberOfOptionsForUserToSelect: 1,
+                      isRequired: false,
+                      optionName: "",
+                      key: randomId(),
+                      optionValues: [{ value: "", key: randomId(), price: 0 }],
+                    },
+                  ],
                 };
               })
             }

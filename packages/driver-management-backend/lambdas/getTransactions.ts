@@ -1,27 +1,26 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { sql } from 'kysely';
 import { ObjectId } from 'mongodb';
 
 interface GetTransactionsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
 
-export const getTransactions = async ({ arg, client, userId }: GetTransactionsProps) => {
+export const getTransactions = async ({ arg, client, userId, db }: GetTransactionsProps) => {
   const { lastDoc } = arg[0];
-  const userDoc = await client
-    .db('generalData')
-    .collection('driverManagement')
-    .findOne({ usersIds: userId });
+  const userDoc = await db
+    .selectFrom('driverManagements')
+    .selectAll()
+    .where('usersIds', '@>', sql`array[${sql.join([userId])}]`)
+    .executeTakeFirstOrThrow();
 
-  return await client
-    .db('generalData')
-    .collection('transactions')
-    .find({
-      ...(lastDoc ? { _id: { $gt: new ObjectId(lastDoc) } } : {}),
-
-      storeId: userDoc._id.toString(),
-    })
-    .limit(15)
-    .toArray();
+  return await db
+    .selectFrom('transactions')
+    .selectAll()
+    .where(({ or, cmpr }) =>
+      or([cmpr('customerId', '=', userDoc.id), cmpr('storeId', '=', userDoc.id)])
+    )
+    .execute();
 };
 
 export const handler = async (event) => {

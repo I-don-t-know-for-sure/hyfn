@@ -8,7 +8,6 @@ interface BulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {
 export const bulkUpdateHandler = async ({ arg, client, userId }: MainFunctionProps) => {
   var result;
 
-  console.log('🚀 ~ file: bulkUpdate.js ~ line 26 ~ export const handler= ~ arg', arg);
   const { productsArray } = arg[0];
   const storeDoc = await client
     .db('generalData')
@@ -21,7 +20,7 @@ export const bulkUpdateHandler = async ({ arg, client, userId }: MainFunctionPro
     .db('base')
     .collection('storeFronts')
     .findOne({ _id: new ObjectId(storeDoc._id.toString()) }, {});
-  console.log(JSON.stringify(storeFront), 'begining');
+
   // schema validations
   let updateQuery = [];
   for (let i = 0; i < validatedArray.length; i++) {

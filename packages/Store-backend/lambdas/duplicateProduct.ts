@@ -4,27 +4,29 @@ import { ObjectId } from 'mongodb';
 interface DuplicateProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const duplicateProductHandler = async ({ arg, client, userId }: DuplicateProductProps) => {
+export const duplicateProductHandler = async ({
+  arg,
+  client,
+  userId,
+  db,
+}: DuplicateProductProps) => {
   var result;
-  const storeDoc = await client
-    .db('generalData')
-    .collection('storeInfo')
-    .findOne({ usersIds: userId }, {});
+
+  const storeDoc = await db
+    .selectFrom('stores')
+    .selectAll()
+    .where('usersIds', '@>', [userId])
+    .executeTakeFirstOrThrow();
   if (!storeDoc) throw new Error('store not found');
-  const storeId = storeDoc._id.toString();
+  const storeId = storeDoc.id;
   const { times, productId, country } = arg[0];
 
-  const product = await client
-    .db('base')
-    .collection('products')
-    .findOne(
-      { _id: new ObjectId(productId), storeId },
-      {
-        projection: {
-          _id: 0,
-        },
-      }
-    );
+  const { id, ...product } = await db
+    .selectFrom('products')
+    .selectAll()
+    .where('id', '=', productId)
+    .executeTakeFirstOrThrow();
+
   if (times > 30) {
     const products = Array(30)
       .fill(product)
@@ -32,10 +34,10 @@ export const duplicateProductHandler = async ({ arg, client, userId }: Duplicate
         return {
           ...value,
           isActive: false,
-          _id: new ObjectId(),
         };
       });
-    await client.db('base').collection('products').insertMany(products, {});
+    // await client.db('base').collection('products').insertMany(products, {});
+    await db.insertInto('products').values(products).execute();
     return;
   }
   if (times === 0 || times < 0) {
@@ -45,20 +47,20 @@ export const duplicateProductHandler = async ({ arg, client, userId }: Duplicate
         return {
           ...value,
           isActive: false,
-          _id: new ObjectId(),
         };
       });
-    await client.db('base').collection('products').insertMany(products, {});
+    await db.insertInto('products').values(products).execute();
+
     return;
   }
   const products = new Array(times).fill(product).map((value) => {
     return {
       ...value,
       isActive: false,
-      _id: new ObjectId(),
     };
   });
-  await client.db('base').collection('products').insertMany(products, {});
+  await db.insertInto('products').values(products).execute();
+
   return result;
 };
 export const handler = async (event, ctx) => {

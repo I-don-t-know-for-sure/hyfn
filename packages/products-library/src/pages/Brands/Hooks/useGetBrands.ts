@@ -21,7 +21,7 @@ export const useGetBrands = () => {
 
         return result;
       } catch (error) {
-        console.log("🚀 ~ file: useGetBrands.ts:24 ~ error:", error);
+        throw error;
       }
     },
     {

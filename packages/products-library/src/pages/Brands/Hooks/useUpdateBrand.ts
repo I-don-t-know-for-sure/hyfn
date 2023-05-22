@@ -25,7 +25,7 @@ export const useUpdateBrand = () => {
         });
         return result;
       } catch (error) {
-        console.log("🚀 ~ file: useUpdateBrand.ts:28 ~ error:", error);
+        throw error;
       }
     }
   );

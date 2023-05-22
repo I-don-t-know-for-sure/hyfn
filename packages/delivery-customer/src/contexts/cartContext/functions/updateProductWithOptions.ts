@@ -1,21 +1,27 @@
-export const updateProductWithOptions = (data: any, product: any, setCartInfo: any) => {
+export const updateProductWithOptions = (
+  data: any,
+  product: any,
+  setCartInfo: any
+) => {
   setCartInfo((prevState) => {
-    const targetedStore = prevState[data._id.toString()];
-    const newProducts = targetedStore.addedProducts[product._id].map((oldProduct) => {
-      if (oldProduct.key === product.key) {
-        return { ...oldProduct, options: product.options, qty: product.qty };
+    const targetedStore = prevState[data.id];
+    const newProducts = targetedStore.addedProducts[product.id].map(
+      (oldProduct) => {
+        if (oldProduct.key === product.key) {
+          return { ...oldProduct, options: product.options, qty: product.qty };
+        }
+        return oldProduct;
       }
-      return oldProduct;
-    });
+    );
 
     if (targetedStore) {
       const newState = {
         ...prevState,
-        [targetedStore._id]: {
+        [targetedStore.id]: {
           ...targetedStore,
           addedProducts: {
             ...targetedStore.addedProducts,
-            [product._id]: newProducts,
+            [product.id]: newProducts,
           },
         },
       };

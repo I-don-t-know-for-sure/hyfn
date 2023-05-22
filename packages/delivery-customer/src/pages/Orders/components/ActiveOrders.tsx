@@ -47,9 +47,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = () => {
         orders?.pages.map((page) => {
           return page?.map((order, index) => {
             const serviceFeePaid = order?.serviceFeePaid;
-            const driver = order.status.find(
-              (status) => status.userType === "driver"
-            );
+            const driver = { status: order.driverStatus, id: order.driverId };
             // return order.orderType === ORDER_TYPE_DELIVERY ? (
             return (
               <DeliveryActiveOrder

@@ -5,54 +5,40 @@ import { ObjectId } from 'mongodb';
 interface ConfirmPickupProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-export const confirmPickup = async ({ arg, client, userId }: ConfirmPickupProps) => {
-  const { orderId, country, pickupConfirmation } = arg[0];
-  const { _id } = await client
-    .db('generalData')
-    .collection('customerInfo')
-    .findOne({ customerId: userId }, { projection: { _id: 1 } });
-  const orderDoc = await client
-    .db('base')
-    .collection('orders')
-    .findOne({ _id: new ObjectId(orderId) });
+export const confirmPickup = async ({ arg, client, userId, db }: ConfirmPickupProps) => {
+  const { orderId, pickupConfirmation } = arg[0];
+
+  const { id } = await db
+    .selectFrom('customers')
+    .select('id')
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
+
+  const orderDoc = await db
+    .selectFrom('orders')
+    .selectAll()
+    .where('id', '=', orderId)
+    .executeTakeFirstOrThrow();
   if (!orderDoc.serviceFeePaid) {
     throw new Error('service fee not paid');
   }
-  if (orderDoc.userId !== _id.toString()) {
+  if (orderDoc.customerId !== id) {
     throw new Error('user Id does not match');
   }
-  const confirmationStore = orderDoc.orders.find(
-    (store) => store.pickupConfirmation === pickupConfirmation
-  );
-  if (!confirmationStore) {
+
+  if (orderDoc.storePickupConfirmation !== pickupConfirmation) {
     throw new Error('pickup code did not match');
   }
-  const notAllStores = orderDoc.orders.find((store) => {
-    if (store._id === confirmationStore._id) {
-      return false;
-    }
-    return !store.pickedUp;
-  });
-  await client
-    .db('base')
-    .collection('orders')
-    .updateOne(
-      { _id: new ObjectId(orderId) },
-      {
-        $set: {
-          ['orders.$[store].pickedUp']: true,
-          ['status.$[store].status']: ORDER_STATUS_DELIVERED,
-          ['status.$[customer].status']: ORDER_STATUS_DELIVERED,
-          ...(notAllStores ? {} : { delivered: true }),
-        },
-      },
-      {
-        arrayFilters: [
-          { 'store._id': new ObjectId(confirmationStore._id) },
-          { 'customer._id': _id.toString() },
-        ],
-      }
-    );
+
+  await db
+    .updateTable('orders')
+    .set({
+      storeStatus: [...orderDoc.storeStatus, 'pickedUp'],
+      orderStatus: [...orderDoc.orderStatus, 'delivered'],
+    })
+    .where('id', '=', orderId)
+    .execute();
+
   // if()
 };
 export const handler = async (event) => {

@@ -27,10 +27,7 @@ const InfoCard: React.FC<ProductsCard> = ({
   const [value, setValue] = useState("");
   const [generatedDescription, setGenerateDescription] = useState("");
   console.log("🚀 ~ file: InfoCard.tsx:23 ~ value:", value);
-  console.log(
-    "🚀 ~ file: InfoCard.tsx:23 ~ value:",
-    productInfo.textInfo.description
-  );
+  console.log("🚀 ~ file: InfoCard.tsx:23 ~ value:", productInfo.description);
   useEffect(() => {
     console.log(
       "🚀 ~ file: InfoCard.tsx:23 ~ description:",
@@ -41,15 +38,15 @@ const InfoCard: React.FC<ProductsCard> = ({
 
     if (!isLoading) {
       if (value === "") {
-        setValue(productInfo.textInfo.description);
+        setValue(productInfo.description);
       }
     }
-  }, [isLoading, productInfo.textInfo.description]);
+  }, [isLoading, productInfo.description]);
   // const [value, setValue] = useState("");
 
   useEffect(() => {
-    if (productInfo.textInfo?.description !== value) {
-      onChangeHandler(value, "textInfo", "description");
+    if (productInfo.description !== value) {
+      onChangeHandler(value, "description");
     }
   }, [value]);
 
@@ -71,9 +68,9 @@ const InfoCard: React.FC<ProductsCard> = ({
           <TextInput
             required
             label={t("Title")}
-            value={productInfo.textInfo?.title || ""}
+            value={productInfo.title || ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onChangeHandler(e.target.value, "textInfo", "title")
+              onChangeHandler(e.target.value, "title")
             }
           />
 
@@ -109,7 +106,7 @@ const InfoCard: React.FC<ProductsCard> = ({
 
               <FullTextEditor
                 setValue={setValue}
-                value={productInfo.textInfo.description}
+                value={productInfo.description}
                 // newContent={generatedDescription}
               />
             </Stack>

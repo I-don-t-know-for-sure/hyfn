@@ -17,7 +17,7 @@ export const useGetProductsForBulkUpdate = ({
       return await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/getProductsForBulkUpdate`,
 
-        reqData: [userDocument?.storeDoc, pageParam, queryKey[1]],
+        reqData: [userDocument?.id, pageParam, queryKey[1]],
       });
     },
     {

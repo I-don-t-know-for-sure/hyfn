@@ -88,9 +88,4 @@ const getStage = (stage) => {
       }
     );
   });
-
-  console.log(
-    "🚀 ~ file: createDatabaseUser.js:55 ~ databaseUser ~ databaseUser",
-    databaseUser
-  );
 })();

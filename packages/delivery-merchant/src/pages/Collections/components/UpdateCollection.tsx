@@ -25,10 +25,9 @@ const UpdateCollection: React.FC<UpdateCollectionProps> = () => {
   const { data, isFetched, isLoading } = useGetCollection(collectionId);
 
   const [collectionInfo, setCollectionInfo] = useState<CollectionInfo>({
-    textInfo: {
-      title: "",
-      description: "",
-    },
+    title: "",
+    description: "",
+
     collectionType: "manual",
     isActive: true,
   });

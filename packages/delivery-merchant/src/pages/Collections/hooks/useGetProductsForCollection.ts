@@ -18,13 +18,10 @@ export const useGetProductsForCollection = ({
     [allProductsForCollection, collectionId],
     async ({ pageParam }) => {
       try {
-        const { country } = userDocument.storeDoc as { country: string };
-
         const result = await fetchUtil({
           reqData: [
             {
-              country,
-              storeId: userDocument._id,
+              storeId: userDocument.id,
               lastDoc: pageParam,
               collectionId,
             },
@@ -37,6 +34,7 @@ export const useGetProductsForCollection = ({
           "🚀 ~ file: useGetProductsForCollection.ts:37 ~ error:",
           error
         );
+        throw new Error("error");
       }
     },
     {

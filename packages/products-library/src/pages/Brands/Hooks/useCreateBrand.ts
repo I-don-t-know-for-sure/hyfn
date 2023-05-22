@@ -17,10 +17,7 @@ export const useCreateBrand = () => {
       });
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useCreateBrand.ts:20 ~ returnuseMutation ~ error:",
-        error
-      );
+      throw error;
     }
   });
 };

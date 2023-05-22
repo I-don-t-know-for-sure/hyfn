@@ -19,10 +19,7 @@ export const useGetBrandsForList = () => {
 
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useGetBrandsForList.ts:22 ~ returnuseQuery ~ error:",
-        error
-      );
+      throw error;
     }
   });
 };

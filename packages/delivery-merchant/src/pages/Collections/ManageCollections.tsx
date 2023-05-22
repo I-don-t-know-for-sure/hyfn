@@ -363,9 +363,9 @@ const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
                             <UnstyledButton
                               m={"auto"}
                               component={Link}
-                              to={`/collection/${collection._id}`}
+                              to={`/collection/${collection.id}`}
                             >
-                              {collection?.textInfo?.title}
+                              {collection?.title}
                             </UnstyledButton>
                           </td>
                           {collection.conditions ? (

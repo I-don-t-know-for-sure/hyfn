@@ -27,10 +27,7 @@ export const useBulkUpdate = () => {
 
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useBulkUpdate.ts:31 ~ returnuseMutation ~ error:",
-        error
-      );
+      throw error;
     }
   });
 };

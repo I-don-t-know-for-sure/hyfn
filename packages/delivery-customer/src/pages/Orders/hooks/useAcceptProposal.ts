@@ -5,16 +5,16 @@ export const useAcceptProposal = () => {
   return useMutation(
     async ({
       country,
-      driverManagementId,
+      driverId,
       orderId,
     }: {
       country: string;
-      driverManagementId: string;
+      driverId: string;
       orderId: string;
     }) => {
       try {
         const result = await fetchUtil({
-          reqData: [{ country, driverManagementId, orderId }],
+          reqData: [{ country, driverId, orderId }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/acceptProposal`,
         });
         return result;

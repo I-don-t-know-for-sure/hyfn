@@ -6,43 +6,32 @@ import { findOne, mainWrapper } from 'hyfn-server/src';
 interface GetProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-const getProduct = async ({ arg, client }: GetProductProps) => {
+const getProduct = async ({ arg, client, db }: GetProductProps) => {
   var result;
   const { storefront, productId, city, country } = arg[0];
   const withStoreDoc = arg[1];
-  const mongo = client.db('base');
+
   if (withStoreDoc) {
-    const product = await mongo.collection(`products`).findOne(
-      { _id: new ObjectId(productId), storeId: storefront },
-      {
-        projection: {
-          shipping: 0,
-          collections: 0,
-          inventory: 0,
-          city: 0,
-        },
-      }
-    );
-    findOne({ findOneResult: product });
-    const storeDoc = await mongo
-      .collection(`storeFronts`)
-      .findOne({ _id: new ObjectId(storefront) });
-    findOne({ findOneResult: storeDoc });
+    const storeDoc = await db
+      .selectFrom('stores')
+      .selectAll()
+      .where('id', '=', storefront)
+      .executeTakeFirstOrThrow();
+    const product = await db
+      .selectFrom('products')
+      .selectAll()
+      .where('id', '=', productId)
+      .executeTakeFirstOrThrow();
+
     result = { product, storeDoc };
     return result;
   }
-  const product = await mongo.collection(`products`).findOne(
-    { _id: new ObjectId(productId), storeId: storefront },
-    {
-      projection: {
-        shipping: 0,
-        collections: 0,
-        inventory: 0,
-        city: 0,
-      },
-    }
-  );
-  findOne({ findOneResult: product });
+  const product = await db
+    .selectFrom('products')
+    .selectAll()
+    .where('id', '=', productId)
+    .executeTakeFirstOrThrow();
+
   result = product;
   return result;
   // Ensures that the client will close when you finish/error

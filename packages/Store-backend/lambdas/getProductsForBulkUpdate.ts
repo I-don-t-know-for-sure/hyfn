@@ -2,9 +2,9 @@ export const getProductsForBulkUpdateHandler = async ({
   arg,
   client,
   userId,
+  db,
 }: MainFunctionProps) => {
-  var products;
-  const { id, city, country } = arg[0];
+  const id = arg[0];
   const lastDocId = arg[1];
   const filter = arg[2];
   const ALL_PPRODUCTS = 'all';
@@ -30,22 +30,13 @@ export const getProductsForBulkUpdateHandler = async ({
           isActive: filters[filter],
           storeId: id,
         };
-  console.log(JSON.stringify(queryDoc));
-  products = await client
-    .db('base')
-    .collection(`products`)
-    .find(queryDoc, {
-      projection: {
-        collections: 0,
 
-        storeId: 0,
-        inventory: 0,
-        shipping: 0,
-        city: 0,
-      },
-    })
-    .limit(10)
-    .toArray();
+  const products = await db
+    .selectFrom('products')
+    .select(['id', 'title', 'isActive'])
+    .where('storeId', '=', id)
+    .limit(2)
+    .execute();
   return products;
 };
 interface GetProductsForBulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {

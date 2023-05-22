@@ -66,7 +66,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
   console.log("🚀 ~ file: DeliveryActiveOrder.tsx:34 ~ order", order);
 
   const { refetch, isLoading } = useRefreshOrderDocument({
-    orderId: order._id.toString(),
+    orderId: order.id,
   });
   return (
     <Card key={index} mt={8}>
@@ -81,12 +81,13 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
         <Group position="apart">
           <Badge
             color={
-              order?.orders[0]?.orderStatus === STORE_STATUS_PENDING
+              order?.storeStatus[order?.storeStatus.length - 1] ===
+              STORE_STATUS_PENDING
                 ? "red"
                 : "green"
             }
           >
-            {order?.orders[0]?.orderStatus}
+            {order?.storeStatus[order?.storeStatus.length - 1]}
           </Badge>
 
           <Group>
@@ -114,19 +115,19 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
             </ActionIcon>
             <OrderActionMenu
               orderType={order.orderType}
-              isOrderTakenByDriver={driver?._id !== ""}
-              orderId={order._id.toString()}
+              isOrderTakenByDriver={driver?.id !== ""}
+              orderId={order.id}
             />
           </Group>
         </Group>
       }
       <Group
-        position={driver?._id !== "" && !serviceFeePaid ? "apart" : "right"}
+        position={driver?.id !== "" && !serviceFeePaid ? "apart" : "right"}
       >
         {/* {order.orders[0].orderStatus === ORDER_STATUS_ACCEPTED &&
           !serviceFeePaid && (
             <PayServiceFeeModal
-              orderId={order._id.toString()}
+              orderId={order.id}
               balance={balance}
               serviceFee={serviceFee}
               customerBalanceIsSufficient={
@@ -161,8 +162,8 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
             </ActionIcon>
             <OrderActionMenu
               orderType={order.orderType}
-              isOrderTakenByDriver={driver?._id !== ""}
-              orderId={order._id.toString()}
+              isOrderTakenByDriver={driver?.id !== ""}
+              orderId={order.id}
             />
           </>
         </Group> */}
@@ -183,23 +184,22 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
             },
           })}
         >
-          <CopyButton justText value={order._id.toString()} />
+          <CopyButton justText value={order.id} />
         </Box>
 
         {order.orderType === ORDER_TYPE_DELIVERY && !order.acceptedProposal && (
           <ProposalsModal
-            orderId={order._id.toString()}
-            proposals={order?.proposals}
+            orderId={order.id}
+            proposals={order?.proposals || []}
           />
         )}
       </Group>
 
-      {Object.keys(order.orders).map((key) => {
-        const store = order?.orders[key];
+      {order.stores.map((store) => {
         console.log(store, "hshsshshhshss");
         return (
           <Box
-            key={key}
+            key={store.id}
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -220,8 +220,8 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
               {/* {order.orders[0].orderStatus === ORDER_STATUS_ACCEPTED && (
                 <PayStoreForPickupOrder
                   order={order}
-                  orderId={order._id.toString()}
-                  storeId={store._id}
+                  orderId={order.id}
+                  storeId={store.id}
                   storeProducts={store.addedProducts}
                   store={store}
                 />
@@ -229,18 +229,18 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
               {true && (
                 <PayModal
                   order={order}
-                  orderId={order._id.toString()}
-                  storeId={store._id}
-                  storeProducts={store.addedProducts}
+                  orderId={order.id}
+                  storeId={store.id}
+                  storeProducts={order.addedProducts}
                   store={store}
                 />
               )}
-              {Array.isArray(store.transactions) && (
+              {/* {Array.isArray(store.transactions) && (
                 <TransactionModal
                   validateTransaction={validateTransaction}
                   transactions={store.transactions}
                 />
-              )}
+              )} */}
             </Group>
             <Box
               sx={(theme) => ({
@@ -269,14 +269,14 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {store.addedProducts.map((product, index) => {
+                  {order.addedProducts.map((product, index) => {
                     console.log(product);
 
                     return (
                       <tr key={index}>
                         {/* <td>{index + 1}</td> */}
                         <td>
-                          <Text>{product.textInfo.title}</Text>
+                          <Text>{product.title}</Text>
                         </td>
                         <td>{product.qty}</td>
                         <td>
@@ -294,7 +294,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
                           />
                         </td>
                         <td>
-                          {product.options.length > 0 ? (
+                          {product?.options?.length > 0 ? (
                             <OptionsModal options={product.options} />
                           ) : (
                             <Text weight={700}>{t("No options")}</Text>
@@ -313,13 +313,13 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
                 <Button
                 onClick={() => {
                   console.log({
-                    orderId: order._id,
-                    storeId: store._id,
+                    orderId: order.id,
+                    storeId: store.id,
                   });
 
                       cancelOrder({
-                        orderId: order._id,
-                        storeId: store._id,
+                        orderId: order.id,
+                        storeId: store.id,
                       });
                     }}
                   >
@@ -336,10 +336,10 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
         {order.orderType === ORDER_TYPE_DELIVERY ? (
           <DeliveryConfirmationModal
             confirmationCode={order?.confirmationCode}
-            orderId={order._id.toString()}
+            orderId={order.id}
           />
         ) : (
-          <DeliveredModal orderId={order._id} />
+          <DeliveredModal orderId={order.id} />
         )}
       </Group>
     </Card>

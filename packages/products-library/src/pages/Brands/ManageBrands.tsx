@@ -26,7 +26,6 @@ const ManageBrands: React.FC<ManageBrandsProps> = ({}) => {
   const { data, fetchNextPage } = useGetBrands();
   const [filterText, setFilterText] = useState("");
   const { mutate } = useDeleteBrand();
-  console.log(data);
 
   return (
     <Container>

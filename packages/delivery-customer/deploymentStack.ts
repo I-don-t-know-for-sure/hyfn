@@ -4,6 +4,7 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";
 import { config } from "../../envVaraibles";
+import * as s3 from "aws-cdk-lib/aws-s3";
 
 const localhost = "http://localhost:";
 
@@ -29,7 +30,12 @@ export function customerApp({ stack }: StackContext) {
     path: "./",
     buildOutput: "dist",
     buildCommand: "yarn build",
-
+    cdk: {
+      // bucket: {
+      //   blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
+      //   accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
+      // },
+    },
     ...(stack.stage === "production"
       ? {
           customDomain: {

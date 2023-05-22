@@ -535,7 +535,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   justifyContent: "space-around",
                 }}
               >
-                <CopyButton value={user?._id} />
+                <CopyButton value={user?.id} />
                 <Group>
                   <Text weight={700}>{`${t("Balance")}: ${
                     typeof user?.balance?.toFixed(2) !== "undefined"

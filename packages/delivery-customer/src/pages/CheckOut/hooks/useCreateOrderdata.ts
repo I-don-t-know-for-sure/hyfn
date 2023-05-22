@@ -28,7 +28,7 @@ export const useCreateOrderData = () => {
           reqData: [
             cart,
             {
-              customerId: userDocument._id,
+              customerId: userDocument.id,
               customerCoords: coords,
               customerAddress: address,
               deliveryDate,

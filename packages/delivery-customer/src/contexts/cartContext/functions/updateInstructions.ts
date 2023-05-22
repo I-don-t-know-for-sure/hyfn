@@ -10,16 +10,22 @@ export const updateInstructions = ({
   instructions: string;
 }) => {
   setCartInfo((prevState) => {
-    console.log('🚀 ~ file: updateInstructions.ts:13 ~ setCartInfo ~ prevState', prevState);
+    console.log(
+      "🚀 ~ file: updateInstructions.ts:13 ~ setCartInfo ~ prevState",
+      prevState
+    );
 
     if (Array.isArray(prevState)) {
       const newState = prevState.map((store) => {
-        if (store._id !== storeId) {
+        if (store.id !== storeId) {
           return store;
         }
         return {
           ...store,
-          addedProducts: { ...store.addedProducts, [productId]: { ...store.addedProducts[productId], instructions } },
+          addedProducts: {
+            ...store.addedProducts,
+            [productId]: { ...store.addedProducts[productId], instructions },
+          },
         };
       });
       return [...newState];
@@ -31,7 +37,10 @@ export const updateInstructions = ({
         ...prevState[storeId],
         addedProducts: {
           ...prevState[storeId].addedProducts,
-          [productId]: { ...prevState[storeId].addedProducts[productId], instructions },
+          [productId]: {
+            ...prevState[storeId].addedProducts[productId],
+            instructions,
+          },
         },
       },
     };

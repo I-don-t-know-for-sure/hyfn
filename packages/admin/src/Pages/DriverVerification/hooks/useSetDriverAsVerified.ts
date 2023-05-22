@@ -10,10 +10,7 @@ export const useSetDriverAsVerified = () => {
       });
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useSetDriverAsVerified.ts:8 ~ returnuseMutation ~ error",
-        error
-      );
+      console.error(error);
     }
   });
 };

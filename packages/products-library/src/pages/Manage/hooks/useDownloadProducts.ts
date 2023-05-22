@@ -41,10 +41,7 @@ export const useDownlaodProducts = () => {
 
       return "seccess";
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useDownloadProducts.ts:45 ~ returnuseMutation ~ error:",
-        error
-      );
+      throw error;
     }
   });
 };

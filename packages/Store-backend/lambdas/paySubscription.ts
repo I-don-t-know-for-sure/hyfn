@@ -1,4 +1,4 @@
-export const paySubscriptionHandler = async ({ arg, client }) => {
+export const paySubscriptionHandler = async ({ arg, client }: MainFunctionProps) => {
   var result;
   const { storeId, OTP, numberOfMonths /* temporary */ } = arg[0];
   const storeDoc = await client
@@ -26,7 +26,6 @@ export const paySubscriptionHandler = async ({ arg, client }) => {
     if (monthsToAdd + currentMonth >= 12) {
       const newMonth = monthsToAdd + currentMonth - 12;
       currentDate.setFullYear(currentDate.getFullYear() + 1, newMonth);
-      console.log(currentDate);
     } else {
       const newMonth = monthsToAdd + currentMonth;
       currentDate.setMonth(newMonth);
@@ -44,19 +43,7 @@ export const paySubscriptionHandler = async ({ arg, client }) => {
         numberOfMonths: numberOfMonths,
         expirationDate: addMonths(numberOfMonths),
       };
-  // const payment = await axios(config);
-  // console.log(payment.data);
-  // if (payment.data.statusCode === 927) {
-  //   result = payment.data.result;
-  //   return;
-  // }
-  // if (payment.data.statusCode !== 0) {
-  //   throw "transaction went wrong";
-  // }
-  // result = payment.data;
-  /*
-  add transactionId and other payment info like phone number and maybe time to customerData collection
-  */
+
   await client
     .db('generalData')
     .collection('storeInfo')

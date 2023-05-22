@@ -21,25 +21,22 @@ interface UpdateProductProps {}
 
 const UpdateProduct: React.FC<UpdateProductProps> = () => {
   const [productInfo, setProductInfo] = useState<ProductInfo>({
-    textInfo: {
-      title: "",
-      description: "",
-    },
-    measurementSystem: "Unit",
-    pricing: {
-      price: "",
-      currency: "LYD",
+    title: "",
+    description: "",
 
-      prevPrice: "",
-      costPerItem: "",
-    },
+    measurementSystem: "Unit",
+
+    price: "",
+    currency: "LYD",
+
+    prevPrice: "",
+    costPerItem: "",
 
     weightInKilo: "",
-    options: {
-      hasOptions: false,
+    hasOptions: false,
 
-      options: [],
-    },
+    options: [],
+
     isActive: false,
     tags: [],
     collections: [],

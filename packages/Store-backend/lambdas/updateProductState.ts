@@ -26,7 +26,7 @@ export const updateProductStateHandler = async ({
         imagesURLs,
         collections,
       } = product;
-      console.log(arg);
+
       // const { storeFrontId, id, country, city } = arg[1];
       const productId = arg[2];
       var returnValue = 'initial';

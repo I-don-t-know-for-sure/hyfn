@@ -28,7 +28,7 @@ export const updateOptionsHandler = async ({ arg, client, userId }: UpdateOption
       },
     };
   });
-  console.log(updateQuery);
+
   await client.db('base').collection('products').bulkWrite(updateQuery);
   return result;
 };

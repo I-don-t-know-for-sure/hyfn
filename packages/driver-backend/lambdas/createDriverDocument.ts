@@ -7,30 +7,29 @@ export const createDriverDocumentHandler = async ({
   session,
   client,
   event,
+  userId,
+  db,
 }: CreateDriverDocumentProps) => {
   var result;
   const { balance, ...driverInfo } = arg[0];
-  const driverId = arg[1];
+
   // TODO remove this arg
   // const { accessToken, userId } = arg[2];
-  const passportNumber = driverInfo?.passportNumber?.replace(/\s/g, '');
-  const details = await client
-    .db('generalData')
-    .collection('driverData')
-    .insertOne(
-      {
-        ...driverInfo,
-        driverId: driverId,
-        passportNumber,
-        verified: false,
-      },
-      {}
-    );
+
+  await db
+    .insertInto('drivers')
+    .values({
+      driverName: driverInfo.driverName,
+      userId,
+      verified: false,
+      driverPhone: driverInfo.driverPhone,
+    })
+    .executeTakeFirst();
   // await client
   //   .db('generalData')
   //   .collection('driverVerification')
   //   .insertOne({ ...driverInfo, driverId: driverId });
-  console.log(details, 'djdjddjdjd');
+
   result = 'success';
   return result;
 };

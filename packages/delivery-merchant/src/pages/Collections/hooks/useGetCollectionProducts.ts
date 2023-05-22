@@ -18,11 +18,9 @@ export const useGetCollectionProducts = ({
     [collectionProducts, collectionId],
     async ({ pageParam }) => {
       try {
-        const { country } = userDocument.storeDoc as { country: string };
         const result = await fetchUtil({
           reqData: [
             {
-              country,
               storeId: userDocument._id,
               lastDoc: pageParam,
               collectionId,

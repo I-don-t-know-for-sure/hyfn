@@ -1,4 +1,7 @@
-export const getCollectionStoreFrontProductsHandler = async ({ arg, client }) => {
+export const getCollectionStoreFrontProductsHandler = async ({
+  arg,
+  client,
+}: MainFunctionProps) => {
   var result;
   const { country, storeId, collectionId } = arg[0];
   const storeFront = await client

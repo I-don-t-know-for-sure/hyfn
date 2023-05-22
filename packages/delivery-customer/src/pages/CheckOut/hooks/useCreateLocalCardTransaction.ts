@@ -10,7 +10,7 @@ export const useCreateLocalCardTransaction = () => {
     async ({ amount }: { amount: number }) => {
       try {
         const result = await fetchUtil({
-          reqData: [{ amount, customerId: userDocument._id }],
+          reqData: [{ amount, customerId: userDocument.id }],
 
           url: `${
             import.meta.env.VITE_APP_BASE_URL

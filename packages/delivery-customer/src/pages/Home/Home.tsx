@@ -215,7 +215,7 @@ const Home: React.FC = () => {
             >
               {data.pages.map((page) => {
                 return page?.map((store: Store) => {
-                  if (store._id.toString() === "collectionInfo") {
+                  if (store.id === "collectionInfo") {
                     return;
                   }
                   return <StoreCard {...store} />;
@@ -233,7 +233,7 @@ const Home: React.FC = () => {
                     pageParam:
                       data?.pages[data?.pages?.length - 1][
                         data?.pages[data.pages?.length - 1]?.length - 1
-                      ]?._id,
+                      ]?.id,
                   })
                 }
               >

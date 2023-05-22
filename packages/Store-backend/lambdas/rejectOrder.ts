@@ -1,11 +1,13 @@
-export const rejectOrderHandler = async ({ arg, client, userId }: MainFunctionProps) => {
+export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
   var result;
   const { orderId, storeId, country } = arg[0];
   type Store = z.infer<typeof storeSchema>;
-  const userDocument = await client
-    .db('generalData')
-    .collection<Store>('storeInfo')
-    .findOne({ userId });
+
+  const userDocument = await db
+    .selectFrom('stores')
+    .selectAll()
+    .where('usersIds', '@>', [userId])
+    .executeTakeFirstOrThrow();
   const orderDoc = await client
     .db('base')
     .collection('orders')
@@ -18,7 +20,7 @@ export const rejectOrderHandler = async ({ arg, client, userId }: MainFunctionPr
   const deletedStore = orderDoc.orders.find((store) => store._id.toString() === storeId);
   var storeCoords = deletedStore.coords;
   const storePaid = deletedStore.paid;
-  if (userDocument._id.toString() !== deletedStore._id.toString())
+  if (userDocument.id.toString() !== deletedStore._id.toString())
     throw new Error('Store id does not match');
   const orderType = orderDoc.orderType;
   if (storePaid) throw new Error('Store is already paid');
@@ -29,7 +31,7 @@ export const rejectOrderHandler = async ({ arg, client, userId }: MainFunctionPr
   if (deletedStore.orderStatus !== STORE_STATUS_PENDING) {
     throw new Error('can not edit the order after being accepted');
   }
-  // TODO: check if the driver picked any product
+
   const didDriverPickStoreProduct = deletedStore.addedProducts.some((product) => {
     return !!product?.pickup;
   });
@@ -37,7 +39,6 @@ export const rejectOrderHandler = async ({ arg, client, userId }: MainFunctionPr
     throw new Error('Driver started picking up the order');
   }
   const stores = orderDoc.orders.filter((store) => {
-    console.log(store._id?.toString() !== storeId, store);
     if (store._id?.toString() !== storeId) {
       return true;
     } else {
@@ -54,8 +55,6 @@ export const rejectOrderHandler = async ({ arg, client, userId }: MainFunctionPr
   if (deepEqual(orderDoc.status, status)) {
     throw new Error('order status did not change');
   }
-  // TODO: check the order type then recalculate the order information after removing the store from the order
-  // we can use the cancel store function as a reference then return the customer their money back
 
   if (orderType === ORDER_TYPE_PICKUP) {
     throw new Error('service fee already paid');
@@ -78,7 +77,6 @@ export const rejectOrderHandler = async ({ arg, client, userId }: MainFunctionPr
         .updateOne(
           {
             _id: new ObjectId(orderId),
-            // status: { $elemMatch: { _id: storeId, userType: 'store' } },
           },
           {
             $set: {
@@ -88,42 +86,7 @@ export const rejectOrderHandler = async ({ arg, client, userId }: MainFunctionPr
           {}
         );
     }
-    // const {
-    //   deliveryDetails,
-    //   deliveryFeeAfterFee,
-    //   orderCostAfterFee,
-    //   serviceFee,
-    //   totalCost,
-    //   allStoresDurations,
-    //   durationInMinutes,
-    // } = await calculateOrdercost({
-    //   orderArray: orderDoc.orders,
-    //   coordinates: coords,
-    //   buyerCoords: orderDoc.buyerCoords,
-    // });
-    // await updateOne({
-    //   query: {
-    //     _id: new ObjectId(orderId),
-    //     status: { $elemMatch: { _id: storeId, userType: 'store' } },
-    //   },
-    //   update: {
-    //     $set: {
-    //       'orders': stores,
-    //       status,
-    //       'coords.coordinates': coords,
-    //       'drivingDuration': deliveryDetails.data.routes[0].duration / 60,
-    //       'inStoreDuration': allStoresDurations,
-    //       'duration': parseFloat(durationInMinutes).toFixed(2),
-    //       'distance': deliveryDetails.data.routes[0].distance,
-    //       'deliveryFee': parseFloat(deliveryFeeAfterFee).toFixed(2),
-    //       'serviceFee': parseFloat(serviceFee).toFixed(2),
-    //       'totalCost': parseFloat(totalCost).toFixed(2),
-    //       'orderCost': parseFloat(orderCostAfterFee).toFixed(2),
-    //     },
-    //   },
-    //   options: {},
-    //   collection: client.db("base").collection('orders'),
-    // });
+
     result = 'seccess';
     return 'success';
   }

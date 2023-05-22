@@ -1,4 +1,4 @@
-import { removeFromCart } from './removeFromCart';
+import { removeFromCart } from "./removeFromCart";
 
 export const addProductWithNoOptionsToCart = (
   data: any,
@@ -6,9 +6,9 @@ export const addProductWithNoOptionsToCart = (
   setCartInfo: any,
   city: string,
   country: string,
-  orderType?: string,
+  orderType?: string
 ) => {
-  console.log('shsshhshshshshhsshsh');
+  console.log("shsshhshshshshhsshsh");
 
   if (product.qty === 0) {
     removeFromCart(data, product, setCartInfo);
@@ -19,41 +19,41 @@ export const addProductWithNoOptionsToCart = (
       storeName: data?.storeName,
 
       image: data?.image,
-      _id: data._id.toString(),
+      id: data.id,
       city,
       country,
       storeType: data.storeType,
 
       coords: data.coords,
-      orderType: orderType || 'Delivery',
+      orderType: orderType || "Delivery",
       addedProducts: {
-        [product._id.toString()]: {
+        [product.id]: {
           ...product,
         },
       },
     };
     if (!(Object.keys(prevState)?.length > 0)) {
-      return { [data._id.toString()]: proto };
+      return { [data.id]: proto };
     }
 
-    const targetedStore = prevState[data._id.toString()];
+    const targetedStore = prevState[data.id];
     if (!targetedStore) {
-      return { ...prevState, [data._id.toString()]: proto };
+      return { ...prevState, [data.id]: proto };
     }
 
     if (targetedStore) {
       const newStoreProducts = {
         ...targetedStore.addedProducts,
-        [product._id.toString()]: {
+        [product.id]: {
           ...product,
 
-          _id: product._id.toString(),
+          id: product.id,
         },
       };
 
       const newState = {
         ...prevState,
-        [data._id.toString()]: {
+        [data.id]: {
           ...targetedStore,
           addedProducts: newStoreProducts,
         },

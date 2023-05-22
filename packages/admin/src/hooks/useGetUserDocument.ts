@@ -7,8 +7,6 @@ export const useGetUserDocument = ({ userId }: { userId: string }) => {
     [userId],
     async () => {
       try {
-        console.log("shshshshjcdjcbdjcbdhcbhdbchbhd");
-
         if (!userId) {
           return false;
         }

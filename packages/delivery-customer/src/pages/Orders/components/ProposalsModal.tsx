@@ -32,7 +32,7 @@ const ProposalsModal: React.FC<ProposalsModalProps> = ({
                   onClick={() => {
                     acceptProposal({
                       country,
-                      driverManagementId: proposal.managementId,
+                      driverId: proposal.driverId,
                       orderId,
                     });
                   }}

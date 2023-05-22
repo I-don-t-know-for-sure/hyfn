@@ -7,44 +7,52 @@ import { z } from 'zod';
 interface DeleteProposalProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const deleteProposal = async ({ arg, client, userId }: DeleteProposalProps) => {
+export const deleteProposal = async ({ arg, client, userId, db }: DeleteProposalProps) => {
   const { country, orderId } = arg[0];
-  const projection = {};
-  type DriverDoc = z.infer<typeof driverSchema>;
-  const driverDoc = await client
-    .db('generalData')
-    .collection('driverData')
-    .findOne<DriverDoc>({ driverId: userId });
+
+  const driverDoc = await db
+    .selectFrom('drivers')
+    .selectAll()
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
   if (!driverDoc) {
     throw new Error('driver doc not found');
   }
-  const orderDoc = await client
-    .db('base')
-    .collection('orders')
-    .findOne({ _id: new ObjectId(orderId) });
+
+  const orderDoc = await db
+    .selectFrom('orders')
+    .selectAll()
+    .where('id', '=', orderId)
+    .executeTakeFirstOrThrow();
   if (!orderDoc) {
     throw new Error('order not found');
   }
-  if (orderDoc.canceled) {
+  if (orderDoc.orderStatus.includes('Canceled')) {
     throw new Error('Order canceled');
   }
   if (orderDoc.acceptedProposal) {
     throw new Error('customer already accepted a proposal');
   }
-  await client
-    .db('base')
-    .collection('orders')
-    .updateOne(
-      { _id: new ObjectId(orderId) },
-      {
-        $pull: {
-          proposalsIds: driverDoc.driverManagement[0],
-          proposals: {
-            managementId: driverDoc.driverManagement[0],
-          },
-        },
-      }
-    );
+  var removed = false;
+  const newProposalIds = orderDoc.proposalsIds.filter((proposalId) => {
+    const check = proposalId !== driverDoc.driverManagement && removed;
+    if (proposalId === driverDoc.driverManagement) {
+      removed = true;
+    }
+    return check;
+  });
+  const proposals = orderDoc.proposals.filter((proposal) => {
+    return driverDoc.id !== proposal.driverId;
+  });
+  await db
+    .updateTable('orders')
+    .set({
+      proposalsIds: newProposalIds,
+      proposals,
+    })
+    .where('id', '=', orderId)
+    .executeTakeFirst();
+
   return 'success';
 };
 export const handler = async (event) => {

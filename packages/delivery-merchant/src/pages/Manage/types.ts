@@ -1,24 +1,22 @@
 export interface ProductInfo {
-  textInfo: {
-    title: string;
-    description: string;
-  };
+  title: string;
+  description: string;
+
   productLibraryImages?: [];
   measurementSystem: "Kilo" | "Liter" | "Unit" | "Gram" | "Milliliter";
-  pricing: {
-    price: string;
-    currency: "LYD";
 
-    prevPrice: string;
-    costPerItem: string;
-  };
+  price: string;
+  currency: "LYD";
+
+  prevPrice: string;
+  costPerItem?: string;
+
   deletedImages?: any[];
   weightInKilo: string;
-  options: {
-    hasOptions: boolean;
+  hasOptions: boolean;
 
-    options: Option[];
-  };
+  options: Option[];
+
   isActive: boolean;
   tags: { label: string; value: string }[];
   collections: { label: string; value: string }[];

@@ -2,67 +2,39 @@ interface GetActiveOrdersProps extends Omit<MainFunctionProps, 'arg'> {}
 ('use strict');
 import { ObjectId } from 'mongodb';
 import { ORDER_STATUS_DELIVERED, USER_TYPE_CUSTOMER } from 'hyfn-types';
-import { MainFunctionProps, MainWrapperProps, mainWrapper } from 'hyfn-server';
+import {
+  MainFunctionProps,
+  MainWrapperProps,
+  buildJson,
+  mainWrapper,
+  tOrderProduct,
+  tOrderProducts,
+  tStore,
+  tStores,
+} from 'hyfn-server';
+import { sql } from 'kysely';
 interface GetActiveOrdersProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-export const getActiveOrders = async ({ arg, client }: GetActiveOrdersProps) => {
+export const getActiveOrders = async ({ arg, client, db }: GetActiveOrdersProps) => {
   var result;
-  console.log(arg);
+
   const { customerId, status, country, lastDoc } = arg[0];
-  console.log('shshssh');
-  if (lastDoc) {
-    result = await client
-      .db('base')
-      .collection('orders')
-      .find({
-        $and: [
-          { _id: { $gt: new ObjectId(lastDoc) } },
-          {
-            status: {
-              $elemMatch: {
-                _id: customerId,
-                status: { $ne: ORDER_STATUS_DELIVERED },
-                userType: USER_TYPE_CUSTOMER,
-              },
-            },
-          },
-          // { 'status._id': customerId },
-          // { 'status.status': { $ne: ORDER_STATUS_DELIVERED } },
-          // { 'status.userType': 'customer' },
-          { canceled: { $exists: false } },
-        ],
-      })
-      .limit(20)
-      .toArray();
-    return result;
-  }
-  result = await client
-    .db('base')
-    .collection('orders')
-    .find({
-      $and: [
-        {
-          status: {
-            $elemMatch: {
-              _id: customerId,
-              status: { $ne: ORDER_STATUS_DELIVERED },
-              userType: USER_TYPE_CUSTOMER,
-            },
-          },
-        },
-        { canceled: { $exists: false } },
-        // status: {
-        //   $elemMatch: {
-        //     _id: customerId,
-        //     status: "customer",
-        //     userType: "customer",
-        //   },
-        // },
-      ],
-    })
-    .limit(20)
-    .toArray();
+
+  const orders = await db
+    .selectFrom('orders')
+    .innerJoin('orderProducts', (join) => join.onRef('orders.id', '=', 'orderProducts.orderId'))
+    .innerJoin('stores', (join) => join.onRef('orders.storeId', '=', 'stores.id'))
+    .groupBy('stores.id')
+    .select(buildJson(tStores, '*').as('stores'))
+    .select(buildJson<tOrderProduct>(tOrderProducts, '*').as('addedProducts'))
+
+    .selectAll('orders')
+    .groupBy('orders.id')
+    .limit(5)
+    .execute();
+  return orders;
+
   return result;
 };
 export const handler = async (event) => {

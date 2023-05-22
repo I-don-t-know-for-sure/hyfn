@@ -15,32 +15,32 @@ export const useSetProductAsPickedUp = () => {
   return useMutation(
     async ({
       orderId,
-      productKey,
+      productId,
 
       QTYFound,
     }: {
       orderId: string;
-      productKey: string;
+      productId: string;
       QTYFound: number;
     }) => {
       try {
         console.log(
           JSON.stringify([
             {
-              productKey,
+              productId,
               QTYFound,
             },
           ])
         );
         console.log({
-          productKey,
+          productId,
           QTYFound,
         });
         const result = await fetchUtil({
           reqData: [
             {
               orderId,
-              productKey,
+              productId,
               QTYFound,
             },
           ],

@@ -13,7 +13,7 @@ import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
 
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
@@ -131,10 +131,7 @@ const LogIn: React.FC<LogInProps> = () => {
                   });
                   setChangingPassword(false);
                 } catch (error) {
-                  console.log(
-                    "🚀 ~ file: LogIn.tsx:113 ~ onSubmit={changePasswordForm.onSubmit ~ error",
-                    error
-                  );
+                  console.error(error);
                 }
               })}
             >
@@ -173,7 +170,7 @@ const LogIn: React.FC<LogInProps> = () => {
                     code: string;
                     message: string;
                   };
-                  console.log(message, "shshshsh");
+
                   setException({ exception: true, message, code });
                 }
               }}
@@ -329,7 +326,7 @@ const LogIn: React.FC<LogInProps> = () => {
                 });
                 setChangingPassword(true);
               } catch (error) {
-                console.log("🚀 ~ file: LogIn.tsx:259 ~ error", error);
+                console.error(error);
               }
             }}
           >

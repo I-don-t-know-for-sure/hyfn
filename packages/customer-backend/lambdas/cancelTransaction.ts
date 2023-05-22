@@ -4,46 +4,35 @@ interface CancelTransactionProps extends Omit<MainFunctionProps, 'arg'> {
 import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 
-export const cancelTransaction = async ({ arg, client }: CancelTransactionProps) => {
-  const session = client.startSession();
-  const result = await withTransaction({
-    session,
-    fn: async () => {
-      const { transactionId } = arg[0];
-      const transactionDoc = await client
-        .db('generalData')
-        .collection('transactions')
-        .findOne({ _id: new ObjectId(transactionId) }, { session });
-      if (transactionDoc.validated) {
-        throw new Error('transaction validated');
-      }
-      await client
-        .db('generalData')
-        .collection('transactions')
-        .updateOne(
-          { _id: new ObjectId(transactionId) },
-          {
-            $set: {
-              canceled: true,
-            },
-          },
-          { session }
-        );
-      await client
-        .db('generalData')
-        .collection('customerInfo')
-        .updateOne(
-          { _id: new ObjectId(transactionDoc.customerId) },
-          {
-            $set: {
-              transactionId: undefined,
-            },
-          },
-          { session }
-        );
-    },
+export const cancelTransaction = async ({ arg, client, db }: CancelTransactionProps) => {
+  const result = await db.transaction().execute(async (trx) => {
+    const { transactionId } = arg[0];
+
+    const transactionDoc = await trx
+      .selectFrom('transactions')
+      .selectAll()
+      .where('id', '=', transactionId)
+      .executeTakeFirstOrThrow();
+    if (transactionDoc.status.includes('validated')) {
+      throw new Error('transaction validated');
+    }
+
+    await trx
+      .updateTable('transactions')
+      .set({
+        status: ['canceled'],
+      })
+      .where('id', '=', transactionId)
+      .executeTakeFirst();
+
+    await trx
+      .updateTable('customers')
+      .set({
+        transactionId: null,
+      })
+      .where('id', '=', transactionDoc.customerId)
+      .executeTakeFirst();
   });
-  await session.endSession();
   return result;
 };
 export const handler = async (event) => {

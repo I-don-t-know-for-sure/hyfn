@@ -5,41 +5,37 @@ import { ObjectId } from 'mongodb';
 interface ConfirmPickupProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-export const confirmPickup = async ({ arg, client, userId }: ConfirmPickupProps) => {
+export const confirmPickup = async ({ arg, client, userId, db }: ConfirmPickupProps) => {
   const { orderId, country, pickupConfirmation } = arg[0];
-  const { _id } = await client
-    .db('generalData')
-    .collection('driverData')
-    .findOne({ driverId: userId }, { projection: { _id: 1 } });
-  const orderDoc = await client
-    .db('base')
-    .collection('orders')
-    .findOne({ _id: new ObjectId(orderId) });
+
+  const { id } = await db
+    .selectFrom('drivers')
+    .select('id')
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
+
+  const orderDoc = await db
+    .selectFrom('orders')
+    .selectAll()
+    .where('id', '=', orderId)
+    .executeTakeFirstOrThrow();
   if (!orderDoc.serviceFeePaid) {
     throw new Error('service fee not paid');
   }
-  if (
-    orderDoc.status.find((status) => status.userType === USER_TYPE_DRIVER)._id !== _id.toString()
-  ) {
+  if (orderDoc.driverId !== id) {
     throw new Error('driver id does not match');
   }
-  const store = orderDoc.orders.find((store) => store.pickupConfirmation === pickupConfirmation);
-  if (!store) {
+
+  if (orderDoc.storePickupConfirmation !== pickupConfirmation) {
     throw new Error('pickup code did not match');
   }
-  await client
-    .db('base')
-    .collection('orders')
-    .updateOne(
-      { _id: new ObjectId(orderId) },
-      {
-        $set: {
-          ['orders.$[store].orderStatus']: ORDER_STATUS_PICKED,
-          ['status.$[store].status']: ORDER_STATUS_DELIVERED,
-        },
-      },
-      { arrayFilters: [{ 'store._id': new ObjectId(store._id) }] }
-    );
+
+  await db
+    .updateTable('orders')
+    .set({
+      storeStatus: [...orderDoc.storeStatus, 'pickedUp'],
+    })
+    .executeTakeFirst();
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: confirmPickup });

@@ -46,8 +46,6 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   });
   const queryClient = useQueryClient();
   useEffect(() => {
-    console.log("🚀 ~ file: User.tsx:11 ~ data", data);
-
     if (isFetched && !isLoading) {
       if (typeof data === "object") {
         if (Object.keys(data).length === 0) {
@@ -66,17 +64,12 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     email: string;
     password: string;
   }) => {
-    // try {
-    // the actual required field is username but we gave username and email have the same value
     const user = await Auth.signIn(email, password);
-    console.log("🚀 ~ file: User.tsx:50 ~ signIn ~ user", user);
+
     setUserId(user.username);
     setLoggedIn(true);
     await queryClient.resetQueries();
     refetch();
-    // } catch (error) {
-    //   console.log('error signing in', error)
-    // }
   };
 
   const signUp = async ({
@@ -100,11 +93,6 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         enabled: true,
       },
     });
-    console.log("🚀 ~ file: User.tsx:75 ~ signUp ~ user", user);
-    // setUserId(user)
-    // } catch (error) {
-    //   console.log('error signing up:', error)
-    // }
   };
 
   const resendConfirmationEmail = async ({
@@ -114,10 +102,6 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }) => {
     // try {
     await Auth.resendSignUp(username);
-    console.log("code resent successfully");
-    // } catch (err) {
-    //   console.log('error resending code: ', err)
-    // }
   };
 
   const confirmSignUp = async ({
@@ -129,19 +113,13 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     code: string;
     navigate: any;
   }) => {
-    // try {
     await Auth.confirmSignUp(email, code);
-    // const user = await Auth.currentAuthenticatedUser()
+
     await queryClient.resetQueries();
 
-    // setUserId(user.username)
     refetch();
     setLoggedIn(true);
     navigate("/", { replace: true });
-
-    // } catch (error) {
-    //   console.log('error confirming sign up', error)
-    // }
   };
 
   const signOut = async () => {
@@ -150,14 +128,9 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setLoggedIn(false);
     setUserId("");
     await queryClient.resetQueries();
-    // } catch (error) {
-    //   console.log('error signing out: ', error)
-    // }
   };
 
-  const resetPassword = () => {
-    console.log();
-  };
+  const resetPassword = () => {};
 
   const sendPasswordChangeConfirmationCode = async ({
     email,
@@ -166,10 +139,6 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }) => {
     // try {
     const data = await Auth.forgotPassword(email);
-    console.log(data);
-    // } catch (error) {
-    //   console.log(error)
-    // }
   };
   const changePasswordAndConfirmCode = async ({
     code,
@@ -180,11 +149,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     code: string;
     newPassword: string;
   }) => {
-    // try {
     Auth.forgotPasswordSubmit(email, code, newPassword);
-    // } catch (error) {
-    //   console.log(error)
-    // }
   };
 
   return (

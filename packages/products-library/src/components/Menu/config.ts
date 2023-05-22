@@ -70,9 +70,7 @@ export const useConfigData = () => {
     },
     {
       label: t("set store as opened"),
-      fn: () => {
-        console.log("config line 75 menu/components");
-      },
+      fn: () => {},
       icon: MdLogout,
     },
   ];

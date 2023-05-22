@@ -18,7 +18,7 @@ export const useSetOrderAsDelivered = () => {
     async ({ confirmationCode }: { confirmationCode: string }) => {
       try {
         const result = await fetchUtil({
-          reqData: [{ country, id: user?._id, confirmationCode }],
+          reqData: [{ country, id: user?.id, confirmationCode }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/setOrderAsDelivered`,
         });
 

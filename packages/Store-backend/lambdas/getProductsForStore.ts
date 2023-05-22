@@ -1,5 +1,4 @@
-export const getProductsForStoreHandler = async ({ arg, client }) => {
-  var products;
+export const getProductsForStoreHandler = async ({ arg, client, db }: MainFunctionProps) => {
   // return {
   //   statusCode: 200,
   //   body: "hello",
@@ -28,15 +27,12 @@ export const getProductsForStoreHandler = async ({ arg, client }) => {
           isActive: filter.active,
           storeId: id,
         };
-  console.log(JSON.stringify(queryDoc));
-  products = await client
-    .db('base')
-    .collection(`products`)
-    .find(queryDoc, {
-      projection: { _id: 1, textInfo: 1 },
-    })
-    .limit(6)
-    .toArray();
+
+  const products = await db
+    .selectFrom('products')
+    .select(['id', 'title'])
+    .where('storeId', '=', id)
+    .execute();
   return products;
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
 };

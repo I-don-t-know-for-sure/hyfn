@@ -1,16 +1,16 @@
-export const disableLocalCardKeysHandler = async ({ arg, client, userId }: MainFunctionProps) => {
-  await client
-    .db('generalData')
-    .collection('driverManagement')
-    .updateOne(
-      { userId },
-      {
-        $set: {
-          localCardAPIKeyFilled: false,
-        },
-      },
-      {}
-    );
+export const disableLocalCardKeysHandler = async ({
+  arg,
+  client,
+  userId,
+  db,
+}: MainFunctionProps) => {
+  await db
+    .updateTable('driverManagements')
+    .set({
+      localCardKeyFilled: false,
+    })
+    .where('userId', '=', userId)
+    .execute();
 };
 interface DisableLocalCardKeysProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';

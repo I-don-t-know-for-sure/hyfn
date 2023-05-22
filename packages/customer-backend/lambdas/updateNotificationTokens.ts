@@ -8,24 +8,22 @@ export const updateNotificationTokensHandler = async ({
   arg,
   client,
   userId,
+  db,
 }: UpdateNotificationTokensProps) => {
   const { notificationToken } = arg[0];
 
-  await client
-    .db('generalData')
-    .collection('customerInfo')
-    .updateOne(
-      { customerId: userId },
-      {
-        $push: {
-          notificationToken: {
-            $each: [notificationToken],
-            $slice: -5,
-          },
-        },
-      }
-    );
-
+  const customerDoc = await db
+    .selectFrom('customers')
+    .select('notificationTokens')
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
+  await db
+    .updateTable('customers')
+    .set({
+      notificationTokens: [...customerDoc.notificationTokens, notificationToken],
+    })
+    .where('userId', '=', userId)
+    .executeTakeFirst();
   return 'success';
 };
 

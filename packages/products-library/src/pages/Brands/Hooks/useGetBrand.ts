@@ -18,7 +18,7 @@ export const useGetBrand = ({ brandId }: { brandId: string }) => {
 
         return result;
       } catch (error) {
-        console.log("🚀 ~ file: useGetBrand.ts:21 ~ error:", error);
+        throw error;
       }
     },
     {

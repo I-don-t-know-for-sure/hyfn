@@ -4,23 +4,36 @@ import { deleteImages } from './common/utils/deleteImages';
 interface DeleteProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const deleteProductHandler = async ({ arg, client, userId }: DeleteProductProps) => {
+export const deleteProductHandler = async ({ arg, client, userId, db }: DeleteProductProps) => {
   const mongo = client;
   var result = 'initial';
-  const storeDoc = await client
-    .db('generalData')
-    .collection('storeInfo')
-    .findOne({ usersIds: userId }, {});
-  if (!storeDoc) throw new Error('store not found');
-  const id = storeDoc._id.toString();
+
+  const storeDoc = await db
+    .selectFrom('stores')
+    .selectAll()
+    .where('usersIds', '@>', [userId])
+    .executeTakeFirstOrThrow();
+
+  const id = storeDoc.id;
 
   const productId = arg[1];
-  const db = mongo.db('base');
-  const product = await db.collection(`products`).findOne({ _id: new ObjectId(productId) }, {});
+
+  const product = await db
+    .selectFrom('products')
+    .select('images')
+    .where('storeId', '==', id)
+    .where('id', '==', productId)
+    .executeTakeFirstOrThrow();
   if (product.images.length > 0) {
     await deleteImages(product.images);
   }
-  await db.collection(`products`).deleteOne({ storeId: id, _id: new ObjectId(productId) });
+
+  await db
+    .deleteFrom('products')
+    .where('storeId', '==', id)
+    .where('id', '==', productId)
+    .executeTakeFirstOrThrow();
+  result = 'deleted';
 
   return result;
 };

@@ -295,9 +295,9 @@ const ManageProducts: React.FC = () => {
                         >
                           <UnstyledButton
                             component={Link}
-                            to={`/products/${product._id.toString()}`}
+                            to={`/products/${product.id}`}
                           >
-                            {product.textInfo.title}
+                            {product.title}
                           </UnstyledButton>
                         </td>
                         <td
@@ -309,8 +309,8 @@ const ManageProducts: React.FC = () => {
                             variant="outline"
                             onClick={() => {
                               mutate({
-                                productId: product._id.toString(),
-                                title: product.textInfo.title,
+                                productId: product.id,
+                                title: product.title,
                               });
                             }}
                           >

@@ -22,6 +22,7 @@ const deleteLocalCardAPIKey = async ({ client, arg }: MainFunctionProps) => {
             },
           }
         );
+
       await client
         .db('generalData')
         .collection<Store>('storeInfo')

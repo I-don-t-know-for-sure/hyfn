@@ -13,17 +13,14 @@ const useUpdateStoreOwnerInfo = () => {
 
   return useMutation([], async (storeInfo: any) => {
     try {
-      const storeDoc = userDocument?.storeDoc as { id: string };
-      if (storeDoc) {
-        const result = await fetchUtil({
-          reqData: [userDocument.storeDoc, { ...storeInfo }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/updateStoreOwnerInfo`,
-        });
-        // await user?.functions.updateStoreOwnerInfo([
-        //   user?.customData.storeDoc,
-        //   { ...storeInfo },
-        // ]);
-      }
+      const result = await fetchUtil({
+        reqData: [userDocument.storeDoc, { ...storeInfo }],
+        url: `${import.meta.env.VITE_APP_BASE_URL}/updateStoreOwnerInfo`,
+      });
+      // await user?.functions.updateStoreOwnerInfo([
+      //   user?.customData.storeDoc,
+      //   { ...storeInfo },
+      // ]);
     } catch (e) {
       console.error(e);
     }

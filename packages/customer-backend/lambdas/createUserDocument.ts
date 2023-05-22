@@ -5,14 +5,17 @@ import { insertOne, mainWrapper } from 'hyfn-server/src';
 interface CreateUserDocumentProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-export const createUserDocument = async ({ arg, client, userId }: MainFunctionProps) => {
+export const createUserDocument = async ({ arg, client, userId, db }: MainFunctionProps) => {
   var result;
   const { country, ...customerInfo } = arg[0];
-  const insertCustomerResult = await client.db('generalData').collection('customerInfo').insertOne({
-    customerId: userId,
-    name: customerInfo.name,
-  });
-  insertOne({ insertOneResult: insertCustomerResult });
+
+  await db
+    .insertInto('customers')
+    .values({
+      userId,
+      name: customerInfo.name,
+    })
+    .executeTakeFirstOrThrow();
   result = 'success';
   return result;
 };

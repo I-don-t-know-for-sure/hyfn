@@ -9,23 +9,23 @@ export const updateNotificationTokensHandler = async ({
   arg,
   client,
   userId,
+  db,
 }: UpdateNotificationTokensProps) => {
   const { notificationToken } = arg[0];
+  const storeDoc = await db
+    .selectFrom('stores')
+    .select(['notificationToken'])
+    .where('usersIds', '@>', [userId])
+    .executeTakeFirstOrThrow();
 
-  await client
-    .db('generalData')
-    .collection('storeInfo')
-    .updateOne(
-      { userId },
-      {
-        $push: {
-          notificationToken: {
-            $each: [notificationToken],
-            $slice: -50,
-          },
-        },
-      }
-    );
+  await db
+    .updateTable('stores')
+    .set({
+      notificationToken: [...storeDoc.notificationToken, notificationToken],
+    })
+    .where('usersIds', '@>', [userId])
+    .execute();
+
   const app: app.App = firebaseApp();
   app.messaging().subscribeToTopic(notificationToken, 'orders');
   return 'success';

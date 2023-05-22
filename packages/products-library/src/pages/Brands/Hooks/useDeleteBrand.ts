@@ -18,10 +18,7 @@ export const useDeleteBrand = () => {
       });
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useDeleteBrand.ts:21 ~ returnuseMutation ~ error:",
-        error
-      );
+      throw error;
     }
   });
 };

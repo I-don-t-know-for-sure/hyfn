@@ -1,4 +1,4 @@
-export const updatePaymentSettingsHandler = async ({ arg, client }) => {
+export const updatePaymentSettingsHandler = async ({ arg, client }: MainFunctionProps) => {
   var result;
   const { storeId, userId } = arg[0];
   const storeDoc = await client

@@ -14,10 +14,7 @@ export const useCreatePaymentRequestObject = () => {
 
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useGetPaymentRequests.ts:8 ~ returnuseInfiniteQuery ~ error",
-        error
-      );
+      console.error(error);
     }
   });
 };

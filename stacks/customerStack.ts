@@ -68,6 +68,7 @@ export function customerApiStack({ stack }: StackContext) {
           sadadApiKey: config[stage].sadadApiKey,
 
           secretAccessKey: config[stage].secretAccessKey,
+          db_url: config[stage].db_url,
         },
         permissions: [],
       },

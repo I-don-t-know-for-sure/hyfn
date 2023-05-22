@@ -16,6 +16,7 @@ import {
   storePayment,
   subscriptionPayment,
 } from 'hyfn-types';
+import { v4 as uuidV4 } from 'uuid';
 import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
 import { MainFunctionProps, decryptData, withTransaction } from 'hyfn-server';
 import { mainWrapper } from 'hyfn-server';
@@ -35,348 +36,304 @@ import { KMS } from 'aws-sdk';
 interface createLocalCardTransaction extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-const createlocalCardTransaction = async ({ arg, client, userId }: createLocalCardTransaction) => {
+const createlocalCardTransaction = async ({
+  arg,
+  client,
+  userId,
+  db,
+}: createLocalCardTransaction) => {
   const { type, storeId, orderId, numberOfMonths, country } = arg[0];
-  const customerDoc = await client
-    .db('generalData')
-    .collection('customerInfo')
-    .findOne({ customerId: userId }, {});
+  const customerDoc = await db
+    .selectFrom('customers')
+    .selectAll()
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
 
-  if (!customerDoc) throw new Error('customer not found');
-
-  const customerId = customerDoc._id.toString();
+  const customerId = customerDoc.id;
   if (customerDoc.transactionId) {
     throw new Error('transaction in progress');
   }
-  const orderDoc = await client
-    .db('base')
-    .collection('orders')
-    .findOne({ _id: new ObjectId(orderId) }, {});
-  if (!orderDoc) {
-    throw new Error('order not found');
-  }
 
-  if (type === serviceFeePayment) {
-    if (orderDoc.orders.find((storeOrder) => storeOrder.orderStatus !== STORE_STATUS_ACCEPTED)) {
-      throw new Error('order not accepted yet');
-    }
+  const result = await db.transaction().execute(async (trx) => {
+    if (type === serviceFeePayment) {
+      const orderDoc = await trx
+        .selectFrom('orders')
+        .selectAll('orders')
+        .where('id', '=', orderId)
+        .executeTakeFirstOrThrow();
+      if (!orderDoc) {
+        throw new Error('order not found');
+      }
+      if (orderDoc.storeStatus[orderDoc.storeStatus.length - 1] !== 'accepted') {
+        throw new Error('order not accepted yet');
+      }
 
-    if (customerDoc._id.toString() !== orderDoc.userId) {
-      throw new Error('user id does not match');
-    }
-    if (orderDoc?.serviceFeePaid) {
-      throw new Error('service fee already paid');
-    }
-    const amount = orderDoc.serviceFee;
+      if (customerDoc.id !== orderDoc.customerId) {
+        throw new Error('user id does not match');
+      }
+      // if (orderDoc?.serviceFeePaid) {
+      //   throw new Error('service fee already paid');
+      // }
+      const amount = orderDoc.serviceFee;
 
-    const transactionId = new ObjectId();
-    const now = new Date();
-    console.log(transactionId);
+      const now = new Date();
 
-    const insertTransaction = await client.db('generalData').collection('transactions').insertOne(
-      {
-        _id: transactionId,
-        customerId,
+      const newTransaction = await trx
+        .insertInto('transactions')
+        .values({
+          customerId,
+          amount,
+          storeId: adminName,
+          orderId,
+          transactionMethod: 'localCard',
+
+          transactionDate: now,
+          status: ['initial'],
+          type,
+        })
+        .returning('id')
+        .executeTakeFirst();
+
+      await trx
+        .updateTable('customers')
+        .set({
+          transactionId: newTransaction.id,
+        })
+        .where('userId', '=', userId)
+        .executeTakeFirst();
+      const { MerchantId, TerminalId, secretKey } = getAdminLocalCardCreds();
+
+      const configurationObject = createLocalCardConfigurationObject({
+        includeLocalCardTransactionFeeToPrice: true,
+        secretKey,
+        now,
+
+        MerchantId,
+        TerminalId,
         amount: amount,
-        storeId: adminName,
-        orderId,
-        transactionDate: now,
-        validated: false,
-        type,
-      },
-      {}
-    );
-    await client
-      .db('generalData')
-      .collection('customerInfo')
-      .updateOne(
-        { _id: new ObjectId(customerId) },
-        {
-          $set: {
-            transactionId,
-          },
-        }
-      );
-    const { MerchantId, TerminalId, secretKey } = getAdminLocalCardCreds();
-    console.log('hdcbdh');
-    const configurationObject = createLocalCardConfigurationObject({
-      includeLocalCardTransactionFeeToPrice: true,
-      secretKey,
-      now,
-      MerchantId,
-      TerminalId,
-      amount: amount,
-      transactionId,
-    });
-    return { configurationObject };
-  }
+        transactionId: newTransaction.id,
+      });
+      return { configurationObject };
+    }
 
-  if (type === storePayment) {
-    const session = client.startSession();
-    const result = await withTransaction({
-      session,
-      fn: async () => {
-        const storeDoc = await client
-          .db('generalData')
-          .collection('storeInfo')
-          .findOne({ _id: new ObjectId(storeId) }, { session });
+    if (type === storePayment) {
+      const storeDoc = await trx
+        .selectFrom('stores')
+        .innerJoin('localCardKeys', 'stores.localCardApiKeyId', 'localCardKeys.id')
+        .selectAll('stores')
+        .select(['merchantId', 'terminalId', 'secretKey'])
+        .where('stores.id', '=', storeId)
+        .executeTakeFirstOrThrow();
 
-        if (!storeDoc) {
-          throw new Error('store document not found');
-        }
-        if (!storeDoc.localCardAPIKeyFilled) {
-          throw new Error('store does not support local card');
-        }
+      if (!storeDoc) {
+        throw new Error('store document not found');
+      }
+      if (!storeDoc.localCardApiKeyId) {
+        throw new Error('store does not support local card');
+      }
+      const orderDoc = await trx
+        .selectFrom('orders')
+        .selectAll()
+        .where('id', '=', orderId)
+        .executeTakeFirstOrThrow();
+      if (orderDoc.storeId !== storeDoc.id) throw new Error('store id does not match with order');
+      // const storeOrder = orderDoc.orders.find((store) => store._id.toString() === storeId);
+      if (orderDoc?.orderStatus[orderDoc?.orderStatus?.length - 1] === 'Canceled') {
+        throw new Error('store order was canceled');
+      }
+      if (orderDoc.storeStatus.includes('paid')) {
+        throw new Error('store is paid');
+      }
 
-        const storeOrder = orderDoc.orders.find((store) => store._id.toString() === storeId);
-        if (storeOrder.canceled) {
-          throw new Error('store order was canceled');
-        }
-        if (storeOrder.orderStatus === STORE_STATUS_PAID) {
-          throw new Error('store is paid');
-        }
+      const now = new Date();
 
-        const now = new Date();
-        const accepted = storeOrder.orderStatus === STORE_STATUS_ACCEPTED;
-        if (!accepted) {
-          throw new Error('Store did not accept order yet');
-        }
-        const paymentWindowCloseAt = new Date(storeOrder?.paymentWindowCloseAt);
-        if (paymentWindowCloseAt <= now) {
-          const updateOrder = await client
-            .db('base')
-            .collection('orders')
-            .updateOne(
-              { _id: new ObjectId(orderId) },
-              {
-                $set: {
-                  ['orders.$[store].orderStatus']: STORE_STATUS_PENDING,
-                  // ['status.$[store].status']: STORE_STATUS_PENDING,
-                },
-              },
-              { arrayFilters: [{ 'store._id': new ObjectId(storeId) }] }
-            );
-          //   updateOne({ updateOneResult: updateOrder });
-          throw new Error('Payment window closed');
-        }
-        // }
-        if (!orderDoc.serviceFeePaid) {
-          throw new Error('Service fee not paid');
-        }
-        const storePaid = storeOrder?.transactions?.some((transaction) => {
-          return transaction.validated;
+      if (!orderDoc.storeStatus.includes('accepted')) {
+        throw new Error('Store did not accept order yet');
+      }
+      const paymentWindowCloseAt = new Date(orderDoc?.paymentWindowCloseAt);
+      paymentWindowCloseAt.setHours(paymentWindowCloseAt.getHours() + 2);
+
+      if (paymentWindowCloseAt <= now) {
+        await db
+          .updateTable('orders')
+          .set({
+            storeStatus: [...orderDoc?.storeStatus?.filter((status) => status !== 'accepted')],
+          })
+          .where('id', '=', orderDoc.id)
+          .executeTakeFirst();
+
+        throw new Error('Payment window closed');
+      }
+
+      if (!orderDoc.serviceFeePaid) {
+        throw new Error('Service fee not paid');
+      }
+
+      const orderProducts = await trx
+        .selectFrom('orderProducts')
+        .where('orderId', '=', orderDoc.id)
+        .selectAll()
+        .execute();
+      const { amountToPay: amountToPayForProducts } =
+        calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({
+          storeOrder: { addedProducts: orderProducts },
         });
-        if (storePaid) {
-          throw new Error('Store already paid');
-        }
-        const { amountToPay: amountToPayForProducts } =
-          calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({
-            storeOrder,
-          });
-        const amountToPay = add(amountToPayForProducts, 0);
+      const amountToPay = add(amountToPayForProducts, 0);
 
-        const { TerminalId, MerchantId, secretKey: encryptedSecretKey } = storeDoc.localCardAPIKey;
+      const { terminalId, merchantId, secretKey: encryptedSecretKey } = storeDoc;
 
-        const kmsKeyARN = process.env.kmsKeyARN || '';
-        const kmsClient = new KMS();
+      const kmsKeyARN = process.env.kmsKeyARN || '';
+      const kmsClient = new KMS();
 
-        const secretKey = await decryptData({ data: encryptedSecretKey, kmsKeyARN, kmsClient });
+      const secretKey = await decryptData({ data: encryptedSecretKey, kmsKeyARN, kmsClient });
 
-        const transactionId = new ObjectId();
+      const newTransaction = await trx
+        .insertInto('transactions')
+        .values({
+          customerId,
+          orderId,
+          storeId,
+          // paymentMethod
+          transactionMethod: 'localCard',
 
-        const insertTransaction = await client
-          .db('generalData')
-          .collection('transactions')
-          .insertOne(
-            {
-              _id: transactionId,
-              customerId,
-              orderId,
-              storeId,
-              amount: amountToPay,
-              paymentMethod: paymentMethods.localCard,
-              // amount to return to customer if there were products that were not found in the store. the amount is the service fee for the products
-              // amountToReturnToCustomer,
-              transactionDate: now,
-              validated: false,
-              type,
-            },
-            { session }
-          );
+          amount: amountToPay,
+          transactionDate: now,
+          status: ['initial'],
+          type,
+        })
+        .returning('id')
+        .executeTakeFirst();
 
-        await client
-          .db('generalData')
-          .collection('customerInfo')
-          .updateOne(
-            { _id: new ObjectId(customerId) },
-            {
-              $set: {
-                transactionId,
-              },
-            }
-          );
-        // TODO add the transaction info to the store object in the order document
-        const updateOrder = await client
-          .db('base')
-          .collection('orders')
-          .updateOne(
-            {
-              _id: new ObjectId(orderId),
-            },
-            {
-              $push: {
-                [`orders.$[store].transactions`]: {
-                  _id: transactionId,
-                  paymentMethod: paymentMethods.localCard,
-                  amount: amountToPay,
-                  // amount to return to customer if there were products that were not found in the store. the amount is the service fee for the products
-                  transactionDate: now,
-                  validated: false,
-                },
-              },
-            },
-            {
-              arrayFilters: [{ 'store._id': new ObjectId(storeId) }],
-              session,
-            }
-          );
+      await trx
+        .updateTable('customers')
+        .set({
+          transactionId: newTransaction.id,
+        })
+        .where('userId', '=', userId)
+        .executeTakeFirst();
+      // TODO add the transaction info to the store object in the order document
 
-        const configurationObject = createLocalCardConfigurationObject({
-          includeLocalCardTransactionFeeToPrice: storeDoc.includeLocalCardFeeToPrice,
-          amount: amountToPay as number,
-          MerchantId,
-          now,
-          secretKey,
-          TerminalId,
-          transactionId,
-        });
-        return { configurationObject };
-      },
-    });
+      const configurationObject = createLocalCardConfigurationObject({
+        includeLocalCardTransactionFeeToPrice: storeDoc.includeLocalCardFeeToPrice,
+        amount: amountToPay as number,
+        MerchantId: merchantId,
+        now,
+        secretKey,
+        TerminalId: terminalId,
+        transactionId: newTransaction.id,
+      });
+      return { configurationObject };
+    }
+    if (type === subscriptionPayment) {
+      const amount = numberOfMonths * hyfnPlusSubscriptionPrice;
+      const now = new Date();
 
-    await session.endSession();
-    return result;
-  }
-  if (type === subscriptionPayment) {
-    const amount = numberOfMonths * hyfnPlusSubscriptionPrice;
-    const now = new Date();
-    const transactionId = new ObjectId();
-    await client.db('generalData').collection('transactions').insertOne({
-      customerId: customerDoc._id.toString(),
-      amount,
-      _id: transactionId,
-      storeId: adminName,
-      transactionDate: now,
-      validated: false,
-      type,
-      numberOfMonths,
-    });
-    await client
-      .db('generalData')
-      .collection('customerInfo')
-      .updateOne(
-        { _id: new ObjectId(customerDoc._id.toString()) },
-        {
-          $set: {
-            transactionId,
-          },
-        }
-      );
-    const { MerchantId, TerminalId, secretKey } = getAdminLocalCardCreds();
-    const configurationObject = await createLocalCardConfigurationObject({
-      amount,
-      includeLocalCardTransactionFeeToPrice: true,
-      now,
-      transactionId: transactionId,
-      MerchantId,
-      secretKey,
-      TerminalId,
-    });
-    return { configurationObject };
-  }
+      const newTransaction = await db
+        .insertInto('transactions')
+        .values({
+          customerId,
+          amount,
+          status: ['initial'],
+          transactionDate: now,
+          transactionMethod: 'localCard',
+          type,
+          numberOfMonths,
+        })
+        .returning('id')
+        .executeTakeFirst();
 
-  if (type === managementPayment) {
-    const session = client.startSession();
+      await db
+        .updateTable('customers')
+        .set({
+          transactionId: newTransaction.id,
+        })
+        .where('userId', '=', userId)
+        .executeTakeFirst();
+      const { MerchantId, TerminalId, secretKey } = getAdminLocalCardCreds();
+      const configurationObject = await createLocalCardConfigurationObject({
+        amount,
+        includeLocalCardTransactionFeeToPrice: true,
+        now,
+        transactionId: newTransaction.id,
+        MerchantId,
+        secretKey,
+        TerminalId,
+      });
+      return { configurationObject };
+    }
 
-    const result = await withTransaction({
-      session,
-      fn: async () => {
-        const userDoc = await client
-          .db('generalData')
-          .collection('customerInfo')
-          .findOne({ customerId: userId }, { session });
-        if (userDoc.transactionId) {
-          throw new Error('there is a transaction in progress');
-        }
-        const orderDoc = await client
-          .db('base')
-          .collection('orders')
-          .findOne({ _id: new ObjectId(orderId) }, { session });
-        if (orderDoc.delivered) {
-          throw new Error('Order delivered');
-        }
-        if (orderDoc.deliveryFeePaid) {
-          throw new Error('delivery fee already paid');
-        }
-        if (orderDoc.orderType === ORDER_TYPE_PICKUP) {
-          throw new Error('order type is pick up');
-        }
-        const managementDoc = await client
-          .db('generalData')
-          .collection('driverManagement')
-          .findOne({ _id: new ObjectId(orderDoc.driverManagement) }, { session });
-        const transactionId = new ObjectId();
-        const {
-          TerminalId,
-          MerchantId,
-          secretKey: encryptedSecretKey,
-        } = managementDoc.localCardKeys;
-        await client
-          .db('generalData')
-          .collection('customerInfo')
-          .updateOne(
-            { customerId: userId },
-            {
-              $set: {
-                transactionId: transactionId,
-              },
-            }
-          );
-        await client.db('generalData').collection('transactions').insertOne(
-          {
-            _id: transactionId,
-            storeId: orderDoc.driverManagement,
-            customerId: userDoc._id.toString(),
-            amount: orderDoc.deliveryFee,
-            validated: false,
-            type,
-            country: country,
-            orderId: orderId,
-          },
-          { session }
-        );
-        const kmsKeyARN = process.env.kmsKeyARN || '';
-        const secretKey = await decryptData({
-          data: encryptedSecretKey,
-          kmsKeyARN,
-          kmsClient: new KMS(),
-        });
-        const transactionObject = createLocalCardConfigurationObject({
+    if (type === managementPayment) {
+      const userDoc = await trx
+        .selectFrom('customers')
+        .selectAll()
+        .where('userId', '=', userId)
+        .executeTakeFirst();
+      if (userDoc.transactionId) {
+        throw new Error('there is a transaction in progress');
+      }
+
+      const orderDoc = await trx
+        .selectFrom('orders')
+        .selectAll()
+        .where('id', '=', orderId)
+        .executeTakeFirstOrThrow();
+
+      if (orderDoc?.orderStatus?.includes('delivered')) {
+        throw new Error('Order delivered');
+      }
+      // if (orderDoc.deliveryFeePaid) {
+      //   throw new Error('delivery fee already paid');
+      // }
+      if (orderDoc.orderType === ORDER_TYPE_PICKUP) {
+        throw new Error('order type is pick up');
+      }
+
+      const managementDoc = await trx
+        .selectFrom('driverManagements')
+        .selectAll()
+        .where('id', '=', orderDoc.driverManagement)
+        .executeTakeFirstOrThrow();
+      if (!managementDoc.localCardKeyFilled) throw new Error('no payment method');
+      const { terminalId, merchantId, secureKey: encryptedSecretKey } = managementDoc;
+
+      const newTransaction = await trx
+        .insertInto('transactions')
+        .values({
+          storeId: orderDoc.driverManagement,
+          customerId: orderDoc.customerId,
           amount: orderDoc.deliveryFee,
-          includeLocalCardTransactionFeeToPrice: true,
-          MerchantId,
-          now: new Date(),
-          secretKey,
-          TerminalId,
-          transactionId,
-        });
-        return { configurationObject: transactionObject };
-      },
-    });
-
-    await session.endSession();
-    return result;
-  }
+          status: ['initial'],
+          orderId,
+          type: 'managementPayment',
+        })
+        .returning('id')
+        .executeTakeFirst();
+      await trx
+        .updateTable('customers')
+        .set({
+          transactionId: newTransaction.id,
+        })
+        .where('id', '=', orderDoc.customerId)
+        .executeTakeFirst();
+      const kmsKeyARN = process.env.kmsKeyARN || '';
+      const secretKey = await decryptData({
+        data: encryptedSecretKey,
+        kmsKeyARN,
+        kmsClient: new KMS(),
+      });
+      const transactionObject = createLocalCardConfigurationObject({
+        amount: orderDoc.deliveryFee,
+        includeLocalCardTransactionFeeToPrice: true,
+        MerchantId: merchantId,
+        now: new Date(),
+        secretKey,
+        TerminalId: terminalId,
+        transactionId: newTransaction.id,
+      });
+      return { configurationObject: transactionObject };
+    }
+  });
+  return result;
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: createlocalCardTransaction });

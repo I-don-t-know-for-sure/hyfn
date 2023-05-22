@@ -40,7 +40,6 @@ function App() {
       identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
     },
   });
-  console.log("update");
 
   return (
     <BrowserRouter>

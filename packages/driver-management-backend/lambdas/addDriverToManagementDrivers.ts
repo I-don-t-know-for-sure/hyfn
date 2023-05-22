@@ -9,63 +9,53 @@ export const addDriverToManagementDriversHandler = async ({
   arg,
   client,
   userId,
+  db,
 }: MainFunctionProps) => {
-  const session = client.startSession();
-  const result = await withTransaction({
-    session,
-    fn: async () => {
-      const { driverId, balance } = arg[0];
-      const userDocument = await client
-        .db('generalData')
-        .collection('driverManagement')
-        .findOne({ userId }, { session });
-      const trustedBalance = parseFloat(balance);
+  const result = db.transaction().execute(async (trx) => {
+    const { driverId, balance } = arg[0];
 
-      const {
-        _id,
+    const userDocument = await trx
+      .selectFrom('driverManagements')
+      .selectAll()
+      .where('userId', '=', userId)
+      .executeTakeFirstOrThrow();
+    const trustedBalance = parseFloat(balance);
 
-        verified,
-      } = userDocument;
+    const {
+      id,
 
-      const managementId = _id.toString();
-      const driverDoc = await client
-        .db('generalData')
-        .collection('driverData')
-        .findOne({ _id: new ObjectId(driverId) }, { session });
+      verified,
+    } = userDocument;
 
-      const storeTrustsDriver = driverDoc?.driverManagement?.length > 0;
+    const managementId = id.toString();
 
-      if (storeTrustsDriver) {
-        throw new Error('this driver is trusted');
-      }
-      console.log('bchdbchdbcbd');
-      if (!verified) {
-        // if (smaller(availableBalance, trustedBalance)) {
-        throw new Error('You are not verified');
-        // }
-      }
-      await client
-        .db('generalData')
-        .collection('driverData')
-        .updateOne(
-          { _id: new ObjectId(driverId) },
-          {
-            $push: {
-              driverManagement: managementId,
-            },
-            $set: {
-              balance: trustedBalance,
-              verified: true,
-              // managementCut: managementDoc.managementCut,
-            },
-          },
-          { session }
-        );
+    const driverDoc = await trx
+      .selectFrom('drivers')
+      .selectAll()
+      .where('id', '=', driverId)
+      .executeTakeFirstOrThrow();
 
-      return 'driver was Add to trusted list';
-    },
+    if (driverDoc?.driverManagement) {
+      throw new Error('this driver is trusted');
+    }
+    console.log('bchdbchdbcbd');
+    if (!verified) {
+      // if (smaller(availableBalance, trustedBalance)) {
+      throw new Error('You are not verified');
+      // }
+    }
+
+    await trx
+      .updateTable('drivers')
+      .set({
+        balance: trustedBalance,
+        verified: true,
+        driverManagement: managementId,
+      })
+      .where('id', '=', driverId)
+      .execute();
+    return 'driver was Add to trusted list';
   });
-  await session.endSession();
   return result;
 };
 export const handler = async (event) => {

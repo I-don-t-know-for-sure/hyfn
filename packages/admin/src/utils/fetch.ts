@@ -17,9 +17,8 @@ const fetchUtil = async ({
   url: string;
   notifi?: boolean;
 }) => {
-  console.log("🚀 ~ file: fetch.ts:21 ~ url:", url);
   const notGet = !url.includes("get");
-  console.log("🚀 ~ file: fetch.ts:22 ~ notGet:", notGet);
+
   const accessTokenObject = await getAccessToken();
   const id = randomId();
 

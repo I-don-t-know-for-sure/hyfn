@@ -4,22 +4,22 @@ export const addProductWithOptionsToCart = (
   setCartInfo: any,
   city: string,
   country: string,
-  orderType?: string,
+  orderType?: string
 ) => {
   setCartInfo((prevState) => {
     const proto = {
       storeName: data?.storeName,
 
       image: data?.image,
-      _id: data._id.toString(),
+      id: data.id,
       city,
       country,
       storeType: data.storeType,
       currency: data.currency,
       coords: data.coords,
-      orderType: orderType || 'Delivery',
+      orderType: orderType || "Delivery",
       addedProducts: {
-        [product._id.toString()]: [
+        [product.id]: [
           {
             ...product,
           },
@@ -28,26 +28,26 @@ export const addProductWithOptionsToCart = (
     };
 
     if (!(Object.keys(prevState)?.length > 0)) {
-      return { [data._id.toString()]: proto };
+      return { [data.id]: proto };
     }
 
-    const targetedStore = prevState[data._id.toString()];
+    const targetedStore = prevState[data.id];
 
     if (!targetedStore) {
-      return { ...prevState, [data._id.toString()]: proto };
+      return { ...prevState, [data.id]: proto };
     }
 
     if (targetedStore) {
-      const newProduct = Array.isArray(targetedStore.addedProducts[product._id.toString()])
-        ? [...targetedStore.addedProducts[product._id.toString()], product]
+      const newProduct = Array.isArray(targetedStore.addedProducts[product.id])
+        ? [...targetedStore.addedProducts[product.id], product]
         : [product];
       const newState = {
         ...prevState,
-        [targetedStore._id]: {
-          ...prevState[targetedStore._id],
+        [targetedStore.id]: {
+          ...prevState[targetedStore.id],
           addedProducts: {
             ...targetedStore.addedProducts,
-            [product._id.toString()]: newProduct,
+            [product.id]: newProduct,
           },
         },
       };

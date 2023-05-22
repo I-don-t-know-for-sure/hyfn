@@ -31,17 +31,14 @@ export async function resizeAndSaveImages(origimage, dstBucket, imageKey, Jimp, 
     };
 
     const putResult = s3.putObject(destparams).promise();
-    console.log(putResult);
+
     promises.push(putResult);
   }
 
   try {
     const values = await Promise.allSettled(promises);
-    console.log(values);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return;
   }
-
-  console.log(`bucket = ${dstBucket} ... imageKey = ${imageKey}`);
 }

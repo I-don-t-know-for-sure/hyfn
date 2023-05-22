@@ -35,10 +35,9 @@ interface CreateCollectionProps {
 
 const CreateCollection: React.FC<CreateCollectionProps> = ({ requestType }) => {
   const [collectionInfo, setCollectionInfo] = useState<CollectionInfo>({
-    textInfo: {
-      title: "",
-      description: "",
-    },
+    title: "",
+    description: "",
+
     collectionType: "manual",
     isActive: true,
   });

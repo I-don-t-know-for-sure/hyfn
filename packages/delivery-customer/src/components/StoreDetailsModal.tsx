@@ -32,7 +32,7 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
   const [opened, setOpened] = useState(false);
   // const [{ coords }] = useLocation();
 
-  const coords = `${storeDetails.coords.coordinates[1]},${storeDetails.coords.coordinates[0]}`;
+  const coords = `${storeDetails.lat},${storeDetails.long}`;
   return (
     <>
       <Modal

@@ -1,16 +1,19 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { Kysely } from "kysely";
 import { MongoClient } from "mongodb";
+
+import { Database } from "../schemas";
 
 export interface MainFunctionProps {
   arg: any[];
   event: any;
-  client: MongoClient;
+  client?: MongoClient;
   userId: string;
   accessToken?: any;
   session?: any;
   ctx?: any;
   callback?: any;
-  db?: NodePgDatabase;
+
+  db?: Kysely<Database>;
 }
 
 export interface MainWrapperProps {

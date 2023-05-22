@@ -1,12 +1,13 @@
 "use strict";
 // TODO use object as function parameter
-import { getMongoClientWithIAMRole } from "./mongodb";
 
 import { cognitoAuthentication } from "./cognitoAuthentication";
 
 import { _200, _402 } from "./api_Respones";
 import { MainWrapperProps } from "./types";
-import { getPostgresClient } from "./getPostgresClient";
+
+import { getDb } from "./getDb";
+
 // import { mainValidateFunction } from './authentication';
 export const mainWrapper = async ({
   event,
@@ -15,11 +16,8 @@ export const mainWrapper = async ({
   validateUser = true,
 }: MainWrapperProps) => {
   try {
-    console.log("🚀 ~ file: mainWrapper.js:17 ~ mainWrapper ~ userDocument");
     var result;
     const arg = JSON.parse(event.body);
-
-    const client = await getMongoClientWithIAMRole();
 
     const { accessToken, userId } = arg[arg.length - 1];
 
@@ -30,13 +28,14 @@ export const mainWrapper = async ({
       });
     }
 
+    const db = await getDb();
+
     result = await mainFunction({
       arg: [...arg],
-      client,
       event,
       userId,
       accessToken,
-      db: await getPostgresClient(),
+      db,
     });
     result = _200(result);
   } catch (error: any) {

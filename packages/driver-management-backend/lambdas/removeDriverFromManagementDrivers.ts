@@ -3,69 +3,77 @@ export const removeDriverFromManagementDriversHandler = async ({
   client,
   userId,
   session,
+  db,
 }: MainFunctionProps) => {
   const { driverId } = arg[0];
-  const userDocument = await client
-    .db('generalData')
-    .collection('driverManageMent')
-    .findOne({ userId });
-  const { _id, verified } = userDocument;
-  const managementId = _id.toString();
-  const driverDoc = await client
-    .db('generalData')
-    .collection('driverData')
-    .findOne({ _id: new ObjectId(driverId) }, { session });
-  const storeTrustsDriver = driverDoc?.driverManagement[0] === _id.toString();
+
+  const userDocument = await db
+    .selectFrom('driverManagements')
+    .selectAll()
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
+  const { id, verified } = userDocument;
+  const managementId = id.toString();
+
+  const driverDoc = await db
+    .selectFrom('drivers')
+    .selectAll()
+    .where('id', '=', driverId)
+    .executeTakeFirstOrThrow();
+  const storeTrustsDriver = driverDoc?.driverManagement === id.toString();
   if (!storeTrustsDriver) {
     throw new Error('this driver is not in your list');
   }
-  const activeOrders = await client
-    .db('base')
-    .collection('orders')
-    .find(
-      {
-        status: {
-          $elemMatch: {
-            _id: _id.toString(),
-            userType: USER_TYPE_DRIVER,
-            status: { $ne: USER_STATUS_DELIVERED },
-          },
-        },
-      },
-      { session }
+  // const activeOrders = await client
+  //   .db('base')
+  //   .collection('orders')
+  //   .find(
+  //     {
+  //       status: {
+  //         $elemMatch: {
+  //           _id: id.toString(),
+  //           userType: USER_TYPE_DRIVER,
+  //           status: { $ne: USER_STATUS_DELIVERED },
+  //         },
+  //       },
+  //     },
+  //     { session }
+  //   )
+  //   .limit(1)
+  //   .toArray();
+  const activeOrders = await db
+    .selectFrom('orders')
+    .select('id')
+    .where(({ and, cmpr, not }) =>
+      and([
+        cmpr('driverId', '=', driverDoc.id),
+        not(
+          cmpr('orderStatus', '@>', sql`array[${sql.join(['delivered'] as tOrder['orderStatus'])}]`)
+        ),
+      ])
     )
     .limit(1)
-    .toArray();
-
+    .execute();
   if (activeOrders) {
-    await client
-      .db('generalData')
-      .collection('driverData')
-      .updateOne(
-        { _id: new ObjectId(driverId) },
-        {
-          $set: {
-            removeDriverAfterOrder: true,
-          },
-        },
-        { session }
-      );
+    await db
+      .updateTable('drivers')
+      .set({
+        removeDriverAfterOrder: true,
+      })
+      .where('id', '=', driverId)
+      .execute();
     return 'driver will be removed after they delivers their orders';
   }
 
-  await client
-    .db('generalData')
-    .collection('driverData')
-    .updateOne(
-      { _id: new ObjectId(driverId) },
-      {
-        $set: {
-          driverManagement: [],
-          balance: 0,
-        },
-      },
-      { session }
-    );
+  await db
+    .updateTable('drivers')
+    .set({
+      driverManagement: undefined,
+      balance: 0,
+      usedBalance: 0,
+    })
+    .where('id', '=', driverId)
+    .execute();
 
   return 'driver was removed from trusted list';
 };
@@ -74,8 +82,9 @@ interface RemoveDriverFromManagementDriversProps extends Omit<MainFunctionProps,
 }
 ('use strict');
 import { USER_STATUS_DELIVERED, USER_TYPE_DRIVER } from 'hyfn-types';
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper, tOrder } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
+import { sql } from 'kysely';
 export const handler = async (event) => {
   const result = await mainWrapper({
     event,

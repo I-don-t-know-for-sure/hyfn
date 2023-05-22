@@ -350,7 +350,7 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
                 fontSize: "28px",
               }}
             >
-              {product.textInfo.title}
+              {product.title}
             </Text>
             <Group spacing={3}>
               <Text>{storeDoc?.currency || "LYD"}</Text>
@@ -360,10 +360,7 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
                   color: theme.primaryColor,
                 })}
               >
-                {` ${
-                  product.pricing.price -
-                  product.pricing.price * storeServiceFee
-                } `}
+                {` ${product.price - product.price * storeServiceFee} `}
               </Text>
               <Text>{t("Per")}</Text>
               <Text color="red">{t(product?.measurementSystem)}</Text>
@@ -390,8 +387,8 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
             whiteSpace: "normal",
           }}
         >
-          <HtmlRenderer htmlString={product.textInfo.description} />
-          {/* <Text>{product.textInfo.description}</Text> */}
+          <HtmlRenderer htmlString={product.description} />
+          {/* <Text>{product.description}</Text> */}
         </Box>
       </Container>
     )

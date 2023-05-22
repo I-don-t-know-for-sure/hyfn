@@ -1,4 +1,4 @@
-export const setProductAsNotFoundHandler = async ({ arg, client }) => {
+export const setProductAsNotFoundHandler = async ({ arg, client }: MainFunctionProps) => {
   var result;
   const { productId, storeId, country, orderId } = arg[0];
   // const orderDoc = await findOne({_id: new ObjectId(orderId)}, {}, client.db("base").collection('orders'))
@@ -24,6 +24,7 @@ export const setProductAsNotFoundHandler = async ({ arg, client }) => {
         ],
       }
     );
+
   result = 'success';
   return result;
 };

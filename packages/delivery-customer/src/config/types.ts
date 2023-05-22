@@ -3,10 +3,10 @@ export interface Store {
   businessPhone: string;
   businessType: string;
   description: string;
-  image: string;
+  image: string[];
   city: string;
   country: string;
-  _id: any;
+  id: string;
   currentRating: string;
   ratingCount: number;
 }

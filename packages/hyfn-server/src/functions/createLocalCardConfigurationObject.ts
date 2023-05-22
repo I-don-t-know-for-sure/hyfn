@@ -1,8 +1,8 @@
-import { HmacSHA256 } from 'crypto-js';
-import { hex_to_ascii } from './hex_to_ascii';
-import { ObjectId } from 'mongodb';
-import { add, multiply } from 'mathjs';
-import { LOCAL_CARD_FEE } from 'hyfn-types';
+import { HmacSHA256 } from "crypto-js";
+import { hex_to_ascii } from "./hex_to_ascii";
+import { ObjectId } from "mongodb";
+import { add, multiply } from "mathjs";
+import { LOCAL_CARD_FEE } from "hyfn-types";
 
 export function createLocalCardConfigurationObject({
   secretKey,
@@ -11,21 +11,23 @@ export function createLocalCardConfigurationObject({
   TerminalId,
   amount,
   transactionId,
-  includeLocalCardTransactionFeeToPrice = false
+  includeLocalCardTransactionFeeToPrice = false,
 }: {
   secretKey: string;
   now: any;
   MerchantId: string;
   TerminalId: string;
   amount: number;
-  transactionId: ObjectId;
-  includeLocalCardTransactionFeeToPrice: boolean
+  transactionId: string;
+  includeLocalCardTransactionFeeToPrice: boolean;
 }) {
   const merchantKey = hex_to_ascii(secretKey);
-const amountWithFee = includeLocalCardTransactionFeeToPrice ? add(amount, multiply(amount,LOCAL_CARD_FEE )) : amount
+  const amountWithFee = includeLocalCardTransactionFeeToPrice
+    ? add(amount, multiply(amount, LOCAL_CARD_FEE))
+    : amount;
   const strHashData = `Amount=${parseInt(
     Math.round(amountWithFee * 1000).toFixed(3)
-  )}&DateTimeLocalTrxn=${now.getTime()}&MerchantId=${MerchantId}&MerchantReference=${transactionId.toString()}&TerminalId=${TerminalId}`;
+  )}&DateTimeLocalTrxn=${now.getTime()}&MerchantId=${MerchantId}&MerchantReference=${transactionId}&TerminalId=${TerminalId}`;
 
   const hashed = HmacSHA256(strHashData, merchantKey).toString().toUpperCase();
 
@@ -33,7 +35,7 @@ const amountWithFee = includeLocalCardTransactionFeeToPrice ? add(amount, multip
     MID: MerchantId,
     TID: TerminalId,
     AmountTrxn: parseInt(Math.round(amountWithFee * 1000).toFixed(2)),
-    MerchantReference: transactionId.toString(),
+    MerchantReference: transactionId,
     TrxDateTime: `${now.getTime()}`,
 
     SecureHash: hashed,

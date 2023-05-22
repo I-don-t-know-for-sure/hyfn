@@ -28,7 +28,6 @@ export const useCreateProduct = () => {
       // };
       const { files, ...productInfo } = product;
       const imagesURLs = await upload(files);
-      console.log(import.meta.env.VITE_APP_CREATE_PRODUCT_IN_LIBRARY);
 
       const data = await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/createProduct`,

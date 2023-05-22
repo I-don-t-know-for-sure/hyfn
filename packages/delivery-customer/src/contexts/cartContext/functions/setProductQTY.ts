@@ -1,11 +1,15 @@
-export const updateProductWithOptions = (data: any, product: any, setCartInfo: any) => {
+export const updateProductWithOptions = (
+  data: any,
+  product: any,
+  setCartInfo: any
+) => {
   setCartInfo((prevState) => {
-    const targetedStore = prevState[data._id.toString()];
+    const targetedStore = prevState[data.id];
 
     if (targetedStore) {
       const newState = {
         ...prevState,
-        [targetedStore._id]: {
+        [targetedStore.id]: {
           ...targetedStore,
           addedProducts: {
             ...targetedStore.addedProducts,

@@ -6,13 +6,7 @@ import { z } from 'zod';
 interface GetStoreFrontsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const getStoreFronts = async ({ arg, client }: GetStoreFrontsProps) => {
-  console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
-  console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
-  console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
-  console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
-  console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
-  console.log('🚀 ~ file: getStoreFronts.ts:4 ~ test4:', test4);
+export const getStoreFronts = async ({ arg, client, db }: GetStoreFrontsProps) => {
   const { country, city, coords, nearby } = arg[0];
   const { filter: storeType } = arg[1];
   const lastDoc = arg[2];
@@ -49,51 +43,13 @@ export const getStoreFronts = async ({ arg, client }: GetStoreFrontsProps) => {
       : {
           city,
         };
-  type Store = z.infer<typeof storeFrontSchema>;
-  console.log('🚀 ~ file: getStoreFronts.js:14 ~ mainFunction ~ query', city);
-  if (lastDoc) {
-    const stores = await client
-      .db('base')
-      .collection(`storeFronts`)
-      .find<Store>(
-        { ...query, _id: { $gt: new ObjectId(lastDoc) } },
-        {
-          projection: {
-            description: 1,
-            currentRating: 1,
-            _id: true,
-            image: 1,
-            storeName: true,
-            businessName: 1,
-            ratingCount: 1,
-            country: true,
-            city: 1,
-          },
-        }
-      )
-      .limit(20)
-      .toArray();
-    return stores;
-  }
-  const stores = await client
-    .db('base')
-    .collection(`storeFronts`)
-    .find(query, {
-      projection: {
-        description: 1,
-        currentRating: 1,
-        _id: true,
-        image: 1,
-        storeName: true,
-        businessName: 1,
-        ratingCount: 1,
-        country: true,
-        city: 1,
-      },
-    })
-    .limit(20)
-    .toArray();
+  const stores = await db
+    .selectFrom('stores')
+    .select(['storeName', 'description', 'image', 'id', 'storeType'])
+    .limit(5)
+    .execute();
   return stores;
+  // const stores = await db.selectFrom('stores').selectAll().execute()
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getStoreFronts });

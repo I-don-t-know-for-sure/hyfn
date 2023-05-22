@@ -5,8 +5,6 @@ export const useGetUserDocument = ({ userId }: { userId: string }) => {
   // const { userId } = useUser()
   return useQuery([userId], async () => {
     try {
-      console.log("shshshshjcdjcbdjcbdhcbhdbchbhd");
-
       if (!userId) {
         return false;
       }

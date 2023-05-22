@@ -25,6 +25,7 @@ export function storeApiStack({ stack }: StackContext) {
   const { auth } = use(storeCognitoStack);
   const { s3Bucket } = use(imagesBucketStack);
   const { key } = use(kmsStack);
+
   const keyArn = key.keyArn;
   const imagesBucketName = s3Bucket.bucketName;
 
@@ -33,7 +34,40 @@ export function storeApiStack({ stack }: StackContext) {
   const defaultFunction = new Function(stack, "defaultFunction", {
     handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
   });
+  const envVars = {
+    kmsKeyARN: keyArn,
+    //////////////////////////
+    chat_gpt_api_key: config[stage].chat_gpt_api_key,
 
+    MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+    accessKeyId: config[stage].accessKeyId,
+    bucketName: imagesBucketName,
+    bucketArn: s3Bucket.bucketArn,
+    groupId: config[stage].groupId,
+    moalmlatDataService: config[stage].moalmlatDataService,
+    userPoolId: auth.userPoolId,
+    userPoolClientId: auth.userPoolClientId,
+    mongoPrivetKey: config[stage].mongoPrivetKey,
+    mongoPublicKey: config[stage].mongoPublicKey,
+    region: stack.region,
+    sadadURL: config[stage].sadadURL,
+    secretKey: config[stage].secretKey,
+    MerchantId: config[stage].MerchantId,
+    TerminalId: config[stage].TerminalId,
+    mongdbURLKey: config[stage].mongdbURLKey,
+
+    sadadApiKey: config[stage].sadadApiKey,
+
+    secretAccessKey: config[stage].secretAccessKey,
+
+    //////////////////////////
+
+    db_url: config[stage].db_url,
+    //////////////////////////
+    clientEmail: config[""]["firebaseAdminSDK-client_email"],
+    projectId: config[""]["firebaseAdminSDK-project_id"],
+    privateKey: config[""]["firebaseAdminSDK-private_key"],
+  };
   const removeBackgrounds = new Function(stack, "removeBackgrounds", {
     handler: pathToLambdas + "setBackgroundWhite.handler",
     functionName: "setBackgroundWhite" + stack.stage,
@@ -41,29 +75,7 @@ export function storeApiStack({ stack }: StackContext) {
     timeout: 300,
     url: true,
     environment: {
-      kmsKeyARN: keyArn,
-      //////////////////////////
-      chat_gpt_api_key: config[stage].chat_gpt_api_key,
-
-      MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
-      accessKeyId: config[stage].accessKeyId,
-      bucketName: imagesBucketName,
-      bucketArn: s3Bucket.bucketArn,
-      groupId: config[stage].groupId,
-      moalmlatDataService: config[stage].moalmlatDataService,
-      userPoolId: auth.userPoolId,
-      userPoolClientId: auth.userPoolClientId,
-      mongoPrivetKey: config[stage].mongoPrivetKey,
-      mongoPublicKey: config[stage].mongoPublicKey,
-      region: stack.region,
-      sadadURL: config[stage].sadadURL,
-      secretKey: config[stage].secretKey,
-      MerchantId: config[stage].MerchantId,
-      TerminalId: config[stage].TerminalId,
-      mongdbURLKey: config[stage].mongdbURLKey,
-      sadadApiKey: config[stage].sadadApiKey,
-
-      secretAccessKey: config[stage].secretAccessKey,
+      ...envVars,
     },
   });
   const generateDescription = new Function(stack, "generateDescription", {
@@ -74,69 +86,23 @@ export function storeApiStack({ stack }: StackContext) {
     url: true,
     handler: pathToLambdas + "generateProductDescription.handler",
     environment: {
-      kmsKeyARN: keyArn,
-      //////////////////////////
-      chat_gpt_api_key: config[stage].chat_gpt_api_key,
-
-      MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
-      accessKeyId: config[stage].accessKeyId,
-      bucketName: imagesBucketName,
-      bucketArn: s3Bucket.bucketArn,
-      groupId: config[stage].groupId,
-      moalmlatDataService: config[stage].moalmlatDataService,
-      userPoolId: auth.userPoolId,
-      userPoolClientId: auth.userPoolClientId,
-      mongoPrivetKey: config[stage].mongoPrivetKey,
-      mongoPublicKey: config[stage].mongoPublicKey,
-      region: stack.region,
-      sadadURL: config[stage].sadadURL,
-      secretKey: config[stage].secretKey,
-      MerchantId: config[stage].MerchantId,
-      TerminalId: config[stage].TerminalId,
-      mongdbURLKey: config[stage].mongdbURLKey,
-
-      sadadApiKey: config[stage].sadadApiKey,
-
-      secretAccessKey: config[stage].secretAccessKey,
+      ...envVars,
     },
   });
 
   const api = new Api(stack, "storeApi", {
     defaults: {
       function: {
+        bind: [s3Bucket],
         role: defaultFunction.role,
         timeout: stack.stage === "development" ? 30 : 10,
+
         environment: {
-          kmsKeyARN: keyArn,
-          //////////////////////////
-          clientEmail: config[""]["firebaseAdminSDK-client_email"],
-          projectId: config[""]["firebaseAdminSDK-project_id"],
-          privateKey: config[""]["firebaseAdminSDK-private_key"],
-          chat_gpt_api_key: config[stage].chat_gpt_api_key,
+          ...envVars,
           generateProductDescriptionUrl: generateDescription.url || "",
-          MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
-          accessKeyId: config[stage].accessKeyId,
-          bucketArn: s3Bucket.bucketArn,
 
-          bucketName: imagesBucketName,
-          groupId: config[stage].groupId,
-          moalmlatDataService: config[stage].moalmlatDataService,
-          userPoolId: auth.userPoolId,
-          userPoolClientId: auth.userPoolClientId,
-          mongoPrivetKey: config[stage].mongoPrivetKey,
-          mongoPublicKey: config[stage].mongoPublicKey,
-          region: stack.region,
-          sadadURL: config[stage].sadadURL,
-          secretKey: config[stage].secretKey,
-          MerchantId: config[stage].MerchantId,
-          TerminalId: config[stage].TerminalId,
-          mongdbURLKey: config[stage].mongdbURLKey,
           removeBackgroundsURL: removeBackgrounds.url || "",
-          sadadApiKey: config[stage].sadadApiKey,
-
-          secretAccessKey: config[stage].secretAccessKey,
         },
-        permissions: [],
       },
     },
     routes: {

@@ -5,6 +5,6 @@ export const convertObjectToArray = (object) => {
       ...store,
     };
   });
-  console.log('🚀 ~ file: convertObjectToArray.js ~ line 9 ~ test ~ test', test);
+
   return test;
 };

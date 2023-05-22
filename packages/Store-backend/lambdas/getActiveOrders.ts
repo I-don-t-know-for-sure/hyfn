@@ -1,87 +1,24 @@
-export const getActiveOrdersHandler = async ({ arg, client }) => {
+export const getActiveOrdersHandler = async ({ arg, client, db, userId }: MainFunctionProps) => {
   const { id, lastDoc } = arg[0];
-  const db = client.db('base');
-  if (lastDoc) {
-    const orders = await db
-      .collection(`orders`)
-      .find({
-        _id: { $gt: new ObjectId(lastDoc) },
-        canceled: { $exists: false },
-        $or: [
-          {
-            $and: [
-              {
-                status: {
-                  $elemMatch: {
-                    _id: new ObjectId(id),
-                    userType: USER_TYPE_STORE,
-                    status: { $ne: ORDER_STATUS_DELIVERED },
-                  },
-                },
-              },
-              {
-                status: {
-                  $elemMatch: {
-                    userType: USER_TYPE_DRIVER,
-                    _id: { $ne: '' },
-                  },
-                },
-              },
-            ],
-          },
-          { orderType: ORDER_TYPE_PICKUP },
-        ],
-      })
-      .limit(20)
-      .toArray();
-    return orders;
-  }
+  const store = await db
+    .selectFrom('stores')
+    .selectAll()
+    .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]`)
+    .executeTakeFirstOrThrow();
   const orders = await db
-    .collection(`orders`)
-    .find({
-      canceled: { $exists: false },
-      $or: [
-        {
-          $and: [
-            {
-              status: {
-                $elemMatch: {
-                  _id: new ObjectId(id),
-                  userType: USER_TYPE_STORE,
-                  status: { $ne: ORDER_STATUS_DELIVERED },
-                },
-              },
-            },
-            // {
-            //   status: {
-            //     $elemMatch: {
-            //       userType: USER_TYPE_DRIVER,
-            //       _id: { $ne: '' },
-            //     },
-            //   },
-            // },
-          ],
-        },
-        {
-          $and: [
-            {
-              status: {
-                $elemMatch: {
-                  _id: new ObjectId(id),
-                  userType: USER_TYPE_STORE,
-                  status: { $ne: ORDER_STATUS_DELIVERED },
-                },
-              },
-            },
-            { orderType: ORDER_TYPE_PICKUP },
-          ],
-        },
-      ],
-    })
-    .limit(20)
-    .toArray();
-  console.log(JSON.stringify(orders));
-  return orders;
+    .selectFrom('orders')
+
+    .innerJoin('orderProducts', (join) => join.onRef('orderProducts.orderId', '=', 'orders.id'))
+    .groupBy('orders.id')
+    .select(buildJson(tOrderProducts, '*').as('addedProducts'))
+
+    .selectAll('orders')
+    .limit(5)
+    .where('orders.storeId', '=', store.id)
+    .where('orders.deliveryFee', '>=', 0)
+    .execute();
+  const mappedOrders = orders.map((order) => ({ ...order, stores: [store] }));
+  return mappedOrders;
 };
 interface GetActiveOrdersProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
@@ -94,7 +31,15 @@ import {
   USER_TYPE_DRIVER,
   USER_TYPE_STORE,
 } from 'hyfn-types';
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import {
+  MainFunctionProps,
+  buildJson,
+  mainWrapper,
+  tOrderProducts,
+  tOrders,
+  tStores,
+} from 'hyfn-server';
+import { sql } from 'kysely';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getActiveOrdersHandler });
 };

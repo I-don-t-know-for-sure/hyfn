@@ -31,7 +31,7 @@ export const useSearchProducts = (value: string) => {
         });
         return result;
       } catch (error) {
-        console.log("🚀 ~ file: useSearchProducts.ts:35 ~ error:", error);
+        throw error;
       }
     },
     {

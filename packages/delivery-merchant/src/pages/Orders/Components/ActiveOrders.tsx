@@ -54,7 +54,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
   // useEffect(() => {
   //   if (window.innerHeight + window.scrollY >= document.body.offsetHeight && Array.isArray(orders?.pages)) {
   //     fetchNextPage({
-  //       pageParam: orders?.pages[orders?.pages?.length - 1][orders?.pages[orders?.pages?.length - 1]?.length]?._id,
+  //       pageParam: orders?.pages[orders?.pages?.length - 1][orders?.pages[orders?.pages?.length - 1]?.length]?.id,
   //     })
   //   }
   // }, [scroll])
@@ -94,18 +94,26 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
               orders?.pages?.map((page) => {
                 return page
                   .filter((order) => {
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    console.log(
+                      "🚀 ~ file: ActiveOrders.tsx:97 ~ .filter ~ order:",
+                      order
                     );
-                    return storeOrder.orderStatus === "pending";
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
+                    );
+                    return (
+                      order.storeStatus[order.storeStatus.length - 1] ===
+                      "pending"
+                    );
                   })
                   .map((order) => {
-                    const driver = order.status.find((status) => {
-                      return status.userType === USER_TYPE_DRIVER;
-                    });
+                    const driver = {
+                      status: order.driverStatus,
+                      id: order.driverId,
+                    };
 
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
 
                     return (
@@ -144,18 +152,21 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
               orders?.pages?.map((page) => {
                 return page
                   .filter((order) => {
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
-                    return storeOrder.orderStatus === "paid";
+                    return (
+                      order.storeStatus[order.storeStatus.length - 1] === "paid"
+                    );
                   })
                   .map((order) => {
-                    const driver = order.status.find((status) => {
-                      return status.userType === USER_TYPE_DRIVER;
-                    });
+                    const driver = {
+                      status: order.driverStatus,
+                      id: order.driverId,
+                    };
 
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
 
                     return (
@@ -194,18 +205,22 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
               orders?.pages?.map((page) => {
                 return page
                   .filter((order) => {
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
-                    return storeOrder.orderStatus === "accepted";
+                    return (
+                      order.storeStatus[order.storeStatus.length - 1] ===
+                      "accepted"
+                    );
                   })
                   ?.map((order) => {
-                    const driver = order.status.find((status) => {
-                      return status.userType === USER_TYPE_DRIVER;
-                    });
+                    const driver = {
+                      status: order.driverStatus,
+                      id: order.driverId,
+                    };
 
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
 
                     return (
@@ -243,18 +258,18 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
               orders?.pages?.map((page) => {
                 return page
                   .filter((order) => {
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
-                    return storeOrder.orderStatus === "preparing";
+                    return storeorder.storestatus === "preparing";
                   })
                   ?.map((order) => {
                     const driver = order.status.find((status) => {
                       return status.userType === USER_TYPE_DRIVER;
                     });
 
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
 
                     return (
@@ -292,18 +307,22 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
               orders?.pages?.map((page) => {
                 return page
                   .filter((order) => {
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
-                    return storeOrder.orderStatus === "ready";
+                    return (
+                      order.storeStatus[order.storeStatus.length - 1] ===
+                      "ready"
+                    );
                   })
                   ?.map((order) => {
-                    const driver = order.status.find((status) => {
-                      return status.userType === USER_TYPE_DRIVER;
-                    });
+                    const driver = {
+                      status: order.driverStatus,
+                      id: order.driverId,
+                    };
 
-                    const storeOrder = order.orders.find(
-                      (store) => store._id === storeDocId
+                    const storeOrder = order.stores.find(
+                      (store) => store.id === storeDocId
                     );
 
                     return (
@@ -393,7 +412,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
               return status.userType === USER_TYPE_DRIVER
             })
 
-            const storeOrder = order.orders.find((store) => store._id === storeDocId)
+            const storeOrder = order.stores.find((store) => store.id === storeDocId)
 
             return (
               <ActiveOrder
@@ -425,7 +444,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
               pageParam:
                 orders?.pages[orders?.pages?.length - 1][
                   orders?.pages[orders?.pages?.length - 1]?.length - 1
-                ]?._id,
+                ]?.id,
             });
           }}
         >

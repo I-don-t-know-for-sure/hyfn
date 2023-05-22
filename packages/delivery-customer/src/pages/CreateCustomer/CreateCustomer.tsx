@@ -77,7 +77,6 @@ const CreateCustomer: React.FC = () => {
             <Button type="submit">{t("Submit")}</Button>
           </Group>
         </form>
-        <Button onClick={() => testNewDb()}>{"test"}</Button>
       </Card>
     </Container>
   );

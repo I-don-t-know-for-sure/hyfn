@@ -1,35 +1,62 @@
-import { boolean, json, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { InferModel } from "drizzle-orm";
+
+import {
+  boolean,
+  json,
+  jsonb,
+  numeric,
+  pgTable,
+  serial,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
 import { citiesArray } from "hyfn-types";
-
-type TextInfo = {
-  title: string;
-  description: string;
-};
-
-type Option = {
-  hasOptions: boolean;
-  options: {};
-};
-type Collection = {
-  label: string;
-  value: string;
-};
-type Pricing = {
-  pricing: string;
-  currency: "LYD";
-  prevPrice: string;
-};
+import * as z from "zod";
 
 export const products = pgTable("products", {
-  _id: serial("_id").primaryKey(),
-  textInfo: json("textInfo").$type<TextInfo>(),
-  pricing: json("pricing").$type<Pricing>(),
-  options: json("options").$type<Option>().array(),
-  measurementSystem: varchar("measurementSystem", { enum: [""] }),
-  collections: json("collections").$type<Collection>().array(),
-  collectionsIds: varchar("collectionsIds").array(),
-  isActive: boolean("isActive").default(false),
-  storeId: varchar("storeId"),
+  id: uuid("id").defaultRandom().primaryKey(),
+  storeId: uuid("store_id"),
+  price: numeric("price"),
+
+  currency: varchar("currency", { enum: [""] }),
+  prevPrice: numeric("prev_price"),
+  title: varchar("title"),
+  description: varchar("description"),
+  pricing: jsonb("pricing"),
+
+  options: jsonb("options").array(),
+  measurementSystem: varchar("measurement_system", { enum: [""] }),
+  whiteBackgroundImages: varchar("white_background_images").array(),
+  isActive: boolean("is_active").default(false),
+  hasOptions: boolean("has_options").default(false),
+
   images: varchar("images").array(),
-  city: varchar("city", { enum: citiesArray as [string, ...string[]] }),
+  city: varchar("city", { enum: citiesArray }),
 });
+
+const schema = createInsertSchema(products);
+export const zProduct = z.object({
+  ...schema.shape,
+
+  title: z.string(),
+  description: z.string(),
+
+  price: z.number(),
+  currency: z.enum([""]),
+  prevPrice: z.number(),
+
+  options: z.array(
+    z.object({
+      minimumNumberOfOptionsForUserToSelect: z.number(),
+      maximumNumberOfOptionsForUserToSelect: z.number(),
+      key: z.string(),
+      isRequired: z.boolean(),
+      optionName: z.string(),
+      optionValues: z.array(z.any()),
+    })
+  ),
+});
+
+// export type Product = InferModel<typeof products>;

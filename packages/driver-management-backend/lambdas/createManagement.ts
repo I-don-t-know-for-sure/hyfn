@@ -3,27 +3,27 @@ import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 interface CreateManagementProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-export const createManagementHandler = async ({ arg, client, userId }: CreateManagementProps) => {
+export const createManagementHandler = async ({
+  arg,
+  client,
+  userId,
+  db,
+}: CreateManagementProps) => {
   const { balance, ...managerInfo } = arg[0];
-  await client
-    .db('generalData')
-    .collection('driverManagement')
-    .insertOne(
-      {
-        ...managerInfo,
-        userId,
 
-        balance: 0,
-        usedBalance: 0,
-        usersIds: [userId],
-        users: {
-          [userId]: {
-            userType: 'owner',
-          },
-        },
-      },
-      {}
-    );
+  await db
+    .insertInto('driverManagements')
+    .values({
+      country: managerInfo.country,
+      userId,
+      usersIds: [userId],
+      users: [{ userId, userType: 'owner' }],
+      managementAddress: managerInfo.managementAddress,
+      managementName: managerInfo.managementName,
+      managementPhone: managerInfo.managementPhone,
+      verified: false,
+    })
+    .execute();
   return 'sucess';
 };
 export const handler = async (event) => {

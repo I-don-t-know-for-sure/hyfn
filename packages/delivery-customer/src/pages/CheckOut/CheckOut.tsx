@@ -44,9 +44,13 @@ import {
   ORDER_TYPE_DELIVERY,
   ORDER_TYPE_PICKUP,
   STORE_TYPE_RESTAURANT,
+  storeAndCustomerServiceFee,
 } from "hyfn-types";
 import { useNavigate, useLocation as useRouteLocation } from "react-router-dom";
 import { useCreateLocalCardTransaction } from "../../hooks/useCreateLocalCardTransaction";
+import { calculateOrderCost } from "util/calculateOrderCost";
+import { add, multiply } from "mathjs";
+import { baseServiceFee } from "hyfn-types";
 
 interface CheckOutProps {}
 
@@ -71,6 +75,29 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const routeLocation = useRouteLocation();
   const [state, setState] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
+  const { cart, changeOrderType, clearCart, setCartInfo } = useCart();
+
+  const [cartArray, setCartArray] = useState([]);
+  useEffect(() => {
+    const array = convertObjectToArray(cart);
+
+    // we will have only one store per order so we will find the store that
+    // the customer wants to order from based on what they clicked on in the cart page
+    if (!routeLocation?.state?.storeId) {
+      navigate("/cart", { replace: true });
+      return;
+    }
+    const storeToOrderFrom = array.find((store) => {
+      return store.id === routeLocation?.state?.storeId;
+    });
+    setCurrency(storeToOrderFrom.currency);
+    setCartArray([storeToOrderFrom]);
+  }, [cart]);
+  const orderCost = calculateOrderCost(cartArray);
+  const serviceFee = parseFloat(
+    add(multiply(orderCost, storeAndCustomerServiceFee), baseServiceFee) as any
+  ).toFixed(2);
+  const totalCost = add(orderCost, serviceFee);
   const [deliveryDate, setDeliveryDate] = useState(
     (() => {
       const now = new Date();
@@ -88,12 +115,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
     refetch,
   } = useGetUserDocument({ userId });
   const createLocalCardTransaction = useCreateLocalCardTransaction();
-  const { cart } = useCart();
-  console.log(
-    "🚀 ~ file: CheckOut.tsx:68 ~ cart",
-    cart,
-    cart[routeLocation?.state?.storeId]
-  );
 
   useEffect(() => {
     if (typeof cart[routeLocation?.state?.storeId] === "object") {
@@ -104,19 +125,12 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const [, setManualLocation] = useState(false);
   const balance = userCustomData?.balance;
   const [{ coords: userCoords }, setLocation] = useLocation();
-  const [
-    { distance, duration, orderCost, deliveryFee, totalCost, serviceFee },
-    setDeliveryDetails,
-  ] = useState<any>({
-    distance: 0,
-    duration: 0,
-  });
-  console.log("🚀 ~ file: CheckOut.tsx:68 ~ orderType", orderType);
+  const [{ distance, duration, deliveryFee }, setDeliveryDetails] =
+    useState<any>({
+      distance: 0,
+      duration: 0,
+    });
 
-  console.log(distance, duration, orderCost, deliveryFee, serviceFee);
-  console.log(typeof serviceFee);
-
-  console.log(userCoords);
   const initialValues = {
     location: `${userCoords[0]},${userCoords[1]}`,
     address: "",
@@ -135,8 +149,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const addresses = userCustomData?.addresses as any[];
   const customerBalanceIsSuffictient = serviceFee < balance;
   const selectAddresses = addresses?.map((address) => {
-    console.log(address?.coords[0].toString());
-
     return {
       label: address?.label,
       value: address?.key,
@@ -153,22 +165,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const { mutate: createOrderMutation } = useCreateOrder();
   // const coords = getStoresCoords(cart);
 
-  const [cartArray, setCartArray] = useState([]);
-  useEffect(() => {
-    const array = convertObjectToArray(cart);
-    console.log(array);
-    // we will have only one store per order so we will find the store that
-    // the customer wants to order from based on what they clicked on in the cart page
-    if (!routeLocation?.state?.storeId) {
-      navigate("/cart", { replace: true });
-      return;
-    }
-    const storeToOrderFrom = array.find((store) => {
-      return store._id === routeLocation?.state?.storeId;
-    });
-    setCurrency(storeToOrderFrom.currency);
-    setCartArray([storeToOrderFrom]);
-  }, [cart]);
   useEffect(() => {
     if (isSuccess) {
       refetch();
@@ -176,24 +172,11 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   }, [isSuccess]);
   useEffect(() => {
     if (addressKey) {
-      console.log(
-        "🚀 ~ file: CheckOut.tsx ~ line 123 ~ useEffect ~ addressKey",
-        addressKey,
-        addresses
-      );
       const address = addresses.find(({ key }) => {
         return key === addressKey;
       });
-      console.log(
-        "🚀 ~ file: CheckOut.tsx ~ line 124 ~ useEffect ~ address",
-        address
-      );
-      if (address) {
-        console.log(
-          "🚀 ~ file: CheckOut.tsx ~ line 125 ~ useEffect ~ address",
-          address
-        );
 
+      if (address) {
         form.setValues({
           address: address.locationDescription,
           location: convertCoordsArraytoString(address.coords),
@@ -205,8 +188,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const requestHandler = () => {
     const doesOrderExist = userCustomData.order;
 
-    console.log(doesOrderExist);
-
     if (doesOrderExist) {
       const { orders: userOrderCart } = userCustomData.order as {
         orders: any;
@@ -214,14 +195,14 @@ const CheckOut: React.FC<CheckOutProps> = () => {
 
       const change = Object.keys(cart).some((cartStoreId) => {
         const cartStore = cart[cartStoreId];
-        const userStore = userOrderCart[cartStore._id];
+        const userStore = userOrderCart[cartStore.id];
         if (!userStore) {
           return true;
         }
 
         Object.keys(cartStore.addedProducts).some((cartProductId) => {
           const cartProduct = cartStore.addedProducts[cartProductId];
-          const userProduct = userStore.addedProducts[cartProduct._id];
+          const userProduct = userStore.addedProducts[cartProduct.id];
           if (!userProduct) {
             return true;
           }
@@ -280,7 +261,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
     });
     //alert(`lat: ${res.coords.latitude}, long: ${res.coords.longitude}`);
   };
-  console.log(data, 111111);
 
   return (
     <Container>
@@ -302,47 +282,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                 style={{
                   width: "100%",
                 }}
-                onSubmit={form.onSubmit((values) => {
-                  setLocation((prev) => {
-                    const { location: coordinates, address } = values;
-                    if (typeof coordinates !== "string") {
-                      console.log({
-                        city: prev.city,
-                        country: prev.country,
-                        coords: coordinates,
-                        address: prev.address,
-                      });
-
-                      return {
-                        city: prev.city,
-                        country: prev.country,
-                        coords: coordinates,
-                        address: prev.address,
-                      };
-                    }
-                    const proccessed = coordinates.split(",");
-                    console.log({
-                      city: prev.city,
-                      country: prev.country,
-                      coords: [
-                        parseFloat(proccessed[0]),
-                        parseFloat(proccessed[1]),
-                      ],
-                      address: address,
-                    });
-
-                    return {
-                      city: prev.city,
-                      country: prev.country,
-                      coords: [
-                        parseFloat(proccessed[0]),
-                        parseFloat(proccessed[1]),
-                      ],
-                      address: address,
-                    };
-                  });
-                  requestHandler();
-                })}
               >
                 <Button
                   type="button"
@@ -433,16 +372,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                   }}
                   label={t("Pick Date")}
                 />
-
-                <Button
-                  sx={{
-                    width: "100%",
-                    marginTop: "38px",
-                  }}
-                  type={"submit"}
-                >
-                  {t("request")}
-                </Button>
               </form>
             </Box>
 
@@ -454,81 +383,38 @@ const CheckOut: React.FC<CheckOutProps> = () => {
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
-      {(orderChanged && isLoading) || isIdle || !userCustomData?.order ? (
-        <Box mt={16}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text>{t("Subtotal")}</Text>
-            <Skeleton height={15} width={90} />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text>{t("Delivery")}</Text>
-            <Skeleton height={15} width={90} />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text>{t("Service fee")}</Text>
-            <Skeleton height={15} width={90} />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: 6,
-            }}
-          >
-            <Text weight={600}>{t("Total")}</Text>
-            <Skeleton height={15} width={90} />
-          </Box>
-        </Box>
-      ) : (
-        ((orderChanged && !isLoading) || !orderChanged) && (
-          <Box mt={16}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>{t("Subtotal")}</Text>
-              <Text>{`${currency || "LYD"} ${orderCost}`}</Text>
-            </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>{t("Service fee")}</Text>
-              <Text>{`${currency || "LYD"} ${serviceFee}`}</Text>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: 6,
-              }}
-            >
-              <Text weight={600}>{t("Total")}</Text>
-              <Text>{`${currency || "LYD"} ${totalCost}`}</Text>
-            </Box>
-          </Box>
-        )
-      )}
+      <Box mt={16}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text>{t("Subtotal")}</Text>
+          <Text>{`${currency || "LYD"} ${orderCost}`}</Text>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text>{t("Service fee")}</Text>
+          <Text>{`${currency || "LYD"} ${serviceFee}`}</Text>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: 6,
+          }}
+        >
+          <Text weight={600}>{t("Total")}</Text>
+          <Text>{`${currency || "LYD"} ${totalCost}`}</Text>
+        </Box>
+      </Box>
 
       <Button
         // disabled={}
@@ -538,7 +424,26 @@ const CheckOut: React.FC<CheckOutProps> = () => {
         }}
         onClick={() => {
           try {
-            createOrderMutation();
+            setLocation((prev) => {
+              const { location: coordinates, address } = form.values;
+              if (typeof coordinates !== "string") {
+                return {
+                  city: prev.city,
+                  country: prev.country,
+                  coords: coordinates,
+                  address: prev.address,
+                };
+              }
+              const proccessed = coordinates.split(",");
+
+              return {
+                city: prev.city,
+                country: prev.country,
+                coords: [parseFloat(proccessed[0]), parseFloat(proccessed[1])],
+                address: address,
+              };
+            });
+            requestHandler();
           } catch (e) {
             console.error(e);
           }

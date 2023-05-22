@@ -17,17 +17,23 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
 }) => {
   const { mutate: takeOrder } = useTakeOrder();
   console.log("🚀 ~ file: AvailableOrder.tsx:63 ~ userDocument:", userDocument);
-  const driverManagement = Array.isArray(userDocument?.driverManagement)
-    ? userDocument?.driverManagement[0]
-    : "";
-
+  const driverManagement = userDocument.driverManagement;
+  const acceptedProposal = order.acceptedProposal
+    ? order.proposals.find(
+        (porposal) => porposal.driverId === order.acceptedProposal
+      )
+    : {};
+  console.log(
+    "🚀 ~ file: AvailableOrder.tsx:24 ~ acceptedProposal:",
+    acceptedProposal
+  );
   return (
-    <Card m={"24px auto"} key={order?._id.toString()}>
+    <Card m={"24px auto"} key={order?.id}>
       <Group>
-        <Text>{order?._id.toString()}</Text>
+        <Text>{order?.id}</Text>
 
         <CopyButton
-          value={`${order?.coords?.coordinates[0][1]},${order?.coords?.coordinates[0][0]}`}
+          value={`${order?.stores[0].lat},${order?.stores[0].long}`}
         />
         <DateTimePicker
           value={new Date(order.deliveryDate)}
@@ -46,12 +52,12 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
         }}
       >
         <ProposalModal
-          orderId={order._id.toString()}
+          orderId={order.id}
           proposal={order?.proposals?.find(
-            (proposal) => proposal?.managementId === driverManagement
+            (proposal) => proposal?.driverId === userDocument.id
           )}
         />
-        {driverManagement === order.acceptedProposal && (
+        {driverManagement === acceptedProposal.managementId && (
           <Group>
             <Button
               onClick={() => {
@@ -59,7 +65,7 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
                   "sjnhdbchdbchdbchdbchbdchbhdbchdhbdhcbhdbchbdhcbhdcbhdbchbdho"
                 );
 
-                takeOrder({ orderId: order._id.toString() });
+                takeOrder({ orderId: order.id });
               }}
             >
               {t("Take order")}
@@ -69,7 +75,7 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
         <Button
           target="_blank"
           rel="noopener noreferrer"
-          to={`https://www.google.com/maps/search/?api=1&query=${order?.coords?.coordinates[0][1]},${order?.coords?.coordinates[0][0]}`}
+          to={`https://www.google.com/maps/search/?api=1&query=${order?.stores[0].lat},${order?.stores[0].long}`}
           component={Link}
         >
           {t("See on map")}

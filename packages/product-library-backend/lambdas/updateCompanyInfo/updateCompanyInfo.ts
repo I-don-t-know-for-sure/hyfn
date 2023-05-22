@@ -1,4 +1,7 @@
-export const updateCompanyInfoHandler = async ({ arg, client }) => {
+export const updateCompanyInfoHandler = async ({
+  arg,
+  client,
+}: MainFunctionProps) => {
   var result;
   const { companyFrontId, id, city, country } = arg[0];
   const newInfo = arg[1];
@@ -6,12 +9,12 @@ export const updateCompanyInfoHandler = async ({ arg, client }) => {
   const mongo = client.db("base");
   const companyCollection = client.db("generalData").collection(`companyInfo`);
   const coordsArray = newcompany.coords.split(",");
-  console.log(JSON.stringify(coordsArray));
+
   if (Array.isArray(coordsArray)) {
     if (coordsArray.length === 2) {
       const float1 = parseFloat(coordsArray[0]);
       const float2 = parseFloat(coordsArray[1]);
-      console.log(JSON.stringify(coordsArray));
+
       const coords = { type: "Point", coordinates: [float2, float1] };
       await companyCollection.updateOne(
         { _id: new ObjectId(id) },

@@ -6,28 +6,14 @@ import { MainFunctionProps } from 'hyfn-server/src';
 interface GetTransactionsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-const getTransactions = async ({ arg, client }: GetTransactionsProps) => {
+const getTransactions = async ({ arg, client, db }: GetTransactionsProps) => {
   const { customerId, lastDoc } = arg[0];
-  if (lastDoc) {
-    const transactions = await client
-      .db('generalData')
-      .collection('transactions')
-      .find({
-        _id: { $gt: new ObjectId(lastDoc) },
-        customerId,
-      })
-      .limit(20)
-      .toArray();
-    return transactions;
-  }
-  const transactions = await client
-    .db('generalData')
-    .collection('transactions')
-    .find({
-      customerId,
-    })
-    .limit(20)
-    .toArray();
+
+  const transactions = await db
+    .selectFrom('transactions')
+    .selectAll()
+    .where('customerId', '=', customerId)
+    .execute();
   return transactions;
 };
 export const handler = async (event) => {

@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import React, { useEffect } from "react";
 import { useGetPaymentRequests } from "./hooks/useGetPaymentRequests";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useCreatePaymentRequestObject } from "./hooks/useCreatePaymentRequestObject";
 import { useCompletePaymentRequest } from "./hooks/useCompletePaymentRequest";
 
@@ -36,10 +36,7 @@ const PaymentRequests: React.FC<PaymentRequestsProps> = ({}) => {
   useEffect(() => {
     if (!isCreatingPaymentObject && isSuccess && paymentRequests && !isIdle) {
       const { configurationObject } = data;
-      console.log(
-        "🚀 ~ file: PayWithLocalCard.tsx ~ line 20 ~ useEffect ~ configurationObject",
-        configurationObject
-      );
+      console.error(configurationObject);
       const queryString =
         "?" +
         new URLSearchParams({
@@ -48,20 +45,6 @@ const PaymentRequests: React.FC<PaymentRequestsProps> = ({}) => {
           colorScheme,
         }).toString();
       window.open(`${import.meta.env.VITE_APP_PAYMENT_APP_URL}` + queryString);
-      // window.Lightbox.Checkout.configure = {
-      //   ...configurationObject,
-
-      //   completeCallback: function (data) {
-      //     console.log('🚀 ~ file: usePayWithLocalCard.ts ~ line 63 ~ useEffect ~ data success', data);
-      //   },
-      //   errorCallback: function (error) {
-      //     console.log(error);
-      //   },
-      //   cancelCallback: function () {
-      //     setPaying(false);
-      //   },
-      // };
-      // window.Lightbox.Checkout.showLightbox();
     }
   }, [isCreatingPaymentObject, isSuccess]);
 

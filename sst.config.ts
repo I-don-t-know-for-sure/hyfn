@@ -35,6 +35,7 @@ export default {
       .stack(imagesBucketStack)
       .stack(authBucketStack)
       .stack(kmsStack)
+
       .stack(storeCognitoStack)
       .stack(storeApiStack)
       .stack(customerCognitoStack)

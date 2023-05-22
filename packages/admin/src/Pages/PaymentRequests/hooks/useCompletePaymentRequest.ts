@@ -10,10 +10,7 @@ export const useCompletePaymentRequest = () => {
       });
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useCompletePaymentRequest.ts:8 ~ returnuseMutation ~ error",
-        error
-      );
+      console.error(error);
     }
   });
 };

@@ -16,12 +16,10 @@ export const handler = async (event, ctx) => {
     const region = process.env.region;
     const bucketName = process.env.bucketName;
     const { accessKeyId, secretAccessKey } = {
-      //accessKeyId: "AKIAYTHGFE3UDZTFZJYR",
-      //secretAccessKey: "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",
       accessKeyId: process.env.accessKeyId,
       secretAccessKey: process.env.secretAccessKey,
     };
-    console.log(accessKeyId, secretAccessKey);
+
     const s3 = new aws.S3({
       region,
       accessKeyId,

@@ -63,7 +63,6 @@ const ManageProducts: React.FC = () => {
     }
   }, [filterText, data, searchResults, isLoading, areResultsLoading]);
   const [selectedProducts, setSelectedProducts] = useState([]);
-  console.log(data);
 
   return (
     <>

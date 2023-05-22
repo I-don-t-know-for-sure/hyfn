@@ -464,7 +464,7 @@ export function calculateOrderCost(storesArray) {
         '🚀 ~ file: utils.js:559 ~ productValuesPrice=product.options.reduce ~ productValuesPrice',
         productValuesPrice
       );
-      const productTotalPrice = add(product.pricing.price, productValuesPrice);
+      const productTotalPrice = add(product.price, productValuesPrice);
       console.log('hcbdhcbdhbcdhcdbhdbchbdhb', productTotalPrice * product.qty);
       return add(acc, multiply(productTotalPrice, product.qty));
     }, 0);

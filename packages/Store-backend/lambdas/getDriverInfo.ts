@@ -1,9 +1,11 @@
-export const getDriverInfoHandler = async ({ arg, client }) => {
+export const getDriverInfoHandler = async ({ arg, client, db }: MainFunctionProps) => {
   const { driverId } = arg[0];
-  const driverDoc = await client
-    .db('generalData')
-    .collection('driverData')
-    .findOne({ _id: new ObjectId(driverId) }, {});
+
+  const driverDoc = await db
+    .selectFrom('drivers')
+    .selectAll()
+    .where('id', '=', driverId)
+    .executeTakeFirstOrThrow();
   return driverDoc;
 };
 interface GetDriverInfoProps extends Omit<MainFunctionProps, 'arg'> {

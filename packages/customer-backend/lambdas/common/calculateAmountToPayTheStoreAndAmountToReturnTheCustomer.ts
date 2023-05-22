@@ -4,14 +4,14 @@ import { calculateProductOptionsValue } from './utils';
 export function calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({ storeOrder }) {
   var orderCost = 0;
   const amountToPay = storeOrder.addedProducts.reduce((accu, product) => {
-    if (!product.pickup || Object.keys(product.pickup)?.length !== 2)
+    if (product.pickupStatus[product.pickupStatus.length - 1] === 'initial')
       throw new Error('one of the products was not picked');
-    orderCost = add(multiply(product.qty, product.pricing.price), orderCost) as unknown as number;
+    orderCost = add(multiply(product.qty, product.price), orderCost) as unknown as number;
 
     const productValuesPrice = calculateProductOptionsValue(product);
 
-    const productTotalPrice = add(product.pricing.price, productValuesPrice);
-    return add(multiply(product?.pickup.QTYFound, productTotalPrice), accu);
+    const productTotalPrice = add(product.price, productValuesPrice);
+    return add(multiply(product?.qtyFound, productTotalPrice), accu);
   }, 0);
 
   const orderCostAfterFee = subtract(orderCost, multiply(orderCost, storeServiceFee));

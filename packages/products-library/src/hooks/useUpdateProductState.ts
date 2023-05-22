@@ -18,10 +18,7 @@ const useUpdateProductState = () => {
 
       return res;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useUpdateProductState.ts:21 ~ returnuseMutation ~ error:",
-        error
-      );
+      throw error;
     }
   });
 };

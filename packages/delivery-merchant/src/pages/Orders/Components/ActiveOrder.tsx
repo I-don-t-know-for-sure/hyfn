@@ -61,7 +61,7 @@ export function ActiveOrder({
 }) {
   console.log("🚀 ~ file: ActiveOrder.tsx:57 ~ status:", status);
   const { refetch, isLoading: isRefreshOrderLoading } = useRefreshOrderDocument(
-    { orderId: order._id.toString() }
+    { orderId: order.id }
   );
   const { mutate: setProductAsPickedUp } = useSetProductAsPickedUp();
   const { mutate: setProductAsNotFound } = useSetProductAsNotFound();
@@ -76,7 +76,7 @@ export function ActiveOrder({
           }}
         />
         <Group position="right">
-          {storeOrder.paid ? (
+          {order.storeStatus[order.storeStatus.length - 1] === "paid" ? (
             <Badge color={"green"}>{t("Order paid")}</Badge>
           ) : (
             <Badge color={"red"}>{t("Order not paid")}</Badge>
@@ -107,30 +107,30 @@ export function ActiveOrder({
 
           <CloseButton
             onClick={() => {
-              setOrderAsDelivered({ orderId: order?._id?.toString() });
+              setOrderAsDelivered({ orderId: order?.id?.toString() });
             }}
             aria-label="set to delivered"
           />
         </Group>
         <Group position="apart">
-          <Text>{order._id.toString()}</Text>
+          <Text>{order.id}</Text>
         </Group>
         <Group>
-          {Array.isArray(order.transactions) && (
+          {/* {Array.isArray(order.transactions) && (
             <TransactionModal
               validateTransaction={validateTransaction}
               transactions={storeOrder.transactions}
               storeProducts={storeOrder.addedProducts}
             />
-          )}
-          {order.orders[0].orderType === ORDER_TYPE_DELIVERY &&
-            driver?._id !== "" &&
+          )} */}
+          {order.orderType === ORDER_TYPE_DELIVERY &&
+            driver?.id !== "" &&
             driver !== undefined && (
               <DriverInfoModal
-                driverId={driver?._id}
-                orderId={order?._id?.toString()}
+                driverId={driver?.id}
+                orderId={order?.id?.toString()}
                 balancedByDriver={order?.balancedByDriver}
-                storeId={userDocument?._id}
+                storeId={userDocument?.id}
               />
             )}
         </Group>
@@ -167,31 +167,25 @@ export function ActiveOrder({
               </tr>
             </thead>
             <tbody>
-              {storeOrder.addedProducts.map((product, index) => {
+              {order.addedProducts.map((product, index) => {
                 const pickUp = (pickupCount) => {
-                  console.log({
-                    storeId: storeOrder._id,
-                    productKey: product.key,
-                    QTYFound: pickupCount,
-                  });
-
                   setProductAsPickedUp({
-                    orderId: order._id,
-                    productKey: product.key,
+                    orderId: order.id,
+                    productId: product.id,
                     QTYFound: pickupCount,
                   });
                 };
 
                 const notFound = () => {
                   setProductAsNotFound({
-                    orderId: order._id,
-                    productKey: product.key,
+                    orderId: order.id,
+                    productId: product.id,
                   });
                 };
                 return (
                   <tr>
                     <td>
-                      <Text>{product.textInfo.title}</Text>
+                      <Text>{product.title}</Text>
                       {/* {product.options?.length > 0 && (
                       <Container>
                       {product.options.map((option) => {
@@ -241,8 +235,8 @@ export function ActiveOrder({
                       />
                     </td>
                     <td>
-                      {product.options.length > 0 ? (
-                        <OptionsModal options={product.options} />
+                      {product?.options?.length > 0 ? (
+                        <OptionsModal options={product?.options} />
                       ) : (
                         <Text weight={700}>{t("No options")}</Text>
                       )}
@@ -282,7 +276,7 @@ export function ActiveOrder({
             status === "pending" && (
               <Button
                 onClick={() => {
-                  rejectOrder(order._id);
+                  rejectOrder(order.id);
                 }}
               >
                 {t("Reject Order")}
@@ -291,7 +285,7 @@ export function ActiveOrder({
             // ) : (
             //   <Button
             //     onClick={() => {
-            //       rejectOrder(order._id)
+            //       rejectOrder(order.id)
             //     }}
             //   >
             //     {t('Reject Order')}
@@ -307,8 +301,8 @@ export function ActiveOrder({
                     compact
                     onClick={() => {
                       setOrderAsAccepted({
-                        orderId: order._id,
-                        storeId: storeOrder._id,
+                        orderId: order.id,
+                        storeId: order.stores[0].id,
                       });
                     }}
                   >
@@ -321,8 +315,8 @@ export function ActiveOrder({
                   compact
                   onClick={() => {
                     setOrderAsReady({
-                      orderId: order._id,
-                      storeId: storeOrder._id,
+                      orderId: order.id,
+                      storeId: order.stores[0].id,
                     });
                   }}
                 >
@@ -334,8 +328,8 @@ export function ActiveOrder({
               compact
               onClick={() => {
                 setOrderAsReady({
-                  orderId: order._id,
-                  storeId: storeOrder._id,
+                  orderId: order.id,
+                  storeId: storeOrder.id,
                 });
               }}
               >
@@ -348,7 +342,7 @@ export function ActiveOrder({
         </Group>
         {status === STORE_STATUS_READY && (
           <DeliveryConfirmationModal
-            confirmationCode={storeOrder.pickupConfirmation}
+            confirmationCode={order.storePickupConfirmation}
           />
         )}
       </Card>

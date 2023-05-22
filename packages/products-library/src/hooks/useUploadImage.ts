@@ -12,10 +12,6 @@ const useUploadImage = () => {
       url: `${import.meta.env.VITE_APP_BASE_URL}/generateImageURL`,
       reqData: [files.length],
     });
-    console.log(
-      "🚀 ~ file: useUploadImage.ts:15 ~ uploadImage ~ generatedURLs",
-      generatedURLs
-    );
 
     // await user.functions.uploadImages([data]);
     for (let i = 0; i < files.length; i++) {

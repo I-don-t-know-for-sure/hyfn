@@ -5,10 +5,6 @@ exports.getDatabaseIndexes = async (client) => {
   let collectionNames = await (
     await country.listCollections().toArray()
   ).map((collectionName) => collectionName.name);
-  console.log(
-    "🚀 ~ file: getDatabaseIndexes.js:24 ~ collectionNames:",
-    collectionNames
-  );
 
   for (const collectionName of collectionNames) {
     const indexes = await country.collection(collectionName).indexes();
@@ -24,7 +20,6 @@ exports.getDatabaseIndexes = async (client) => {
       },
     };
   }
-  setTimeout(() => console.log("1 second"), 1000);
 
   const generalData = await client.db("generalData");
 
@@ -70,6 +65,5 @@ exports.getDatabaseIndexes = async (client) => {
     };
   }
 
-  setTimeout(() => console.log("1 second"), 1000);
   return databaseIndexes;
 };

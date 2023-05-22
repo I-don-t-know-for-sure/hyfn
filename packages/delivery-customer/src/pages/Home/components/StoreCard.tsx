@@ -12,7 +12,7 @@ interface StoreCardProps extends Store {
   storeName?: string;
 }
 const StoreCard: React.FC<StoreCardProps> = ({
-  _id,
+  id,
   description,
   businessName,
   storeName,
@@ -24,7 +24,7 @@ const StoreCard: React.FC<StoreCardProps> = ({
 }) => {
   return (
     <Card
-      to={`/${_id.toString()}/${country}/${city}`}
+      to={`/${id}/${country}/${city}`}
       component={Link}
       shadow={"lg"}
       sx={(theme) => ({

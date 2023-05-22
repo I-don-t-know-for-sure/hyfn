@@ -11,14 +11,13 @@ export const getCustomerData = async ({
   client,
   event,
   userId,
+  db,
 }: GetCustomerDataProps) => {
-  console.log(process.env);
-  const mongo = client;
-  const customerDoc = await mongo
-    .db('generalData')
-    .collection('customerInfo')
-    .findOne({ customerId: userId });
-  findOne({ findOneResult: customerDoc });
+  const customerDoc = await db
+    .selectFrom('customers')
+    .selectAll()
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
   return customerDoc;
 };
 export const handler = async (event: any) => {

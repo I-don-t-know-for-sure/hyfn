@@ -8,7 +8,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useCreateBrand } from "pages/Brands/Hooks/useCreateBrand";
 import { useGetBrand } from "pages/Brands/Hooks/useGetBrand";
 import { useGetBrands } from "pages/Brands/Hooks/useGetBrands";
@@ -42,7 +42,6 @@ const BrandModal: React.FC<BrandModalProps> = ({
     form.setFieldValue("brandName", brandLabel);
     form.setFieldValue("brandDescription", brandDescription);
   }, [brandLabel, brandDescription]);
-  console.log(form.values, brandDescription);
 
   return (
     <>

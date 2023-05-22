@@ -62,7 +62,7 @@ const Collection: React.FC<CollectionProps> = ({
   } = useGetCollectionProducts({
     collectionid: collectionId,
     country: country,
-    storefront: storefront._id.toString(),
+    storefront: storefront.id,
     documents: 5,
     isOnScreen,
   });
@@ -82,7 +82,7 @@ const Collection: React.FC<CollectionProps> = ({
         pageParam:
           products?.pages[products.pages.length - 1][
             products?.pages[products.pages.length - 1].length - 1
-          ]?._id?.toString(),
+          ]?.id,
       });
     }
   }, [slideIndex, products]);
@@ -100,7 +100,7 @@ const Collection: React.FC<CollectionProps> = ({
         <Button
           variant="subtle"
           component={Link}
-          to={`/collection/${storefront._id.toString()}/${collectionId}/${country}`}
+          to={`/collection/${storefront.id}/${collectionId}/${country}`}
           state={{ city, country, storeInfo: storefront }}
         >
           {t("show all")}
@@ -145,19 +145,15 @@ const Collection: React.FC<CollectionProps> = ({
                     setCartInfo
                   );
                 };
-                const productUrl = product?.options?.hasOptions
-                  ? `/product/${storefront._id.toString()}/${country}/${city}/${
-                      product._id
-                    }`
-                  : `/product/withnotoptions/${storefront._id.toString()}/${country}/${city}/${
-                      product._id
-                    }`;
+                const productUrl = product?.hasOptions
+                  ? `/product/${storefront.id}/${country}/${city}/${product.id}`
+                  : `/product/withnotoptions/${storefront.id}/${country}/${city}/${product.id}`;
                 return (
                   <Carousel.Slide
                     sx={{
                       width: "fit-content",
                     }}
-                    key={product?._id?.toString()}
+                    key={product?.id}
                   >
                     <Product
                       currency={storefront.currency}

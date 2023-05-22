@@ -7,7 +7,6 @@ export const cognitoAuthentication = async ({
   accessToken: string;
   userId: string;
 }) => {
-  console.log("🚀 ~ file: cognitoAuthentication.ts:13 ~ userId:", userId);
   const verifier = CognitoJwtVerifier.create({
     userPoolId: process.env.userPoolId || "",
     tokenUse: "access",
@@ -15,12 +14,10 @@ export const cognitoAuthentication = async ({
   });
 
   try {
-    const payload = await verifier.verify(
+    await verifier.verify(
       accessToken // the JWT as string
     );
-    console.log("Token is valid. Payload:", payload);
   } catch {
-    console.log("Token not valid!dchbchfbhbfhbhbdchbdhbchdb");
     throw new Error("token not verified");
   }
 };

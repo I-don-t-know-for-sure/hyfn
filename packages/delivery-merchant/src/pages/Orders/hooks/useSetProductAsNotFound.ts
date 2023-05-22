@@ -13,19 +13,13 @@ export const useSetProductAsNotFound = () => {
   const queryClient = useQueryClient();
   const id = randomId();
   return useMutation(
-    async ({
-      orderId,
-      productKey,
-    }: {
-      orderId: string;
-      productKey: string;
-    }) => {
+    async ({ orderId, productId }: { orderId: string; productId: string }) => {
       try {
         const result = await fetchUtil({
           reqData: [
             {
               orderId,
-              productKey,
+              productId,
             },
           ],
           url: `${import.meta.env.VITE_APP_BASE_URL}/setProductAsNotFound`,

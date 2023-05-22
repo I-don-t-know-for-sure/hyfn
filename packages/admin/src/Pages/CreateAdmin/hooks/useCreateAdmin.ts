@@ -14,10 +14,7 @@ export const useCreateAdmin = () => {
 
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useCreateAdmin.ts:8 ~ returnuseMutation ~ error",
-        error
-      );
+      console.error(error);
     }
   });
 };

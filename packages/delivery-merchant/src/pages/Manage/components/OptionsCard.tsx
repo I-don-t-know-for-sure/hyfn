@@ -39,13 +39,14 @@ const OptionsCard: React.FC<OptionsCardProps> = ({
         >
           <Checkbox
             label={t("This Product Has Options")}
-            checked={productInfo?.options?.hasOptions || false}
+            checked={productInfo?.hasOptions || false}
             onChange={(e) => {
               const checked = e.currentTarget.checked;
               if (checked) {
                 setProductInfo((prevState: ProductInfo): ProductInfo => {
                   return {
                     ...prevState,
+                    hasOptions: checked,
                     options: {
                       ...prevState.options,
                       options: [
@@ -68,6 +69,8 @@ const OptionsCard: React.FC<OptionsCardProps> = ({
                 setProductInfo((prevState: ProductInfo): ProductInfo => {
                   return {
                     ...prevState,
+                    hasOptions: checked,
+
                     options: {
                       ...prevState.options,
                       options: undefined,
@@ -81,7 +84,7 @@ const OptionsCard: React.FC<OptionsCardProps> = ({
           />
         </>
       )}
-      {productInfo.options.hasOptions && (
+      {productInfo.hasOptions && (
         <Options
           onChangeHandler={onChangeHandler}
           productInfo={productInfo}

@@ -28,7 +28,7 @@ export const useDuplicateProduct = () => {
 
         return result;
       } catch (error) {
-        console.log("🚀 ~ file: useDuplicateProduct.ts:33 ~ error:", error);
+        throw error;
       }
     }
   );

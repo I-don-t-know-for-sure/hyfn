@@ -10,10 +10,7 @@ export const useVerifyDriverManagement = () => {
           url: `${import.meta.env.VITE_APP_BASE_URL}/verifyDriverManagement`,
         });
       } catch (error) {
-        console.log(
-          "🚀 ~ file: useVerifyDriverManagement.ts:8 ~ returnuseMutation ~ error",
-          error
-        );
+        console.error(error);
       }
     }
   );

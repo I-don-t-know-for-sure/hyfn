@@ -11,7 +11,7 @@ export const useGetProduct = (productId?: string) => {
     try {
       const res = await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/getProduct`,
-        reqData: [userDocument?.storeDoc, productId],
+        reqData: [userDocument?.id, productId],
       });
 
       return res;

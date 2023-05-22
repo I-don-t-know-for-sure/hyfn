@@ -9,17 +9,15 @@ import { UseMutateFunction } from "react-query";
 import { Link } from "react-router-dom";
 
 interface ProductType {
-  _id: any;
-  textInfo: {
-    title: string;
-    description: string;
-  };
-  pricing: {
-    price: number;
-  };
-  options: {
-    hasOptions: boolean;
-  };
+  id: any;
+
+  title: string;
+  description: string;
+
+  price: number;
+
+  hasOptions: boolean;
+
   images: string[];
   customerLikesProduct: boolean;
   likes: number;
@@ -70,7 +68,7 @@ const Product: React.FC<ProductProps> = ({
         position: "relative",
       }}
     >
-      {!product?.options?.hasOptions && (
+      {!product?.hasOptions && (
         <Box
           sx={{
             zIndex: 999,
@@ -82,7 +80,7 @@ const Product: React.FC<ProductProps> = ({
           <ProductControler
             addproduct={addProduct}
             reduceOrRemoveProduct={reduceOrRemoveProduct}
-            qty={addedProducts ? addedProducts[product._id.toString()]?.qty : 0}
+            qty={addedProducts ? addedProducts[product.id]?.qty : 0}
           />
         </Box>
       )}
@@ -115,14 +113,11 @@ const Product: React.FC<ProductProps> = ({
           <Box>
             <Text>
               {currency}
-              {(
-                product.pricing.price -
-                product.pricing.price * storeServiceFee
-              ).toFixed(3)}
+              {(product.price - product.price * storeServiceFee).toFixed(3)}
             </Text>
           </Box>
           <Box>
-            <Text weight={700}>{product.textInfo.title}</Text>
+            <Text weight={700}>{product.title}</Text>
             {/* <Text>{product.textInfo.description}</Text> */}
           </Box>
         </Box>

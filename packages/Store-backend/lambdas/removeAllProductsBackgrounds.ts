@@ -14,18 +14,6 @@ export const removeAllProductsBackgroundsHandler = async ({
   const { productIds, storeId } = arg[0];
   const imageKeys = [];
 
-  // for (const productId of productIds) {
-  //   const product = await client
-  //     .db('base')
-  //     .collection('products')
-  //     .findOne({ _id: new ObjectId(productId) }, { projection: { _id: false, images: true } });
-  //   imageKeys.push(...product.images);
-  // }
-  // console.log(
-  //   '🚀 ~ file: removeAllProductsBackgrounds.ts:15 ~ imageKeys:',
-  //   process.env.backgroundRemovalEventBus
-  // );
-
   sendRemoveBackgroundsEventBus({ productIds, storeId });
 
   return 'success';

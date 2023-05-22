@@ -3,37 +3,31 @@ export const setOrderAsPickedUpHandler = async ({
   session,
   client,
   event,
+  db,
+  userId,
 }: MainFunctionProps) => {
-  var result;
-  const { id, country, driverId, orderId } = arg[0];
-  const driverDoc = await client.db('generalData').collection('driverData').findOne(
-    {
-      driverId,
-    },
-    {}
-  );
-  const orderDoc = await client
-    .db('base')
-    .collection('orders')
-    .findOne({ _id: new ObjectId(orderId) }, {});
+  const { orderId, confirmationCode } = arg[0];
 
-  if (!orderDoc.status.find((status) => status._id === driverDoc._id.toString())) {
-    throw new Error('driver did not take the order');
-  }
-
-  await client
-    .db('base')
-    .collection('orders')
-    .updateOne(
-      { '_id': new ObjectId(orderId), 'status._id': id },
-      {
-        $set: {
-          'status.$': { _id: id, status: DRIVER_STATUS_PICKEDUP },
-        },
-      },
-      {}
-    );
-
+  const driverDoc = await db
+    .selectFrom('drivers')
+    .select('id')
+    .where('userId', '=', userId)
+    .executeTakeFirst();
+  const orderDoc = await db
+    .selectFrom('orders')
+    .select(['id', 'storePickupConfirmation'])
+    .where('id', '=', orderId)
+    .where('driverId', '=', driverDoc.id)
+    .executeTakeFirstOrThrow();
+  if (confirmationCode !== orderDoc.storePickupConfirmation) throw new Error('code does not match');
+  await db
+    .updateTable('orders')
+    .set({
+      storeStatus: sql`store_status || ${'pickedUp'}`,
+    })
+    .where('id', '=', orderId)
+    .where('driverId', '=', driverDoc.id)
+    .execute();
   return 'success';
 };
 interface SetOrderAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
@@ -41,8 +35,9 @@ interface SetOrderAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { DRIVER_STATUS_PICKEDUP } from 'hyfn-types';
-import { ObjectId } from 'mongodb';
+
+import { sql } from 'kysely';
+
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setOrderAsPickedUpHandler });
 };

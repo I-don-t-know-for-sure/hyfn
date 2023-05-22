@@ -18,10 +18,7 @@ export const useStoreStateControl = () => {
       refetch();
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useStoreStateControle.ts:25 ~ returnuseMutation ~ error:",
-        error
-      );
+      console.error(error);
     }
   });
 };

@@ -10,10 +10,7 @@ export const useGetUnverifiedDrivers = () => {
       });
       return results;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useGetVerificationRequest.ts:8 ~ returnuseInfiniteQuery ~ error",
-        error
-      );
+      console.error(error);
     }
   });
 };

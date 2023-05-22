@@ -1,4 +1,4 @@
-import { MainFunctionProps, getMongoClientWithIAMRole, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { backgroundRemovalPerImage } from 'hyfn-types';
 import request from 'request';
 import fs from 'fs';
@@ -44,7 +44,7 @@ export const setBackgroundWhiteHandler = async ({
       (whiteBackgroundImage) => whiteBackgroundImage === image
     );
   });
-  console.log('🚀 ~ file: setBackgroundWhite.ts:43 ~ newKeys ~ newKeys:', newKeys);
+
   // let newKeys = [];
 
   // Check if the array has at least 5 elements
@@ -102,13 +102,11 @@ export const setBackgroundWhiteHandler = async ({
       Key: 'initial/' + key,
     };
 
-    console.log('🚀 ~ file: setBackgroundWhite.ts:30 ~ setBackgroundWhiteHandler ~ key:', key);
     const getObjectResult = await s3.getObject(getObjectParams).promise();
     const tmpPath = `/tmp/${key}.jpg`;
     await fs.promises.writeFile(tmpPath, getObjectResult.Body as any);
 
     const strem = fs.createReadStream(tmpPath);
-    console.log('🚀 ~ file: setBackgroundWhite.ts:38 ~ setBackgroundWhiteHandler ~ strem:');
 
     formData.files.push(strem);
 
@@ -121,23 +119,16 @@ export const setBackgroundWhiteHandler = async ({
         'Content-Type': 'multipart/form-data',
       },
     };
-    console.log(
-      '🚀 ~ file: setBackgroundWhite.ts:51 ~ setBackgroundWhiteHandler ~ convertRequest:',
-      JSON.stringify(convertRequest)
-    );
 
     const result = await new Promise((resolve, reject) => {
       request(convertRequest, (err, response, body) => {
         if (err) {
           reject(err);
         } else {
-          console.log('🚀 ~ file: setBackgroundWhite.ts:60 ~ request ~ err:', body);
           resolve(JSON.parse(body));
         }
       });
     });
-
-    console.log('🚀 ~ file: setBackgroundWhite.ts:49 ~ result ~ result:', result);
 
     const resultsRequest = {
       url: results_url,
@@ -162,10 +153,6 @@ export const setBackgroundWhiteHandler = async ({
       };
       pollResults();
     });
-    console.log(
-      '🚀 ~ file: setBackgroundWhite.ts:102 ~ constresults:any=awaitnewPromise ~ results:',
-      results
-    );
 
     files.push(results.files[0]);
   }
@@ -201,8 +188,7 @@ export const setBackgroundWhiteHandler = async ({
           .composite(productImage, 0, 0)
           .getBufferAsync(Jimp.AUTO as any);
       } catch (error) {
-        console.log(error, 'hdhdh');
-        return;
+        throw error;
       }
       // Upload the thumbnail image to the destination bucket
       try {
@@ -225,18 +211,12 @@ export const setBackgroundWhiteHandler = async ({
         Promise.allSettled(putPromis).then((values) => {
           console.log(values);
         });
-
-        console.log(putResult);
       } catch (error) {
-        console.log(error, 'ooooo');
-        return;
+        throw error;
       }
     }
   }
-  console.log(
-    '🚀 ~ file: setBackgroundWhite.ts:171 ~ setBackgroundWhiteHandler ~ keys:',
-    productIds
-  );
+
   if (productIds.length > 0) {
     axios
       .post(url, {
@@ -245,46 +225,17 @@ export const setBackgroundWhiteHandler = async ({
         url,
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
-    /* const eventBridge = new AWS.EventBridge();
-    const params = {
-      Entries: [
-        {
-          Detail: JSON.stringify({ productIds, eventBusName, storeId }),
-          EventBusName: eventBusName,
-          DetailType: process.env.backgroundRemovalEventBusDetailType,
-          Source: process.env.backgroundRemovalEventBusSource,
-        },
-      ],
-    };
-    // put the event async
-    // await eventBridge.putEvents(params).promise();
-    eventBridge.putEvents(params, function (err, data) {
-      if (err) {
-        console.log('Error', err);
-      } else {
-        console.log('Success', data);
-      }
-    });
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: `EventBus event sent with args: `,
-      }),
-    }; */
   }
 
   return 'success';
 };
 
 export const handler = async (event) => {
-  console.log('🚀 ~ file: setBackgroundWhite.ts:200 ~ handler ~ event:', event);
-
   const { eventBusName, productIds, storeId, url } = JSON.parse(event.body);
   const client = await getMongoClientWithIAMRole();
-  // console.log('🚀 ~ file: setBackgroundWhite.ts:323 ~ handler ~ keys:', keys);
-  // // return await mainWrapper({ event, mainFunction: setBackgroundWhiteHandler });
+
   return await setBackgroundWhiteHandler({
     productIds,
     eventBusName,

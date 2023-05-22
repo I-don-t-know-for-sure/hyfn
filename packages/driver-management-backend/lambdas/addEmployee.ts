@@ -1,18 +1,19 @@
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper, tDriverManagement } from 'hyfn-server';
+import { sql } from 'kysely';
 
 interface AddUserAsEmployeeProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
 
-export const addUserAsEmployeeHandler = async ({ arg, client, userId }: AddUserAsEmployeeProps) => {
+export const addUserAsEmployeeHandler = async ({ arg, client, userId, db }: AddUserAsEmployeeProps) => {
   const { employeeId } = arg[0];
-  const managementDoc = await client
-    .db('generalData')
-    .collection('driverManagement')
-    .findOne({ userId });
+  
+    const managementDoc = await db.selectFrom('driverManagements').selectAll().where('userId', '=', userId).executeTakeFirstOrThrow()
   if (!managementDoc) throw new Error('management not found');
   if (managementDoc.usersIds.includes(employeeId)) throw new Error('employee already exists');
-  if (managementDoc.users[employeeId]) throw new Error('employee already exists');
+  if (managementDoc.users.some((user) => {
+    return user.userId === employeeId
+  })) throw new Error('employee already exists');
 
   await client
     .db('generalData')
@@ -31,6 +32,10 @@ export const addUserAsEmployeeHandler = async ({ arg, client, userId }: AddUserA
         },
       }
     );
+    await db.updateTable('driverManagements').set({
+      usersIds: sql`users_ids || ${employeeId}`,
+      users: sql`users || ${{userType: 'employee', userId: employeeId} as tDriverManagement['users'][0]}`
+    }).execute()
 };
 
 export const handler = async (event) => {

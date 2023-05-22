@@ -1,4 +1,7 @@
-export const updateProductHandler = async ({ arg, client }) => {
+export const updateProductHandler = async ({
+  arg,
+  client,
+}: MainFunctionProps) => {
   var result;
   const {
     creatorId,
@@ -6,7 +9,7 @@ export const updateProductHandler = async ({ arg, client }) => {
     newProductInfo: { imagesURLs, ...rest },
     deletedImages,
   } = arg[0];
-  console.log(arg[0]);
+
   const oldProduct = await client
     .db("productsLibrary")
     .collection("products")
@@ -14,7 +17,7 @@ export const updateProductHandler = async ({ arg, client }) => {
   const updatedImages = oldProduct?.images?.filter(
     (image) => !deletedImages?.some((deletedImage) => deletedImage === image)
   );
-  console.log(oldProduct);
+
   const status = await client
     .db("productsLibrary")
     .collection("products")
@@ -28,7 +31,7 @@ export const updateProductHandler = async ({ arg, client }) => {
         },
       }
     );
-  console.log(status, "shshshshssh");
+
   return result;
 };
 interface UpdateProductProps extends Omit<MainFunctionProps, "arg"> {

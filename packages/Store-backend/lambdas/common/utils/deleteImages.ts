@@ -21,7 +21,6 @@ export const deleteImages = async (imageKeys) => {
     Bucket: bucketName,
     Delete: { Objects: deleteArray },
   };
-  console.log(params);
+
   const data = await s3.deleteObjects(params).promise();
-  console.log(data);
 };

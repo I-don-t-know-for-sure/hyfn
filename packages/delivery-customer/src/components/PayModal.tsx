@@ -16,6 +16,7 @@ import {
   storeServiceFee,
   serviceFeePayment,
   managementPayment,
+  storePayment,
 } from "hyfn-types";
 import { add } from "mathjs";
 import TransactionList from "components/TransactionList";
@@ -67,9 +68,7 @@ const PayModal: React.FC<PayModalProps> = ({
   const balance = userDocument.balance;
   //   const createLocalCardTransactionObject = useCreateLocalCardTransaction();
   const orderTotal = storeProducts.reduce((accu, currentProduct) => {
-    return (
-      accu + currentProduct.pricing.price * currentProduct?.pickup?.QTYFound
-    );
+    return accu + currentProduct.price * currentProduct?.qtyFound;
   }, 0);
   const orderSaleFee = orderTotal * storeServiceFee;
   const orderTotalAfterFee = orderTotal - orderSaleFee;
@@ -99,8 +98,8 @@ const PayModal: React.FC<PayModalProps> = ({
               {storeProducts.map((product) => {
                 return (
                   <tr>
-                    <td>{product?.textInfo?.title}</td>
-                    <td>{product?.pickup?.QTYFound || 0}</td>
+                    <td>{product?.title}</td>
+                    <td>{product?.qtyFound || 0}</td>
                     <td>
                       <Image
                         radius={4}
@@ -191,7 +190,7 @@ const PayModal: React.FC<PayModalProps> = ({
                   <Button
                     onClick={() => {
                       createTransaction({
-                        type: serviceFeePayment,
+                        type: storePayment,
                         country,
                         orderId,
                         storeId,

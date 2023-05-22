@@ -2,46 +2,21 @@ export const disableLocalCardAPIKeysHandler = async ({
   arg,
   client,
   userId,
+  db,
 }: MainFunctionProps) => {
-  const session = client.startSession();
-  const response = await withTransaction({
-    session,
-    fn: async () => {
-      const storeDoc = await client
+  const response = await db.transaction().execute(async (trx) => {
+    const storeDoc = await trx
+      .selectFrom('stores')
+      .selectAll()
+      .where('userId', '=', userId)
+      .executeTakeFirstOrThrow();
+    if (storeDoc.opened) {
+      throw new Error('store is open');
+    }
 
-        .db('generalData')
-        .collection('storeInfo')
-        .findOne({ userId }, { session });
-      if (storeDoc.opened) {
-        throw new Error('store is open');
-      }
-      await client
-        .db('generalData')
-        .collection('storeInfo')
-        .updateOne(
-          { userId },
-          {
-            $set: {
-              localCardAPIKeyFilled: false,
-            },
-          },
-          { session }
-        );
-      await client
-        .db('generalData')
-        .collection('localCardKeys')
-        .updateOne(
-          { MerchantId: storeDoc?.localCardAPIKey?.MerchantId },
-          {
-            $set: {
-              inUse: false,
-            },
-          },
-          { session }
-        );
-    },
+    await trx.deleteFrom('localCardKey_store').where('storeId', '=', storeDoc.id).execute();
   });
-  await session.endSession();
+
   return response;
 };
 interface DisableLocalCardAPIKeysProps extends Omit<MainFunctionProps, 'arg'> {

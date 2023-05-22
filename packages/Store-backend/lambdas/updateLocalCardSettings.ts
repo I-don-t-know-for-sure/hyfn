@@ -2,25 +2,17 @@ export const updateLocalCardSettingsHandler = async ({
   arg,
   client,
   userId,
+  db,
 }: MainFunctionProps) => {
   type Store = z.infer<typeof storeSchema>;
-  const storeDoc = await client
-    .db('generalData')
-    .collection<Store>('storeInfo')
-    .findOne<Store>(
-      { userId },
-      {
-        projection: {
-          includeLocalCardFeeToPrice: 1,
-        },
-      }
-    );
-  console.log('🚀 ~ file: updateLocalCardSettings.ts:13 ~ storeDoc ~ storeDoc:', storeDoc);
+  const storeDoc = await db
+    .selectFrom('stores')
+    .selectAll()
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
+
   const includeLocalCardFeeToPrice = storeDoc.includeLocalCardFeeToPrice || false;
-  console.log(
-    '🚀 ~ file: updateLocalCardSettings.ts:14 ~ mainFunction ~ includeLocalCardFeeToPrice:',
-    includeLocalCardFeeToPrice
-  );
+
   await client
     .db('generalData')
     .collection<Store>('storeInfo')
@@ -32,6 +24,13 @@ export const updateLocalCardSettingsHandler = async ({
         },
       }
     );
+  await db
+    .updateTable('stores')
+    .set({
+      includeLocalCardFeeToPrice: !includeLocalCardFeeToPrice,
+    })
+    .where('userId', '=', userId)
+    .execute();
 };
 interface UpdateLocalCardSettingsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;

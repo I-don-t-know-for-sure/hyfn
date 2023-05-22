@@ -1,23 +1,33 @@
-export const getProductHandler = async ({ arg, client, userId }: MainFunctionProps) => {
+export const getProductHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
   // await subscriptionCheck({ storedoc: userDocument, client, storeId: userDocument._id });
-  var result;
-  const { id, city, country } = arg[0];
+
+  const id = arg[0];
   const productId = arg[1];
-  console.log(productId);
-  result = await client
-    .db('base')
-    .collection(`products`)
-    .findOne({ _id: new ObjectId(productId) }, {});
-  return result;
-  // Ensures that the client will close when you finish/error
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+
+  const product = await db
+    .selectFrom('products')
+    .selectAll()
+    .where('id', '=', productId)
+    .executeTakeFirstOrThrow();
+  const productCollection = await db
+    .selectFrom('collectionsProducts')
+    .selectAll()
+    .where('productId', '=', productId)
+    .execute();
+  const collections = productCollection.map((relation) => relation.collectionId);
+  const collectionsArray = await db
+    .selectFrom('collections')
+    .select(['id as value', 'title as label'])
+    .where(sql` id = any (array[${sql.join(collections)}]::uuid[])`)
+    .execute();
+  return { ...product, collections: collectionsArray };
 };
 interface GetProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper, tCollection, tCollections } from 'hyfn-server';
+import { sql } from 'kysely';
 import { ObjectId } from 'mongodb';
 
 export const handler = async (event, ctx, callback) => {

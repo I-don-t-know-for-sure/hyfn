@@ -98,11 +98,11 @@ const Home: React.FC<HomeProps> = () => {
     let orders = [];
     return arr.filter((obj) => {
       // const includesUniqueId = uniqueIds.includes(obj.orders[0]._id);
-      if (Array.isArray(obj.orders)) {
-        if (uniqueIds.includes(obj?.orders[0]?._id)) {
+      if (Array.isArray(obj.stores)) {
+        if (uniqueIds.includes(obj?.stores[0]?.id)) {
           return false;
         } else {
-          uniqueIds.push(obj?.orders[0]?._id);
+          uniqueIds.push(obj?.stores[0]?.id);
           return true;
         }
       }
@@ -133,9 +133,6 @@ const Home: React.FC<HomeProps> = () => {
   console.log("🚀 ~ file: Home.tsx:84 ~ uniqueStores:", uniqueStores);
   return (
     <Container>
-      {/* <div style={{ height: "500px", width: "500px" }}> */}
-
-      {/* </div> */}
       <>
         {isLoading ? (
           <Loader />
@@ -163,18 +160,22 @@ const Home: React.FC<HomeProps> = () => {
                     // maxHeight: "500px",
                   }}
                 >
-                  {/* <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" /> */}
                   <TileLayer
                     attribution='Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
                     url={`https://api.mapbox.com/styles/v1/${"bariomymen"}/${"clg1t5msl00oo01pc6oagbl8y"}/tiles/256/{z}/{x}/{y}@2x?access_token=${"pk.eyJ1IjoiYmFyaW9teW1lbiIsImEiOiJjbDFrcXRnaHowM2lxM2Jtb3h3Z2J4bDQ0In0.DKfCj0bt3QfE9QgacrWnpA"}`}
                   />
                   {uniqueStores?.map((order) => {
-                    const store = order?.orders[0];
+                    const store = order?.stores[0];
                     const storeName = store.storeName;
-                    const storeCoords = store?.coords?.coordinates;
+                    const storeCoords = [12.12, 32.23];
+                    // const storeCoords = [store.long, store.lat];
                     const customerCoords = order?.buyerCoords;
+                    console.log(
+                      "🚀 ~ file: Home.tsx:176 ~ {uniqueStores?.map ~ flatPages:",
+                      flatPages
+                    );
                     const allStoreOrders = flatPages.filter(
-                      (order) => order?.orders[0]._id === store._id
+                      (order) => order?.stores[0].id === store.id
                     );
                     var myIcon = L.icon({
                       iconUrl: `${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${
@@ -195,10 +196,6 @@ const Home: React.FC<HomeProps> = () => {
                         <Marker
                           position={[storeCoords[1], storeCoords[0]] as any}
                           icon={myIcon}
-                          // icon={L.icon({
-                          //   iconUrl: icon,
-                          //   shadowUrl: iconShadow,
-                          // })}
                         >
                           <Popup minWidth={250}>
                             <Stack
@@ -209,14 +206,15 @@ const Home: React.FC<HomeProps> = () => {
                             >
                               <Text weight={700}>{storeName}</Text>
                               {allStoreOrders.map((order) => {
-                                const store = order?.orders[0];
+                                const store = order?.stores[0];
 
-                                const customerCoords = order?.buyerCoords;
+                                const customerCoords = [
+                                  order.customerLong,
+                                  order.customerLat,
+                                ];
                                 return (
                                   <>
-                                    <Text weight={700}>
-                                      {order._id.toString()}
-                                    </Text>
+                                    <Text weight={700}>{order.id}</Text>
                                     <Group>
                                       <Button
                                         onClick={() => setOrder(order)}
@@ -239,10 +237,6 @@ const Home: React.FC<HomeProps> = () => {
                                               ],
                                             },
                                           ]);
-                                          // mapRef.current.setView([
-                                          //   customerCoords[1],
-                                          //   customerCoords[0],
-                                          // ]);
                                         }}
                                       >
                                         {t("Destination")}
@@ -252,20 +246,8 @@ const Home: React.FC<HomeProps> = () => {
                                 );
                               })}
                             </Stack>
-                            {/* <Button
-                                  onClick={() => {
-                                    const map = mapRef.current;
-                                    if (map) {
-                                      map.setView([32.13, 13.23]);
-                                    }
-                                    // setCenter([32.13, 13.23]);
-                                  }}
-                                >
-                                  {"click"}
-                                </Button> */}
                           </Popup>
                         </Marker>
-                        // AvailabeOrder(order, userDocument)
                       )
                     );
                   })}
@@ -287,7 +269,6 @@ const Home: React.FC<HomeProps> = () => {
                               overflowY: "scroll",
                             }}
                           >
-                            {/* <Text weight={700}>{order._id.toString()}</Text> */}
                             {markers
                               .filter((oldMarker) => {
                                 return checkCoordsWithinRadius(
@@ -297,15 +278,16 @@ const Home: React.FC<HomeProps> = () => {
                                 );
                               })
                               .map((marker) => {
-                                const store = marker?.order?.orders[0];
+                                const store = marker?.order?.stores[0];
 
-                                const customerCoords =
-                                  marker?.order?.buyerCoords;
+                                const customerCoords = [
+                                  marker?.order?.buyerLong,
+                                  marker?.order?.buyerLong,
+                                ];
+
                                 return (
                                   <>
-                                    <Text weight={700}>
-                                      {order._id.toString()}
-                                    </Text>
+                                    <Text weight={700}>{order.id}</Text>
                                     <Group>
                                       <Button
                                         onClick={() => setOrder(order)}
@@ -313,62 +295,15 @@ const Home: React.FC<HomeProps> = () => {
                                       >
                                         {t("Show Order")}
                                       </Button>
-
-                                      {/* <Button
-                                        compact
-                                        onClick={() => {
-                                          setMarkers((markers) => [
-                                            ...markers,
-                                            [
-                                              customerCoords[1],
-                                              customerCoords[0],
-                                            ],
-                                          ]);
-                                          // mapRef.current.setView([
-                                          //   customerCoords[1],
-                                          //   customerCoords[0],
-                                          // ]);
-                                        }}
-                                      >
-                                        {t("Destination")}
-                                      </Button> */}
                                     </Group>
                                   </>
                                 );
                               })}
                           </Stack>
-                          {/* <Button
-                            onClick={() => {
-                              const map = mapRef.current;
-                              if (map) {
-                                map.setView([32.13, 13.23]);
-                              }
-                              // setCenter([32.13, 13.23]);
-                            }}
-                          >
-                            {"click"}
-                          </Button> */}
                         </Popup>
                       </Marker>
                     );
                   })}
-                  {/* <Marker
-          position={position as any}
-          icon={L.icon({ iconUrl: icon, shadowUrl: iconShadow })}
-          >
-          <Popup>
-          <Button
-          onClick={() => {
-            if (map) {
-              map.setView([32.13, 13.23]);
-            }
-            // setCenter([32.13, 13.23]);
-          }}
-          >
-          {"click"}
-          </Button>
-          </Popup>
-        </Marker> */}
                 </MapContainer>
                 <Group>
                   {markers.length > 0 && (
@@ -400,7 +335,6 @@ const Home: React.FC<HomeProps> = () => {
                             order={order}
                             userDocument={userDocument}
                           />
-                          // AvailabeOrder(order, userDocument)
                         )
                       );
                     })
@@ -423,7 +357,7 @@ const Home: React.FC<HomeProps> = () => {
                 pageParam:
                   orders?.pages[orders?.pages?.length - 1][
                     orders?.pages[orders.pages?.length - 1]?.length - 1
-                  ]?._id,
+                  ]?.id,
               })
             }
           >

@@ -8,30 +8,31 @@ export const setOrderAsPreparingHandler = async ({
   arg,
   client,
   userId,
+  db,
 }: SetOrderAsPreparingProps) => {
   const { orderId, country } = arg[0];
-  const storeDoc = await client
-    .db('generalData')
-    .collection('storeInfo')
-    .findOne({ usersIds: userId }, {});
+
+  const storeDoc = await db
+    .selectFrom('stores')
+    .selectAll()
+    .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]`)
+    .executeTakeFirstOrThrow();
   if (!storeDoc) throw new Error('store not found');
-  const storeId = storeDoc._id.toString();
-  const orderDoc = await client
-    .db('base')
-    .collection('orders')
-    .findOne({ _id: new ObjectId(orderId) }, {});
-  if (orderDoc.delivered) {
+  const storeId = storeDoc.id.toString();
+
+  const orderDoc = await db
+    .selectFrom('orders')
+    .selectAll()
+    .where('id', '=', orderId)
+    .executeTakeFirstOrThrow();
+  if (orderDoc.orderStatus.includes('delivered')) {
     throw new Error('order is Delivered');
   }
-  const store = orderDoc.orders.find((store) => {
-    return store._id.toString() === storeId;
-  });
-  if (!store.paid) {
-    throw new Error('Not paid yet');
+
+  if (!orderDoc.storeStatus.includes('paid')) {
+    throw new Error(`current state is ${orderDoc.storeStatus}`);
   }
-  if (store.orderStatus !== STORE_STATUS_PAID) {
-    throw new Error('Not accepted');
-  }
+
   await client
     .db('base')
     .collection('orders')
@@ -47,6 +48,14 @@ export const setOrderAsPreparingHandler = async ({
         arrayFilters: [{ 'store._id': new ObjectId(storeId) }],
       }
     );
+
+  await db
+    .updateTable('orders')
+    .set({
+      storeStatus: [...orderDoc.storeStatus, 'preparing'],
+    })
+    .where('id', '=', orderId)
+    .execute();
   return 'success';
 };
 export const handler = async (event) => {

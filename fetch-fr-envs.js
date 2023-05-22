@@ -14,10 +14,7 @@ import fs from "fs";
     cmd.on("spawn", () => console.log("Running build command for:"));
     cmd.stdout.on("data", (d) => {
       const parameters = JSON.parse(d).Parameters;
-      console.log(
-        "🚀 ~ file: fetch-envs.js:31 ~ cmd.stdout.on ~ parameters:",
-        parameters
-      );
+
       result = parameters.reduce((accu, parameter) => {
         const parameterNameList = parameter.Name.split("/");
         const parameterName = `${
@@ -32,15 +29,8 @@ import fs from "fs";
           },
         };
       }, result);
-      console.log(
-        "🚀 ~ file: fetch-envs.js:45 ~ result=parameters.reduce ~ result:",
-        result
-      );
     });
 
-    cmd.stderr.on("data", (d) =>
-      console.log(` onebhbdch22222 ${d.Parameters}`)
-    );
     cmd.on("exit", async () => {
       fs.writeFile(
         `frEnvVaraibles.ts`,

@@ -11,12 +11,9 @@ export const generateDescriptionClientHandler = async ({
   userId,
   client,
 }: GenerateDescriptionClientProps) => {
-  console.log('🚀 ~ file: generateDescriptionClient.ts:14 ~ arg:', arg);
-  // console.log('🚀 ~ file: generateDescriptionClient.ts:15 ~ userId:', userId);
   try {
     generateProductDescription({ arg });
   } catch (error) {
-    console.log('🚀 ~ file: generateDescriptionClient.ts:17 ~ error:', error);
     throw new Error('error');
   }
   return 'success';

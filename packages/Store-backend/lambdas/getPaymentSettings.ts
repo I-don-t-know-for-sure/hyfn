@@ -1,4 +1,4 @@
-export const getPaymentSettingsHandler = async ({ arg, client }) => {
+export const getPaymentSettingsHandler = async ({ arg, client }: MainFunctionProps) => {
   var result;
   const { storeId, userId } = arg[0];
   result = await client

@@ -1,16 +1,9 @@
 import { ObjectId } from 'mongodb';
 
 import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
-import {
-  decryptData,
-  isLocalCardTransactionValidated,
-  mainWrapper,
-  withTransaction,
-} from 'hyfn-server';
+import { decryptData, isLocalCardTransactionValidated, mainWrapper } from 'hyfn-server';
 import { MainFunctionProps } from 'hyfn-server';
 import {
-  ORDER_TYPE_PICKUP,
-  STORE_STATUS_PAID,
   managementPayment,
   serviceFeePayment,
   storePayment,
@@ -23,18 +16,19 @@ interface validateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg
 const kmsKeyARN = process.env.kmsKeyARN || '';
 export const validateLocalCardTransaction = async ({
   arg,
-  client,
+
+  db,
 }: validateLocalCardTransactionProps) => {
   const { transactionId } = arg[0];
-  const transaction = await client
-    .db('generalData')
-    .collection('transactions')
-    .findOne({ _id: new ObjectId(transactionId) }, {});
-  if (!transaction) {
-    throw '';
-  }
+
+  const transaction = await db
+    .selectFrom('transactions')
+    .selectAll()
+    .where('id', '=', transactionId)
+    .executeTakeFirstOrThrow();
+
   console.log('any');
-  if (transaction.validated) {
+  if (transaction.status.includes('validated')) {
     return 'transaction already approved';
   }
 
@@ -42,16 +36,20 @@ export const validateLocalCardTransaction = async ({
     var { MerchantId, TerminalId, secretKey }: any = getAdminLocalCardCreds();
   }
   if (transaction.type === storePayment) {
-    const storeDoc = await client
-      .db('generalData')
-      .collection('storeInfo')
-      .findOne({ _id: new ObjectId(transaction.storeId) }, {});
-    //   findOne({ findOneResult: storeDoc });
-    if (!storeDoc) {
-      throw new Error('store not found');
-    }
+    const storeDoc = await db
+      .selectFrom('stores')
+      .innerJoin('localCardKeys', 'localCardKeys.id', 'stores.localCardApiKeyId')
+      .selectAll('stores')
+      .select(['merchantId', 'terminalId', 'secretKey'])
+      .where('stores.id', '=', transaction.storeId)
+      .executeTakeFirstOrThrow();
+
     const kmsClient = new KMS();
-    var { TerminalId, MerchantId, secretKey: encryptedSecretKey } = storeDoc.localCardAPIKey;
+    var {
+      terminalId: TerminalId,
+      merchantId: MerchantId,
+      secretKey: encryptedSecretKey,
+    }: any = storeDoc;
     var secretKey: any = await decryptData({
       data: encryptedSecretKey,
       kmsClient: kmsClient,
@@ -59,11 +57,16 @@ export const validateLocalCardTransaction = async ({
     });
   }
   if (transaction.type === managementPayment) {
-    const driverManagement = await client
-      .db('generalData')
-      .collection('driverManagement')
-      .findOne({ _id: new ObjectId(transaction.storeId) }, {});
-    var { TerminalId, MerchantId, secretKey: encryptedSecretKey } = driverManagement.localCardKeys;
+    const driverManagement = await db
+      .selectFrom('driverManagements')
+      .selectAll()
+      .where('id', '=', transaction.storeId)
+      .executeTakeFirstOrThrow();
+    var {
+      terminalId: TerminalId,
+      merchantId: MerchantId,
+      secureKey: encryptedSecretKey,
+    }: any = driverManagement;
 
     var secretKey: any = await decryptData({
       data: encryptedSecretKey,
@@ -83,248 +86,144 @@ export const validateLocalCardTransaction = async ({
   if (!isValidated) {
     throw new Error('transaction not validated');
   }
-  const session = client.startSession();
+  const result = await db.transaction().execute(async (db) => {
+    const transaction = await db
+      .selectFrom('transactions')
+      .selectAll()
+      .where('id', '=', transactionId)
+      .executeTakeFirstOrThrow();
 
-  const result = await withTransaction({
-    session,
-    options: {
-      writeConcern: { w: 'majority' },
-      readConcern: { level: 'majority' },
-    },
-    fn: async () => {
-      const transaction = await client
-        .db('generalData')
-        .collection('transactions')
-        .findOne({ _id: new ObjectId(transactionId) }, { session });
-      if (!transaction) {
-        throw new Error('transaction not found');
-      }
+    if (transaction.status.includes('validated')) {
+      return 'transaction already approved';
+    }
+    const type = transaction.type;
 
-      if (transaction.validated) {
-        return 'transaction already approved';
-      }
-      const type = transaction.type;
+    if (type === subscriptionPayment) {
+      // create a date and add the number of months from the transaction
+      const date = new Date();
+      date.setMonth(date.getMonth() + transaction.numberOfMonths);
 
-      if (type === subscriptionPayment) {
-        // create a date and add the number of months from the transaction
-        const date = new Date();
-        date.setMonth(date.getMonth() + transaction.months);
+      await db
+        .updateTable('customers')
+        .set({
+          transactionId: null,
+          subscribedToHyfnPlus: true,
+          expirationDate: date,
+        })
+        .where('id', '=', transaction.customerId)
+        .executeTakeFirst();
 
-        await client
-          .db('generalData')
-          .collection('customerInfo')
-          .updateOne(
-            { _id: new ObjectId(transaction.customerId) },
+      await db
+        .updateTable('transactions')
+        .set({
+          status: [...(transaction.status || []), 'validated'],
+        })
+        .where('id', '=', transaction.id)
+        .executeTakeFirst();
+      return 'transaction approved';
+    }
 
-            {
-              $set: {
-                transactionId: undefined,
-                subscribedToHyfnPlus: true,
-                expirationDate: date,
-              },
-            },
+    if (type === serviceFeePayment) {
+      await db
+        .updateTable('orders')
+        .set({
+          serviceFeePaid: true,
+        })
+        .where('id', '=', transaction.orderId)
+        .executeTakeFirst();
+      await db
+        .updateTable('transactions')
+        .set({
+          status: [...(transaction.status || []), 'validated'],
+        })
+        .where('id', '=', transaction.id)
+        .executeTakeFirst();
 
-            {
-              session,
-            }
-          );
-        await client
-          .db('generalData')
-          .collection('transactions')
-          .updateOne(
-            { _id: new ObjectId(transactionId) },
-            {
-              $set: {
-                validated: true,
-              },
-            },
-            { session }
-          );
-        return 'transaction approved';
-      }
+      await db
+        .updateTable('customers')
+        .set({
+          transactionId: null,
+        })
+        .where('id', '=', transaction.customerId)
+        .executeTakeFirst();
+      return 'transaction approved';
+    }
 
-      if (type === serviceFeePayment) {
-        await client
-          .db('base')
-          .collection('orders')
-          .updateOne(
-            { _id: new ObjectId(transaction.orderId) },
-            {
-              $set: {
-                serviceFeePaid: true,
-              },
-            },
-            { session }
-          );
-        await client
-          .db('generalData')
-          .collection('transactions')
-          .updateOne(
-            { _id: new ObjectId(transactionId) },
-            {
-              $set: {
-                validated: true,
-              },
-            },
-            { session }
-          );
-        await client
-          .db('generalData')
-          .collection('customerInfo')
-          .updateOne(
-            { _id: new ObjectId(transaction.customerId) },
+    if (type === storePayment) {
+      const orderDoc = await db
+        .selectFrom('orders')
+        .selectAll()
+        .where('id', '=', transaction.orderId)
+        .executeTakeFirst();
 
-            {
-              $set: {
-                transactionId: undefined,
-              },
-            },
+      await db
+        .updateTable('orders')
+        .set({
+          storeStatus: [...(orderDoc.storeStatus || []), 'paid'],
+        })
+        .where('id', '=', transaction.orderId)
+        .executeTakeFirst();
+      await db
+        .updateTable('transactions')
+        .set({
+          status: [...(transaction.status || []), 'validated'],
+        })
+        .where('id', '=', transaction.id)
+        .executeTakeFirst();
+      await db
+        .updateTable('customers')
+        .set({
+          transactionId: null,
+        })
+        .where('id', '=', transaction.customerId)
+        .executeTakeFirst();
+      // await db.updateTable('stores').set({
+      //   sales: sql`tStores.sales + transaction.amount`
+      // })
 
-            {
-              session,
-            }
-          );
-        return 'transaction approved';
-      }
+      return 'transaction approved';
+    }
 
-      if (type === storePayment) {
-        // const customerDocUpdate = await client
-        //   .db('generalData')
-        //   .collection('customerInfo')
-        //   .updateOne(
-        //     { _id: new ObjectId(transaction.customerId) },
-        //     {
-        //       $set: {
-        //         balance: -Math.abs(transaction.amount),
-        //       },
-        //     }
-        //   );
-        // updateOne({ updateOneResult: customerDocUpdate });
-        const orderDoc = await client
-          .db('base')
-          .collection('orders')
-          .findOne({ _id: new ObjectId(transaction.orderId) }, {});
-        if (!orderDoc) {
-          throw new Error('order not found');
-        }
-        // findOne({ findOneResult: orderDoc });
-        var updateDoc = {
-          [`orders.$[store].transactions.$[transaction].validated`]: true,
-          [`orders.$[store].paid`]: true,
-          [`orders.$[store].orderStatus`]: STORE_STATUS_PAID,
-          // ['status.$[customer].status']: ORDER_STATUS_DELIVERED,
-          [`orders.$[store].paymentDate`]: new Date(),
-          // ['status.$[store].status']: ORDER_STATUS_DELIVERED,
-        } as any;
+    if (type === managementPayment) {
+      // await client
+      //   .db('generalData')
+      //   .collection('driverManagement')
+      //   .updateOne(
+      //     { _id: new ObjectId(transaction.storeId) },
+      //     {
+      //       $inc: {
+      //         // balance: Math.abs(transaction.amount),
+      //         profits: Math.abs(transaction.amount),
+      //       },
+      //     },
+      //     { session }
+      //   );
 
-        if (orderDoc.orderType === ORDER_TYPE_PICKUP) {
-          const storesNotPaid = orderDoc.orders.some((store) => {
-            return !store.paid;
-          });
-          if (!storesNotPaid) {
-            updateDoc = { ...updateDoc, delivered: true };
-          }
-        }
-        const updateOrderDoc = await client
-          .db('base')
-          .collection('orders')
-          .updateOne(
-            { _id: new ObjectId(transaction.orderId) },
-            {
-              $set: updateDoc,
-            },
-            {
-              session,
-              arrayFilters: [
-                {
-                  'store._id': new ObjectId(transaction.storeId),
-                },
-                { 'transaction._id': new ObjectId(transaction._id.toString()) },
-              ],
-            }
-          );
+      await db
+        .updateTable('customers')
+        .set({
+          transactionId: null,
+        })
+        .where('id', '=', transaction.customerId)
+        .executeTakeFirst();
 
-        await client
-          .db('generalData')
-          .collection('transactions')
-          .updateOne(
-            { _id: new ObjectId(transactionId) },
-            {
-              $set: { validated: true },
-            },
-            { session }
-          );
+      await db
+        .updateTable('orders')
+        .set({
+          deliveryFeePaid: true,
+        })
+        .where('id', '=', transaction.orderId)
+        .executeTakeFirst();
 
-        const storeInfoUpdate = await client
-          .db('generalData')
-          .collection('storeInfo')
-          .updateOne(
-            { _id: new ObjectId(transaction.storeId) },
-            {
-              $inc: {
-                sales: Math.abs(transaction.amount),
-              },
-            },
-            { session }
-          );
-        // updateOne({ updateOneResult: storeInfoUpdate });
-        return 'transaction approved';
-      }
-
-      if (type === managementPayment) {
-        await client
-          .db('generalData')
-          .collection('driverManagement')
-          .updateOne(
-            { _id: new ObjectId(transaction.storeId) },
-            {
-              $inc: {
-                // balance: Math.abs(transaction.amount),
-                profits: Math.abs(transaction.amount),
-              },
-            },
-            { session }
-          );
-        await client
-          .db('generalData')
-          .collection('customerInfo')
-          .updateOne(
-            { _id: new ObjectId(transaction.customerId) },
-            {
-              $set: {
-                transactionId: undefined,
-              },
-            },
-            { session }
-          );
-        await client
-          .db('base')
-          .collection('orders')
-          .updateOne(
-            { _id: new ObjectId(transaction.orderId) },
-            {
-              $set: {
-                deliveryFeePaid: true,
-              },
-            },
-            { session }
-          );
-        await client
-          .db('generalData')
-          .collection('transactions')
-          .updateOne(
-            { _id: new ObjectId(transactionId) },
-            {
-              $set: {
-                validated: true,
-              },
-            }
-          );
-      }
-    },
+      await db
+        .updateTable('transactions')
+        .set({
+          status: [...(transaction.status || []), 'validated'],
+        })
+        .where('id', '=', transaction.id)
+        .executeTakeFirst();
+    }
   });
-
-  await session.endSession();
   return result;
 };
 export const handler = async (event) => {

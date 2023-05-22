@@ -1,6 +1,9 @@
 export function calculateOrderCost(storesArray) {
   return storesArray.reduce((accu, store, currentIndex) => {
-    const storeTotal = store.addedProducts?.reduce((acc, product) => acc + product.pricing.price * product.qty, 0);
+    const storeTotal = store.addedProducts?.reduce(
+      (acc, product) => acc + product.price * product.qty,
+      0
+    );
 
     // storesArray.map((oldStore) => {
     //   if (oldStore._id === store._id) {

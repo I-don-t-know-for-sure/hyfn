@@ -14,16 +14,10 @@ export const subscriptionCheck = async ({
   storeId: any;
   session: any;
 }) => {
-  console.log('🚀 ~ file: subscriptionCheck.js:11 ~ storeId', storeId);
-  // const {
-  //   monthlySubscriptionPaid,
-  //   subscriptionInfo: { expirationDate },
-  // } = storedoc;
   const monthlySubscriptionPaid = storeDoc?.monthlySubscriptionPaid;
   const expirationDate = storeDoc?.subscriptionInfo?.expirationDate;
   const now = new Date();
-  console.log('🚀 ~ file: subscriptionCheck.js:15 ~ expirationDate', expirationDate);
-  console.log('🚀 ~ file: subscriptionCheck.js:17 ~ now', now);
+
   const { country } = storeDoc.storeDoc;
   if (monthlySubscriptionPaid) {
     if (expirationDate < now) {

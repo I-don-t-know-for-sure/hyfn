@@ -1,43 +1,22 @@
-export const getCollectionProductsHandler = async ({ arg, client }) => {
+export const getCollectionProductsHandler = async ({ arg, client, db }: MainFunctionProps) => {
   var result;
 
-  const { country, storeId, lastDoc, collectionId } = arg[0];
-  if (lastDoc) {
-    result = await client
-      .db('base')
-      .collection('products')
-      .find(
-        {
-          '_id': { $gt: new ObjectId(lastDoc) },
-          storeId,
-          'collections.value': collectionId,
-        },
-        { projection: { _id: 1, textInfo: 1 } }
-      )
-      .limit(20)
-      .toArray();
-    result = result.map((product) => {
-      return {
-        value: product._id.toString(),
-        label: product?.textInfo?.title,
-      };
-    });
-    return;
-  }
-  result = await client
-    .db('base')
-    .collection('products')
-    .find(
-      {
-        storeId,
-        'collections.value': collectionId,
-      },
-      { projection: { _id: 1, textInfo: 1 } }
-    )
+  const { lastDoc, collectionId } = arg[0];
+
+  const products = await db
+    .selectFrom('collectionsProducts')
+    .where('collectionId', '=', collectionId)
+    .innerJoin('products', 'collectionsProducts.productId', 'products.id')
+    .select(['products.id', 'products.title'])
+    .offset(lastDoc > 0 ? lastDoc : 0)
     .limit(20)
-    .toArray();
-  result = result.map((product) => {
-    return { value: product._id.toString(), label: product?.textInfo?.title };
+    .execute();
+
+  result = products.map((product) => {
+    return {
+      value: product.id,
+      label: product?.title,
+    };
   });
   return result;
 };

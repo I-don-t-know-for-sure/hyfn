@@ -54,11 +54,11 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
             productOptionsPrice
           );
           const priceAfterFee = add(
-            product?.pricing?.price,
+            product?.price,
             subtract(
               productOptionsPrice,
               multiply(
-                add(product?.pricing?.price, productOptionsPrice),
+                add(product?.price, productOptionsPrice),
                 storeServiceFee
               )
             )
@@ -72,8 +72,8 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
         return add(acc, priceAfterFee);
       }
       const priceAfterFee = subtract(
-        product?.pricing?.price,
-        multiply(product.pricing.price, storeServiceFee)
+        product?.price,
+        multiply(product.price, storeServiceFee)
       );
       return add(acc, multiply(priceAfterFee, product?.qty));
     },
@@ -101,7 +101,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
             changeStoreOrderType({
               orderType: ORDER_TYPE_DELIVERY,
               setCartInfo,
-              storeId: inCartStore._id,
+              storeId: inCartStore.id,
             });
             // setOrderType('Delivery');
           }}
@@ -116,7 +116,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
             changeStoreOrderType({
               orderType: ORDER_TYPE_PICKUP,
               setCartInfo,
-              storeId: inCartStore._id,
+              storeId: inCartStore.id,
             });
             // setOrderType('Pickup');
           }}
@@ -139,9 +139,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
       >
         <UnstyledButton
           component={Link}
-          to={`/${inCartStore?._id?.toString()}/${inCartStore?.country}/${
-            inCartStore?.city
-          }`}
+          to={`/${inCartStore?.id}/${inCartStore?.country}/${inCartStore?.city}`}
           style={{
             display: "flex",
             flexDirection: "row",
@@ -182,17 +180,17 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
           };
           const updateProductInstructions = (instructions: string) => {
             updateInstructions({
-              storeId: inCartStore._id,
-              productId: product._id,
+              storeId: inCartStore.id,
+              productId: product.id,
               instructions,
               setCartInfo,
             });
           };
           const checkProduct = Array.isArray(product) ? product[0] : product;
           const productUrl =
-            checkProduct?.options.length > 0
-              ? `/product/${inCartStore._id}/${inCartStore.country}/${inCartStore.city}/${checkProduct._id}`
-              : `/product/withnotoptions/${inCartStore._id}/${inCartStore.country}/${inCartStore.city}/${checkProduct._id}`;
+            checkProduct?.options?.length > 0
+              ? `/product/${inCartStore.id}/${inCartStore.country}/${inCartStore.city}/${checkProduct.id}`
+              : `/product/withnotoptions/${inCartStore.id}/${inCartStore.country}/${inCartStore.city}/${checkProduct.id}`;
           // const som = addedProducts?.find((added) => {
           //   return added._id === product._id.toString();
           // })?.qty;
@@ -235,7 +233,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                           imageName={
                             product.images?.length > 0 ? product.images[0] : ""
                           }
-                          alt={product.textInfo?.title}
+                          alt={product.title}
                         />
                       </Box>
                       <Box
@@ -243,7 +241,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                           marginLeft: "6px",
                         }}
                       >
-                        <Text>{product.textInfo?.title}</Text>
+                        <Text>{product.title}</Text>
                         {/* <Text size="sm">{t('weight')}</Text> */}
                       </Box>
                     </Box>
@@ -260,9 +258,9 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                       <Text>
                         {` ${inCartStore?.currency || "LYD"} ${multiply(
                           subtract(
-                            add(product?.pricing?.price, productOptionsPrice),
+                            add(product?.price, productOptionsPrice),
                             multiply(
-                              add(product?.pricing?.price, productOptionsPrice),
+                              add(product?.price, productOptionsPrice),
                               storeServiceFee
                             )
                           ),
@@ -329,7 +327,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                       imageName={
                         product.images?.length > 0 ? product.images[0] : ""
                       }
-                      alt={product.textInfo?.title}
+                      alt={product.title}
                     />
                   </Box>
                   <Box
@@ -337,7 +335,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                       marginLeft: "6px",
                     }}
                   >
-                    <Text>{product.textInfo?.title}</Text>
+                    <Text>{product.title}</Text>
                     {/* <Text size="sm">{t('weight')}</Text> */}
                   </Box>
                 </UnstyledButton>
@@ -353,8 +351,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                 <Group>
                   <Text>
                     {`${inCartStore?.currency || "LYD"} ${(
-                      (product?.pricing?.price -
-                        product.pricing.price * storeServiceFee) *
+                      (product?.price - product.price * storeServiceFee) *
                       product?.qty
                     ).toFixed(2)} `}
                   </Text>
@@ -410,7 +407,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                 component={Link}
                 to={"/checkout"}
                 state={{
-                  storeId: inCartStore._id,
+                  storeId: inCartStore.id,
                 }}
                 style={{
                   width: "100%",

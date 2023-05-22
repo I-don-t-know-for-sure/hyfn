@@ -11,23 +11,30 @@ export const descriptionGenerationPricePerImage = 0.1;
 export const backgroundRemovalPerImage = 0.1;
 
 /// customer payment
-
+// export const TRANSACTION_TYPE_SUBSCRIPTION = "storeSubsscription";
+export const TRANSACTION_TYPE_WALLET = "storeWallet";
 export const subscriptionPayment = "subscriptionPayment";
 export const serviceFeePayment = "serviceFeePayment";
 export const managementPayment = "managementPayment";
 export const storePayment = "storePayment";
+
+export const transactionTypesArray = [
+  subscriptionPayment,
+  serviceFeePayment,
+  managementPayment,
+  storePayment,
+  TRANSACTION_TYPE_WALLET,
+  // TRANSACTION_TYPE_SUBSCRIPTION,
+] as const;
+
 export const something = "sjdjncjd";
 export const measurementSystem = [
   { label: "Kilo", value: "Kilo" },
   { label: "Liter", value: "Liter" },
-  // { label: t("Gram"), value: "Gram" },
-  // { label: t("Milliliter"), value: "Milliliter" },
+
   { label: "Unit", value: "Unit" },
 ];
-export const test = "jcdnj";
-export const test2 = "jcdnj";
-export const test3 = "jcdnj";
-export const test4 = "jcdnj";
+
 export const ACTIVE_ORDERS = "activeOrders";
 export const ACCEPTED_PROPOSALS_FLAG = "accepted";
 export const ALL_PROPOSALS_FLAG = "all";
@@ -184,8 +191,6 @@ export const sadadCategoryNumber = 20;
 
 export const PAYMENT_WINDOW = 10;
 export const gibbrish = "gibbrish";
-export const TRANSACTION_TYPE_SUBSCRIPTION = "SUBSCRIPTION";
-export const TRANSACTION_TYPE_WALLET = "WALLET";
 
 export const ORDER_STATUS_ACCEPTED = "accepted";
 
@@ -257,7 +262,8 @@ export const countries = {
 };
 ///////////////////////////////////////////////////////// enums ////////////////////////////////////////////////////////////
 export const collectionTypesArray = [COLLECTION_TYPE_MANUAL];
-export const measurementSystemArray = ["Kilo", "Liter", "Unit"];
+export const measurementSystemArray = ["Kilo", "Liter", "Unit"] as const;
+export const transactionMethods = ["localCard", "sadad"] as const;
 export const storeTypesArray = [
   "restaurant",
   "grocery",
@@ -268,8 +274,8 @@ export const storeTypesArray = [
   "MCA",
   "CM",
   "games",
-];
-export const countriesArray = ["Libya"];
+] as const;
+export const countriesArray = ["Libya"] as const;
 export const citiesArray = [
   "Tripoli",
   "Ajdabiya",
@@ -314,7 +320,7 @@ export const citiesArray = [
   "Sorman",
   "Msallata",
   "Kikla",
-];
+] as const;
 
 export const currenciesArray = ["LYD"];
 

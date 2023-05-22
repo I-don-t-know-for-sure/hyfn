@@ -1,142 +1,101 @@
-export const setOrderAsDeliveredHandler = async ({ arg, client }: MainFunctionProps) => {
-  const session = client.startSession();
-  const result = await withTransaction({
-    session,
-    fn: async () => {
-      var result;
-      const { id, country, confirmationCode, orderId } = arg[0];
-      console.log('🚀 ~ file: setOrderAsDelivered.js:20 ~ mainFunction ~ arg', arg[0]);
-      const driverDoc = await client
-        .db('generalData')
-        .collection('driverData')
-        .findOne(
-          {
-            _id: new ObjectId(id),
-          },
-          { session }
-        );
-      const { orderIds } = driverDoc;
-      const driverTakenOrder = orderIds.find((id) => id === orderId);
-      if (!driverTakenOrder) {
-        throw new Error('driver did not take the order');
+export const setOrderAsDeliveredHandler = async ({
+  arg,
+  client,
+  db,
+  userId,
+}: MainFunctionProps) => {
+  const result = await db.transaction().execute(async (trx) => {
+    const { id, country, confirmationCode, orderId } = arg[0];
+    console.log('🚀 ~ file: setOrderAsDelivered.js:20 ~ mainFunction ~ arg', arg[0]);
+
+    const driverDoc = await trx
+      .selectFrom('drivers')
+      .selectAll()
+      .where('userId', '=', userId)
+      .executeTakeFirstOrThrow();
+
+    // const driverTakenOrder = orderIds.find((id) => id === orderId);
+    // if (!driverTakenOrder) {
+    //   throw new Error('driver did not take the order');
+    // }
+    // if (!driverDoc?.onDuty) {
+    //   throw new Error('driver is not on duty');
+    // }
+
+    const orderDoc = await trx
+      .selectFrom('orders')
+      .selectAll()
+      .where('confirmationCode', '=', confirmationCode)
+      .where('driverId', '=', id)
+      .executeTakeFirstOrThrow();
+    if (!orderDoc.storeStatus.includes('paid')) {
+      throw new Error('not all stores are paid');
+    }
+    if (!orderDoc.deliveryFeePaid) throw new Error('delivery fee not paid');
+    if (orderDoc.confirmationCode !== confirmationCode) {
+      throw new Error('Confirmation Code does not match');
+    }
+
+    await trx
+      .updateTable('orders')
+      .set({
+        deliveryDate: new Date(),
+
+        orderStatus: [...orderDoc.orderStatus, 'delivered'],
+        // maybe add a delivered status to both the driver and customer
+      })
+      .where('confirmationCode', '=', confirmationCode)
+      .execute();
+
+    const removeDriverAfterOrder = driverDoc.removeDriverAfterOrder;
+    if (removeDriverAfterOrder) {
+      const hasOrders = await trx
+        .selectFrom('orders')
+        .select('id')
+        .where('driverId', '=', driverDoc.id)
+        .where(sql`not array_contains(order_status, ${'delivered'})`)
+        .execute();
+      if (hasOrders.length === 0) {
+        await trx
+          .updateTable('drivers')
+          .set({
+            driverManagement: undefined,
+            removeDriverAfterOrder: false,
+          })
+          .where('id', '=', driverDoc.id)
+          .executeTakeFirst();
       }
-      if (!driverDoc?.onDuty) {
-        throw new Error('driver is not on duty');
-      }
-      const orderDoc = await client
-        .db('base')
-        .collection('orders')
-        .findOne(
-          {
-            _id: new ObjectId(orderId),
-          },
-          { session }
-        );
-      orderDoc.orders.some((store) => {
-        if (!store?.paid) {
-          result = 'not all stores are paid';
-          throw new Error('not all stores are paid');
-        }
-        return;
-      });
-      if (orderDoc.confirmationCode !== confirmationCode) {
-        throw new Error('Confirmation Code does not match');
-      }
-      await client
-        .db('base')
-        .collection('orders')
-        .updateOne(
-          { '_id': new ObjectId(orderId), 'status._id': id },
-          {
-            $set: {
-              deliveryDate: new Date(),
-              delivered: true,
-              ['status.$[driver].status']: USER_STATUS_DELIVERED,
-              ['status.$[customer].status']: USER_STATUS_DELIVERED,
-            },
-          },
-          {
-            session,
-            arrayFilters: [{ 'driver._id': id }, { 'customer._id': orderDoc.userId }],
-          }
-        );
-      const removeDriverAfterOrder = driverDoc.removeDriverAfterOrder;
-      if (removeDriverAfterOrder) {
-        await client
-          .db('generalData')
-          .collection('driverData')
-          .updateOne(
-            {
-              _id: new ObjectId(id),
-            },
-            {
-              $set: {
-                onDuty: false,
-                orderId: '',
-                driverManagement: [],
-                removeDriverAfterOrder: false,
-              },
-            },
-            { session }
-          );
-        await client
-          .db('generalData')
-          .collection('driverManagement')
-          .updateOne(
-            { _id: new ObjectId(driverDoc.driverManagement[0]) },
-            {
-              $inc: {
-                usedBalance: -Math.abs(parseInt(driverDoc.balance)),
-                balance: Math.abs(parseFloat(orderDoc.managementFee.toFixed(3))),
-                profits: Math.abs(parseFloat(orderDoc.managementFee.toFixed(3))),
-              },
-            },
-            { session }
-          );
-        return 'success';
-      }
-      await client
-        .db('generalData')
-        .collection('driverManagement')
-        .updateOne(
-          { _id: new ObjectId(driverDoc.driverManagement[0]) },
-          {
-            $inc: {
-              balance: Math.abs(parseFloat(orderDoc.managementFee.toFixed(3))),
-              profits: Math.abs(parseFloat(orderDoc.managementFee.toFixed(3))),
-            },
-          },
-          { session }
-        );
-      await client
-        .db('generalData')
-        .collection('driverData')
-        .updateOne(
-          {
-            _id: new ObjectId(id),
-          },
-          {
-            $set: {
-              onDuty: false,
-              orderId: '',
-            },
-          },
-          { session }
-        );
-      result = 'success';
-      return result;
-    },
+
+      await trx
+        .updateTable('driverManagements')
+        .set({
+          profits: sql`profits + ${orderDoc.deliveryFee}`,
+        })
+        .where('id', '=', orderDoc.driverManagement)
+        .execute();
+      return 'success';
+    }
+
+    await trx
+      .updateTable('driverManagements')
+      .set({
+        profits: sql`profits + ${orderDoc.deliveryFee}`,
+      })
+      .where('id', '=', orderDoc.driverManagement)
+      .execute();
+
+    return 'success';
   });
-  await session.endSession();
+
   return result;
 };
 interface SetOrderAsDeliveredProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-import { ObjectId } from 'mongodb';
-import { USER_STATUS_DELIVERED } from 'hyfn-types';
-import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
+
+import { MainFunctionProps, mainWrapper, tOrder } from 'hyfn-server';
+import { sql } from 'kysely';
 export const handler = async (event) => {
   return await mainWrapper({
     mainFunction: setOrderAsDeliveredHandler,

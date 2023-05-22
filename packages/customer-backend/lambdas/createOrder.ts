@@ -79,21 +79,6 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
       const status = order.orders.map((store) => {
         return { _id: store._id, status: ORDER_STATUS_PENDING, userType: 'store' };
       });
-      console.log({
-        orders: order.orders,
-        name,
-        userId,
-        buyerCoords: fixedBuyerCoords,
-        duration,
-        distance,
-        orderType,
-        status: [...status, { _id: userId, status: 'customer', userType: 'customer' }],
-        coords: fixedGeometry,
-      });
-      // const ordersObject = orders.reduce((accu, current) => {
-      //   return { ...accu, [current._id]: current };
-      // }, {});
-      // console.log(ordersObject);
 
       const insertOrderResult = await mongo.collection(`orders`).insertOne(
         {
@@ -127,22 +112,6 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
         { session }
       );
 
-      // if (orderType === ORDER_TYPE_PICKUP) {
-      //   const updateCustomerResult = await client
-      //     .db('generalData')
-      //     .collection('customerInfo')
-      //     .updateOne(
-      //       {
-      //         _id: new ObjectId(userId),
-      //       },
-      //       {
-      //         $inc: { balance: -Math.abs(parseFloat(serviceFee.toFixed(3))) },
-      //       },
-      //       { session }
-      //     );
-      //   updateOne({ updateOneResult: updateCustomerResult });
-      // }
-      console.log('there is a result');
       return { message: 'success' };
     },
   });

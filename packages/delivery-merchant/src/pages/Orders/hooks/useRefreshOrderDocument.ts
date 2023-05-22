@@ -8,7 +8,6 @@ import fetchUtil from "utils/fetch";
 export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
   // const [{ country }] = useLocation();
   const { userDocument } = useUser();
-  const { country } = userDocument?.storeDoc as { country: string };
 
   const queryClient = useQueryClient();
   return useQuery(
@@ -16,7 +15,7 @@ export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
     async () => {
       try {
         const result = await fetchUtil({
-          reqData: [{ orderId, country }],
+          reqData: [{ orderId }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/getOrderDocument`,
         });
 

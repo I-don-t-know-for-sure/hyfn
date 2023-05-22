@@ -11,7 +11,7 @@ export const isLocalCardTransactionValidated = async ({
   MerchantId,
   TerminalId,
   secretKey,
-includeLocalCardTransactionFeeToPrice = false,
+  includeLocalCardTransactionFeeToPrice = false,
   amount: amountFromTransaction,
 }: {
   transactionId: string;
@@ -19,33 +19,24 @@ includeLocalCardTransactionFeeToPrice = false,
   TerminalId: string;
   secretKey: string;
   amount: number;
-  includeLocalCardTransactionFeeToPrice: boolean
+  includeLocalCardTransactionFeeToPrice: boolean;
 }) => {
-  console.log(
-    "🚀 ~ file: validateLocalCardTransaction.js:21 ~ validateLocalCardTransaction ~ result",
-    "bdhcbhdbchdbchdchdbchdbchbdhcbdh"
-  );
-
-  console.log(
-    "🚀 ~ file: isLocalCardTransactionValidated.js:90 ~ amountFromTransaction",
-    typeof amountFromTransaction
+  const amountWithFee = includeLocalCardTransactionFeeToPrice
+    ? add(
+        amountFromTransaction,
+        multiply(amountFromTransaction, LOCAL_CARD_FEE)
+      )
+    : amountFromTransaction;
+  const transactionDocAmount = parseInt(
+    /* Math.round */ (amountWithFee * 1000).toFixed(3)
   );
   const now = new Date();
-  console.log(dataServicesURL);
+
   const merchantKey = hex_to_ascii(secretKey);
 
   const strHashData = `DateTimeLocalTrxn=${now.getTime()}&MerchantId=${MerchantId}&TerminalId=${TerminalId}`;
   const hashed = HmacSHA256(strHashData, merchantKey).toString().toUpperCase();
-  console.log("🚀 ~ file: isLocalCardTransactionValidated.js:23 ~ hashed", {
-    dataServicesURL,
-    MerchantReference: transactionId,
-    TerminalId: TerminalId,
-    MerchantId: MerchantId,
-    DisplayLength: 1,
-    DisplayStart: 0,
-    DateTimeLocalTrxn: `${now.getTime()}`,
-    SecureHash: hashed,
-  });
+
   var result: any;
   try {
     result = await axios({
@@ -72,62 +63,22 @@ includeLocalCardTransactionFeeToPrice = false,
       "🚀 ~ file: isLocalCardTransactionValidated.js:77 ~ error",
       error
     );
-    console.log(error);
   }
-
-  // const result = await got
-  //   .post(dataServicesURL, {
-  //     json: {
-  //       MerchantReference: transactionId,
-  //       TerminalId: TerminalId,
-  //       MerchantId: MerchantId,
-  //       DisplayLength: 1,
-  //       DisplayStart: 0,
-  //       DateTimeLocalTrxn: `${now.getTime()}`,
-  //       SecureHash: hashed,
-  //     },
-  //   })
-  //   .json();
-
-  console.log(
-    "🚀 ~ file: isLocalCardTransactionValidated.js:39 ~ result",
-    result.data
-  );
 
   if (result.data.Transactions.length === 0) {
     throw new Error("transaction not found");
     // or throw an error telling that the transaction doesn't exist
   }
-  const amount = parseInt(
-    (parseFloat(amountFromTransaction.toFixed(3)) * 1000).toFixed(3)
-  );
-  console.log(
-    "🚀 ~ file: isLocalCardTransactionValidated.js:95 ~ amount",
-    amount
-  );
+
   const isApproved =
     result.data.Transactions[0].DateTransactions[0].Status ===
     transactionApproved;
-  console.log(result.data.Transactions[0].DateTransactions[0].Status);
+
   const transactionAmount = parseInt(
     result.data.Transactions[0].DateTransactions[0].Amnt
   );
-  console.log(
-    "🚀 ~ file: isLocalCardTransactionValidated.js:99 ~ transactionAmount",
-    transactionAmount
-  );
-  // const transactionAmountWithDecimal = (transactionAmount / Math.pow(10, 3)).toFixed(3);
-  // console.log(
-  //   '🚀 ~ file: isLocalCardTransactionValidated.js:93 ~ transactionAmount',
-  //   transactionAmountWithDecimal
-  // );
 
-  console.log(
-    "🚀 ~ file: isLocalCardTransactionValidated.js:99 ~ amount",
-    amount
-  );
-const amountWithFee = includeLocalCardTransactionFeeToPrice ? add(amount, multiply(amount, LOCAL_CARD_FEE)) : amount
-  if (!equal(transactionAmount, amountWithFee)) {
+  if (!equal(transactionAmount, transactionDocAmount)) {
     throw new Error("transaction amount does not match");
   }
   console.log(

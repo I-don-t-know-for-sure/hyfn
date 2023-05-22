@@ -14,7 +14,7 @@ const InfoCard: React.FC<{
   onChangeHandler?: (
     value: any,
     firstChangedKey: string,
-    changedKey: string
+    changedKey?: string
   ) => void;
   info: any;
   isLoading?: boolean;
@@ -37,17 +37,17 @@ const InfoCard: React.FC<{
           <TextInput
             label={t("Collection name")}
             required
-            value={info.textInfo?.title || ""}
+            value={info.title || ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onChangeHandler(e.target.value, "textInfo", "title")
+              onChangeHandler(e.target.value, "title")
             }
           />
           <TextInput
             required
             label={t("Collection description")}
-            value={info.textInfo?.description || ""}
+            value={info.description || ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onChangeHandler(e.target.value, "textInfo", "description")
+              onChangeHandler(e.target.value, "description")
             }
           />
         </>

@@ -1,38 +1,18 @@
-export const getOrderHistoryHandler = async ({ arg, client }: MainFunctionProps) => {
+export const getOrderHistoryHandler = async ({ arg, client, db, userId }: MainFunctionProps) => {
   const { status, city, country, id, lastDoc } = arg[0];
-  const db = client.db('base');
-  if (lastDoc) {
-    const orders = await db
-      .collection(`orders`)
-      .find({
-        _id: { $gt: new ObjectId(lastDoc) },
-        status: {
-          $elemMatch: {
-            status: { $eq: ORDER_STATUS_DELIVERED },
-            _id: new ObjectId(id),
-            userType: 'store',
-          },
-        },
-      })
-      .limit(20)
-      .toArray();
-    console.log(JSON.stringify(orders));
-    return orders;
-  }
+  // const db = client.db('base');
+  const storeDoc = await db
+    .selectFrom('stores')
+    .where('usersIds', '@>', [userId])
+    .select(['id'])
+    .executeTakeFirstOrThrow();
   const orders = await db
-    .collection(`orders`)
-    .find({
-      status: {
-        $elemMatch: {
-          status: { $eq: ORDER_STATUS_DELIVERED },
-          _id: new ObjectId(id),
-          userType: 'store',
-        },
-      },
-    })
-    .limit(20)
-    .toArray();
-  console.log(JSON.stringify(orders));
+    .selectFrom('orders')
+    .where('storeId', '=', storeDoc.id)
+    .innerJoin('orderProducts', 'orderId', 'orders.id')
+    .limit(15)
+    .execute();
+
   return orders;
 };
 interface GetOrderHistoryProps extends Omit<MainFunctionProps, 'arg'> {

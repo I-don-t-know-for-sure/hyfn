@@ -1,7 +1,6 @@
-export const addLocalCardKeysHandler = async ({ arg, client, userId }) => {
+export const addLocalCardKeysHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
   const { terminalId, merchantId, secretKey } = arg[0];
-  console.log('🚀 ~ file: addLocalCardKeys.js:12 ~ mainFunction ~ secretKey', secretKey);
-  console.log('🚀 ~ file: isLocalCardTransactionValidated.js:8 ~ dataServicesURL', dataServicesURL);
+
   const encryptedSecretkey = await encryptData(secretKey, process.env.kmsKeyARN || '', new KMS());
   const now = new Date();
   console.log('here iaLocal');
@@ -32,23 +31,17 @@ export const addLocalCardKeysHandler = async ({ arg, client, userId }) => {
   if (!areKeysValid) {
     throw new Error('your keys are not valid');
   }
-  await client
-    .db('generalData')
-    .collection('driverManagement')
-    .updateOne(
-      { userId },
-      {
-        $set: {
-          localCardKeys: {
-            TerminalId: terminalId,
-            MerchantId: merchantId,
-            secretKey: encryptedSecretkey,
-          },
-          localCardAPIKeyFilled: true,
-        },
-      },
-      {}
-    );
+
+  await db
+    .updateTable('driverManagements')
+    .set({
+      terminalId,
+      merchantId,
+      secureKey: encryptedSecretkey,
+      localCardKeyFilled: true,
+    })
+    .where('userId', '=', userId)
+    .execute();
 };
 interface AddLocalCardKeysProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;

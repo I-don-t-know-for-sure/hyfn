@@ -54,15 +54,17 @@ export const useUpdateProduct = () => {
           url: `${import.meta.env.VITE_APP_BASE_URL}/updateProduct`,
           reqData: [
             {
-              ...rest,
-              imagesURLs: [
-                ...(imagesURLs?.length > 0 ? imagesURLs : []),
-                ...productLibraryImages,
-              ],
+              product: {
+                ...rest,
+                imagesURLs: [
+                  ...(imagesURLs?.length > 0 ? imagesURLs : []),
+                  ...productLibraryImages,
+                ],
+              },
+              deletedImages,
+              productId,
             },
-            userDocument?.storeDoc,
-            productId,
-            deletedImages,
+            // userDocument?.storeDoc,
           ],
         });
 

@@ -17,7 +17,7 @@ export const useCreateOrder = () => {
     async () => {
       try {
         const result = await fetchUtil({
-          reqData: [userDocument._id],
+          reqData: [userDocument.id],
           url: `${import.meta.env.VITE_APP_BASE_URL}/createOrder`,
         });
         navigate("/");

@@ -21,14 +21,20 @@
   "devDependencies": {
     "@serverless-stack/resources": "^1.18.4",
     "@tsconfig/node16": "^1.0.3",
-    "aws-cdk-lib": "2.62.2",
+    "aws-cdk-lib": "2.72.1",
     "colorette": "^2.0.19",
     "constructs": "10.1.156",
-    "sst": "^2.8.3",
+    "kysely-codegen": "^0.10.0",
+    "prettier": "^2.8.8",
+    "prettier-plugin-sql": "^0.14.0",
+    "sst": "2.8.27",
     "typescript": "^4.9.5"
   },
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "kysely": "^0.24.2",
+    "pg": "^8.10.0"
+  }
 }

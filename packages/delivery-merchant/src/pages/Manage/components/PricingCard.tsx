@@ -69,11 +69,11 @@ const PricingCard: React.FC<ProductsCard> = ({
                 label={t("Pricing")}
                 required
                 placeholder={t(
-                  `${productInfo.pricing.currency} 10.00 Per ${productInfo.measurementSystem}`
+                  `${productInfo.currency} 10.00 Per ${productInfo.measurementSystem}`
                 )}
-                value={`${productInfo?.pricing?.price || ""}`}
+                value={`${productInfo?.price || ""}`}
                 onChange={(e) => {
-                  onChangeHandler(e.target.value, "pricing", "price");
+                  onChangeHandler(e.target.value, "price");
                 }}
                 rightSectionWidth={100}
                 rightSection={
@@ -121,7 +121,7 @@ const PricingCard: React.FC<ProductsCard> = ({
                   { label: "LYD", value: "LYD" },
                   // { label: 'USD', value: 'USD' },
                 ]}
-                value={productInfo.pricing.currency}
+                value={productInfo.currency}
                 // onChange={(e) => {
                 //   onChangeHandler(e, "pricing", "currency");
                 // }}
@@ -170,10 +170,10 @@ const PricingCard: React.FC<ProductsCard> = ({
               type="number"
               required
               label={t("Compare at Price")}
-              placeholder={`${productInfo.pricing.currency} 20.00 Per ${productInfo.measurementSystem}`}
-              value={`${productInfo?.pricing?.prevPrice || ""}`}
+              placeholder={`${productInfo.currency} 20.00 Per ${productInfo.measurementSystem}`}
+              value={`${productInfo?.prevPrice || ""}`}
               onChange={(e) => {
-                onChangeHandler(e.target.value, "pricing", "prevPrice");
+                onChangeHandler(e.target.value, "prevPrice");
               }}
             />
             {/* <TextInput

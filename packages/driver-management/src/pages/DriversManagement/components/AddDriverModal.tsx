@@ -59,7 +59,7 @@ const AddDriverModal: React.FC<AddDriverModalProps> = ({
           />
           <Button
             onClick={() =>
-              addDriver({ driverId: driver._id, balance: balanceToAdd })
+              addDriver({ driverId: driver.id, balance: balanceToAdd })
             }
           >
             {t("Add driver")}

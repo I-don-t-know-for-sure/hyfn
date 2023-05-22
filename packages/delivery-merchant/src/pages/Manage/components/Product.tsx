@@ -32,28 +32,24 @@ needs refactoring
 */
 const Product: React.FC<ProductProps> = () => {
   const { userDocument } = useUser();
-  const currency = currencies[userDocument.storeDoc.country];
-  console.log("🚀 ~ file: Product.tsx:28 ~ currency", currency);
-  const [productInfo, setProductInfo] = useState<ProductInfo>({
-    textInfo: {
-      title: "",
-      description: "",
-    },
-    measurementSystem: "Unit",
-    pricing: {
-      price: "",
-      currency: currency,
+  const currency = currencies[userDocument.country];
 
-      prevPrice: "",
-      costPerItem: "",
-    },
+  const [productInfo, setProductInfo] = useState<ProductInfo>({
+    title: "",
+    description: "",
+
+    measurementSystem: "Unit",
+
+    price: "",
+    currency: currency,
+
+    prevPrice: "",
+    costPerItem: "",
 
     weightInKilo: "",
-    options: {
-      hasOptions: false,
+    hasOptions: false,
+    options: [],
 
-      options: [],
-    },
     barcode: "",
     isActive: false,
     tags: [],

@@ -17,7 +17,7 @@ import { useConfigData } from "components/Menu/config";
 import Translation from "components/Translation";
 import { useUser } from "contexts/userContext/User";
 
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -153,7 +153,6 @@ const SignUp: React.FC = () => {
                   name: string;
                 };
 
-                console.log("already in use");
                 setException({ exception: true, code, message });
                 updateNotification({
                   message: t("An Error occurred"),

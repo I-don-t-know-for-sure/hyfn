@@ -8,11 +8,12 @@ import { updateAllOrder } from './common/updateAllOrder';
 interface CreateOrderDataProps extends Omit<MainFunctionProps, 'args'> {
   arg: any[];
 }
-export const createOrderData = async ({ arg, client, userId }: CreateOrderDataProps) => {
-  const customerDoc = await client
-    .db('generalData')
-    .collection('customerInfo')
-    .findOne({ customerId: userId }, {});
+export const createOrderData = async ({ arg, client, userId, db }: CreateOrderDataProps) => {
+  const customerDoc = await db
+    .selectFrom('customers')
+    .selectAll()
+    .where('userId', '=', userId)
+    .executeTakeFirstOrThrow();
   // const arg = event;
   const orderCart = arg[0];
   const buyerInfo = arg[1];
@@ -39,7 +40,7 @@ export const createOrderData = async ({ arg, client, userId }: CreateOrderDataPr
   //   },
   //   {},
   // );
-  const orders = customerDoc?.order?.orders;
+
   // if (customerDoc.order) {
   //   var diffrent = false;
   //   // or stores are diffrent
@@ -51,7 +52,7 @@ export const createOrderData = async ({ arg, client, userId }: CreateOrderDataPr
   //   }
   // check this out when free // customerDoc?.order?.orders?.length !== orderCart?.length || diffrent
 
-  await updateAllOrder({ arg, client, customerDoc });
+  await updateAllOrder({ arg, client, customerDoc, db });
   // }
   return JSON.stringify('success');
   // Ensures that the client will close when you finish/error

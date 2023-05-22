@@ -40,8 +40,7 @@ const ProductsSelection: React.FC<ProductsSelectionProps> = ({
     collectionId,
     checked,
   });
-  const [storeFrontTransferList, setStoreFrontTransferList] =
-    useState<TransferListData>([[], []]);
+
   const {
     data: products,
     isLoading: areProductsLoading,

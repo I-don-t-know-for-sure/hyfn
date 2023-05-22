@@ -13,7 +13,7 @@ export const getAdminDocumentHandler = async ({
     .db("generalData")
     .collection("adminInfo")
     .findOne({ userId }, {});
-  console.log(result);
+
   return result;
 };
 import { ObjectId } from "mongodb";

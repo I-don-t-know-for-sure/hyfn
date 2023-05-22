@@ -24,10 +24,7 @@ export const useBulkWrite = () => {
       });
       return result;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useBulkWrite.ts:29 ~ returnuseMutation ~ error:",
-        error
-      );
+      throw error;
     }
   });
 };

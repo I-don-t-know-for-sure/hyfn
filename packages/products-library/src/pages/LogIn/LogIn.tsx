@@ -14,7 +14,7 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 import { useConfigData } from "components/Menu/config";
 import Translation from "components/Translation";
 import { useUser } from "contexts/userContext/User";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { userInfo } from "os";
 import { useCreateCompany } from "pages/SignUp/hooks/useCreateCompany";
 import React, { useEffect, useState } from "react";
@@ -68,8 +68,6 @@ const LogIn: React.FC<LogInProps> = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      console.log(loggedIn);
-
       navigate("/", { replace: true });
     }
   }, [loggedIn]);
@@ -118,12 +116,7 @@ const LogIn: React.FC<LogInProps> = () => {
                     code: values.confirmationCode,
                   });
                   setChangingPassword(false);
-                } catch (error) {
-                  console.log(
-                    "🚀 ~ file: LogIn.tsx:113 ~ onSubmit={changePasswordForm.onSubmit ~ error",
-                    error
-                  );
-                }
+                } catch (error) {}
               })}
             >
               <Stack>
@@ -161,7 +154,7 @@ const LogIn: React.FC<LogInProps> = () => {
                     code: string;
                     message: string;
                   };
-                  console.log(message, "shshshsh");
+
                   setException({ exception: true, message, code });
                 }
               }}
@@ -317,8 +310,6 @@ const LogIn: React.FC<LogInProps> = () => {
               color="green"
               m={"sm"}
               onClick={async () => {
-                console.log(form.values.email);
-
                 const validated = String(form.values.email).match(
                   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 );
@@ -335,7 +326,7 @@ const LogIn: React.FC<LogInProps> = () => {
                   });
                   setChangingPassword(true);
                 } catch (error) {
-                  console.log("🚀 ~ file: LogIn.tsx:259 ~ error", error);
+                  throw error;
                 }
               }}
             >

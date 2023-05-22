@@ -127,7 +127,7 @@ const Product: React.FC<ProductProps> = ({}) => {
 
   const didSelectOptions = () => {
     // const allOptionsOptional = product.options.options.some((option) => option.isRequired)
-    const didNotMeetRules = product.options.options.some((option) => {
+    const didNotMeetRules = product.options.some((option) => {
       const productOrderOptions = productOrder.options.find(
         (productOrderOption) => {
           return productOrderOption.key === option.key;
@@ -439,7 +439,7 @@ const Product: React.FC<ProductProps> = ({}) => {
                 fontSize: "28px",
               }}
             >
-              {product.textInfo.title}
+              {product.title}
             </Text>
             <Group spacing={3}>
               <Text>{storeDoc?.currency || "LYD"}</Text>
@@ -449,10 +449,7 @@ const Product: React.FC<ProductProps> = ({}) => {
                   color: theme.primaryColor,
                 })}
               >
-                {` ${
-                  product.pricing.price -
-                  product.pricing.price * storeServiceFee
-                } `}
+                {` ${product.price - product.price * storeServiceFee} `}
               </Text>
               <Text>{t("Per")}</Text>
               <Text color="red">{t(product?.measurementSystem)}</Text>
@@ -463,7 +460,7 @@ const Product: React.FC<ProductProps> = ({}) => {
               }}
             >
               {`${storeDoc?.currency || "LYD"} ${
-                product.pricing.price - product.pricing.price * storeServiceFee
+                product.price - product.price * storeServiceFee
               } ${t("Per")} `}
             </Text> */}
           </Container>
@@ -501,7 +498,7 @@ const Product: React.FC<ProductProps> = ({}) => {
               })}
           </Box>
         </Box>
-        {product.options?.options?.map((option, index) => {
+        {product.options?.map((option, index) => {
           return (
             <Paper
               key={index}
@@ -628,11 +625,9 @@ const Product: React.FC<ProductProps> = ({}) => {
                             (oldOptions, place) => {
                               if (oldOptions.key === option.key) {
                                 const optionInProductDocument =
-                                  product.options.options.find(
-                                    (productOption) => {
-                                      return productOption.key === option.key;
-                                    }
-                                  );
+                                  product.options.find((productOption) => {
+                                    return productOption.key === option.key;
+                                  });
 
                                 if (
                                   newValues.length >
@@ -678,7 +673,7 @@ const Product: React.FC<ProductProps> = ({}) => {
             </Text>
           }
         />
-        <HtmlRenderer htmlString={product?.textInfo?.description} />
+        <HtmlRenderer htmlString={product?.description} />
       </Container>
     )
   );

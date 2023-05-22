@@ -1,17 +1,19 @@
-export const getDriverInfoHandler = async ({ arg, client }) => {
+export const getDriverInfoHandler = async ({ arg, client, db }: MainFunctionProps) => {
   const { driverId } = arg[0];
-  const driver = await client
-    .db('generalData')
-    .collection('driverData')
-    .findOne({ _id: new ObjectId(driverId) }, {});
+
+  const driver = await db
+    .selectFrom('drivers')
+    .selectAll()
+    .where('id', '=', driverId)
+    .executeTakeFirstOrThrow();
   return driver;
 };
 interface GetDriverInfoProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import { MainFunctionProps } from 'hyfn-types';
-import { mainWrapper } from 'hyfn-server';
-const { ObjectId } = require('mongodb');
+
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getDriverInfoHandler });
 };

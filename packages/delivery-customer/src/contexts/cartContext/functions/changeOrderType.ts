@@ -23,8 +23,8 @@ export const changeOrderType = (orderType, setCartInfo: any) => {
     // });
     // const newState = {
     //   ...prevInfo,
-    //   [data._id.toString()]: {
-    //     ...prevInfo[data._id.toString()],
+    //   [data.id.toString()]: {
+    //     ...prevInfo[data.id.toString()],
     //     orderType,
     //   },
     // };

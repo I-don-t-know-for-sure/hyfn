@@ -1,26 +1,26 @@
-import { Box, Button, Chip, Container, Loader, Text } from '@mantine/core';
+import { Box, Button, Chip, Container, Loader, Text } from "@mantine/core";
 
-import Image from '../../components/Image';
+import Image from "../../components/Image";
 
-import { useCart } from '../../contexts/cartContext/Provider';
+import { useCart } from "../../contexts/cartContext/Provider";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from "react-router-dom";
 
-import { useLocation } from '../../contexts/locationContext/LocationContext';
+import { useLocation } from "../../contexts/locationContext/LocationContext";
 
-import StoreDetailsModal from '../../components/StoreDetailsModal';
+import StoreDetailsModal from "../../components/StoreDetailsModal";
 
-import { useLikeProduct } from '../../pages/Product/hooks/useProduct';
+import { useLikeProduct } from "../../pages/Product/hooks/useProduct";
 
-import { useCustomerData } from '../../contexts/customerData/CustomerDataProvider';
+import { useCustomerData } from "../../contexts/customerData/CustomerDataProvider";
 
-import { t } from '../../util/i18nextFix';;
+import { t } from "../../util/i18nextFix";
 
-import { useGetStoreFront } from './hooks/useGetStoreFront';
-import { useRateStore } from './hooks/useRateStore';
-import Collection from './components/Collection';
+import { useGetStoreFront } from "./hooks/useGetStoreFront";
+import { useRateStore } from "./hooks/useRateStore";
+import Collection from "./components/Collection";
 
 /*
 
@@ -37,7 +37,13 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
     city: string;
   }>();
 
-  const { setCartInfo, addProductToCart, reduceOrRemoveProductFromCart, changeOrderType, cart } = useCart();
+  const {
+    setCartInfo,
+    addProductToCart,
+    reduceOrRemoveProductFromCart,
+    changeOrderType,
+    cart,
+  } = useCart();
   const { data, isLoading, isFetched, isError, error } = useGetStoreFront({
     city,
     country,
@@ -49,11 +55,11 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
 
   // const [data, setdata] = useState<storeFront>();
   const [{ coords }] = useLocation();
-  const [distance, setDistance] = useState('0');
+  const [distance, setDistance] = useState("0");
   const { customerData } = useCustomerData();
   const [inCartStore, setInCartStore] = useState<any>({});
 
-  const [orderType, setOrderType] = useState<'Pickup' | 'Delivery'>('Delivery');
+  const [orderType, setOrderType] = useState<"Pickup" | "Delivery">("Delivery");
   const { mutate: likeMutation } = useLikeProduct();
   console.log(orderType);
 
@@ -64,7 +70,10 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
     var dLon = deg2rad(lon2 - lon1);
     var a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c; // Distance in km
     return d;
@@ -84,10 +93,13 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
       const result = getDistanceFromLatLonInKm(
         coords[0],
         coords[1],
-        data?.coords?.coordinates[1],
-        data?.coords?.coordinates[0],
+        data?.lat,
+        data?.long
       );
-      const processedResult = result < 1 ? `${result * 1000} ${t('m')}` : `${result.toFixed(2)}${t('km')}`;
+      const processedResult =
+        result < 1
+          ? `${result * 1000} ${t("m")}`
+          : `${result.toFixed(2)}${t("km")}`;
 
       setDistance(processedResult);
     }
@@ -95,10 +107,10 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
 
   useEffect(() => {
     if (isFetched && !isLoading && data) {
-      const cartStore = cart[data?._id.toString()];
+      const cartStore = cart[data?.id];
       //const cartStore = cart.find((store) => store._id === data._id.toString());
       setInCartStore(cartStore);
-      if (typeof cartStore?.orderType === 'string') {
+      if (typeof cartStore?.orderType === "string") {
         setOrderType(cartStore?.orderType);
       }
     }
@@ -146,59 +158,59 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
       <Container
         sx={(theme) => ({
           margin: `auto `,
-          [theme.fn.largerThan('md')]: {
+          [theme.fn.largerThan("md")]: {
             margin: `auto `,
           },
         })}
       >
         <Box
           mb={56}
-          mt={'23px'}
+          mt={"23px"}
           style={{
-            width: '100%',
+            width: "100%",
           }}
         >
           <>
             <Image
               imageName={data?.image[0]}
-              radius={'md'}
+              radius={"md"}
               // alt={data.businessName}
-              width={'100%'}
-              height={'230px'}
+              width={"100%"}
+              height={"230px"}
               style={{
-                margin: ' auto',
-                alignSelf: 'center',
-                justifySelf: 'center',
+                margin: " auto",
+                alignSelf: "center",
+                justifySelf: "center",
               }}
             />
           </>
 
           <Box>
-            <Text weight={700} style={{ fontSize: '34px' }}>
+            <Text weight={700} style={{ fontSize: "34px" }}>
               {data.businessName || data.storeName}
             </Text>
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
+                display: "flex",
+                justifyContent: "space-between",
               }}
             >
               <Box
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
                 }}
               >
                 <Box
                   sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
                   <Text>{data.description}</Text>
-                  <Text m={'auto 2px'}>.</Text>
+                  <Text m={"auto 2px"}>.</Text>
                   {/* <Text>{data.currentRating}</Text>
                   
                   <AiFillStar
@@ -222,18 +234,18 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
                 <Text
                   weight={500}
                   sx={{
-                    fontSize: '20px',
-                    color: data?.opened ? 'green' : 'red',
+                    fontSize: "20px",
+                    color: data?.opened ? "green" : "red",
                   }}
                 >
-                  {data?.opened ? t('Open') : t('Closed')}
+                  {data?.opened ? t("Open") : t("Closed")}
                 </Text>
               </Box>
               <Box
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
               >
                 {/* <Box
@@ -281,21 +293,17 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
             /> */}
           </Box>
         </Box>
-        {Object.keys(data).map((collection) => {
-          if (!data[collection]?.collectionName) {
-            return;
-          }
-
+        {data.collections.map((collection) => {
           return (
             <Collection
-              key={data[collection]?.collectionId}
-              collectionName={data[collection]?.collectionName}
+              key={collection.id}
+              collectionName={collection.title}
               orderType={orderType}
               responsive={responsive}
               addedProducts={addedProducts}
               city={city}
               country={country}
-              collectionId={data[collection]?.collectionId}
+              collectionId={collection.id}
               storefront={data}
             />
             // <Box mb={63}>

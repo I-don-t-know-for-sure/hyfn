@@ -47,8 +47,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   });
   const queryClient = useQueryClient();
   useEffect(() => {
-    console.log("🚀 ~ file: User.tsx:11 ~ data", data);
-
     if (isFetched && !isLoading) {
       if (typeof data === "object" && data !== null && data !== undefined) {
         if (Object.keys(data).length === 0) {
@@ -70,14 +68,11 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     // try {
     // the actual required field is username but we gave username and email have the same value
     const user = await Auth.signIn(email, password);
-    console.log("🚀 ~ file: User.tsx:50 ~ signIn ~ user", user);
+
     setUserId(user.username);
     setLoggedIn(true);
     await queryClient.resetQueries();
     refetch();
-    // } catch (error) {
-    //   console.log('error signing in', error)
-    // }
   };
 
   const signUp = async ({
@@ -101,7 +96,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         enabled: true,
       },
     });
-    console.log("🚀 ~ file: User.tsx:75 ~ signUp ~ user", user);
+
     // setUserId(user)
     // } catch (error) {
     //   console.log('error signing up:', error)

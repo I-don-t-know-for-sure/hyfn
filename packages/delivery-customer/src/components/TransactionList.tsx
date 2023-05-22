@@ -49,10 +49,10 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
           transactions.pages.map((page) => {
             return page.map((transaction) => {
               return (
-                <Paper shadow={"md"} withBorder key={transaction._id} mt={12}>
+                <Paper shadow={"md"} withBorder key={transaction.id} mt={12}>
                   <Box m={"md"}>
                     <Group>
-                      <Text weight={700}>{`_id : ${transaction._id}`}</Text>
+                      <Text weight={700}>{`id : ${transaction.id}`}</Text>
                     </Group>
                     <Group
                       grow
@@ -77,7 +77,9 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                       />
                       <TextInput
                         label={t("Validated")}
-                        value={transaction.validated}
+                        value={
+                          transaction.status[transaction.status.length - 1]
+                        }
                         readOnly
                         variant="unstyled"
                       />
@@ -92,7 +94,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                         <Button
                           onClick={() => {
                             validateTransaction({
-                              transactionId: transaction._id,
+                              transactionId: transaction.id,
                             });
 
                             // if (
@@ -100,18 +102,18 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                             //   TRANSACTION_TYPE_DRIVER_MANAGMENT
                             // ) {
                             //   validateManagementLocalCardTransaction({
-                            //     transactionId: transaction._id,
+                            //     transactionId: transaction.id,
                             //   });
                             //   return;
                             // }
                             // if (transaction.storeId !== adminName) {
                             //   validateStoreLocalCardTransaction({
-                            //     transactionId: transaction._id,
+                            //     transactionId: transaction.id,
                             //   });
                             //   return;
                             // }
                             // validateTransaction({
-                            //   transactionId: transaction._id,
+                            //   transactionId: transaction.id,
                             // });
                           }}
                           mt={16}
@@ -119,9 +121,9 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                           {t("Validate")}
                         </Button>
                       )}
-                      {!transaction.canceled && !transaction.validated && (
+                      {!transaction.status.includes("canceled") && (
                         <CancelTransactionModal
-                          transactionId={transaction._id}
+                          transactionId={transaction.id}
                         />
                       )}
                     </Group>
@@ -144,7 +146,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                   transactions?.pages[transactions?.pages?.length - 1][
                     transactions?.pages[transactions.pages?.length - 1]
                       ?.length - 1
-                  ]?._id,
+                  ]?.id,
               })
             }
           >

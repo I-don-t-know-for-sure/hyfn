@@ -12,11 +12,9 @@ export const useStoreStateControl = () => {
   const id = randomId();
   return useMutation(["storeState", userDocument?.opened], async () => {
     try {
-      const { country } = userDocument?.storeDoc as { country: string };
-
       const result = await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/openAndCloseStore`,
-        reqData: [userDocument?._id, country],
+        reqData: [userDocument?.id],
       });
 
       refetch();

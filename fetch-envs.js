@@ -15,11 +15,6 @@ import fs from "fs";
     );
 
     cmd.stdout.on("data", (d) => {
-      console.log(
-        "🚀 ~ file: fetch-envs.js:34 ~ cmd.stdout.on ~ d:",
-        d.toString()
-      );
-
       const parameters = JSON.parse(d.toString());
 
       result = parameters.reduce((accu, parameter) => {
@@ -42,11 +37,7 @@ import fs from "fs";
       }, result);
     });
 
-    cmd.stderr.on("data", (d) =>
-      console.log(` onebhbdch22222 ${d.Parameters}`)
-    );
     cmd.on("exit", async () => {
-      console.log(result);
       fs.writeFile(
         `envVaraibles.ts`,
         `export const config = ${JSON.stringify(result)}`,
