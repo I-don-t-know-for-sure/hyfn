@@ -13,7 +13,7 @@ export const useDeleteBrand = () => {
   return useMutation(async ({ brandId }: { brandId: string }) => {
     try {
       const result = await fetchUtil({
-        reqData: [{ creatorId: userDocument._id, brandId }],
+        reqData: [{ creatorId: userDocument.id, brandId }],
         url: `${import.meta.env.VITE_APP_BASE_URL}/deleteBrand`,
       });
       return result;

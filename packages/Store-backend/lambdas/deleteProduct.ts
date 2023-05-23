@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { deleteImages } from './common/utils/deleteImages';
+import { sql } from 'kysely';
 interface DeleteProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -11,7 +12,7 @@ export const deleteProductHandler = async ({ arg, client, userId, db }: DeletePr
   const storeDoc = await db
     .selectFrom('stores')
     .selectAll()
-    .where('usersIds', '@>', [userId])
+    .where('usersIds', '@>', sql`ARRAY[${sql.join([userId])}]::uuid[]`)
     .executeTakeFirstOrThrow();
 
   const id = storeDoc.id;

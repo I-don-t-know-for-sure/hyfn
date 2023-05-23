@@ -1,15 +1,14 @@
-
-
-
-
-
-
 import { boolean, literal, number, object, string, z } from "zod";
-import { citiesArray, collectionTypesArray, countriesArray, currenciesArray, storeTypesArray } from "../constants";
+import {
+  citiesArray,
+  collectionTypesArray,
+  countriesArray,
+  currenciesArray,
+  storeTypesArray,
+} from "../constants";
 
 export const storeSchema = object({
-  _id: z.any(),
-
+  id: z.any(),
 
   currency: z.enum(currenciesArray as any),
   userId: string(),
@@ -21,7 +20,7 @@ export const storeSchema = object({
   }),
   storeType: z.enum(storeTypesArray as any).array(),
   storeName: string(),
-includeLocalCardFeeToPrice: boolean().default(false),
+  includeLocalCardFeeToPrice: boolean().default(false),
   storePhone: string(),
   country: z.enum(countriesArray as any),
   city: z.enum(citiesArray as any),
@@ -45,7 +44,7 @@ includeLocalCardFeeToPrice: boolean().default(false),
     }),
     collectionType: z.enum(collectionTypesArray as any),
     isActive: boolean(),
-    _id: string().length(24),
+    id: string().length(24),
   }).array(),
   image: string().array(),
   ownerFirstName: string(),

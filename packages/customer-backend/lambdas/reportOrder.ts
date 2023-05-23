@@ -13,7 +13,7 @@ export const reportOrderHandler = async ({ arg, client }: MainFunctionProps) => 
       const orderDoc = await client
         .db('base')
         .collection('orders')
-        .findOne({ _id: new ObjectId(orderId) }, {});
+        .findOne({ id: new ObjectId(orderId) }, {});
       if (!orderDoc) {
         throw new Error('bdhbc');
       }
@@ -44,12 +44,12 @@ export const reportOrderHandler = async ({ arg, client }: MainFunctionProps) => 
         console.log('🚀 ~ file: reportOrder.js:38 ~ mainFunction ~ reportDoc', reportDoc);
         const driverId = orderDoc.status.find((status) => {
           return status.userType === 'driver';
-        })?._id;
+        })?.id;
         await client
           .db('generalData')
           .collection('driverData')
           .updateOne(
-            { _id: new ObjectId(driverId) },
+            { id: new ObjectId(driverId) },
             {
               $set: {
                 reported: true,
@@ -62,7 +62,7 @@ export const reportOrderHandler = async ({ arg, client }: MainFunctionProps) => 
           .db('generalData')
           .collection('customerInfo')
           .updateOne(
-            { _id: new ObjectId(orderDoc.userId) },
+            { id: new ObjectId(orderDoc.userId) },
             {
               $set: {
                 reported: true,
@@ -75,7 +75,7 @@ export const reportOrderHandler = async ({ arg, client }: MainFunctionProps) => 
           .db('base')
           .collection('orders')
           .updateOne(
-            { _id: new ObjectId(orderId) },
+            { id: new ObjectId(orderId) },
             {
               $set: {
                 reported: true,

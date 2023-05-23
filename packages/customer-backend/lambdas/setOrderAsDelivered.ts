@@ -1,6 +1,6 @@
 export const setOrderAsDeliveredHandler = async ({ arg, client, userId }: MainFunctionProps) => {
   const { orderId, country } = arg[0];
-  const { _id } = await getCustomerInfo({
+  const { id } = await getCustomerInfo({
     client,
     options: { projection: {}, session: undefined },
     userId,
@@ -8,11 +8,11 @@ export const setOrderAsDeliveredHandler = async ({ arg, client, userId }: MainFu
   const orderDoc = await client
     .db('base')
     .collection('orders')
-    .findOne({ _id: new ObjectId(orderId) }, {});
+    .findOne({ id: new ObjectId(orderId) }, {});
   if (!orderDoc) {
     throw new Error('jbdj');
   }
-  const customerId = _id.toString();
+  const customerId = id;
   orderDoc.orders.map((store) => {
     if (store.paid !== true) {
       throw new Error('not all stores are paid');
@@ -25,14 +25,14 @@ export const setOrderAsDeliveredHandler = async ({ arg, client, userId }: MainFu
     .db('base')
     .collection('orders')
     .updateOne(
-      { _id: new ObjectId(orderId) },
+      { id: new ObjectId(orderId) },
       {
         $set: {
           ['status.$[customer].status']: USER_STATUS_DELIVERED,
         },
       },
       {
-        arrayFilters: [{ 'customer._id': customerId }],
+        arrayFilters: [{ 'customer.id': customerId }],
       }
     );
 };

@@ -24,7 +24,7 @@ export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
         };
         const newQuerydata = cachedQuery.pages.map((page) => {
           return page.map((order) => {
-            if (order._id.toString() === orderId) {
+            if (order.id === orderId) {
               return { ...result, updated: true };
             }
             return order;

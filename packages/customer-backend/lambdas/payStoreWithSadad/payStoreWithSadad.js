@@ -18,11 +18,11 @@ export const handler = async (event) => {
     const { customerId, OTP, storeId, country, orderId } = arg[0];
 
     const customerDoc = await findOne(
-      { _id: new ObjectId(customerId) },
+      { id: new ObjectId(customerId) },
       {
         session,
         projection: {
-          _id: 0,
+          id: 0,
           transaction: 1,
         },
       },
@@ -30,10 +30,10 @@ export const handler = async (event) => {
     );
 
     const storeAPIToken = await findOne(
-      { _id: new ObjectId(storeId) },
+      { id: new ObjectId(storeId) },
       {
         projection: {
-          _id: 0,
+          id: 0,
           sadadApiKey: 1,
         },
         session,
@@ -78,7 +78,7 @@ export const handler = async (event) => {
     const { isPaying, ...rest } = customerDoc.transaction;
     await updateOne({
       query: {
-        _id: new ObjectId(orderId),
+        id: new ObjectId(orderId),
       },
       update: {
         $set: {
@@ -95,7 +95,7 @@ export const handler = async (event) => {
 
     await updateOne({
       query: {
-        _id: new ObjectId(storeId),
+        id: new ObjectId(storeId),
       },
       update: {
         $inc: {

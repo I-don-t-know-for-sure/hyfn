@@ -13,11 +13,11 @@ export const useGetDriverDocument = () => {
   const { userDocument, refetch, isLoading } = useUser();
   refetch();
   return useQuery(
-    [driverDoc, userDocument._id],
+    [driverDoc, userDocument.id],
     async () => {
       try {
         const result = await fetchUtil({
-          reqData: [{ driverId: userDocument._id }],
+          reqData: [{ driverId: userDocument.id }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/getDriverDocument`,
         });
         return result;

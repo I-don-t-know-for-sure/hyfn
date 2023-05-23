@@ -1,14 +1,7 @@
-
-
-
-
-
-
 import { boolean, object, string, z } from "zod";
 
 export const localCardKeysSchema = object({
-  _id: z.any(),
-
+  id: z.any(),
 
   TerminalId: string(),
 

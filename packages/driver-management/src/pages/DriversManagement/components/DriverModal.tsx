@@ -33,7 +33,7 @@ const DriverModal: React.FC<AddDriverModalProps> = ({
           <Group>
             <Box>
               <Text weight={700}>ID</Text>
-              <Text>{driver._id}</Text>
+              <Text>{driver.id}</Text>
             </Box>
           </Group>
           <Group position="apart">
@@ -90,7 +90,7 @@ const DriverModal: React.FC<AddDriverModalProps> = ({
           <Button
             onClick={() =>
               updateDriverBalance({
-                driverId: driver._id,
+                driverId: driver.id,
                 newBalance: balanceToAdd,
                 newCut: managementCut,
               })
@@ -101,7 +101,7 @@ const DriverModal: React.FC<AddDriverModalProps> = ({
 
           <Group grow mt={16}>
             <Button
-              onClick={() => removeDriver({ driverId: driver._id })}
+              onClick={() => removeDriver({ driverId: driver.id })}
               color={"red"}
             >
               {t("Remove driver")}

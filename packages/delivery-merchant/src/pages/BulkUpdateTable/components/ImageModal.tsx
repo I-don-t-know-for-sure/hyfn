@@ -18,13 +18,13 @@ import ValueComponent from "components/PreviewImage";
 interface ImageModalProps {
   onChange: any;
   productInfo: any;
-  _id: any;
+  id: any;
 }
 
 const ImageModal: React.FC<ImageModalProps> = ({
   productInfo,
   onChange,
-  _id,
+  id,
 }) => {
   const [opened, setOpened] = useState(false);
   const { files } = productInfo;
@@ -70,7 +70,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
                           firstChangedKey: "files",
 
-                          _id,
+                          id,
                         },
                       });
                     }}
@@ -106,7 +106,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
                   firstChangedKey: "files",
 
-                  _id,
+                  id,
                 },
               });
             }}
@@ -158,7 +158,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
                               firstChangedKey: "deletedImages",
 
-                              _id,
+                              id,
                             },
                           });
                           setDeletedImages([updatedDeletedImages]);
@@ -170,7 +170,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
                               firstChangedKey: "deletedImages",
 
-                              _id,
+                              id,
                             },
                           });
                           setDeletedImages([imageName]);
@@ -186,7 +186,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
                             firstChangedKey: "images",
 
-                            _id,
+                            id,
                           },
                         });
                         setImages(newImages);
@@ -252,7 +252,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
                           payload: {
                             value: newImages,
                             firstChangedKey: "deletedImages",
-                            _id,
+                            id,
                           },
                         });
                         setDeletedImages(newImages);
@@ -263,7 +263,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
                           payload: {
                             value: [...productInfo.images, imageName],
                             firstChangedKey: "images",
-                            _id,
+                            id,
                           },
                         });
                       }}

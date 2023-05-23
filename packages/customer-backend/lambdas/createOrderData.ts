@@ -36,7 +36,7 @@ export const createOrderData = async ({ arg, client, userId, db }: CreateOrderDa
   // temp
   // const customerDoc = await client.db('generalData').collection('customerInfo').findOne(
   //   {
-  //     _id: new ObjectId(_id.toString()),
+  //    id: new ObjectId(id),
   //   },
   //   {},
   // );
@@ -46,7 +46,7 @@ export const createOrderData = async ({ arg, client, userId, db }: CreateOrderDa
   //   // or stores are diffrent
   //   for (let i = 0; i < orderCart?.length; i++) {
   //     const store = orderCart[i];
-  //     if (store._id !== orders[i]?._id) {
+  //     if (store.id !== orders[i]?.id) {
   //       diffrent = true;
   //     }
   //   }

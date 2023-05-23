@@ -23,7 +23,7 @@ export const useConfirmOrderDelivery = () => {
       try {
         const result = await fetchUtil({
           reqData: [
-            { country, orderId, customerId: userDocument._id },
+            { country, orderId, customerId: userDocument.id },
             { newRating },
           ],
           url: import.meta.env.VITE_APP_CONFIRM_ORDER_DELIVERY,

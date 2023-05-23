@@ -12,7 +12,7 @@ export const useCreateBrand = () => {
   return useMutation(async ({ brandInfo }: { brandInfo: any }) => {
     try {
       const result = await fetchUtil({
-        reqData: [{ creatorId: userDocument._id, brandInfo }],
+        reqData: [{ creatorId: userDocument.id, brandInfo }],
         url: `${import.meta.env.VITE_APP_BASE_URL}/createBrand`,
       });
       return result;

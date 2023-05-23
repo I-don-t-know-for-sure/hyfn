@@ -49,7 +49,7 @@ export const rateDriver = async ({
     .collection('orders')
     .updateOne(
       {
-        _id: new ObjectId(orderId),
+        id: new ObjectId(orderId),
       },
       {
         $set: {
@@ -63,7 +63,7 @@ export const rateDriver = async ({
     .collection('driverInfo')
     .updateOne(
       {
-        _id: new ObjectId(driverId),
+        id: new ObjectId(driverId),
       },
       {
         $push: {
@@ -76,7 +76,7 @@ export const rateDriver = async ({
     await client
       .db('generalData')
       .collection('driverData')
-      .findOne({ _id: new ObjectId(driverId) }, { session });
+      .findOne({ id: new ObjectId(driverId) }, { session });
   const { currentRating, currentRatingTotal, ratingCount } = addRating(
     oldCurrentRatingTotal,
     oldRatingCount,
@@ -87,7 +87,7 @@ export const rateDriver = async ({
     .collection('driverData')
     .updateOne(
       {
-        _id: new ObjectId(driverId),
+        id: new ObjectId(driverId),
       },
       {
         $set: {
@@ -104,7 +104,7 @@ export const getStore = async (store, client) => {
   const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
-    .findOne({ _id: new ObjectId(store._id) });
+    .findOne({ id: new ObjectId(store.id) });
   return { ...storeDoc };
 };
 /* export const updateAllOrder = async (arg, client) => {
@@ -134,7 +134,7 @@ export const getStore = async (store, client) => {
     const storeDoc = await client
       .db('generalData')
       .collection('storeInfo')
-      .findOne({ _id: new ObjectId(store._id) }, {});
+      .findOne({id: new ObjectId(store.id) }, {});
     if (storeDoc.city !== city || storeDoc.country !== country) {
       throw new Error('location do not match');
     }
@@ -164,7 +164,7 @@ export const getStore = async (store, client) => {
       const productDoc = await client
         .db('base')
         .collection('products')
-        .findOne({ _id: new ObjectId(product._id) }, {});
+        .findOne({id: new ObjectId(product.id) }, {});
       let validOptions = { hasOptions: false };
       if (Array.isArray(product.options)) {
         validOptions = product.options.map((option) => {
@@ -250,7 +250,7 @@ export const getStore = async (store, client) => {
       .db('generalData')
       .collection(`customerInfo`)
       .updateOne(
-        { _id: new ObjectId(buyerInfo.customerId) },
+        {id: new ObjectId(buyerInfo.customerId) },
         {
           $set: {
             order: {
@@ -299,7 +299,7 @@ export const getStore = async (store, client) => {
       .db('generalData')
       .collection(`customerInfo`)
       .updateOne(
-        { _id: new ObjectId(buyerInfo.customerId) },
+        {id: new ObjectId(buyerInfo.customerId) },
         {
           $set: {
             order: {
@@ -325,7 +325,7 @@ export const getStore = async (store, client) => {
         },
         {}
       );
-    //     await client.db('generalData').collection(`customerInfo`).updateOne( { _id: new ObjectId(buyerInfo.customerId) },
+    //     await client.db('generalData').collection(`customerInfo`).updateOne( {id: new ObjectId(buyerInfo.customerId) },
     //  {
     //         $set: {
     //           order: {
@@ -477,7 +477,7 @@ export function calculateOrderCost(storesArray) {
       subtract(storeTotal, multiply(storeTotal, storeServiceFee))
     );
     // storesArray.map((oldStore) => {
-    //   if (oldStore._id === store._id) {
+    //   if (oldStore.id === store.id) {
     //     return { ...oldStore, orderCost: storeTotal - storeTotal * storeServiceFee };
     //   }
     //   return oldStore;

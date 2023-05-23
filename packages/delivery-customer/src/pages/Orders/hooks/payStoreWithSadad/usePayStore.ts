@@ -22,7 +22,7 @@ export const usePayStore = () => {
               storeId,
               orderId,
               country,
-              customerId: userDocument?._id,
+              customerId: userDocument?.id,
             },
           ],
           url: `${import.meta.env.VITE_APP_BASE_URL}/payStoreWithSadad`,

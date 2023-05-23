@@ -13,7 +13,7 @@ export const useCreateTransaction = () => {
   return useMutation(async ({ amount }: { amount: number }) => {
     try {
       const result = await fetchUtil({
-        reqData: [{ amount, userId: userDocument._id }],
+        reqData: [{ amount, userId: userDocument.id }],
         url: `${import.meta.env.VITE_APP_BASE_URL}/createTransaction`,
       });
 

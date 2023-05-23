@@ -6,7 +6,7 @@ export const deleteProductHandler = async ({ arg, client }) => {
     .collection("products")
     .deleteOne({
       creatorId,
-      _id: new ObjectId(productId),
+      id: new ObjectId(productId),
     });
   return result;
 };

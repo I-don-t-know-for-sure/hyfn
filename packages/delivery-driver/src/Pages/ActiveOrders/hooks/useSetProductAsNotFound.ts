@@ -29,7 +29,7 @@ export const useSetProductAsNotFound = () => {
               storeId,
               productKey,
 
-              driverId: user?._id,
+              driverId: user?.id,
             },
           ],
           url: `${import.meta.env.VITE_APP_BASE_URL}/setProductAsNotFound`,

@@ -6,8 +6,8 @@ export const getOrderHistoryHandler = async ({ arg, client }) => {
       .db('base')
       .collection('orders')
       .find({
-        _id: { $gt: new ObjectId(lastDoc) },
-        status: { $elemMatch: { _id: driverId, status: USER_STATUS_DELIVERED } },
+        id: { $gt: new ObjectId(lastDoc) },
+        status: { $elemMatch: { id: driverId, status: USER_STATUS_DELIVERED } },
       })
       .limit(20)
       .toArray();
@@ -17,7 +17,7 @@ export const getOrderHistoryHandler = async ({ arg, client }) => {
     .db('base')
     .collection('orders')
     .find({
-      status: { $elemMatch: { _id: driverId, status: USER_STATUS_DELIVERED } },
+      status: { $elemMatch: { id: driverId, status: USER_STATUS_DELIVERED } },
     })
     .limit(20)
     .toArray();

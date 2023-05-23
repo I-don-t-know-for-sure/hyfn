@@ -1,22 +1,22 @@
-import { useLocalStorage } from '@mantine/hooks';
-import React, { createContext, useContext } from 'react';
+import { useLocalStorage } from "@mantine/hooks";
+import React, { createContext, useContext } from "react";
 // import { UserContextApi } from "./types";
-import usePersistState from '../../hooks/usePersistState';
+import usePersistState from "../../hooks/usePersistState";
 // userInfo : {}
 // updaters: () => {}
-import { changeOrderType } from './functions/changeOrderType';
-import { addProductWithNoOptionsToCart } from './functions/addProductWithNoOptionsToCart';
+import { changeOrderType } from "./functions/changeOrderType";
+import { addProductWithNoOptionsToCart } from "./functions/addProductWithNoOptionsToCart";
 
-import { clearCart } from './functions/clearCart';
+import { clearCart } from "./functions/clearCart";
 
-import { removeProductWithOptionsFromCart } from './functions/removeProductWithOptionsFromCart';
-import { updateProductWithOptions } from './functions/updateProductWithOptions';
-import { addProductWithOptionsToCart } from './functions/addProductWithOptionsToCart';
-import { removeFromCart } from './functions/removeFromCart';
-import { reduceOrRemoveProductFromCart } from './functions/reduceOrRemoveProductFromCart';
-import { addProductToCart } from './functions/addProductToCart';
-import { updateInstructions } from './functions/updateInstructions';
-import { changeStoreOrderType } from './functions/changeStoreOrderType';
+import { removeProductWithOptionsFromCart } from "./functions/removeProductWithOptionsFromCart";
+import { updateProductWithOptions } from "./functions/updateProductWithOptions";
+import { addProductWithOptionsToCart } from "./functions/addProductWithOptionsToCart";
+import { removeFromCart } from "./functions/removeFromCart";
+import { reduceOrRemoveProductFromCart } from "./functions/reduceOrRemoveProductFromCart";
+import { addProductToCart } from "./functions/addProductToCart";
+import { updateInstructions } from "./functions/updateInstructions";
+import { changeStoreOrderType } from "./functions/changeStoreOrderType";
 
 export const CartContext = createContext(undefined);
 
@@ -32,7 +32,7 @@ const CartProvider: React.FC = ({ children }) => {
   //   [setUserInfo]
   // );
   const [cart, setCartInfo] = useLocalStorage({
-    key: 'cart',
+    key: "cart",
     defaultValue: {},
   });
   // const updateInstructions = (
@@ -41,17 +41,17 @@ const CartProvider: React.FC = ({ children }) => {
   //   instructions: string
   // ) => {
   //   const targetedStore = cart.find((potentialStore) => {
-  //     return potentialStore._id === store._id;
+  //     return potentialStore.id === store.id;
   //   });
 
   //   setCartInfo((prevState) => {
   //     return prevState.map((store) => {
-  //       if (store._id === targetedStore._id) {
+  //       if (store.id === targetedStore.id) {
   //         return {
   //           ...targetedStore,
   //           addedProducts: targetedStore.addedProducts.map(
   //             (potentialProduct) => {
-  //               if (potentialProduct._id === product._id.toString()) {
+  //               if (potentialProduct.id === product.id) {
   //                 return { ...potentialProduct, instructions };
   //               }
   //               return potentialProduct;
@@ -90,7 +90,7 @@ const CartProvider: React.FC = ({ children }) => {
 export const useCart = () => {
   const cart = useContext(CartContext);
   if (!cart) {
-    throw new Error('call inside the component tree');
+    throw new Error("call inside the component tree");
   }
 
   return cart;
@@ -109,7 +109,7 @@ const addProductWithNoOptionsToCart = (
       const proto = {
         storeName: data?.businessName,
         image: data?.image,
-        _id: data._id.toString(),
+       id: data.id,
         city,
         country,
         coords: data.coords,
@@ -118,7 +118,7 @@ const addProductWithNoOptionsToCart = (
           {
             ...product,
 
-            _id: product._id.toString(),
+           id: product.id,
           },
         ],
       };
@@ -127,7 +127,7 @@ const addProductWithNoOptionsToCart = (
       }
 
       const targetedStore = prevState.find((store) => {
-        return store._id === data._id.toString();
+        return store.id === data.id;
       });
 
       if (!targetedStore) {
@@ -137,11 +137,11 @@ const addProductWithNoOptionsToCart = (
       if (targetedStore) {
         const newStoreProducts = targetedStore.addedProducts.map(
           (oldProduct) => {
-            if (product._id.toString() === oldProduct._id) {
+            if (product.id === oldProduct.id) {
               return {
                 ...product,
 
-                _id: product._id.toString(),
+               id: product.id,
               };
             }
             return oldProduct;
@@ -149,7 +149,7 @@ const addProductWithNoOptionsToCart = (
         );
         //
         return prevState.map((oldStore) => {
-          if (oldStore._id === data._id.toString()) {
+          if (oldStore.id === data.id) {
             return { ...targetedStore, addedProducts: newStoreProducts };
           }
           return oldStore;
@@ -168,7 +168,7 @@ const addProductWithNoOptionsToCart = (
       const proto = {
         storeName: data?.businessName,
         image: data?.image,
-        _id: data._id.toString(),
+       id: data.id,
         city,
         country,
         coords: data.coords,
@@ -183,7 +183,7 @@ const addProductWithNoOptionsToCart = (
                   product.measurementSystem === "Liter"
                 ? 0.25
                 : 0.05,
-            _id: product._id.toString(),
+           id: product.id,
           },
         ],
       };
@@ -193,7 +193,7 @@ const addProductWithNoOptionsToCart = (
       }
 
       const targetedStore = prevState.find((store) => {
-        return store._id === data._id.toString();
+        return store.id === data.id;
       });
 
       if (!targetedStore) {
@@ -202,7 +202,7 @@ const addProductWithNoOptionsToCart = (
 
       if (targetedStore) {
         const oldProduct = targetedStore.addedProducts.find((old) => {
-          return old._id === product._id.toString();
+          return old.id === product.id;
         });
 
         if (oldProduct) {
@@ -217,10 +217,10 @@ const addProductWithNoOptionsToCart = (
                 : oldProduct.qty + 0.05,
           };
           const newState = prevState.map((oldStore) => {
-            if (oldStore._id === targetedStore._id) {
+            if (oldStore.id === targetedStore.id) {
               const newProducts = targetedStore.addedProducts?.map(
                 (product) => {
-                  if (product._id === newProduct._id) {
+                  if (product.id === newProduct.id) {
                     return newProduct;
                   }
                   return product;
@@ -251,13 +251,13 @@ const addProductWithNoOptionsToCart = (
                       product.measurementSystem === "Liter"
                     ? 0.25
                     : 0.05,
-                _id: product._id.toString(),
+               id: product.id,
               },
             ],
           };
 
           return prevState.map((oldStore) => {
-            if (oldStore._id === newStore._id) {
+            if (oldStore.id === newStore.id) {
               return newStore;
             }
             return oldStore;
@@ -270,7 +270,7 @@ const addProductWithNoOptionsToCart = (
   const updateProductWithOptions = (data: any, product: any) => {
     setCartInfo((prevState) => {
       const targetedStore = prevState.find((store) => {
-        return store._id === data._id.toString();
+        return store.id === data.id;
       });
 
       if (targetedStore) {
@@ -279,7 +279,7 @@ const addProductWithNoOptionsToCart = (
         });
 
         const newState = prevState.map((oldStore) => {
-          if (oldStore._id === targetedStore._id) {
+          if (oldStore.id === targetedStore.id) {
             const newProducts = targetedStore.addedProducts?.map(
               (oldProduct) => {
                 if (oldProduct.key === product.key) {
@@ -305,7 +305,7 @@ const addProductWithNoOptionsToCart = (
   const removeProductWithOptionsFromCart = (data: any, product: any) => {
     setCartInfo((prevState) => {
       const targetedStore = prevState.find((store) => {
-        return store._id === data._id.toString();
+        return store.id === data.id;
       });
 
       if (targetedStore) {
@@ -315,11 +315,11 @@ const addProductWithNoOptionsToCart = (
 
         if (!(newProducts.length > 0)) {
           return prevState.filter((oldStore) => {
-            return oldStore._id !== targetedStore._id;
+            return oldStore.id !== targetedStore.id;
           });
         }
         const newState = prevState.map((oldStore) => {
-          if (oldStore._id === targetedStore._id) {
+          if (oldStore.id === targetedStore.id) {
             return {
               ...oldStore,
               addedProducts: newProducts,
@@ -336,21 +336,21 @@ const addProductWithNoOptionsToCart = (
   const removeFromCart = (data: any, product: any) => {
     setCartInfo((prevState) => {
       const targetedStore = prevState.find((store) => {
-        return store._id === data._id.toString();
+        return store.id === data.id;
       });
 
       if (targetedStore) {
         const newProducts = targetedStore.addedProducts.filter((old) => {
-          return old._id !== product._id.toString();
+          return old.id !== product.id;
         });
 
         if (!(newProducts.length > 0)) {
           return prevState.filter((oldStore) => {
-            return oldStore._id !== targetedStore._id;
+            return oldStore.id !== targetedStore.id;
           });
         }
         const newState = prevState.map((oldStore) => {
-          if (oldStore._id === targetedStore._id) {
+          if (oldStore.id === targetedStore.id) {
             return {
               ...oldStore,
               addedProducts: newProducts,
@@ -367,12 +367,12 @@ const addProductWithNoOptionsToCart = (
   const reduceOrRemoveProductFromCart = (data: any, product: any) => {
     setCartInfo((prevState) => {
       const targetedStore = prevState.find((store) => {
-        return store._id === data._id.toString();
+        return store.id === data.id;
       });
 
       if (targetedStore) {
         const oldProduct = targetedStore.addedProducts.find((old) => {
-          return old._id === product._id.toString();
+          return old.id === product.id;
         });
 
         if (oldProduct && oldProduct.qty > 1) {
@@ -387,10 +387,10 @@ const addProductWithNoOptionsToCart = (
                 : oldProduct.qty - 0.05,
           };
           const newState = prevState.map((oldStore) => {
-            if (oldStore._id === targetedStore._id) {
+            if (oldStore.id === targetedStore.id) {
               const newProducts = targetedStore.addedProducts?.map(
                 (product) => {
-                  if (product._id === newProduct._id) {
+                  if (product.id === newProduct.id) {
                     return newProduct;
                   }
                   return product;
@@ -408,12 +408,12 @@ const addProductWithNoOptionsToCart = (
         }
         if (!(oldProduct.qty > 1)) {
           const newProducts = targetedStore.addedProducts.filter(
-            (oldProduct) => oldProduct._id !== product._id.toString()
+            (oldProduct) => oldProduct.id !== product.id
           );
 
           if (!(newProducts.length > 0)) {
             return prevState.filter((oldStore) => {
-              return oldStore._id !== targetedStore._id;
+              return oldStore.id !== targetedStore.id;
             });
           }
           const newStore = {
@@ -422,7 +422,7 @@ const addProductWithNoOptionsToCart = (
           };
 
           return prevState.map((oldStore) => {
-            if (oldStore._id === newStore._id) {
+            if (oldStore.id === newStore.id) {
               return newStore;
             }
             return oldStore;
@@ -435,7 +435,7 @@ const addProductWithNoOptionsToCart = (
   const changeOrderType = (data, orderType) => {
     setCartInfo((prevInfo) => {
       return prevInfo.map((store) => {
-        if (store._id === data._id.toString()) {
+        if (store.id === data.id) {
           return {
             ...store,
             orderType,

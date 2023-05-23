@@ -12,7 +12,7 @@ export const useStoreStateControl = () => {
 
       const result = await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/openAndCloseStore`,
-        reqData: [userDocument?._id, country],
+        reqData: [userDocument?.id, country],
       });
 
       refetch();

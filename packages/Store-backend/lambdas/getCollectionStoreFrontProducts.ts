@@ -7,7 +7,7 @@ export const getCollectionStoreFrontProductsHandler = async ({
   const storeFront = await client
     .db('base')
     .collection('storeFronts')
-    .findOne({ _id: new ObjectId(storeId) }, {});
+    .findOne({ id: new ObjectId(storeId) }, {});
   const key = Object.keys(storeFront).find((key) => storeFront[key]?.collectionId === collectionId);
   if (!key) {
     result = [];
@@ -15,7 +15,7 @@ export const getCollectionStoreFrontProductsHandler = async ({
   }
   const { products } = storeFront[key];
   result = products?.map((product) => {
-    return { value: product._id, label: product.textInfo.title };
+    return { value: product.id, label: product.textInfo.title };
   });
   return result;
 };

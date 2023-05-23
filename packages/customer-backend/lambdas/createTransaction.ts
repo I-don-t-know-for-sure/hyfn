@@ -137,7 +137,7 @@ const createlocalCardTransaction = async ({
         .where('id', '=', orderId)
         .executeTakeFirstOrThrow();
       if (orderDoc.storeId !== storeDoc.id) throw new Error('store id does not match with order');
-      // const storeOrder = orderDoc.orders.find((store) => store._id.toString() === storeId);
+      // const storeOrder = orderDoc.orders.find((store) => store.id === storeId);
       if (orderDoc?.orderStatus[orderDoc?.orderStatus?.length - 1] === 'Canceled') {
         throw new Error('store order was canceled');
       }

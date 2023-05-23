@@ -12,7 +12,7 @@ export const useGetTransactions = ({ enabled }: { enabled: boolean }) => {
       console.log(pageParam);
 
       return await fetchUtil({
-        reqData: [{ userId: user._id, lastDoc: pageParam }],
+        reqData: [{ userId: user.id, lastDoc: pageParam }],
         url: `${import.meta.env.VITE_APP_BASE_URL}/getTransactionsList`,
       });
     },

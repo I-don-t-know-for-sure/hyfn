@@ -4,7 +4,7 @@ export const getBrandHandler = async ({ arg, client }) => {
   const brand = await client
     .db("productsLibrary")
     .collection("brands")
-    .findOne({ _id: new ObjectId(brandId) });
+    .findOne({ id: new ObjectId(brandId) });
   result = brand;
   return result;
 };

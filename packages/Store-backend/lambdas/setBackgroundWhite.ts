@@ -36,7 +36,7 @@ export const setBackgroundWhiteHandler = async ({
     .db('base')
     .collection('products')
     .findOne(
-      { _id: new ObjectId(productId) },
+      { id: new ObjectId(productId) },
       { projection: { images: true, whiteBackgroundImages: true } }
     );
   const newKeys = product.images.filter((image) => {
@@ -53,7 +53,7 @@ export const setBackgroundWhiteHandler = async ({
   const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
-    .findOne({ _id: new ObjectId(storeId) }, { projection: { balance: true } });
+    .findOne({ id: new ObjectId(storeId) }, { projection: { balance: true } });
 
   const price = backgroundRemovalPerImage * newKeys.length;
 
@@ -65,7 +65,7 @@ export const setBackgroundWhiteHandler = async ({
     .db('generalData')
     .collection('storeInfo')
     .updateOne(
-      { _id: new ObjectId(storeId) },
+      { id: new ObjectId(storeId) },
       {
         $inc: {
           balance: -price,
@@ -80,7 +80,7 @@ export const setBackgroundWhiteHandler = async ({
     .db('base')
     .collection('products')
     .updateOne(
-      { _id: new ObjectId(productId) },
+      { id: new ObjectId(productId) },
       {
         $push: {
           whiteBackgroundImages: { $each: newKeys },

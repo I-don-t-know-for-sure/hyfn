@@ -1,7 +1,7 @@
-import { useLocalStorage } from '@mantine/hooks';
-import { useUser } from 'contexts/userContext/User';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useLocalStorage } from "@mantine/hooks";
+import { useUser } from "contexts/userContext/User";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 // import { UserContextApi } from "./types";
 // userInfo : {}
@@ -11,8 +11,8 @@ export const CustomerDataContext = createContext<CustomerData>(undefined);
 
 interface CustomerData {
   customerData: {
-    likedProducts: { storeId: string; _id: string }[];
-    storeRatings: { _id: string; rating: number }[];
+    likedProducts: { storeId: string; id: string }[];
+    storeRatings: { id: string; rating: number }[];
   };
   updateLikes: (storeId: string, productId: string) => void;
   updateRatings: (storeId: string, rating: number) => void;
@@ -32,10 +32,10 @@ const CustomerDataProvider: React.FC = ({ children }) => {
   //   [setUserInfo]
   // );
   const [customerData, setCustomerData] = useLocalStorage<{
-    likedProducts: { storeId: string; _id: string }[];
-    storeRatings: { _id: string; rating: number }[];
+    likedProducts: { storeId: string; id: string }[];
+    storeRatings: { id: string; rating: number }[];
   }>({
-    key: 'customerdata',
+    key: "customerdata",
     defaultValue: { likedProducts: [], storeRatings: [] },
   });
 
@@ -48,10 +48,12 @@ const CustomerDataProvider: React.FC = ({ children }) => {
   }, [data, isLoading]);
 
   const updateLikes = (storeId: string, productId: string) => {
-    const didCustomerLikeProduct = customerData.likedProducts.find((product) => product._id === productId);
+    const didCustomerLikeProduct = customerData.likedProducts.find(
+      (product) => product.id === productId
+    );
     if (didCustomerLikeProduct) {
       const updatedProducts = customerData.likedProducts.filter((product) => {
-        return product._id !== productId;
+        return product.id !== productId;
       });
       setCustomerData({ ...customerData, likedProducts: updatedProducts });
       return;
@@ -59,17 +61,22 @@ const CustomerDataProvider: React.FC = ({ children }) => {
 
     setCustomerData({
       ...customerData,
-      likedProducts: [...customerData.likedProducts, { storeId, _id: productId }],
+      likedProducts: [
+        ...customerData.likedProducts,
+        { storeId, id: productId },
+      ],
     });
   };
 
   const updateRatings = (storeId: string, rating: number) => {
-    const didCustmerRateStore = customerData.storeRatings.find((store) => storeId === store._id);
+    const didCustmerRateStore = customerData.storeRatings.find(
+      (store) => storeId === store.id
+    );
 
     if (didCustmerRateStore) {
       const updatedRatings = customerData.storeRatings.map((store) => {
-        if (storeId === store._id) {
-          return { _id: storeId, rating };
+        if (storeId === store.id) {
+          return { id: storeId, rating };
         }
         return store;
       });
@@ -79,14 +86,16 @@ const CustomerDataProvider: React.FC = ({ children }) => {
 
     setCustomerData({
       ...customerData,
-      storeRatings: [...customerData.storeRatings, { _id: storeId, rating }],
+      storeRatings: [...customerData.storeRatings, { id: storeId, rating }],
     });
   };
 
   const cancelRating = (storeId: string) => {
     setCustomerData({
       ...customerData,
-      storeRatings: customerData.storeRatings.filter((store) => store._id !== storeId),
+      storeRatings: customerData.storeRatings.filter(
+        (store) => store.id !== storeId
+      ),
     });
   };
   const context: CustomerData = {
@@ -97,13 +106,17 @@ const CustomerDataProvider: React.FC = ({ children }) => {
     refetch,
   };
 
-  return <CustomerDataContext.Provider value={context}>{children}</CustomerDataContext.Provider>;
+  return (
+    <CustomerDataContext.Provider value={context}>
+      {children}
+    </CustomerDataContext.Provider>
+  );
 };
 
 export const useCustomerData = (): CustomerData => {
   const customerData = useContext(CustomerDataContext);
   if (!customerData) {
-    throw new Error('call inside the component tree');
+    throw new Error("call inside the component tree");
   }
 
   return customerData;

@@ -42,7 +42,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
   // useEffect(() => {
   //   if (window.innerHeight + window.scrollY >= document.body.offsetHeight && Array.isArray(orders?.pages)) {
   //     fetchNextPage({
-  //       pageParam: orders?.pages[orders?.pages?.length - 1][orders?.pages[orders?.pages?.length - 1]?.length]?._id,
+  //       pageParam: orders?.pages[orders?.pages?.length - 1][orders?.pages[orders?.pages?.length - 1]?.length]?.id,
   //     })
   //   }
   // }, [scroll])
@@ -66,10 +66,10 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
         orders?.pages?.map((page) => {
           return page?.map((order) => {
             const store = order.orders.find((store) => {
-              return store._id === storeDocId;
+              return store.id === storeDocId;
             });
             const storeProducts = order.orders.find(
-              (store) => store._id === storeDocId
+              (store) => store.id === storeDocId
             ).addedProducts;
 
             const orderTotal = storeProducts.reduce((accu, currentProduct) => {
@@ -87,7 +87,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
             const orderTotalAfterFee = orderTotal - orderSaleFee;
             return (
               <Card mt={8}>
-                <Text>{order._id.toString()}</Text>
+                <Text>{order.id}</Text>
                 <Box
                   style={{
                     overflowX: "scroll",
@@ -118,7 +118,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
                     </thead>
                     <tbody>
                       {order.orders
-                        .find((store) => store._id === storeDocId)
+                        .find((store) => store.id === storeDocId)
                         .addedProducts.map((product, index) => {
                           return (
                             <tr>
@@ -196,7 +196,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
               pageParam:
                 orders?.pages[orders?.pages?.length - 1][
                   orders?.pages[orders?.pages?.length - 1]?.length
-                ]?._id,
+                ]?.id,
             });
           }}
         >

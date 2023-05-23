@@ -13,10 +13,10 @@ export const setProductAsPickedUpHandler = async ({
 }: SetProductAsPickedUpProps) => {
   var result;
   const { QTYFound, productId, orderId } = arg[0];
-  // const { _id, country } = await client
+  // const {id, country } = await client
   //   .db('generalData')
   //   .collection('storeInfo')
-  //   .findOne({ userId }, { projection: { _id: 1, country: 1 } });
+  //   .findOne({ userId }, { projection: {id: 1, country: 1 } });
   const storeDoc = await db
     .selectFrom('stores')
     .selectAll()

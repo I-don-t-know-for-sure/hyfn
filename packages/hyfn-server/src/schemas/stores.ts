@@ -71,7 +71,7 @@ export const stores = pgTable("stores", {
   lat: numeric("lat"),
   long: numeric("long"),
   opened: boolean("opened").default(false),
-  balance: numeric("balance", { precision: 3, scale: 2 }),
+  balance: numeric("balance"),
 
   image: varchar("image").array(),
   notificationToken: varchar("notification_token").array(),

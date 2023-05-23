@@ -19,7 +19,7 @@ export const useBulkWrite = () => {
   return useMutation(async (productsArray: any) => {
     try {
       const result = await fetchUtil({
-        reqData: [{ productsArray, storeId: userDocument._id }],
+        reqData: [{ productsArray, storeId: userDocument.id }],
         url: `${import.meta.env.VITE_APP_BASE_URL}/bulkWrite`,
       });
 

@@ -27,7 +27,7 @@ const AddDriverModal: React.FC<AddDriverModalProps> = ({
       <Modal opened={opened} onClose={() => setOpened(false)}>
         <Box>
           <Text weight={700}>ID</Text>
-          <Text>{driver._id}</Text>
+          <Text>{driver.id}</Text>
         </Box>
         <Group
           position="apart"

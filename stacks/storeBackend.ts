@@ -106,10 +106,10 @@ export function storeApiStack({ stack }: StackContext) {
       },
     },
     routes: {
-      "POST /getProductsForStore": {
+      "POST /getProducts": {
         function: {
-          handler: pathToLambdas + "getProductsForStore.handler",
-          // functionName: "getProductsForStore" + stack.stage,
+          handler: pathToLambdas + "getProducts.handler",
+          // functionName: "getProducts" + stack.stage,
         },
       },
       "POST /generateDescriptionClient": {

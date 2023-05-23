@@ -14,10 +14,10 @@ const TableRow: React.FC<TableRowProps> = ({
   selectvalue,
   onChangeHandler,
 }) => {
-  const { _id } = product;
+  const { id } = product;
 
   return (
-    <tr key={_id}>
+    <tr key={id}>
       {selectvalue.map((value, index) => {
         const keys = value?.split(".");
 
@@ -38,7 +38,7 @@ const TableRow: React.FC<TableRowProps> = ({
                       value: !keyValue,
                       firstChangedKey: keys[0],
                       changedKey: keys[1],
-                      _id,
+                     id,
                     },
                   });
                 }}
@@ -51,7 +51,7 @@ const TableRow: React.FC<TableRowProps> = ({
               //       value: e,
               //       firstChangedKey: keys[0],
               //       changedKey: keys[1],
-              //       _id,
+              //      id,
               //     })
               //   }
               // />
@@ -64,7 +64,7 @@ const TableRow: React.FC<TableRowProps> = ({
                       value: e.currentTarget.value,
                       firstChangedKey: keys[0],
                       changedKey: keys[1],
-                      _id,
+                     id,
                     },
                   })
                 }
@@ -73,7 +73,7 @@ const TableRow: React.FC<TableRowProps> = ({
             {value === ""}
             <TableInput
               productInfo={product}
-              _id={_id}
+              id={id}
               keyValue={keyValue}
               keys={keys}
               onChangeHandler={onChangeHandler}

@@ -25,7 +25,7 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
       if (!userInfo) {
         throw new Error('user document not found');
       }
-      const userId = userInfo._id.toString();
+      const userId = userInfo.id;
 
       const { order, name, balance = 0 } = userInfo;
 
@@ -61,7 +61,7 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
         const store = order.orders[i];
         const storeDoc = await mongo.collection('storeFronts').findOne(
           {
-            _id: new ObjectId(store._id),
+            id: new ObjectId(store.id),
           },
           { session }
         );
@@ -77,7 +77,7 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
         storesArray.push(storeDoc);
       }
       const status = order.orders.map((store) => {
-        return { _id: store._id, status: ORDER_STATUS_PENDING, userType: 'store' };
+        return { id: store.id, status: ORDER_STATUS_PENDING, userType: 'store' };
       });
 
       const insertOrderResult = await mongo.collection(`orders`).insertOne(
@@ -101,8 +101,8 @@ const createOrder = async ({ arg, client, userId: customerId }: CreateOrderProps
           proposals: [],
           status: [
             ...status,
-            { _id: userId, status: 'customer', userType: 'customer' },
-            orderType !== ORDER_TYPE_PICKUP && { _id: '', status: 'not set', userType: 'driver' },
+            { id: userId, status: 'customer', userType: 'customer' },
+            orderType !== ORDER_TYPE_PICKUP && { id: '', status: 'not set', userType: 'driver' },
           ],
           coords: fixedGeometry,
           orderDate: new Date(),

@@ -1,5 +1,3 @@
-
-
 export interface Store {
   businessName: string;
   businessPhone: string;
@@ -8,13 +6,13 @@ export interface Store {
   image: string;
   city: string;
   country: string;
-  _id: any
+  id: any;
   currentRating: string;
   ratingCount: number;
 }
 
 export interface storeFront {
-  _id: any;
+  id: any;
   description: string;
   currentRating: number;
   ratingCount: number;

@@ -4,18 +4,14 @@ import { useInfiniteQuery } from "react-query";
 
 import fetchUtil from "utils/fetch";
 
-export const useGetProductsForBulkUpdate = ({
-  lastDocId,
-  check,
-  filterText,
-}) => {
+export const useGetProducts = ({ lastDocId, check, filterText }) => {
   const { userId, userDocument } = useUser();
 
   return useInfiniteQuery(
     [products, check],
     async ({ queryKey, pageParam }) => {
       return await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getProductsForBulkUpdate`,
+        url: `${import.meta.env.VITE_APP_BASE_URL}/getProducts`,
 
         reqData: [userDocument?.id, pageParam, queryKey[1]],
       });

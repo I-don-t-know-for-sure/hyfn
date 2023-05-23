@@ -10,7 +10,7 @@ export const useRemoveProductsBackgrounds = () => {
         url: `${
           import.meta.env.VITE_APP_BASE_URL
         }/removeAllProductsBackgrounds`,
-        reqData: [{ productIds, storeId: userDocument._id }],
+        reqData: [{ productIds, storeId: userDocument.id }],
       });
       return result;
     } catch (error) {

@@ -33,7 +33,7 @@ export const generateProductDescriptionHandler = async ({
   const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
-    .findOne({ _id: new ObjectId(storeId) }, { projection: { balance: true } });
+    .findOne({ id: new ObjectId(storeId) }, { projection: { balance: true } });
 
   const price = descriptionGenerationPricePerImage * imageKeys.length;
 
@@ -45,7 +45,7 @@ export const generateProductDescriptionHandler = async ({
     .db('generalData')
     .collection('storeInfo')
     .updateOne(
-      { _id: new ObjectId(storeId) },
+      { id: new ObjectId(storeId) },
       {
         $inc: {
           balance: -price,
@@ -127,7 +127,7 @@ export const generateProductDescriptionHandler = async ({
       .db('base')
       .collection('products')
       .updateOne(
-        { _id: new ObjectId(productId) },
+        { id: new ObjectId(productId) },
         {
           $set: {
             'textInfo.description': productDescription,

@@ -21,7 +21,7 @@ export const useGetCollectionProducts = ({
         const result = await fetchUtil({
           reqData: [
             {
-              storeId: userDocument._id,
+              storeId: userDocument.id,
               lastDoc: pageParam,
               collectionId,
             },

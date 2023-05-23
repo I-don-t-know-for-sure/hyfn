@@ -1,15 +1,8 @@
-
-
-
-
-
-
 import { boolean, number, object, string, z } from "zod";
 import { countriesArray } from "../constants";
 
 export const driverManagementSchema = object({
-  _id: z.any(),
-
+  id: z.any(),
 
   managementName: string(),
   managementPhone: string(),

@@ -7,13 +7,13 @@ export const getProductsForCollectionHandler = async ({ arg, client, db }: MainF
   //     .collection('products')
   //     .find(
   //       {
-  //         '_id': { $gt: new ObjectId(lastDoc) },
+  //         'id': { $gt: new ObjectId(lastDoc) },
   //         storeId,
   //         'collections.value': { $ne: collectionId },
   //       },
   //       {
   //         projection: {
-  //           _id: 1,
+  //          id: 1,
   //           textInfo: 1,
   //         },
   //       }
@@ -21,7 +21,7 @@ export const getProductsForCollectionHandler = async ({ arg, client, db }: MainF
   //     .limit(20)
   //     .toArray();
   //   result = result.map((product) => {
-  //     return { value: product._id.toString(), label: product.textInfo.title };
+  //     return { value: product.id, label: product.textInfo.title };
   //   });
   //   return;
   // }
@@ -32,7 +32,7 @@ export const getProductsForCollectionHandler = async ({ arg, client, db }: MainF
   //     { storeId, 'collections.value': { $ne: collectionId } },
   //     {
   //       projection: {
-  //         _id: 1,
+  //        id: 1,
   //         textInfo: 1,
   //       },
   //     }

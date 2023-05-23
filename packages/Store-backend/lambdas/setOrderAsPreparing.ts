@@ -37,7 +37,7 @@ export const setOrderAsPreparingHandler = async ({
     .db('base')
     .collection('orders')
     .updateOne(
-      { _id: new ObjectId(orderId) },
+      { id: new ObjectId(orderId) },
       {
         $set: {
           ['orders.$[store].orderStatus']: ORDER_STATUS_PREPARING,
@@ -45,7 +45,7 @@ export const setOrderAsPreparingHandler = async ({
         },
       },
       {
-        arrayFilters: [{ 'store._id': new ObjectId(storeId) }],
+        arrayFilters: [{ 'store.id': new ObjectId(storeId) }],
       }
     );
 

@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useFixedComponent } from "contexts/fixedComponentContext/FixedComponentProvider";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useBulkUpdate } from "pages/Manage/hooks/useBulkUpdate";
 
 import React, { useEffect, useReducer, useState } from "react";
@@ -35,9 +35,9 @@ const BulkUpdateTable: React.FC<BulkUpdateTableProps> = ({}) => {
   const reducer = (state, { type, payload }) => {
     switch (type) {
       case ActionTypes.ON_CHANGE_HANDLER:
-        const { _id, changedKey, firstChangedKey, value } = payload;
+        const { id, changedKey, firstChangedKey, value } = payload;
         return state.map((product) => {
-          if (product._id !== _id) {
+          if (product.id !== id) {
             return product;
           }
           if (changedKey === undefined) {
@@ -77,16 +77,16 @@ const BulkUpdateTable: React.FC<BulkUpdateTableProps> = ({}) => {
   //     value,
   //     firstChangedKey,
   //     changedKey,
-  //     _id,
+  //    id,
   //   }: {
   //     value: any;
   //     firstChangedKey: string;
   //     changedKey?: string;
-  //     _id: string;
+  //    id: string;
   //   }) => {
   //     setTableData(prevState: any) => {
   //       return prevState.map((product) => {
-  //         if (product._id !== _id) {
+  //         if (product.id !==id) {
   //           return product;
   //         }
   //         if (changedKey === undefined) {

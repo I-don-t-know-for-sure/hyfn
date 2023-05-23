@@ -17,7 +17,7 @@ export const useUpdatePaymentSettings = () => {
       try {
         const storeDoc = userDocument?.storeDoc as { id: string };
         await fetchUtil({
-          reqData: [{ storeId: userDocument._id, userId }],
+          reqData: [{ storeId: userDocument.id, userId }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/updatePaymentSettings`,
         });
       } catch (error) {

@@ -56,7 +56,7 @@ export const handler = async (event) => {
 
     await insertOne({
       insertDocument: {
-        _id: new ObjectId(customerDoc.transaction.invoiceNumber),
+        id: new ObjectId(customerDoc.transaction.invoiceNumber),
         paymentMethod: paymentMethods.sadad,
         successful: true,
         amount: customerDoc.transaction.amountToBeAdded,

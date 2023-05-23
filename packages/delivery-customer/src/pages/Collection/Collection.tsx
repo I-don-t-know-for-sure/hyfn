@@ -1,13 +1,13 @@
-import { Box, Container, Loader, SimpleGrid, Text } from '@mantine/core';
-import Product from './components/Product';
-import { useCart } from '../../contexts/cartContext/Provider';
-import { storeFront } from '../../config/types';
-import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { useGetCollectionProducts } from './hooks/useGetCollectionProducts';
-import { useLikeProduct } from '../../pages/Product/hooks/useProduct';
-import { t } from '../../util/i18nextFix';;
-import { useWindowScroll } from '@mantine/hooks';
+import { Box, Container, Loader, SimpleGrid, Text } from "@mantine/core";
+import Product from "./components/Product";
+import { useCart } from "../../contexts/cartContext/Provider";
+import { storeFront } from "../../config/types";
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { useGetCollectionProducts } from "./hooks/useGetCollectionProducts";
+import { useLikeProduct } from "../../pages/Product/hooks/useProduct";
+import { t } from "../../util/i18nextFix";
+import { useWindowScroll } from "@mantine/hooks";
 interface CollectionProps {}
 
 const Collection: React.FC<CollectionProps> = ({}) => {
@@ -29,54 +29,60 @@ const Collection: React.FC<CollectionProps> = ({}) => {
   });
 
   useEffect(() => {
-    console.log(window.innerHeight + window.scrollY >= document.body.offsetHeight);
+    console.log(
+      window.innerHeight + window.scrollY >= document.body.offsetHeight
+    );
 
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight && Array.isArray(data?.pages)) {
-      fetchNextPage({ pageParam: data.pages[data.pages.length - 1][24]?._id });
-      console.log(data.pages[data.pages.length - 1][24]?._id);
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+      Array.isArray(data?.pages)
+    ) {
+      fetchNextPage({ pageParam: data.pages[data.pages.length - 1][24]?.id });
+      console.log(data.pages[data.pages.length - 1][24]?.id);
     }
   }, [scroll]);
 
   console.log(data);
-  const { addProductToCart, reduceOrRemoveProductFromCart, cart, setCartInfo } = useCart();
+  const { addProductToCart, reduceOrRemoveProductFromCart, cart, setCartInfo } =
+    useCart();
 
   const { mutate: likeMutation } = useLikeProduct();
-  const addedProducts = cart[storeInfo?._id]?.addedProducts;
+  const addedProducts = cart[storeInfo?.id]?.addedProducts;
 
   return (
     <Box
       sx={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <Text>{t('Error')}</Text>
+        <Text>{t("Error")}</Text>
       ) : (
         data && (
           <SimpleGrid
             sx={(theme) => ({
-              width: '100%',
-              margin: 'auto',
+              width: "100%",
+              margin: "auto",
 
-              [theme.fn.largerThan('md')]: {
-                gridTemplateColumns: 'repeat(2, 1fr)',
+              [theme.fn.largerThan("md")]: {
+                gridTemplateColumns: "repeat(2, 1fr)",
               },
-              [theme.fn.largerThan('lg')]: {
-                gridTemplateColumns: 'repeat(3, 1fr)',
+              [theme.fn.largerThan("lg")]: {
+                gridTemplateColumns: "repeat(3, 1fr)",
               },
-              [theme.fn.smallerThan('md')]: {
-                gridTemplateColumns: 'repeat(2, 1fr)',
+              [theme.fn.smallerThan("md")]: {
+                gridTemplateColumns: "repeat(2, 1fr)",
               },
-              [theme.fn.smallerThan('sm')]: {
-                gridTemplateColumns: 'repeat(1, 1fr)',
+              [theme.fn.smallerThan("sm")]: {
+                gridTemplateColumns: "repeat(1, 1fr)",
               },
-              [theme.fn.smallerThan('xs')]: {
-                gridTemplateColumns: 'repeat(1, 1fr)',
+              [theme.fn.smallerThan("xs")]: {
+                gridTemplateColumns: "repeat(1, 1fr)",
               },
               // display: "flex",
               // flexWrap: "wrap",
@@ -85,40 +91,50 @@ const Collection: React.FC<CollectionProps> = ({}) => {
             cols={3}
             breakpoints={[
               {
-                maxWidth: 'lg',
+                maxWidth: "lg",
                 cols: 2,
-                spacing: 'md',
+                spacing: "md",
               },
               {
-                maxWidth: 'md',
+                maxWidth: "md",
                 cols: 2,
-                spacing: 'sm',
+                spacing: "sm",
               },
               {
-                maxWidth: 'sm',
+                maxWidth: "sm",
                 cols: 3,
-                spacing: 'md',
+                spacing: "md",
               },
             ]}
           >
             {data?.pages?.map((chunck) => {
               return chunck?.map((product) => {
                 const addProduct = () => {
-                  console.log('add ................', product, storeInfo);
+                  console.log("add ................", product, storeInfo);
 
-                  addProductToCart(storeInfo, product, setCartInfo, city, country);
+                  addProductToCart(
+                    storeInfo,
+                    product,
+                    setCartInfo,
+                    city,
+                    country
+                  );
                 };
                 const reduceOrRemoveProduct = () => {
-                  console.log('reduce ................', storeInfo, product);
+                  console.log("reduce ................", storeInfo, product);
 
-                  reduceOrRemoveProductFromCart(storeInfo, product, setCartInfo);
+                  reduceOrRemoveProductFromCart(
+                    storeInfo,
+                    product,
+                    setCartInfo
+                  );
                 };
                 const productUrl = product?.options?.hasOptions
-                  ? `/product/${storeInfo._id}/${country}/${city}/${product._id.toString()}`
-                  : `/product/withnotoptions/${storeInfo._id}/${country}/${city}/${product._id.toString()}`;
+                  ? `/product/${storeInfo.id}/${country}/${city}/${product.id}`
+                  : `/product/withnotoptions/${storeInfo.id}/${country}/${city}/${product.id}`;
                 return (
                   <Product
-                    key={product._id}
+                    key={product.id}
                     product={product}
                     productUrl={productUrl}
                     addProduct={addProduct}
@@ -127,7 +143,7 @@ const Collection: React.FC<CollectionProps> = ({}) => {
                     // likeMutation={likeMutation}
                     city={city}
                     country={country}
-                    storefront={storeInfo._id}
+                    storefront={storeInfo.id}
                   />
                 );
               });

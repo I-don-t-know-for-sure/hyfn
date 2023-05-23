@@ -5,7 +5,7 @@ export const updateBrandHandler = async ({ arg, client }) => {
     .db("productsLibrary")
     .collection("brands")
     .updateOne(
-      { creatorId, _id: new ObjectId(brandId) },
+      { creatorId, id: new ObjectId(brandId) },
       {
         $set: {
           ...newBrandInfo,

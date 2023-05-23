@@ -53,7 +53,7 @@ const PickupActiveOrder: React.FC<PickupActiveOrderProps> = ({
 }) => {
   console.log("🚀 ~ file: PickupActiveOrder.tsx:34 ~ order", order);
   const { refetch, isLoading } = useRefreshOrderDocument({
-    orderId: order._id.toString(),
+    orderId: order.id,
   });
   const { mutate: setOrderAsDelivered } = useSetOrderAsDelivered();
 
@@ -106,17 +106,17 @@ const PickupActiveOrder: React.FC<PickupActiveOrderProps> = ({
           <OrderActionMenu
             orderType={order.orderType}
             isOrderTakenByDriver={false}
-            orderId={order._id.toString()}
+            orderId={order.id}
           />
         </Group>
         <Group position="apart" m={"md"}>
-          <Text>{order._id.toString()}</Text>
+          <Text>{order.id}</Text>
         </Group>
         {order?.orders?.map((store) => {
           console.log(store, "hshsshshhshss");
           return (
             <Box
-              key={store._id.toString()}
+              key={store.id}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -136,8 +136,8 @@ const PickupActiveOrder: React.FC<PickupActiveOrderProps> = ({
                 </Text>
                 <PayStoreForPickupOrder
                   order={order}
-                  orderId={order._id.toString()}
-                  storeId={store._id}
+                  orderId={order.id}
+                  storeId={store.id}
                   storeProducts={store.addedProducts}
                   store={store}
                 />
@@ -219,7 +219,7 @@ const PickupActiveOrder: React.FC<PickupActiveOrderProps> = ({
 
         <Button
           onClick={() => {
-            setOrderAsDelivered({ orderId: order._id.toString() });
+            setOrderAsDelivered({ orderId: order.id });
           }}
         >
           {t("Set as Delivered")}

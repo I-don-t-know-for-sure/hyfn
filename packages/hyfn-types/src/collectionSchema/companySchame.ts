@@ -1,15 +1,8 @@
-
-
-
-
-
-
 import { boolean, literal, number, object, string, z } from "zod";
 import { citiesArray, countriesArray, storeTypesArray } from "../constants";
 
 export const companySchame = object({
-  _id: z.any(),
-
+  id: z.any(),
 
   userId: string(),
   companyDoc: object({

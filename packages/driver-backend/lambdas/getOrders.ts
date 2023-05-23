@@ -16,9 +16,9 @@ export const getOrders = async ({ arg, client, userId }: GetOrdersProps) => {
     .db('base')
     .collection('orders')
     .find({
-      ...(lastDoc ? { _id: { $gt: new ObjectId(lastDoc) } } : {}),
+      ...(lastDoc ? { id: { $gt: new ObjectId(lastDoc) } } : {}),
       'status.$': {
-        _id: driverDoc._id.toString(),
+        id: driverDoc.id,
         userType: USER_TYPE_DRIVER,
         status: active ? { $ne: USER_STATUS_DELIVERED } : USER_STATUS_DELIVERED,
       },

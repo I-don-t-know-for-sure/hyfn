@@ -13,7 +13,7 @@ export const removeDriverManagementVerificationHandler = async ({
     .db("generalData")
     .collection("driverManagement")
     .updateOne(
-      { _id: new ObjectId(driverManagement) },
+      { id: new ObjectId(driverManagement) },
       {
         $set: {
           verified: false,

@@ -5,7 +5,7 @@ export const updateDriverDocumentHandler = async ({
   userId,
 }: MainFunctionProps) => {
   // const driverInfo = await driverInfoSchema.validate(arg[1]);
-  const { _id, driverId, balance, ...driverInfo } = await arg[1];
+  const { id, driverId, balance, ...driverInfo } = await arg[1];
 
   const driverDoc = await db
     .selectFrom('drivers')

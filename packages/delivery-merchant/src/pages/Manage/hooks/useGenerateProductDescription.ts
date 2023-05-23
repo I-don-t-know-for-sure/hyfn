@@ -48,7 +48,7 @@ export const useGenerateProductDescription = () => {
       const result = await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/generateDescriptionClient`,
         reqData: [
-          { products: productsToBeGenerated, storeId: userDocument?._id },
+          { products: productsToBeGenerated, storeId: userDocument?.id },
         ],
       });
       return result;

@@ -12,7 +12,7 @@ export const useGetProducts = ({ lastDocId, check, filterText }) => {
       return await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/getProducts`,
 
-        reqData: [{ creatorId: userDocument._id, lastProductId: pageParam }],
+        reqData: [{ creatorId: userDocument.id, lastProductId: pageParam }],
       });
     },
     {

@@ -34,7 +34,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
       await trx
         .updateTable('drivers')
         .set({
-          reportsIds: sql`reports_ids || ${reportDoc.id}`,
+          reportsIds: sql`reportsids || ${reportDoc.id}`,
         })
         .where('id', '=', orderDoc.driverId)
         .executeTakeFirst();
@@ -42,7 +42,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
       await trx
         .updateTable('customers')
         .set({
-          reportsIds: sql`reports_ids || ${reportDoc.id}`,
+          reportsIds: sql`reportsids || ${reportDoc.id}`,
         })
         .where('id', '=', orderDoc.customerId)
         .executeTakeFirst();
@@ -50,7 +50,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
       await trx
         .updateTable('orders')
         .set({
-          reportsIds: sql`reports_ids || ${reportDoc.id}`,
+          reportsIds: sql`reportsids || ${reportDoc.id}`,
         })
         .where('id', '=', orderDoc.id)
         .executeTakeFirst();

@@ -21,7 +21,7 @@ export const useBulkUpdate = () => {
     try {
       const { country } = userDocument.storeDoc as { country: string };
       const result = await fetchUtil({
-        reqData: [{ country, productsArray, storeId: userDocument._id }],
+        reqData: [{ country, productsArray, storeId: userDocument.id }],
         url: import.meta.env.VITE_APP_BULK_UPDATE,
       });
 

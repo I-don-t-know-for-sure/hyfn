@@ -4,7 +4,7 @@ export const getReportsHandler = async ({ arg, client }) => {
     const results = await client
       .db("generalData")
       .collection("reports")
-      .find({ _id: { $gt: new ObjectId(lastDoc) } })
+      .find({ id: { $gt: new ObjectId(lastDoc) } })
       .limit(20)
       .toArray();
     return results;

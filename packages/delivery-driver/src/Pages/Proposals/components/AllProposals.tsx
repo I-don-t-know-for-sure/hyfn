@@ -61,7 +61,7 @@ const AllProposals: React.FC<AllProposalsProps> = ({}) => {
               pageParam:
                 orders?.pages[orders?.pages?.length - 1][
                   orders?.pages[orders.pages?.length - 1]?.length - 1
-                ]?._id,
+                ]?.id,
             })
           }
         >

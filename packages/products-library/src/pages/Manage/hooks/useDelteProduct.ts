@@ -29,7 +29,7 @@ export const useDeleteProduct = () => {
       try {
         const result = await fetchUtil({
           url: `${import.meta.env.VITE_APP_BASE_URL}/deleteProduct`,
-          reqData: [userDocument._id, productId],
+          reqData: [userDocument.id, productId],
         });
         return result;
       } catch (e) {

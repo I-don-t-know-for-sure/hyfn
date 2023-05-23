@@ -69,7 +69,7 @@ const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionPro
       await trx
         .updateTable('stores')
         .set({
-          balance: sql`${tStores.balance} || ${transaction.amount}`,
+          balance: sql`${sql.raw(tStores.balance)}::numeric + ${transaction.amount}::numeric`,
         })
         .where('id', '=', transaction.customerId)
         .execute();

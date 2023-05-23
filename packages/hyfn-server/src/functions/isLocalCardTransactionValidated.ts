@@ -88,7 +88,7 @@ export const isLocalCardTransactionValidated = async ({
 
   // if (isApproved) {
   //   await updateOne({
-  //     query: { _id: new ObjectId(transactionId) },
+  //     query: {id: new ObjectId(transactionId) },
   //     update: {
   //       $set: { validated: true },
   //     },

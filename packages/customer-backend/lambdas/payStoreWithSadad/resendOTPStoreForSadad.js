@@ -15,7 +15,7 @@ export const handler = async (event) => {
     const { customerId, storeId } = arg[0];
 
     const customerDoc = await findOne(
-      { _id: new ObjectId(customerId) },
+      { id: new ObjectId(customerId) },
       {},
       client.db('generalData').collection('customerInfo')
     );
@@ -25,10 +25,10 @@ export const handler = async (event) => {
     }
 
     const storeAPIToken = await findOne(
-      { _id: new ObjectId(storeId) },
+      { id: new ObjectId(storeId) },
       {
         projection: {
-          _id: 0,
+          id: 0,
           sadadApiKey: 1,
         },
       },

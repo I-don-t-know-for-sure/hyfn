@@ -10,7 +10,7 @@ export const bulkWriteHandler = async ({ event, arg, client, userId }: BulkWrite
     .collection('storeInfo')
     .findOne({ usersIds: userId }, {});
   if (!storeDoc) throw new Error('store not found');
-  const storeId = storeDoc._id.toString();
+  const storeId = storeDoc.id;
 
   const { productsArray } = arg[0];
   const objKeysExample = ['name', 'price', 'barcode'];
@@ -54,7 +54,7 @@ export const bulkWriteHandler = async ({ event, arg, client, userId }: BulkWrite
         const libraryProductDoc = await client
           .db('productsLibrary')
           .collection('products')
-          .findOne({ barcode: row[x].trim() }, { projection: { _id: 0, images: 1 } });
+          .findOne({ barcode: row[x].trim() }, { projection: { id: 0, images: 1 } });
         outputObject = {
           ...outputObject,
           images: libraryProductDoc?.images,

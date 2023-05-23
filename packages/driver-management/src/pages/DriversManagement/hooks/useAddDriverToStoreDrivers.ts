@@ -9,8 +9,10 @@ export const useAddDriverToManagementDrivers = () => {
   return useMutation(
     async ({ driverId, balance }: { driverId: string; balance: number }) => {
       return await fetchUtil({
-        reqData: [{ driverId, storeId: userDocument._id, balance }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/addDriverToManagementDrivers`,
+        reqData: [{ driverId, storeId: userDocument.id, balance }],
+        url: `${
+          import.meta.env.VITE_APP_BASE_URL
+        }/addDriverToManagementDrivers`,
       });
     }
   );

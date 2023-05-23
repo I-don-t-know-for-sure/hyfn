@@ -20,7 +20,7 @@ export const useGetOrderHistory = () => {
         reqData: [
           {
             country: location.country,
-            customerId: userDocument._id,
+            customerId: userDocument.id,
             lastDoc: pageParam,
           },
         ],

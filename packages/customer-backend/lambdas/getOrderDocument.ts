@@ -1,7 +1,7 @@
 export const getOrderDocumentHandler = async ({ arg, client, db }: MainFunctionProps) => {
   const { orderId, country } = arg[0];
   // const ordeDoc = await findOne(
-  //   { _id: new ObjectId(orderId) },
+  //   {id: new ObjectId(orderId) },
   //   {},
   //   client.db("base").collection('orders')
   // );

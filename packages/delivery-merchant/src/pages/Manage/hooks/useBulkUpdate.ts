@@ -31,9 +31,9 @@ export const useBulkUpdate = () => {
       // create a function that takes productsArray and maps through it and takes the deletedImages and removeBackgroundImages and generateProductImages key from every object and returns an array of those keys
       const getKeys = (productsArray: any[]) => {
         return productsArray.map((product) => {
-          const { files, generateDescriptionImages, _id } = product;
+          const { files, generateDescriptionImages, id } = product;
           return {
-            _id,
+            id,
             files,
             generateDescriptionImages,
           };
@@ -43,7 +43,7 @@ export const useBulkUpdate = () => {
       // return;
       var productsToGenerateDescription = [];
       for (let i = 0; i < keysArray.length; i++) {
-        const { files, generateDescriptionImages, _id } = keysArray[i];
+        const { files, generateDescriptionImages, id } = keysArray[i];
         const upload = useUploadImage();
 
         if (files?.length > 0) {
@@ -60,10 +60,10 @@ export const useBulkUpdate = () => {
               generatedNames,
               generatedURLs,
             });
-            // loop through products array and and find the product that has the _id that matches the product._id and push generatedImages to that product images array
+            // loop through products array and and find the product that has theid that matches the product.id and push generatedImages to that product images array
             for (let i = 0; i < products.length; i++) {
               const product = products[i];
-              if (product._id === _id) {
+              if (product.id === id) {
                 product.images = [...product.images, ...generatedNames];
               }
             }
@@ -74,17 +74,20 @@ export const useBulkUpdate = () => {
             );
           }
         }
-
+        console.log(
+          "🚀 ~ file: useBulkUpdate.ts:17 ~ returnuseMutation ~ productsArray:",
+          generateDescriptionImages?.length > 0
+        );
         if (generateDescriptionImages?.length > 0) {
           try {
             // const { generatedURLs, generatedNames } =
             //   await generateProductDescriptionImageUrl(
             //     generateDescriptionImages
             //   );
-            // // loop through products array and and find the product that has the _id that matches the product._id and set description field to ""
+            // // loop through products array and and find the product that has theid that matches the product.id and set description field to ""
             // for (let i = 0; i < products.length; i++) {
             //   const product = products[i];
-            //   if (product._id === _id) {
+            //   if (product.id ===id) {
             //     delete product.description;
             //   }
             // }
@@ -97,7 +100,7 @@ export const useBulkUpdate = () => {
 
             productsToGenerateDescription = [
               ...productsToGenerateDescription,
-              { images: generateDescriptionImages, productId: _id },
+              { images: generateDescriptionImages, productId: id },
             ];
           } catch (error) {
             console.log(
@@ -119,11 +122,9 @@ export const useBulkUpdate = () => {
       const log = (value: any) => {
         console.log(value);
       };
-      const { country } = userDocument.storeDoc as { country: string };
+
       const result = await fetchUtil({
-        reqData: [
-          { country, productsArray: products, storeId: userDocument._id },
-        ],
+        reqData: [{ productsArray: products, storeId: userDocument.id }],
         url: `${import.meta.env.VITE_APP_BASE_URL}/bulkUpdate`,
       });
 

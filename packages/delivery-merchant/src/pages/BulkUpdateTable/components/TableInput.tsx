@@ -11,7 +11,7 @@ interface TableInputProps {
   onChangeHandler: any;
   keyValue: any;
   keys: any;
-  _id: any;
+  id: any;
   productInfo: any;
 }
 
@@ -20,7 +20,7 @@ const TableInput: React.FC<TableInputProps> = ({
   onChangeHandler,
   keyValue,
   keys,
-  _id,
+  id,
   productInfo,
 }) => {
   console.log("🚀 ~ file: TableInput.tsx:23 ~ keyValue:", keyValue);
@@ -41,7 +41,7 @@ const TableInput: React.FC<TableInputProps> = ({
               value: !keyValue,
               firstChangedKey: keys[0],
               changedKey: keys[1],
-              _id,
+              id,
             },
           });
           return;
@@ -53,7 +53,7 @@ const TableInput: React.FC<TableInputProps> = ({
             value: !keyValue,
             firstChangedKey: keys[0],
 
-            _id,
+            id,
           },
         });
       }}
@@ -64,7 +64,7 @@ const TableInput: React.FC<TableInputProps> = ({
       //       value: e.target.checked,
       //       firstChangedKey: keys[0],
       //       changedKey: keys[1],
-      //       _id,
+      //      id,
       //     },
       //   })
       // }}
@@ -83,7 +83,7 @@ const TableInput: React.FC<TableInputProps> = ({
               value: e,
               firstChangedKey: keys[0],
               changedKey: keys[1],
-              _id,
+              id,
             },
           });
           return;
@@ -94,7 +94,7 @@ const TableInput: React.FC<TableInputProps> = ({
             value: e,
             firstChangedKey: keys[0],
             // changedKey: keys[1],
-            _id,
+            id,
           },
         });
       }}
@@ -103,15 +103,11 @@ const TableInput: React.FC<TableInputProps> = ({
     <DescriptionModal
       value={keyValue}
       onChange={onChangeHandler}
-      _id={_id}
+      id={id}
       productInfo={productInfo}
     />
   ) : value === "images" ? (
-    <ImageModal
-      _id={_id}
-      onChange={onChangeHandler}
-      productInfo={productInfo}
-    />
+    <ImageModal id={id} onChange={onChangeHandler} productInfo={productInfo} />
   ) : (
     // <TableInput
     //   value={keyValue}
@@ -120,7 +116,7 @@ const TableInput: React.FC<TableInputProps> = ({
     //       value: e,
     //       firstChangedKey: keys[0],
     //       changedKey: keys[1],
-    //       _id,
+    //      id,
     //     })
     //   }
     // />
@@ -133,7 +129,7 @@ const TableInput: React.FC<TableInputProps> = ({
       //       value: e.currentTarget.value,
       //       firstChangedKey: keys[0],
       //       changedKey: keys[1],
-      //       _id,
+      //      id,
       //     },
       //   })
       // }
@@ -148,7 +144,7 @@ const TableInput: React.FC<TableInputProps> = ({
             value: e.currentTarget.value,
             firstChangedKey: keys[0],
             changedKey: keys[1],
-            _id,
+            id,
           },
         });
       }}

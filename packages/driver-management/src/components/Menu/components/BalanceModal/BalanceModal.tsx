@@ -302,7 +302,7 @@ const BalanceModal: React.FC<AddToWalletModalProps> = ({}) => {
                                 fullWidth
                                 onClick={() => {
                                   cancelPaymentRequest({
-                                    requestId: paymentRequest._id.toString(),
+                                    requestId: paymentRequest.id,
                                   });
                                 }}
                               >
@@ -323,7 +323,7 @@ const BalanceModal: React.FC<AddToWalletModalProps> = ({}) => {
                           paymentRequests.pages[
                             paymentRequests.pages.length - 1
                           ].length - 1
-                        ]._id,
+                        ].id,
                     });
                   }}
                 >

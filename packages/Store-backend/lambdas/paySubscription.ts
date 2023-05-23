@@ -4,7 +4,7 @@ export const paySubscriptionHandler = async ({ arg, client }: MainFunctionProps)
   const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
-    .findOne({ _id: new ObjectId(storeId) }, {});
+    .findOne({ id: new ObjectId(storeId) }, {});
   // if (!customerDoc.isPaying) {
   //   return "no transaction in progress";
   // }
@@ -49,7 +49,7 @@ export const paySubscriptionHandler = async ({ arg, client }: MainFunctionProps)
     .collection('storeInfo')
     .updateOne(
       {
-        _id: new ObjectId(storeId),
+        id: new ObjectId(storeId),
       },
       {
         $set: {
@@ -64,7 +64,7 @@ export const paySubscriptionHandler = async ({ arg, client }: MainFunctionProps)
     .collection('storeFronts')
     .updateOne(
       {
-        _id: new ObjectId(storeId),
+        id: new ObjectId(storeId),
       },
       {
         $set: {

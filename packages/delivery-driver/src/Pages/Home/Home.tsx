@@ -97,7 +97,7 @@ const Home: React.FC<HomeProps> = () => {
     let uniqueIds = [];
     let orders = [];
     return arr.filter((obj) => {
-      // const includesUniqueId = uniqueIds.includes(obj.orders[0]._id);
+      // const includesUniqueId = uniqueIds.includes(obj.orders[0].id);
       if (Array.isArray(obj.stores)) {
         if (uniqueIds.includes(obj?.stores[0]?.id)) {
           return false;
@@ -371,9 +371,9 @@ const Home: React.FC<HomeProps> = () => {
 
 export default Home;
 // function AvailabeOrder({order,userDocument}:{order: any, userDocument: any}): JSX.Element {
-//   return <Card m={"24px auto"} key={order?._id.toString()}>
+//   return <Card m={"24px auto"} key={order?.id}>
 //     <Group>
-//       <Text>{order?._id.toString()}</Text>
+//       <Text>{order?.id}</Text>
 
 //       <CopyButton
 //         value={`${order?.coords?.coordinates[0][1]},${order?.coords?.coordinates[0][0]}`} />
@@ -404,7 +404,7 @@ export default Home;
 //       }}
 //     >
 //       <ProposalModal
-//         orderId={order._id.toString()}
+//         orderId={order.id}
 //         proposal={order?.proposals?.find(
 //           (proposal) => proposal.managementId ===
 //             userDocument.driverManagement[0]

@@ -23,18 +23,18 @@ export const useDownlaodProducts = () => {
 
       fetch(`${import.meta.env.VITE_APP_DOWNLOAD_ALL_PRODUCTS}`, {
         method: "POST",
-        body: JSON.stringify([{ storeId: userDocument._id, country }]),
+        body: JSON.stringify([{ storeId: userDocument.id, country }]),
       }).then(async (response) => {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", userDocument._id as string);
+        link.setAttribute("download", userDocument.id as string);
         document.body.appendChild(link);
         link.click();
       });
       // const result = await fetchUtil({
-      //   reqData: [{ storeId: user.customData._id, country }],
+      //   reqData: [{ storeId: user.customData.id, country }],
       //   url: import.meta.env.VITE_APP_DOWNLOAD_ALL_PRODUCTS,
       //   user,
       // });

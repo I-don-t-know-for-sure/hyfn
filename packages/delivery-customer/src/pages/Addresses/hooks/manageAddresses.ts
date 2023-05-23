@@ -11,7 +11,7 @@ export const useManageAddresses = () => {
     async ({ addresses }: { addresses: any[] }) => {
       try {
         const result = await fetchUtil({
-          reqData: [{ addresses, customerId: userDocument._id }],
+          reqData: [{ addresses, customerId: userDocument.id }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/updateAddresses`,
         });
 

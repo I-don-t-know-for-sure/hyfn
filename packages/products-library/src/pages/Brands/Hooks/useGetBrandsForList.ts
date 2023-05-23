@@ -13,7 +13,7 @@ export const useGetBrandsForList = () => {
   return useQuery(["brands"], async () => {
     try {
       const result = await fetchUtil({
-        reqData: [{ creatorId: userDocument._id }],
+        reqData: [{ creatorId: userDocument.id }],
         url: `${import.meta.env.VITE_APP_BASE_URL}/getBrandsForList`,
       });
 

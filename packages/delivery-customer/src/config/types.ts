@@ -12,7 +12,7 @@ export interface Store {
 }
 
 export interface storeFront {
-  _id: any;
+  id: any;
   description: string;
   currentRating: number;
   ratingCount: number;

@@ -49,8 +49,8 @@ const Home: React.FC = () => {
   //     window.innerHeight + window.scrollY >= document.body.offsetHeight &&
   //     Array.isArray(data?.pages)
   //   ) {
-  //     fetchNextPage({ pageParam: data.pages[data.pages.length - 1][]?._id });
-  //     console.log(data.pages[data.pages.length - 1][19]?._id);
+  //     fetchNextPage({ pageParam: data.pages[data.pages.length - 1][]?.id });
+  //     console.log(data.pages[data.pages.length - 1][19]?.id);
   //   }
   // }, [scroll]);
   // console.log(convertZodToJSONSchema(productSchema as any));

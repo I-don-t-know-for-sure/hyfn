@@ -10,7 +10,7 @@ export const getTransactionsList = async ({ arg, client }) => {
       .db('generalData')
       .collection('transactions')
       .find({
-        _id: { $gt: new ObjectId(lastDoc) },
+        id: { $gt: new ObjectId(lastDoc) },
         customerId,
       })
       .limit(20)

@@ -79,7 +79,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
     },
     0
   );
-  //const addedProducts = cart[inCartStore?._id.toString()].addedProducts;
+  //const addedProducts = cart[inCartStore?.id].addedProducts;
   return (
     <Card shadow={"md"} m={"6px auto"}>
       <Center
@@ -192,7 +192,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
               ? `/product/${inCartStore.id}/${inCartStore.country}/${inCartStore.city}/${checkProduct.id}`
               : `/product/withnotoptions/${inCartStore.id}/${inCartStore.country}/${inCartStore.city}/${checkProduct.id}`;
           // const som = addedProducts?.find((added) => {
-          //   return added._id === product._id.toString();
+          //   return added.id === product.id;
           // })?.qty;
           if (Array.isArray(product)) {
             return product.map((product) => {

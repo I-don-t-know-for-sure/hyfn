@@ -11,10 +11,10 @@ export const handler = async (event, ctx) => {
       .db("productsLibrary")
       .collection("products")
       .findOne(
-        { _id: new ObjectId(productId) },
+        { id: new ObjectId(productId) },
         {
           projection: {
-            _id: 0,
+            id: 0,
             creatorId: 0,
           },
         }

@@ -136,6 +136,6 @@ export const handler = async (event) => {
     event,
     mainFunction: addLocalCardPaymentAPIKey,
     withUserDocument: true,
-    projection: { _id: 1, userId: 1, subscriptionInfo: 1 },
+    projection: { id: 1, userId: 1, subscriptionInfo: 1 },
   });
 };

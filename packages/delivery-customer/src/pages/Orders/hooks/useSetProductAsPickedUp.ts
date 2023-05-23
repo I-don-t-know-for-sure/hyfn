@@ -33,7 +33,7 @@ export const useSetProductAsPickedUp = () => {
               storeId,
               productId,
               QTYFound,
-              driver: user?._id,
+              driver: user?.id,
             },
           ])
         );
@@ -43,7 +43,7 @@ export const useSetProductAsPickedUp = () => {
           productId,
           QTYFound,
 
-          driverId: user?._id,
+          driverId: user?.id,
         });
         const result = await fetchUtil({
           reqData: [

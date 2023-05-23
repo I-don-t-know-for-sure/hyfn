@@ -31,7 +31,7 @@ export const removeDriverFromManagementDriversHandler = async ({
   //     {
   //       status: {
   //         $elemMatch: {
-  //           _id: id.toString(),
+  //          id: id.toString(),
   //           userType: USER_TYPE_DRIVER,
   //           status: { $ne: USER_STATUS_DELIVERED },
   //         },

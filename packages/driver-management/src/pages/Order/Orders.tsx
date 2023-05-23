@@ -58,7 +58,7 @@ const Orders: React.FC<OrdersProps> = ({}) => {
               return page.map((order) => {
                 const driverId = order.status.find(
                   (status) => status.userType === USER_TYPE_DRIVER
-                )._id;
+                ).id;
                 const driver = data.find((driver) => driver.value === driverId);
 
                 return (
@@ -71,7 +71,7 @@ const Orders: React.FC<OrdersProps> = ({}) => {
                       <Group position="apart">
                         <TextInput
                           label={t("Order Id")}
-                          value={order._id.toString()}
+                          value={order.id}
                           variant="unstyled"
                         />
                         <TextInput
@@ -89,7 +89,7 @@ const Orders: React.FC<OrdersProps> = ({}) => {
                         <ReplaceDriverModal
                           allDrivers={data}
                           oldDriver={driver}
-                          orderId={order._id}
+                          orderId={order.id}
                         />
                       </Stack>
                     </Stack>

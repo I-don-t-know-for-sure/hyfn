@@ -9,7 +9,7 @@ export const useGetAllDrivers = () => {
     async () => {
       try {
         const result = await fetchUtil({
-          reqData: [{ managementId: userDocument._id }],
+          reqData: [{ managementId: userDocument.id }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/getAllDrivers`,
         });
         return result;

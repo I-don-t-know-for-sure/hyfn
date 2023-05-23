@@ -1,7 +1,8 @@
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper, tStores } from 'hyfn-server';
 import { multiply, smaller } from 'mathjs';
 import { ObjectId } from 'mongodb';
 import { subscriptionCost } from 'hyfn-types';
+import { sql } from 'kysely';
 
 interface UpdateSubscibtionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
@@ -55,21 +56,11 @@ export const updateSubscibtionHandler = async ({
       timeOfPayment: subscriptionInfo.timeOfPayment,
       numberOfMonths: subscriptionInfo.numberOfMonths,
       expirationDate: subscriptionInfo.expirationDate,
+      balance: sql`${sql.raw(tStores.balance)}::numeric - ${price}::numeric`,
     })
     .where('userId', '=', userId)
     .execute();
-  await client
-    .db('base')
-    .collection('storeFronts')
-    .updateOne(
-      { userId },
-      {
-        $set: {
-          city: storeDoc.city,
-        },
-      },
-      {}
-    );
+
   return 'success';
 };
 

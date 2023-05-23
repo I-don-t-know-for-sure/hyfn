@@ -43,7 +43,7 @@ export const useRejectOrder = () => {
       } = userDocument;
       await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/rejectOrder`,
-        reqData: [{ storeId: userDocument?._id, orderId, country }],
+        reqData: [{ storeId: userDocument?.id, orderId, country }],
       });
     } catch (error) {
       console.log(

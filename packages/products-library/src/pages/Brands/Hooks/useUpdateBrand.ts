@@ -16,7 +16,7 @@ export const useUpdateBrand = () => {
         const result = await fetchUtil({
           reqData: [
             {
-              creatorId: userDocument._id,
+              creatorId: userDocument.id,
               newBrandInfo: brandInfo,
               brandId,
             },

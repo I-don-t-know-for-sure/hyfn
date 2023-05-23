@@ -10,20 +10,20 @@ export const getActiveOrdersHandler = async ({ arg, client, userId }: MainFuncti
   const userDocument = await client
     .db('generalData')
     .collection('driverManagement')
-    .findOne({ usersIds: userId }, { projection: { _id: 1 } });
-  const { _id } = userDocument;
+    .findOne({ usersIds: userId }, { projection: { id: 1 } });
+  const { id } = userDocument;
   console.log(
     '🚀 ~ file: getActiveOrders.ts:9 ~ getActiveOrdersHandler ~ lastDoc:',
     JSON.stringify({
       $and: [
-        { ...(type === 'all' ? { acceptedProposal: _id.toString() } : {}) },
+        { ...(type === 'all' ? { acceptedProposal: id } : {}) },
         {
           status: {
             $elemMatch: {
               status: active ? DRIVER_STATUS_NOT_SET : { $ne: DRIVER_STATUS_NOT_SET },
 
               userType: USER_TYPE_DRIVER,
-              ...(type !== 'all' ? { _id: type } : {}),
+              ...(type !== 'all' ? { id: type } : {}),
             },
           },
         },
@@ -37,16 +37,16 @@ export const getActiveOrdersHandler = async ({ arg, client, userId }: MainFuncti
       .find({
         $and: [
           {
-            _id: { $gt: new ObjectId(lastDoc) },
+            id: { $gt: new ObjectId(lastDoc) },
           },
-          { ...(type === 'all' ? { acceptedProposal: _id.toString() } : {}) },
+          { ...(type === 'all' ? { acceptedProposal: id } : {}) },
           {
             'status.status': active ? DRIVER_STATUS_NOT_SET : { $ne: DRIVER_STATUS_NOT_SET },
           },
           {
             'status.userType': USER_TYPE_DRIVER,
           },
-          type !== 'all' ? { 'status._id': type } : {},
+          type !== 'all' ? { 'status.id': type } : {},
         ],
       })
       .limit(10)
@@ -58,14 +58,14 @@ export const getActiveOrdersHandler = async ({ arg, client, userId }: MainFuncti
     .collection('orders')
     .find({
       $and: [
-        { ...(type === 'all' ? { acceptedProposal: _id.toString() } : {}) },
+        { ...(type === 'all' ? { acceptedProposal: id } : {}) },
         {
           'status.status': active ? DRIVER_STATUS_NOT_SET : { $ne: DRIVER_STATUS_NOT_SET },
         },
         {
           'status.userType': USER_TYPE_DRIVER,
         },
-        type !== 'all' ? { 'status._id': type } : {},
+        type !== 'all' ? { 'status.id': type } : {},
       ],
     })
     .limit(10)

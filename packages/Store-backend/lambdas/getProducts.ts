@@ -1,18 +1,16 @@
-export const getProductsForStoreHandler = async ({ arg, client, db }: MainFunctionProps) => {
-  // return {
-  //   statusCode: 200,
-  //   body: "hello",
-  // };
-  const { id, city, country } = arg[0];
+export const getProducts = async ({ arg, client, userId, db }: MainFunctionProps) => {
+  const id = arg[0];
   const lastDocId = arg[1];
   const filter = arg[2];
-  const isFiltered = Object.keys(filter).length === 1;
+  const ALL_PPRODUCTS = 'all';
+  const filters = { active: true, inActive: false };
+  const isFiltered = filter !== ALL_PPRODUCTS;
   const queryDoc =
     lastDocId && isFiltered
       ? {
           storeId: id,
           id: { $gt: new ObjectId(lastDocId) },
-          isActive: filter.active,
+          isActive: filters[filter],
         }
       : lastDocId && !isFiltered
       ? {
@@ -24,24 +22,24 @@ export const getProductsForStoreHandler = async ({ arg, client, db }: MainFuncti
           storeId: id,
         }
       : {
-          isActive: filter.active,
+          isActive: filters[filter],
           storeId: id,
         };
 
   const products = await db
     .selectFrom('products')
-    .select(['id', 'title'])
+    .select(['id', 'title', 'isActive'])
     .where('storeId', '=', id)
+    .limit(2)
     .execute();
   return products;
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
 };
-interface GetProductsForStoreProps extends Omit<MainFunctionProps, 'arg'> {
+interface GetProductsForBulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
-  return await mainWrapper({ event, ctx, mainFunction: getProductsForStoreHandler });
+  return await mainWrapper({ event, mainFunction: getProducts });
 };

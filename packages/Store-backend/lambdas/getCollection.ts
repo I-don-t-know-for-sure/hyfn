@@ -7,7 +7,7 @@ export const getCollectionHandler = async ({ arg, client, db, userId }: MainFunc
     .selectAll()
     .where('usersIds', '@>', sql`ARRAY[${sql.join([userId])}]::uuid[]`)
     .executeTakeFirstOrThrow();
-  // const collection = storeDoc.collections?.find((collection) => collection._id === collectionId);
+  // const collection = storeDoc.collections?.find((collection) => collection.id === collectionId);
 
   const collection = await db
     .selectFrom('collections')

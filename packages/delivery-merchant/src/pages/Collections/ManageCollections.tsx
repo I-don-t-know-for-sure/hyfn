@@ -299,7 +299,7 @@ const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
                         .map((collection) => (
                           <tr
                             onClick={() => {
-                              //navigate(`/${product._id.toString()}`, { replace: true })
+                              //navigate(`/${product.id}`, { replace: true })
                             }}
                             // style={{
                             //   width: "100%",
@@ -317,7 +317,7 @@ const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
                               <UnstyledButton
                                 m={"auto"}
                                 component={Link}
-                                to={`/collection/${collection._id}`}
+                                to={`/collection/${collection.id}`}
                               >
                                 {collection.textInfo.title}
                               </UnstyledButton>

@@ -9,10 +9,10 @@ import {
 } from "../constants";
 
 export const orderSchema = object({
-  _id: z.any(),
+  id: z.any(),
 
   orders: object({
-    _id: z.any(),
+    id: z.any(),
 
     currency: z.enum(currenciesArray as any),
     // userId: string(),
@@ -51,7 +51,7 @@ export const orderSchema = object({
   originalDeliveryFee: number(),
   orderType: z.enum(["Delivery", "Pickup"]),
   status: object({
-    _id: string().length(24),
+    id: string().length(24),
     status: string(),
     userType: z.enum(userTypesArray as any),
   }).array(),

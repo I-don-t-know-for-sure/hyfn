@@ -68,8 +68,8 @@ const RestuarantOrder: React.FC<ActiveOrderProps> = () => {
   const { mutate: leaveOrder } = useLeaveOrder();
   // const orderId =
   //   typeof order === "object"
-  //     ? Object.hasOwn(order, "_id")
-  //       ? order?._id.toString()
+  //     ? Object.hasOwn(order, "id")
+  //       ? order?.id
   //       : ""
   //     : "";
   // const { refetch, isLoading: isRefreshOrderLoading } = useRefreshOrderDocument({
@@ -98,7 +98,7 @@ const RestuarantOrder: React.FC<ActiveOrderProps> = () => {
             return;
           }
           page?.map((order) => {
-            const orderId = order._id.toString();
+            const orderId = order.id;
 
             return (
               <Card m={"24px auto"}>
@@ -175,7 +175,7 @@ const RestuarantOrder: React.FC<ActiveOrderProps> = () => {
                     <CopyButton value={orderId} />
                     {/* <Button
                   onClick={() => {
-                    leaveOrder({ orderId: order._id.toString() })
+                    leaveOrder({ orderId: order.id })
                   }}
                   >
                   {t('Leave Order')}
@@ -196,7 +196,7 @@ const RestuarantOrder: React.FC<ActiveOrderProps> = () => {
                 {order?.orders?.map((store) => {
                   return (
                     <Box
-                      key={store._id.toString()}
+                      key={store.id}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -231,7 +231,7 @@ const RestuarantOrder: React.FC<ActiveOrderProps> = () => {
                           label={t("Map")}
                         />
                         <PickupOrderModal
-                          orderId={order._id.toString()}
+                          orderId={order.id}
                           pickedUp={store.orderStatus === ORDER_STATUS_PICKED}
                         />
                       </Group>

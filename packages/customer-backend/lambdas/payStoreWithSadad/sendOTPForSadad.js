@@ -36,7 +36,7 @@ export const handler = async (event) => {
             */
 
     const order = await findOne(
-      { _id: new ObjectId(orderId) },
+      { id: new ObjectId(orderId) },
       { session },
       client.db('base').collection('order')
     );
@@ -63,10 +63,10 @@ export const handler = async (event) => {
     }, 0);
 
     const storeAPIToken = await findOne(
-      { _id: new ObjectId(storeId) },
+      { id: new ObjectId(storeId) },
       {
         projection: {
-          _id: 0,
+          id: 0,
           sadadApiKey: 1,
         },
         session,
@@ -96,7 +96,7 @@ export const handler = async (event) => {
     };
 
     const customerDoc = await findOne(
-      { _id: new ObjectId(customerId) },
+      { id: new ObjectId(customerId) },
       { session },
       client.db('generalData').collection('customerInfo')
     );
@@ -111,7 +111,7 @@ export const handler = async (event) => {
     }
 
     await updateOne({
-      query: { _id: new ObjectId(customerId) },
+      query: { id: new ObjectId(customerId) },
       update: {
         $set: {
           transaction: {

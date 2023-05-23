@@ -20,7 +20,7 @@ export const useCreateOrderData = () => {
       try {
         // const result = await user.functions.createOrderData([
         //   cart,
-        //   { customerId: user.customData._id, customerCoords: coords },
+        //   { customerId: user.customData.id, customerCoords: coords },
         // ]);
 
         const result = await fetchUtil({

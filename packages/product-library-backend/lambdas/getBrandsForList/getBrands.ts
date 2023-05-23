@@ -8,7 +8,7 @@ export const getBrandsHandler = async ({ arg, client }) => {
       { creatorId },
       {
         projection: {
-          _id: 0,
+          id: 0,
           description: 0,
           creatorId: 0,
         },

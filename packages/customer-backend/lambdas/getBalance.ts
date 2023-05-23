@@ -2,13 +2,13 @@ export const getBalanceHandler = async ({ arg, client }: MainFunctionProps) => {
   const { userId } = arg[0];
   // const balance = await findOne(
   //   { customerId: userId },
-  //   { projection: { _id: 0, balance: 1 } },
+  //   { projection: {id: 0, balance: 1 } },
   //   client.db('generalData').collection('customerInfo')
   // );
   const balance = await client
     .db('generalData')
     .collection('customerInfo')
-    .findOne({ customerId: userId }, { projection: { _id: 0, balance: 1 } });
+    .findOne({ customerId: userId }, { projection: { id: 0, balance: 1 } });
   if (!balance) {
     throw '';
   }

@@ -1,5 +1,5 @@
 export const getProductHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
-  // await subscriptionCheck({ storedoc: userDocument, client, storeId: userDocument._id });
+  // await subscriptionCheck({ storedoc: userDocument, client, storeId: userDocument.id });
 
   const id = arg[0];
   const productId = arg[1];

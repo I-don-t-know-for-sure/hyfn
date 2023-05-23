@@ -22,7 +22,7 @@ export const useGetActiveOrders = () => {
       return await fetchUtil({
         reqData: [
           {
-            driverId: user?._id,
+            driverId: user?.id,
             orderId: user?.orderId,
             country,
             lastDoc: pageParam,

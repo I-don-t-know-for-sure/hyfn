@@ -15,7 +15,7 @@ export const useGetBrands = () => {
     async ({ queryKey, pageParam }) => {
       try {
         const result = await fetchUtil({
-          reqData: [{ creatorId: userDocument._id, lastBrandId: pageParam }],
+          reqData: [{ creatorId: userDocument.id, lastBrandId: pageParam }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/getBrands`,
         });
 

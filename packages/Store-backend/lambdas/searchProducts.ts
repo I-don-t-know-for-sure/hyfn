@@ -31,7 +31,7 @@ export const searchProductsHandler = async ({ arg, client }: MainFunctionProps) 
     },
     {
       $project: {
-        _id: 1,
+        id: 1,
         textInfo: 1,
       },
     },

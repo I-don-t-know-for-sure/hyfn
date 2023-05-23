@@ -16,14 +16,14 @@ import ValueComponent from "components/PreviewImage";
 interface DescriptionModalProps {
   value: any;
   onChange: any;
-  _id: string;
+  id: string;
   productInfo: any;
 }
 
 const DescriptionModal: React.FC<DescriptionModalProps> = ({
   onChange,
   value,
-  _id,
+  id,
   productInfo,
 }) => {
   console.log("🚀 ~ file: DescriptionModal.tsx:18 ~ value:", value);
@@ -39,7 +39,7 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({
           value: fullTextEditorValue,
           firstChangedKey: "textInfo",
           changedKey: "description",
-          _id,
+          id,
         },
       });
     }
@@ -69,7 +69,7 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({
 
                           firstChangedKey: "generateDescriptionImages",
 
-                          _id,
+                          id,
                         },
                       });
                     }}
@@ -96,7 +96,7 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({
                   value: file,
                   firstChangedKey: "generateDescriptionImages",
 
-                  _id,
+                  id,
                 },
               });
             }}

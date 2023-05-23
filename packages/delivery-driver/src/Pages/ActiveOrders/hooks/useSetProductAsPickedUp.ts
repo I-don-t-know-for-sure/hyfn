@@ -33,7 +33,7 @@ export const useSetProductAsPickedUp = () => {
               storeId,
               productKey,
               QTYFound,
-              driver: user?._id,
+              driver: user?.id,
             },
           ])
         );
@@ -43,7 +43,7 @@ export const useSetProductAsPickedUp = () => {
           productKey,
           QTYFound,
 
-          driverId: user?._id,
+          driverId: user?.id,
         });
 
         const result = await fetchUtil({
@@ -54,7 +54,7 @@ export const useSetProductAsPickedUp = () => {
               productKey,
               QTYFound,
 
-              driverId: user?._id,
+              driverId: user?.id,
             },
           ],
           url: `${import.meta.env.VITE_APP_BASE_URL}/setProductAsPickedUp`,

@@ -30,7 +30,7 @@ export const useUpdateDriverDocument = () => {
 
       const result = await fetchUtil({
         reqData: [
-          user?._id,
+          user?.id,
           {
             ...driverInfo,
             passportAndFacePic: passportAndFacePicKey,

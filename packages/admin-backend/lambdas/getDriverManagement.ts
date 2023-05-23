@@ -10,7 +10,7 @@ export const getDriverManagementHandler = async ({
   const driverManagementDoc = await client
     .db("generalData")
     .collection("driverManagement")
-    .findOne({ _id: new ObjectId(driverManagement) }, {});
+    .findOne({ id: new ObjectId(driverManagement) }, {});
   return driverManagementDoc;
 };
 const { ObjectId } = require("mongodb");

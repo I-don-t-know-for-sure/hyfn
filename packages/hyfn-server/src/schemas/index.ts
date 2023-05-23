@@ -57,7 +57,7 @@ export function reorderKeysAlphabetically(arr: any[], columns: string[]) {
   // Return the values of the reordered objects in an array
   return orderedArr.map((obj) => Object.values(obj));
 }
-function toSnakeCase(str: string): string {
+export function toSnakeCase(str: string): string {
   return str.replace(/[A-Z]/g, (match) => "_" + match.toLowerCase());
 
   // .replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
@@ -300,7 +300,13 @@ export const bulkUpdate = (
       if (row.update[column] === undefined) {
         continue;
       }
-      whenClauses.push(`when ${row.filter} then ${row.update[column]}`);
+      whenClauses.push(
+        `when ${row.filter} then ${
+          typeof row.update[column] === "string"
+            ? `'${row.update[column]}'`
+            : row.update[column]
+        }`
+      );
     }
     if (whenClauses.length > 0) {
       res[column] = column;

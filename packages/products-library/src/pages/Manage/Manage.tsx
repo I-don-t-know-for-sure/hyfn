@@ -31,11 +31,7 @@ const ManageProducts: React.FC = () => {
   const [lastDocId] = useState();
   const [filterText, setFilterText] = useState("");
   const [checkedFilter, setCheckedFilter] = useState<any>(2);
-  // const { data, isLoading, isError, fetchNextPage } = useGetProducts({
-  //   lastDocId,
-  //   check: checkedFilter,
-  //   filterText,
-  // });
+
   const { data, isLoading, isError, fetchNextPage } = useGetProducts({
     lastDocId,
     check: checkedFilter,
@@ -153,7 +149,9 @@ const ManageProducts: React.FC = () => {
                               return;
                             }
                             setSelectedProducts([
-                              ...data?.pages?.flatMap((page) => page),
+                              ...data?.pages?.map((page) =>
+                                page.map((product) => product.id)
+                              ),
                             ]);
                           }}
                         />
@@ -196,42 +194,29 @@ const ManageProducts: React.FC = () => {
                   ) : (
                     // data?.pages?.map((page) => {
                     results?.map((product) => (
-                      <tr
-                        onClick={() => {
-                          //navigate(`/${product._id.toString()}`, { replace: true })
-                          //
-                        }}
-                        // style={{
-                        //   width: "100%",
-                        //   display: "flex",
-                        //   flexDirection: "row",
-                        //   justifyContent: "space-around",
-                        //   padding: "8px 0px",
-                        // }}
-                      >
+                      <tr onClick={() => {}}>
                         <td>
                           <Checkbox
                             checked={selectedProducts.find(
                               (selectedProduct) =>
-                                selectedProduct._id === product._id
+                                selectedProduct.id === product.id
                             )}
                             onChange={() => {
                               const isProductSelected = selectedProducts.find(
                                 (selectedProduct) =>
-                                  selectedProduct._id === product._id
+                                  selectedProduct.id === product.id
                               );
                               if (isProductSelected) {
                                 setSelectedProducts(
                                   selectedProducts.filter(
-                                    (selectedProduct) =>
-                                      selectedProduct._id !== product._id
+                                    (id) => id !== product.id
                                   )
                                 );
                                 return;
                               }
                               setSelectedProducts([
                                 ...selectedProducts,
-                                product,
+                                product.id,
                               ]);
                             }}
                           />
@@ -243,7 +228,7 @@ const ManageProducts: React.FC = () => {
                         >
                           <UnstyledButton
                             component={Link}
-                            to={`/products/${product._id.toString()}`}
+                            to={`/products/${product.id}`}
                           >
                             {product.textInfo.title}
                           </UnstyledButton>
@@ -257,7 +242,7 @@ const ManageProducts: React.FC = () => {
                             variant="outline"
                             onClick={() => {
                               mutate({
-                                productId: product._id.toString(),
+                                productId: product.id,
                                 title: product.textInfo.title,
                               });
                             }}
@@ -285,7 +270,7 @@ const ManageProducts: React.FC = () => {
                 pageParam:
                   data?.pages[data?.pages?.length - 1][
                     data?.pages[data.pages?.length - 1]?.length - 1
-                  ]?._id,
+                  ]?.id,
               })
             }
           >

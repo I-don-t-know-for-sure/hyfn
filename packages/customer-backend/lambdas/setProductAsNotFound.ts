@@ -1,13 +1,13 @@
 export const setProductAsNotFoundHandler = async ({ arg, client }: MainFunctionProps) => {
   var result;
   const { productId, storeId, country, orderId } = arg[0];
-  // const orderDoc = await findOne({_id: new ObjectId(orderId)}, {}, client.db("base").collection('orders'))
+  // const orderDoc = await findOne({id: new ObjectId(orderId)}, {}, client.db("base").collection('orders'))
   await client
     .db('base')
     .collection('orders')
     .updateOne(
       {
-        _id: new ObjectId(orderId),
+        id: new ObjectId(orderId),
       },
       {
         $set: {
@@ -19,8 +19,8 @@ export const setProductAsNotFoundHandler = async ({ arg, client }: MainFunctionP
       },
       {
         arrayFilters: [
-          { 'store._id': new ObjectId(storeId) },
-          { 'product._id': new ObjectId(productId) },
+          { 'store.id': new ObjectId(storeId) },
+          { 'product.id': new ObjectId(productId) },
         ],
       }
     );

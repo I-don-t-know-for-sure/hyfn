@@ -1,19 +1,12 @@
-
-
-
 import { number, object, string, z } from "zod";
 import { orderSchema } from "./orderSchema";
 
-
-
-
 export const customerSchema = object({
-  _id: z.any(),
-
+  id: z.any(),
 
   name: string(),
   customerId: string(),
-  order: orderSchema.omit({ _id: true, canceled: true }),
+  order: orderSchema.omit({ id: true, canceled: true }),
   balance: number(),
   addresses: object({
     label: string(),

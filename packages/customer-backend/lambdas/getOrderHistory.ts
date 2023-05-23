@@ -17,20 +17,20 @@ export const getOrderHistory = async ({ arg, client }: GetOrderHistoryProps) => 
       .find({
         $or: [
           {
-            _id: { $gt: new ObjectId(lastDoc) },
+            id: { $gt: new ObjectId(lastDoc) },
             status: {
               $elemMatch: {
-                _id: customerId,
+                id: customerId,
                 userType: USER_TYPE_CUSTOMER,
                 status: ORDER_STATUS_DELIVERED,
               },
             },
           },
           {
-            _id: { $gt: new ObjectId(lastDoc) },
+            id: { $gt: new ObjectId(lastDoc) },
             status: {
               $elemMatch: {
-                _id: customerId,
+                id: customerId,
                 userType: USER_TYPE_CUSTOMER,
                 status: ORDER_STATUS_DELIVERED,
               },
@@ -51,7 +51,7 @@ export const getOrderHistory = async ({ arg, client }: GetOrderHistoryProps) => 
         {
           status: {
             $elemMatch: {
-              _id: customerId,
+              id: customerId,
               userType: USER_TYPE_CUSTOMER,
               status: ORDER_STATUS_DELIVERED,
             },
@@ -60,7 +60,7 @@ export const getOrderHistory = async ({ arg, client }: GetOrderHistoryProps) => 
         {
           status: {
             $elemMatch: {
-              _id: customerId,
+              id: customerId,
               userType: USER_TYPE_CUSTOMER,
               status: ORDER_STATUS_DELIVERED,
             },

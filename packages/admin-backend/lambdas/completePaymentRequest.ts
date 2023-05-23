@@ -18,7 +18,7 @@ export const completePaymentRequest = async ({
   const paymentRequest = await client
     .db("generalData")
     .collection("paymentRequests")
-    .findOne({ _id: new ObjectId(transactionId) }, { session });
+    .findOne({ id: new ObjectId(transactionId) }, { session });
   const paymentRequestAmount = paymentRequest.amount;
 
   if (paymentRequest.validated) {
@@ -27,7 +27,7 @@ export const completePaymentRequest = async ({
   const driverManagementDoc = await client
     .db("generalData")
     .collection("driverManagement")
-    .findOne({ _id: new ObjectId(paymentRequest.merchantId) }, { session });
+    .findOne({ id: new ObjectId(paymentRequest.merchantId) }, { session });
 
   const {
     localCardKeys: { MerchantId, TerminalId, secretKey },
@@ -53,7 +53,7 @@ export const completePaymentRequest = async ({
     .db("generalData")
     .collection("paymentRequests")
     .updateOne(
-      { _id: paymentRequest._id },
+      { id: paymentRequest.id },
       {
         $set: {
           validated: true,
@@ -65,7 +65,7 @@ export const completePaymentRequest = async ({
     .db("generalData")
     .collection("driverManagement")
     .updateOne(
-      { _id: new ObjectId(paymentRequest.merchantId) },
+      { id: new ObjectId(paymentRequest.merchantId) },
       {
         $inc: {
           balance: -Math.abs(paymentRequestAmount),

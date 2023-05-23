@@ -11,7 +11,7 @@ export const useCreateLocalCardTransactionForDeliveryOrder = () => {
     async ({ orderId }: { orderId: string }) => {
       try {
         const result = await fetchUtil({
-          reqData: [{ orderId, customerId: userDocument._id }],
+          reqData: [{ orderId, customerId: userDocument.id }],
 
           url: `${
             import.meta.env.VITE_APP_BASE_URL

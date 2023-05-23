@@ -6,7 +6,7 @@ export function calculateOrderCost(storesArray) {
     );
 
     // storesArray.map((oldStore) => {
-    //   if (oldStore._id === store._id) {
+    //   if (oldStore.id === store.id) {
     //     return { ...oldStore, orderCost: storeTotal - storeTotal * storeServiceFee };
     //   }
     //   return oldStore;

@@ -1,14 +1,7 @@
-
-
-
-
-
-
 import { boolean, number, object, string, z } from "zod";
 
 export const driverSchema = object({
-  _id: z.any(),
-
+  id: z.any(),
 
   driverName: string(),
   driverPhone: string(),

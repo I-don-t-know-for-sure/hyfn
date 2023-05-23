@@ -1,15 +1,13 @@
-
-
-
-
-
-
 import { array, boolean, literal, number, object, string, z } from "zod";
-import { citiesArray, countriesArray, currenciesArray, storeTypesArray } from "../constants";
+import {
+  citiesArray,
+  countriesArray,
+  currenciesArray,
+  storeTypesArray,
+} from "../constants";
 
 export const storeFrontSchema = object({
-  _id: z.any(),
-
+  id: z.any(),
 
   currency: z.enum(currenciesArray as any),
   storeType: z.enum(storeTypesArray as any).array(),

@@ -35,7 +35,7 @@ export const updateProductStateHandler = async ({
         .collection('products')
         .updateOne(
           {
-            _id: new ObjectId(productId),
+            id: new ObjectId(productId),
           },
           {
             $set: {

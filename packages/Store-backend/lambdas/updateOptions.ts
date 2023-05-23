@@ -10,12 +10,12 @@ export const updateOptionsHandler = async ({ arg, client, userId }: UpdateOption
   const validatedArray = productsArray;
   // schema validations
   const updateQuery = validatedArray?.map((product) => {
-    const { _id, ...rest } = product;
+    const { id, ...rest } = product;
     const options = rest.options.options;
     return {
       updateOne: {
         filter: {
-          _id: new ObjectId(product._id),
+          id: new ObjectId(product.id),
         },
         update: {
           $set: {

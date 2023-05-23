@@ -222,15 +222,15 @@ const Payments: React.FC<PaymentsProps> = () => {
                 <Group>
                   <Text>
                     {`${t("Started at")} ${
-                      data?.subscriptionInfo?.timeOfPayment
-                        ? convertDate(data?.subscriptionInfo?.timeOfPayment)
+                      data?.timeOfPayment
+                        ? convertDate(data?.timeOfPayment)
                         : Number.NaN
                     }`}
                   </Text>
                   <Text>
                     {`${t("Ends at")} ${
-                      data?.subscriptionInfo?.expirationDate
-                        ? convertDate(data?.subscriptionInfo?.expirationDate)
+                      data?.expirationDate
+                        ? convertDate(data?.expirationDate)
                         : Number.NaN
                     }`}
                   </Text>

@@ -71,7 +71,7 @@ const DriverVerification: React.FC<DriverVerificationProps> = ({}) => {
                   <Button
                     onClick={() => {
                       setDriverAsVerified({
-                        driverId: unverifiedDriver._id.toString(),
+                        driverId: unverifiedDriver.id,
                       });
                     }}
                   >

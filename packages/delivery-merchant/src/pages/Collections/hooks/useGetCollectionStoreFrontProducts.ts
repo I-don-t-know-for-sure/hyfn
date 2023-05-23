@@ -24,7 +24,7 @@ export const useGetCollectionStoreFrontProducts = ({
           reqData: [
             {
               country,
-              storeId: userDocument._id,
+              storeId: userDocument.id,
 
               collectionId,
             },

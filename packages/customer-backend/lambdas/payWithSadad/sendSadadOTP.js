@@ -28,7 +28,7 @@ export const handler = async (event) => {
   */
 
     const customerDoc = await findOne(
-      { _id: new ObjectId(customerId) },
+      { id: new ObjectId(customerId) },
       { session },
       client.db('generalData').collection('customerInfo')
     );
@@ -38,7 +38,7 @@ export const handler = async (event) => {
 
     //  const orderDoc = await findOne(
     //    {
-    //      _id: new ObjectId(orderId),
+    //     id: new ObjectId(orderId),
     //    },
     //    {
     //      session,
@@ -76,7 +76,7 @@ export const handler = async (event) => {
     }
 
     await updateOne({
-      query: { _id: new ObjectId(customerId) },
+      query: { id: new ObjectId(customerId) },
       update: {
         $set: {
           transaction: {

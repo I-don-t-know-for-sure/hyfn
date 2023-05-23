@@ -15,7 +15,7 @@ export const useGetStoreDrivers = () => {
     [trustedDrivers],
     async ({ pageParam }) => {
       return fetchUtil({
-        reqData: [{ storeId: userDocument?._id, lastDoc: pageParam }],
+        reqData: [{ storeId: userDocument?.id, lastDoc: pageParam }],
 
         url: `${import.meta.env.VITE_APP_BASE_URL}/getTrustedDrivers`,
       });

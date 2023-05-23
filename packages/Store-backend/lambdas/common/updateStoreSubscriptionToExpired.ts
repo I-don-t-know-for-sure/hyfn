@@ -9,7 +9,7 @@ export const updateStoreSubscriptionToExpired = async ({ client, storeId }) => {
     .db('generalData')
     .collection('storeInfo')
     .updateOne(
-      { _id: new ObjectId(storeId) },
+      { id: new ObjectId(storeId) },
       {
         $set: {
           monthlySubscriptionPaid: false,
@@ -21,7 +21,7 @@ export const updateStoreSubscriptionToExpired = async ({ client, storeId }) => {
     .db('generalData')
     .collection('storeFronts')
     .updateOne(
-      { _id: new ObjectId(storeId) },
+      { id: new ObjectId(storeId) },
       {
         $set: {
           city: gibbrish,

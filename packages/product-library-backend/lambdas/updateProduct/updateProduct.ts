@@ -13,7 +13,7 @@ export const updateProductHandler = async ({
   const oldProduct = await client
     .db("productsLibrary")
     .collection("products")
-    .findOne({ _id: new ObjectId(productId) });
+    .findOne({ id: new ObjectId(productId) });
   const updatedImages = oldProduct?.images?.filter(
     (image) => !deletedImages?.some((deletedImage) => deletedImage === image)
   );
@@ -22,7 +22,7 @@ export const updateProductHandler = async ({
     .db("productsLibrary")
     .collection("products")
     .updateOne(
-      { _id: new ObjectId(productId) },
+      { id: new ObjectId(productId) },
       {
         $set: {
           ...rest,

@@ -20,7 +20,7 @@ export const useMakePayment = () => {
     }) => {
       try {
         const res = await fetchUtil({
-          reqData: [{ storeId: userDocument._id, OTP, numberOfMonths }],
+          reqData: [{ storeId: userDocument.id, OTP, numberOfMonths }],
           url: import.meta.env.VITE_APP_MAKEPAYMENT,
         });
         return res;

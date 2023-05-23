@@ -25,7 +25,7 @@ export const subscriptionCheck = async ({
         .db('base')
         .collection('storeFronts')
         .updateOne(
-          { _id: new ObjectId(storeId) },
+          { id: new ObjectId(storeId) },
           {
             $set: {
               city: gibbrish,
@@ -38,7 +38,7 @@ export const subscriptionCheck = async ({
         .db('generalData')
         .collection('storeInfo')
         .updateOne(
-          { _id: new ObjectId(storeId) },
+          { id: new ObjectId(storeId) },
           {
             $set: {
               monthlySubscriptionPaid: false,

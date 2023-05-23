@@ -6,7 +6,7 @@ export const getPaymentSettingsHandler = async ({ arg, client }: MainFunctionPro
     .collection('storeInfo')
     .findOne(
       {
-        _id: new ObjectId(storeId),
+        id: new ObjectId(storeId),
       },
       {}
     );

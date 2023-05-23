@@ -20,7 +20,7 @@ export const createCompanyDocumentHandler = async ({
   // Step 2: Optional. Define options to use for the transaction
   // Step 3: Use withTransaction to start a transaction, execute the callback, and commit (or abort on error)
   // Note: The callback for withTransaction MUST be async and/or return a Promise.
-  //    const isIndexed = await client.db("base").collection("companys").findOne({_id: 'collectionInfo'})
+  //    const isIndexed = await client.db("base").collection("companys").findOne({id: 'collectionInfo'})
   // const companyFronts = await mongo
   //   .db("base")
   //   .collection(`companyFronts`);
@@ -54,7 +54,7 @@ export const createCompanyDocumentHandler = async ({
       // );
       const newId = new ObjectId();
       await customUserData.insertOne({
-        _id: newId,
+        id: newId,
         userId: userId,
         companyDoc: {
           id: newId.toString(),

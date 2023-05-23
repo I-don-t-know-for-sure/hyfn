@@ -108,7 +108,7 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
   useEffect(() => {
     if (isFetched && !isLoading && data) {
       const cartStore = cart[data?.id];
-      //const cartStore = cart.find((store) => store._id === data._id.toString());
+      //const cartStore = cart.find((store) => store.id === data.id);
       setInCartStore(cartStore);
       if (typeof cartStore?.orderType === "string") {
         setOrderType(cartStore?.orderType);
@@ -259,7 +259,7 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
                   <Chip
                     checked={orderType === 'Delivery'}
                     onChange={(e) => {
-                      if (cart[data?._id.toString()]) {
+                      if (cart[data?.id]) {
                         changeOrderType(data, 'Delivery', setCartInfo);
                       }
                       setOrderType('Delivery');
@@ -273,7 +273,7 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
                     onChange={(e) => {
                       console.log(data?.storeType.includes('restaurant'), 'hghghghgh');
                       if (data?.storeType.includes('restaurant')) {
-                        if (cart[data?._id.toString()]) {
+                        if (cart[data?.id]) {
                           changeOrderType(data, 'Pickup', setCartInfo);
                         }
                         setOrderType('Pickup');
@@ -342,8 +342,8 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
             //         reduceOrRemoveProductFromCart(data, product, setCartInfo);
             //       };
             //       const productUrl = product.hasOptions
-            //         ? `/product/${data._id}/${country}/${city}/${product._id}`
-            //         : `/product/withnotoptions/${data._id}/${country}/${city}/${product._id}`;
+            //         ? `/product/${data.id}/${country}/${city}/${product.id}`
+            //         : `/product/withnotoptions/${data.id}/${country}/${city}/${product.id}`;
             //       return (
             //         <Product
             //           product={product}

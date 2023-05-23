@@ -11,17 +11,16 @@ export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFuncti
   const orderDoc = await client
     .db('base')
     .collection('orders')
-    .findOne({ _id: new ObjectId(orderId) }, {});
+    .findOne({ id: new ObjectId(orderId) }, {});
   // TODO:  check if the order was delivered
   if (orderDoc.delivered) {
     throw new Error('Order is already delivered');
   }
   // TODO: check if the store was paid if true then throw an error
-  const deletedStore = orderDoc.orders.find((store) => store._id.toString() === storeId);
+  const deletedStore = orderDoc.orders.find((store) => store.id === storeId);
   var storeCoords = deletedStore.coords;
   const storePaid = deletedStore.paid;
-  if (userDocument.id.toString() !== deletedStore._id.toString())
-    throw new Error('Store id does not match');
+  if (userDocument.id.toString() !== deletedStore.id) throw new Error('Store id does not match');
   const orderType = orderDoc.orderType;
   if (storePaid) throw new Error('Store is already paid');
 
@@ -39,7 +38,7 @@ export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFuncti
     throw new Error('Driver started picking up the order');
   }
   const stores = orderDoc.orders.filter((store) => {
-    if (store._id?.toString() !== storeId) {
+    if (store.id?.toString() !== storeId) {
       return true;
     } else {
       storeCoords = store.coords;
@@ -50,7 +49,7 @@ export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFuncti
     throw new Error('order orders did not change');
   }
   const status = orderDoc.status.filter((oldStatus) => {
-    return oldStatus.userType !== 'store' && oldStatus._id?.toString() !== storeId;
+    return oldStatus.userType !== 'store' && oldStatus.id?.toString() !== storeId;
   });
   if (deepEqual(orderDoc.status, status)) {
     throw new Error('order status did not change');
@@ -76,7 +75,7 @@ export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFuncti
         .collection('orders')
         .updateOne(
           {
-            _id: new ObjectId(orderId),
+            id: new ObjectId(orderId),
           },
           {
             $set: {

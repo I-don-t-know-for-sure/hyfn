@@ -1,10 +1,20 @@
-import { Badge, Box, Button, Card, Container, Group, Image, Loader, Table, Text } from '@mantine/core';
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Container,
+  Group,
+  Image,
+  Loader,
+  Table,
+  Text,
+} from "@mantine/core";
 
-
-import { useRateDriver } from '../../../hooks/useRateDriver';
-import { t } from '../../../util/i18nextFix';;
-import React, { useState } from 'react';
-import OptionsModal from './OptionsModal';
+import { useRateDriver } from "../../../hooks/useRateDriver";
+import { t } from "../../../util/i18nextFix";
+import React, { useState } from "react";
+import OptionsModal from "./OptionsModal";
 
 interface OrderCardProps {
   order: any;
@@ -15,23 +25,23 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const { mutate: rateDriver } = useRateDriver();
   return (
     <Card mt={8}>
-      <Text>{order._id.toString()}</Text>
+      <Text>{order.id}</Text>
       {order.orders.map((store) => {
         return (
           <Box
-            key={store?._id.toString()}
+            key={store?.id}
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <Text
               variant="text"
               weight={600}
               sx={{
-                fontSize: '24px',
-                margin: '4px auto',
+                fontSize: "24px",
+                margin: "4px auto",
               }}
             >
               {store.storeName}
@@ -39,10 +49,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
             <Table>
               <thead>
                 <tr>
-                  <th>{t('Name')}</th>
-                  <th>{t('Quantity')}</th>
-                  <th>{t('Image')}</th>
-                  <th>{t('Options')}</th>
+                  <th>{t("Name")}</th>
+                  <th>{t("Quantity")}</th>
+                  <th>{t("Image")}</th>
+                  <th>{t("Options")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -59,19 +69,21 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                         <Image
                           radius={4}
                           sx={{
-                            width: '45px',
-                            height: '45px',
-                            maxWidth: '45px',
-                            maxHeight: '45px',
+                            width: "45px",
+                            height: "45px",
+                            maxWidth: "45px",
+                            maxHeight: "45px",
                           }}
-                          src={`${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${product.images[0]}`}
+                          src={`${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${
+                            product.images[0]
+                          }`}
                         />
                       </td>
                       <td>
                         {product.options.length > 0 ? (
                           <OptionsModal options={product.options} />
                         ) : (
-                          <Text weight={700}>{t('No options')}</Text>
+                          <Text weight={700}>{t("No options")}</Text>
                         )}
                       </td>
                     </tr>
@@ -85,7 +97,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
       <Group>
         {/* <Button
                   onClick={() => {
-                    confirmDelivery(order._id.toString());
+                    confirmDelivery(order.id);
                   }}
                 >
                   confirm delivery
@@ -103,7 +115,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                 onClick={() => {
                   rateDriver({
                     newRating: rating,
-                    orderId: order._id.toString(),
+                    orderId: order.id,
                   });
                 }}
               >

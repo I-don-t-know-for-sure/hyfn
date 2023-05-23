@@ -108,8 +108,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
             >
               {transactions?.map((transaction) => {
                 return (
-                  <tr key={transaction._id}>
-                    {/* <td>{transaction._id}</td> */}
+                  <tr key={transaction.id}>
+                    {/* <td>{transaction.id}</td> */}
                     <td>{transaction.paymentMethod}</td>
                     <td>{transaction.amount}</td>
                     <td>
@@ -119,7 +119,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         <Button
                           onClick={() =>
                             validateTransaction({
-                              transactionId: transaction._id,
+                              transactionId: transaction.id,
                             })
                           }
                         >

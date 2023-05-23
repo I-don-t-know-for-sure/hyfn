@@ -36,7 +36,7 @@ export const useUpdateProduct = () => {
           reqData: [
             {
               newProductInfo: { ...rest, imagesURLs },
-              creatorId: userDocument?._id,
+              creatorId: userDocument?.id,
               productId,
               deletedImages,
             },

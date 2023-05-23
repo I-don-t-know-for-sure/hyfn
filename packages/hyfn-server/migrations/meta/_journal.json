@@ -8,6 +8,13 @@
       "when": 1684656102948,
       "tag": "0000_awesome_monster_badoon",
       "breakpoints": false
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1684778273630,
+      "tag": "0001_wild_franklin_richards",
+      "breakpoints": false
     }
   ]
 }

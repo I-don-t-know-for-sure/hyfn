@@ -11,7 +11,7 @@ export const setStoreToPickupHandler = async ({ arg, client }: MainFunctionProps
         .collection('orders')
         .findOne(
           {
-            _id: new ObjectId(orderId),
+            id: new ObjectId(orderId),
           },
           { session }
         );
@@ -20,8 +20,8 @@ export const setStoreToPickupHandler = async ({ arg, client }: MainFunctionProps
       }
       var storeCoords;
       const stores = orderDoc.orders.map((store) => {
-        console.log(store._id === new ObjectId(storeId));
-        if (store._id.toString() === storeId) {
+        console.log(store.id === new ObjectId(storeId));
+        if (store.id === storeId) {
           console.log(store.coords);
           storeCoords = store.coords;
           return { ...store, orderType: 'Pickup' };
@@ -40,7 +40,7 @@ export const setStoreToPickupHandler = async ({ arg, client }: MainFunctionProps
           .collection('orders')
           .updateOne(
             {
-              _id: new ObjectId(orderId),
+              id: new ObjectId(orderId),
             },
             {
               $set: {
@@ -66,7 +66,7 @@ export const setStoreToPickupHandler = async ({ arg, client }: MainFunctionProps
         .collection('orders')
         .updateOne(
           {
-            _id: new ObjectId(orderId),
+            id: new ObjectId(orderId),
           },
           {
             $set: {

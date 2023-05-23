@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import { t } from "i18next";
 
 interface ProductType {
-  _id: any;
+  id: any;
   textInfo: {
     title: string;
     description: string;
@@ -85,7 +85,7 @@ const Product: React.FC<ProductProps> = ({
           <ProductControler
             addproduct={addProduct}
             reduceOrRemoveProduct={reduceOrRemoveProduct}
-            qty={addedProducts ? addedProducts[product._id.toString()]?.qty : 0}
+            qty={addedProducts ? addedProducts[product.id]?.qty : 0}
           />
         </Box>
       )}
@@ -110,7 +110,7 @@ const Product: React.FC<ProductProps> = ({
             likeMutation({
               city,
               country,
-              productId: product._id.toString(),
+              productId: product.id,
               storeId: storefront,
             });
           }}

@@ -35,7 +35,7 @@ export const useCreateProduct = () => {
         reqData: [
           {
             productInfo: { ...productInfo, imagesURLs },
-            creatorId: userDocument._id,
+            creatorId: userDocument.id,
           },
         ],
       });

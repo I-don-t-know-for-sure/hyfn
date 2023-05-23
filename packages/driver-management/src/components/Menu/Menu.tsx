@@ -388,7 +388,7 @@ const Menu: React.FC<ReactProps> = ({ children }) => {
   maxWidth: ""
 }}> */}
 
-                <CopyButton value={userDocument?._id} />
+                <CopyButton value={userDocument?.id} />
                 {/* </Box> */}
 
                 {/* <Group>

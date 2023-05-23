@@ -5,7 +5,7 @@ export const getProductsHandler = async ({ arg, client }) => {
     const products = await client
       .db("productsLibrary")
       .collection("products")
-      .find({ creatorId, _id: { $gt: new ObjectId(lastProductId) } })
+      .find({ creatorId, id: { $gt: new ObjectId(lastProductId) } })
       .limit(15)
       .toArray();
     result = products;

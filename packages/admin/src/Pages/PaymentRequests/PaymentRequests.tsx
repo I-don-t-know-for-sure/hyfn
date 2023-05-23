@@ -78,7 +78,7 @@ const PaymentRequests: React.FC<PaymentRequestsProps> = ({}) => {
                       <Button
                         onClick={() => {
                           createPaymentRequest({
-                            transactionId: paymentRequest._id,
+                            transactionId: paymentRequest.id,
                           });
                         }}
                       >
@@ -88,7 +88,7 @@ const PaymentRequests: React.FC<PaymentRequestsProps> = ({}) => {
                         <Button
                           onClick={() => {
                             completePaymentRequest({
-                              transactionId: paymentRequest._id,
+                              transactionId: paymentRequest.id,
                             });
                           }}
                         >
@@ -107,7 +107,7 @@ const PaymentRequests: React.FC<PaymentRequestsProps> = ({}) => {
                     paymentRequests.pages[paymentRequests.pages.length - 1][
                       paymentRequests.pages[paymentRequests.pages.length - 1]
                         .length - 1
-                    ]._id,
+                    ].id,
                 });
               }}
             >

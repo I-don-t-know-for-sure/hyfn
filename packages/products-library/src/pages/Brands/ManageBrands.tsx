@@ -115,7 +115,7 @@ const ManageBrands: React.FC<ManageBrandsProps> = ({}) => {
                 .map((brand) => (
                   <tr
                     onClick={() => {
-                      //navigate(`/${product._id.toString()}`, { replace: true })
+                      //navigate(`/${product.id}`, { replace: true })
                     }}
                     // style={{
                     //   width: "100%",
@@ -205,7 +205,7 @@ const ManageBrands: React.FC<ManageBrandsProps> = ({}) => {
               pageParam:
                 data?.pages[data?.pages?.length - 1][
                   data?.pages[data.pages?.length - 1]?.length - 1
-                ]?._id,
+                ]?.id,
             })
           }
         >

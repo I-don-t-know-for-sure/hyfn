@@ -29,23 +29,23 @@ interface BulkUpdateTableProps {}
 const BulkUpdateTable: React.FC<BulkUpdateTableProps> = ({}) => {
   const location = useLocation();
   const { products } = location.state as { products: any[] };
-  console.log("🚀 ~ file: BulkUpdateTable.tsx:21 ~ products:", products);
+  console.log("🚀 ~ file: BulkUpdateTable.tsx:21 ~ products:", location.state);
 
   const productsObjects = products.reduce((accu, product) => {
-    return { ...accu, [product?._id?.toString()]: product };
+    return { ...accu, [product?.id?.toString()]: product };
   }, {});
 
   const [selectvalue, setSelectValue] = useState([
-    "textInfo.title",
-    "pricing.price",
-    "textInfo.description",
+    "title",
+    "price",
+    "description",
     "isActive",
   ]);
 
   const reducer = (state, { type, payload }) => {
     switch (type) {
       case ActionTypes.ON_CHANGE_HANDLER:
-        const { _id, changedKey, firstChangedKey, value } = payload;
+        const { id, changedKey, firstChangedKey, value } = payload;
         console.log(
           "🚀 ~ file: BulkUpdateTable.tsx:47 ~ reducer ~ firstChangedKey:",
           firstChangedKey
@@ -60,17 +60,17 @@ const BulkUpdateTable: React.FC<BulkUpdateTableProps> = ({}) => {
         );
 
         if (changedKey === undefined) {
-          state[_id][`${firstChangedKey}`] = value;
+          state[id][`${firstChangedKey}`] = value;
           console.log(state);
 
           return state;
         }
         const newState = {
           ...state,
-          [_id]: {
-            ...state[_id],
+          [id]: {
+            ...state[id],
             [`${firstChangedKey}`]: {
-              ...state[_id][`${firstChangedKey}`],
+              ...state[id][`${firstChangedKey}`],
               [`${changedKey}`]: value,
             },
           },
@@ -78,7 +78,7 @@ const BulkUpdateTable: React.FC<BulkUpdateTableProps> = ({}) => {
         return newState;
 
       // return state.map((product) => {
-      //   if (product._id !== _id) {
+      //   if (product.id !==id) {
       //     return product;
       //   }
       //   if (changedKey === undefined) {
@@ -101,11 +101,11 @@ const BulkUpdateTable: React.FC<BulkUpdateTableProps> = ({}) => {
 
   const [tableData, dispatch] = useReducer(reducer, productsObjects);
   const selectData = [
-    { label: t("Price"), value: "pricing.price" },
+    { label: t("Price"), value: "price" },
     // { label: t("Cost Per Item"), value: "pricing.costPerItem" },
-    { label: t("Prev price"), value: "pricing.prevPrice" },
-    { label: t("Description"), value: "textInfo.description" },
-    { label: t("Title"), value: "textInfo.title" },
+    { label: t("Prev price"), value: "prevPrice" },
+    { label: t("Description"), value: "description" },
+    { label: t("Title"), value: "title" },
     // { label: t("Weight in Kilo"), value: "weightInKilo" },
     { label: t("Is Active"), value: "isActive" },
     { label: t("Measurement system"), value: "measurementSystem" },
@@ -113,17 +113,17 @@ const BulkUpdateTable: React.FC<BulkUpdateTableProps> = ({}) => {
   ];
 
   const selectDataObject = {
-    "pricing.price": { label: t("Price"), value: "pricing.price" },
+    price: { label: t("Price"), value: "price" },
     // "pricing.costPerItem": {
     //   label: t("Cost Per Item"),
     //   value: "pricing.costPerItem",
     // },
-    "pricing.prevPrice": { label: t("Prev price"), value: "pricing.prevPrice" },
-    "textInfo.description": {
+    prevPrice: { label: t("Prev price"), value: "prevPrice" },
+    description: {
       label: t("Description"),
       value: "textInfo.description",
     },
-    "textInfo.title": { label: t("Title"), value: "textInfo.title" },
+    title: { label: t("Title"), value: "title" },
     // weightInKilo: { label: t("Weight in Kilo"), value: "weightInKilo" },
     isActive: { label: t("Is Active"), value: "isActive" },
     measurementSystem: {
@@ -142,16 +142,16 @@ const BulkUpdateTable: React.FC<BulkUpdateTableProps> = ({}) => {
   //     value,
   //     firstChangedKey,
   //     changedKey,
-  //     _id,
+  //    id,
   //   }: {
   //     value: any;
   //     firstChangedKey: string;
   //     changedKey?: string;
-  //     _id: string;
+  //    id: string;
   //   }) => {
   //     setTableData(prevState: any) => {
   //       return prevState.map((product) => {
-  //         if (product._id !== _id) {
+  //         if (product.id !==id) {
   //           return product;
   //         }
   //         if (changedKey === undefined) {

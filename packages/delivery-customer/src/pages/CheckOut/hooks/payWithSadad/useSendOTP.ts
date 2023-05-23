@@ -20,7 +20,7 @@ export const useSendOTP = () => {
       try {
         const { OTPSent, amount, ...rest } = paymentInfo;
         const res = await fetchUtil({
-          reqData: [{ customerId: userDocument._id, amount: amount, ...rest }],
+          reqData: [{ customerId: userDocument.id, amount: amount, ...rest }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/sendSadadOTP`,
         });
         OTPSent(true);

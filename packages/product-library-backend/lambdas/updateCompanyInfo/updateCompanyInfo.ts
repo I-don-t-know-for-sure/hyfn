@@ -17,7 +17,7 @@ export const updateCompanyInfoHandler = async ({
 
       const coords = { type: "Point", coordinates: [float2, float1] };
       await companyCollection.updateOne(
-        { _id: new ObjectId(id) },
+        { id: new ObjectId(id) },
         {
           $set: { ...newcompany, coords: coords },
         }

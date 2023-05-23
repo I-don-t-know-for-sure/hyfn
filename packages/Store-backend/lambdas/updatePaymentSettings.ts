@@ -6,7 +6,7 @@ export const updatePaymentSettingsHandler = async ({ arg, client }: MainFunction
     .collection('storeInfo')
     .findOne(
       {
-        _id: new ObjectId(storeId),
+        id: new ObjectId(storeId),
       },
       {}
     );
@@ -15,7 +15,7 @@ export const updatePaymentSettingsHandler = async ({ arg, client }: MainFunction
     .collection('storeInfo')
     .updateOne(
       {
-        _id: new ObjectId(storeId),
+        id: new ObjectId(storeId),
       },
       {
         $set: {
