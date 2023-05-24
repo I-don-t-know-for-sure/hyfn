@@ -27,6 +27,7 @@ import { zOrderProducts } from "./orderProducts";
 
 import { zReports } from "./reports";
 import { sql } from "kysely";
+import { zProductDescriptions } from "./productDescriptions";
 
 type ZodSchemaObject = Record<string, ZodType<any, any>>;
 
@@ -354,6 +355,7 @@ export type tCollectionsProduct = z.infer<typeof zCollectionsProducts>;
 export type tLocalCardKeyStoreActivity = z.infer<
   typeof zLocalCardKeyStoreActivity
 >;
+export type tProductDescription = z.infer<typeof zProductDescriptions>;
 export type tReport = z.infer<typeof zReports>;
 export type tOrderProduct = z.infer<typeof zOrderProducts>;
 
@@ -369,9 +371,15 @@ export type Database = {
   transactions: tTransaction;
   customers: tCustomer;
   collectionsProducts: tCollectionsProduct;
+  productDescriptions: tProductDescription;
 
   localCardKeyStoreActivity: tLocalCardKeyStoreActivity;
   orderProducts: tOrderProduct;
+};
+
+export const tProductDescriptions = {
+  _: "product_description",
+  ...zodSchemaToObject(zProductDescriptions),
 };
 
 export const tCollections = {

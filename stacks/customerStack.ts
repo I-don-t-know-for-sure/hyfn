@@ -87,12 +87,7 @@ export function customerApiStack({ stack }: StackContext) {
           functionName: "createTransaction" + stack.stage,
         },
       },
-      "POST /testNewDb": {
-        function: {
-          handler: pathToLambdas + "testNewDb.handler",
-          functionName: "testNewDb" + stack.stage,
-        },
-      },
+
       "POST /validateTransaction": {
         function: {
           handler: pathToLambdas + "validateTransaction.handler",
@@ -135,12 +130,7 @@ export function customerApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getCustomerData.handler",
         },
       },
-      "POST /createOrder": {
-        function: {
-          functionName: "createOrder" + stack.stage,
-          handler: pathToLambdas + "createOrder.handler",
-        },
-      },
+
       "POST /setOrderAsDelivered": {
         function: {
           functionName: "setOrderAsDelivered" + stack.stage,

@@ -1,4 +1,4 @@
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper, tProducts, tStores } from 'hyfn-server';
 import { backgroundRemovalPerImage } from 'hyfn-types';
 import request from 'request';
 import fs from 'fs';
@@ -8,6 +8,8 @@ import Jimp from 'jimp';
 import { ObjectId } from 'mongodb';
 import { smaller } from 'mathjs';
 import axios from 'axios';
+import { getDb } from 'hyfn-server/src/functions/getDb';
+import { sql } from 'kysely';
 const s3 = new AWS.S3();
 
 interface setBackgroundWhite extends Omit<MainFunctionProps, 'arg'> {
@@ -19,7 +21,7 @@ const api_result_url = 'https://api.backgroundremoverai.com';
 
 export const setBackgroundWhiteHandler = async ({
   productIds,
-  client,
+  db,
   eventBusName,
   url,
   storeId,
@@ -29,16 +31,15 @@ export const setBackgroundWhiteHandler = async ({
   productIds: string[];
   storeId: string;
   eventBusName: string;
-  client: MainFunctionProps['client'];
+  db: MainFunctionProps['db'];
 }) => {
   const productId = productIds.pop();
-  const product = await client
-    .db('base')
-    .collection('products')
-    .findOne(
-      { id: new ObjectId(productId) },
-      { projection: { images: true, whiteBackgroundImages: true } }
-    );
+
+  const product = await db
+    .selectFrom('products')
+    .selectAll()
+    .where('id', '=', productId)
+    .executeTakeFirstOrThrow();
   const newKeys = product.images.filter((image) => {
     return !product?.whiteBackgroundImages?.find(
       (whiteBackgroundImage) => whiteBackgroundImage === image
@@ -50,43 +51,38 @@ export const setBackgroundWhiteHandler = async ({
   // Check if the array has at least 5 elements
 
   /////////////////////////////
-  const storeDoc = await client
-    .db('generalData')
-    .collection('storeInfo')
-    .findOne({ id: new ObjectId(storeId) }, { projection: { balance: true } });
 
+  const storeDoc = await db
+    .selectFrom('stores')
+    .selectAll()
+    .where('id', '=', storeId)
+    .executeTakeFirstOrThrow();
   const price = backgroundRemovalPerImage * newKeys.length;
 
   if (smaller(storeDoc.balance, price)) {
     throw new Error('balance not enough');
   }
 
-  await client
-    .db('generalData')
-    .collection('storeInfo')
-    .updateOne(
-      { id: new ObjectId(storeId) },
-      {
-        $inc: {
-          balance: -price,
-        },
-      }
-    );
-
+  await db
+    .updateTable('stores')
+    .set({
+      balance: sql`${sql.raw(tStores.balance)} - ${price}`,
+    })
+    .where('id', '=', storeId)
+    .executeTakeFirst();
   ///////////////////////////////
 
   ///////////////////////////
-  await client
-    .db('base')
-    .collection('products')
-    .updateOne(
-      { id: new ObjectId(productId) },
-      {
-        $push: {
-          whiteBackgroundImages: { $each: newKeys },
-        },
-      }
-    );
+
+  await db
+    .updateTable('products')
+    .set({
+      whiteBackgroundImages: sql`${sql.raw(tProducts.whiteBackgroundImages)} || array[${sql.join(
+        newKeys
+      )}]`,
+    })
+    .where('id', '=', productId)
+    .executeTakeFirst();
   ///////////////////////////
 
   const bucket = process.env.bucketName;
@@ -234,12 +230,12 @@ export const setBackgroundWhiteHandler = async ({
 
 export const handler = async (event) => {
   const { eventBusName, productIds, storeId, url } = JSON.parse(event.body);
-  const client = await getMongoClientWithIAMRole();
+  const db = await getDb();
 
   return await setBackgroundWhiteHandler({
     productIds,
     eventBusName,
-    client: client,
+    db,
     storeId,
     url,
   });

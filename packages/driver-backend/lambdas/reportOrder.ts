@@ -22,7 +22,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
       const report = await trx
         .insertInto('reports')
         .values({
-          reportDate: new Date().toDateString(),
+          reportDate: new Date(),
           orderId,
           driverId: orderDoc.driverId,
         })
@@ -63,7 +63,7 @@ interface ReportOrderProps extends Omit<MainFunctionProps, 'arg'> {
 }
 import { ObjectId } from 'mongodb';
 import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP } from 'hyfn-types';
-import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: reportOrderHandler });

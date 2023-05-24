@@ -1,4 +1,4 @@
-import { MainFunctionProps, getMongoClientWithIAMRole, mainWrapper } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper, tStores } from 'hyfn-server';
 import { descriptionGenerationPricePerImage } from 'hyfn-types';
 interface GenerateProductDescriptionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
@@ -8,19 +8,21 @@ import axios from 'axios';
 import { chatAfterInfo, chatBeforeInfo, chatTranslateAfter, chatTranslateBefore } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
 import { smaller } from 'mathjs';
+import { getDb } from 'hyfn-server/src/functions/getDb';
+import { sql } from 'kysely';
 
 const s3 = new AWS.S3({ region: process.env.region });
 const rekognition = new AWS.Rekognition({ region: 'eu-west-1' });
 export const generateProductDescriptionHandler = async ({
   products,
   eventBusName,
-  client,
+  db,
   storeId,
   url,
 }: {
   products: any[];
   eventBusName: string;
-  client: MainFunctionProps['client'];
+  db: MainFunctionProps['db'];
   storeId: string;
 
   url: string;
@@ -30,29 +32,24 @@ export const generateProductDescriptionHandler = async ({
   var text = '';
   const imageKeys = product?.imageKeys;
 
-  const storeDoc = await client
-    .db('generalData')
-    .collection('storeInfo')
-    .findOne({ id: new ObjectId(storeId) }, { projection: { balance: true } });
-
+  const storeDoc = await db
+    .selectFrom('stores')
+    .selectAll()
+    .where('id', '=', storeId)
+    .executeTakeFirstOrThrow();
   const price = descriptionGenerationPricePerImage * imageKeys.length;
 
   if (smaller(storeDoc.balance, price)) {
     throw new Error('balance not enough');
   }
 
-  await client
-    .db('generalData')
-    .collection('storeInfo')
-    .updateOne(
-      { id: new ObjectId(storeId) },
-      {
-        $inc: {
-          balance: -price,
-        },
-      }
-    );
-
+  await db
+    .updateTable('stores')
+    .set({
+      balance: sql`${sql.raw(tStores.balance)} - ${price}`,
+    })
+    .where('id', '=', storeId)
+    .executeTakeFirst();
   const bucketFolder = 'image-reader/';
   const productId = product?.productId;
 
@@ -123,21 +120,21 @@ export const generateProductDescriptionHandler = async ({
 
     const productDescription = `${chatResult.data.choices[0].message.content} \n\n\n ${translateResult.data.choices[0].message.content}`;
 
-    await client
-      .db('base')
-      .collection('products')
-      .updateOne(
-        { id: new ObjectId(productId) },
-        {
-          $set: {
-            'textInfo.description': productDescription,
-          },
-        }
-      );
-    await client.db('base').collection('productDescriptions').insertOne({
-      productId,
-      description: productDescription,
-    });
+    await db
+      .updateTable('products')
+      .set({
+        description: productDescription,
+      })
+      .where('id', '=', productId)
+      .executeTakeFirst();
+
+    await db
+      .insertInto('productDescriptions')
+      .values({
+        productId,
+        description: productDescription,
+      })
+      .execute();
   } catch (error) {
     throw new Error('error');
   }
@@ -149,9 +146,9 @@ export const generateProductDescriptionHandler = async ({
 
 export const handler = async (event) => {
   const { eventBusName, products, storeId, url } = JSON.parse(event.body);
-  const client = await getMongoClientWithIAMRole();
+  const db = await getDb();
 
-  return await generateProductDescriptionHandler({ client, eventBusName, products, storeId, url });
+  return await generateProductDescriptionHandler({ db, eventBusName, products, storeId, url });
 };
 
 const createChatPrompt = (prompt: any) => {

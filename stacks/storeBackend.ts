@@ -188,11 +188,11 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "setOrderAsAccepted.handler",
         },
       },
-      "POST /setOrderAsDelivered": {
-        function: {
-          handler: pathToLambdas + "setOrderAsDelivered.handler",
-        },
-      },
+      // "POST /setOrderAsDelivered": {
+      //   function: {
+      //     handler: pathToLambdas + "setOrderAsDelivered.handler",
+      //   },
+      // },
       "POST /getDriverInfo": {
         function: {
           handler: pathToLambdas + "getDriverInfo.handler",
@@ -220,11 +220,6 @@ export function storeApiStack({ stack }: StackContext) {
         },
       },
 
-      "POST /getProductFromBarcode": {
-        function: {
-          handler: pathToLambdas + "getProductFromBarcode.handler",
-        },
-      },
       "POST /createCollection": {
         function: {
           handler: pathToLambdas + "createCollectionWithActive.handler",
