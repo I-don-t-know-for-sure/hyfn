@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS "orders" (
 	"proposals_ids" varchar[],
 	"accepted_proposal" varchar,
 	"driver_management" varchar,
-	"order_status" varchar,
+	"order_status" varchar[],
 	"reports_ids" uuid[],
 	"delivery_fee_paid" boolean
 );
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS "stores" (
 	"lat" numeric,
 	"long" numeric,
 	"opened" boolean DEFAULT false,
-	"balance" numeric(3, 2),
+	"balance" numeric,
 	"image" varchar[],
 	"notification_token" varchar[],
 	"store_owner_info_filled" boolean DEFAULT false,
@@ -159,17 +159,10 @@ CREATE TABLE IF NOT EXISTS "transactions" (
 	"store_id" varchar,
 	"transaction_date" timestamp DEFAULT now(),
 	"type" varchar,
-	"status" varchar,
+	"status" varchar[],
 	"transaction_method" varchar,
 	"number_of_months" integer,
 	"order_id" varchar
-);
-
-CREATE TABLE IF NOT EXISTS "local_card_key_store" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"local_card_key" uuid,
-	"in_use" boolean DEFAULT true,
-	"store_id" uuid
 );
 
 CREATE TABLE IF NOT EXISTS "local_card_key_store_activity" (
@@ -195,6 +188,12 @@ CREATE TABLE IF NOT EXISTS "order_products" (
 	"city" varchar,
 	"qty" numeric,
 	"instructions" varchar
+);
+
+CREATE TABLE IF NOT EXISTS "product_descriptions" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"product_id" uuid NOT NULL,
+	"description" varchar
 );
 
 CREATE TABLE IF NOT EXISTS "reports" (

@@ -86,7 +86,7 @@ export const updateProductHandler = async ({ arg, client, db, userId }: UpdatePr
       (image) => !deletedImages?.some((deletedImage) => deletedImage === image)
     );
     const whiteBackgroundImages = oldProductDoc?.whiteBackgroundImages?.filter(
-      (oldWhiteImage) => !deletedImages.includes(oldWhiteImage)
+      (oldWhiteImage) => !deletedImages?.includes(oldWhiteImage)
     );
     if (deletedImages?.length > 0) {
       await deleteImages(deletedImages);

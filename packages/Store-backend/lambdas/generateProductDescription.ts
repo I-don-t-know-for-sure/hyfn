@@ -136,7 +136,7 @@ export const generateProductDescriptionHandler = async ({
       })
       .execute();
   } catch (error) {
-    throw new Error('error');
+    throw new Error(error);
   }
 
   if (products.length > 0) {

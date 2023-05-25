@@ -66,7 +66,7 @@ const ManageProducts: React.FC = () => {
       setResults(searchResults);
     }
   }, [filterText, data, searchResults, isLoading, areResultsLoading]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const navigate = useNavigate();
   const length = data?.pages?.reduce((accu, crr) => {
     return accu + crr?.length;
@@ -171,17 +171,13 @@ const ManageProducts: React.FC = () => {
                     variant="outline"
                     size="xs"
                     onClick={() => {
-                      const productIds = selectedProducts.map(
-                        (product) => product.id
-                      );
-
-                      removeBackgounds({ productIds });
+                      removeBackgounds({ productIds: selectedProducts });
                     }}
                   >
                     {t("Remove image backgrounds")}
                   </Button>
                   {selectedProducts.length === 1 && (
-                    <DuplicateModal productId={selectedProducts[0]?.id} />
+                    <DuplicateModal productId={selectedProducts[0]} />
                   )}
                 </Group>
               )}
@@ -256,9 +252,9 @@ const ManageProducts: React.FC = () => {
                       >
                         <td>
                           <Checkbox
-                            checked={selectedProducts.find(
-                              (id) => id === product.id
-                            )}
+                            checked={
+                              !!selectedProducts.find((id) => id === product.id)
+                            }
                             onChange={() => {
                               const isProductSelected = selectedProducts.find(
                                 (id) => id === product.id

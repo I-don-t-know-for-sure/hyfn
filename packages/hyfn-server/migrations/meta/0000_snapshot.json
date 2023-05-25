@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "3f4b3c07-016d-432b-8eb2-16b3e1082a30",
+  "id": "fb35f403-1edb-4a24-ba61-d9f04e08bf75",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "collections": {
@@ -549,7 +549,7 @@
         },
         "order_status": {
           "name": "order_status",
-          "type": "varchar",
+          "type": "varchar[]",
           "primaryKey": false,
           "notNull": false
         },
@@ -795,7 +795,7 @@
         },
         "balance": {
           "name": "balance",
-          "type": "numeric(3, 2)",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": false
         },
@@ -919,7 +919,7 @@
         },
         "status": {
           "name": "status",
-          "type": "varchar",
+          "type": "varchar[]",
           "primaryKey": false,
           "notNull": false
         },
@@ -938,41 +938,6 @@
         "order_id": {
           "name": "order_id",
           "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {}
-    },
-    "local_card_key_store": {
-      "name": "local_card_key_store",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "local_card_key": {
-          "name": "local_card_key",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "in_use": {
-          "name": "in_use",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "store_id": {
-          "name": "store_id",
-          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         }
@@ -1107,6 +1072,34 @@
         },
         "instructions": {
           "name": "instructions",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "product_descriptions": {
+      "name": "product_descriptions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false

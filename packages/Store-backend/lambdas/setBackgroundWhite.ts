@@ -33,6 +33,8 @@ export const setBackgroundWhiteHandler = async ({
   eventBusName: string;
   db: MainFunctionProps['db'];
 }) => {
+  console.log('🚀 ~ file: setBackgroundWhite.ts:36 ~ storeId:', storeId);
+  console.log('🚀 ~ file: setBackgroundWhite.ts:36 ~ productIds:', productIds);
   const productId = productIds.pop();
 
   const product = await db

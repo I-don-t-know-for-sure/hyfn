@@ -47,21 +47,19 @@ const OptionsCard: React.FC<OptionsCardProps> = ({
                   return {
                     ...prevState,
                     hasOptions: checked,
-                    options: {
-                      ...prevState.options,
-                      options: [
-                        {
-                          minimumNumberOfOptionsForUserToSelect: 0,
-                          maximumNumberOfOptionsForUserToSelect: 1,
-                          isRequired: false,
-                          optionName: "",
-                          optionValues: [
-                            { value: "", key: randomId(), price: 0 },
-                          ],
-                          key: randomId(),
-                        },
-                      ],
-                    },
+
+                    options: [
+                      {
+                        minimumNumberOfOptionsForUserToSelect: 0,
+                        maximumNumberOfOptionsForUserToSelect: 1,
+                        isRequired: false,
+                        optionName: "",
+                        optionValues: [
+                          { value: "", key: randomId(), price: 0 },
+                        ],
+                        key: randomId(),
+                      },
+                    ],
                   };
                 });
               }
@@ -71,10 +69,7 @@ const OptionsCard: React.FC<OptionsCardProps> = ({
                     ...prevState,
                     hasOptions: checked,
 
-                    options: {
-                      ...prevState.options,
-                      options: undefined,
-                    },
+                    options: undefined,
                   };
                 });
               }

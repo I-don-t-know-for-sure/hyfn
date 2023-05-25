@@ -15,10 +15,13 @@ export const getProductHandler = async ({ arg, client, userId, db }: MainFunctio
     .where('productId', '=', productId)
     .execute();
   const collections = productCollection.map((relation) => relation.collectionId);
+  if (collections.length === 0) {
+    return { ...product, collections: [] };
+  }
   const collectionsArray = await db
     .selectFrom('collections')
     .select(['id as value', 'title as label'])
-    .where(sql` id = any (array[${sql.join(collections)}]::uuid[])`)
+    .where(sql` id = any (array[${sql.join(collections || [])}]::uuid[])`)
     .execute();
   return { ...product, collections: collectionsArray };
 };
