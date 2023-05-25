@@ -21,7 +21,7 @@ export const acceptProposal = async ({ arg, client, userId, db }: AcceptProposal
   if (!orderDoc) {
     throw new Error('order not found');
   }
-  if (orderDoc?.orderStatus?.includes('Canceled')) {
+  if (orderDoc?.orderStatus?.includes('canceled')) {
     throw new Error('order canceled');
   }
   const proposal = orderDoc?.proposals?.find((proposal) => proposal.driverId === driverId);

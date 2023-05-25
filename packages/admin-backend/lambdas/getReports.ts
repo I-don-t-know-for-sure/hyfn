@@ -22,7 +22,7 @@ interface GetReportsProps extends Omit<MainFunctionProps, "arg"> {
 }
 import { MainFunctionProps, mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
-import { test3 } from "hyfn-types";
+
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getReportsHandler });
 };

@@ -1,7 +1,6 @@
 interface ConfirmPickupProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ORDER_STATUS_DELIVERED } from 'hyfn-types';
-import { ObjectId } from 'mongodb';
+
 interface ConfirmPickupProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }

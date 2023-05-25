@@ -1,7 +1,7 @@
 interface CancelTransactionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 
 export const cancelTransaction = async ({ arg, client, db }: CancelTransactionProps) => {

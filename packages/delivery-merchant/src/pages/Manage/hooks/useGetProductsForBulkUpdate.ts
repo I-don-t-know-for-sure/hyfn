@@ -10,6 +10,10 @@ export const useGetProducts = ({ lastDocId, check, filterText }) => {
   return useInfiniteQuery(
     [products, check],
     async ({ queryKey, pageParam }) => {
+      console.log(
+        "🚀 ~ file: useGetProductsForBulkUpdate.ts:13 ~ pageParam:",
+        pageParam
+      );
       return await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/getProducts`,
 

@@ -1,5 +1,3 @@
-import { ObjectId } from 'mongodb';
-
 import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
 import { decryptData, isLocalCardTransactionValidated, mainWrapper } from 'hyfn-server';
 import { MainFunctionProps } from 'hyfn-server';
@@ -16,7 +14,7 @@ interface validateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg
 const kmsKeyARN = process.env.kmsKeyARN || '';
 export const validateLocalCardTransaction = async ({
   arg,
-
+  userId,
   db,
 }: validateLocalCardTransactionProps) => {
   const { transactionId } = arg[0];
@@ -99,8 +97,13 @@ export const validateLocalCardTransaction = async ({
     const type = transaction.type;
 
     if (type === subscriptionPayment) {
+      const customerDoc = await db
+        .selectFrom('customers')
+        .selectAll()
+        .where('userId', '=', userId)
+        .executeTakeFirstOrThrow();
       // create a date and add the number of months from the transaction
-      const date = new Date();
+      const date = new Date(customerDoc.expirationDate || undefined);
       date.setMonth(date.getMonth() + transaction.numberOfMonths);
 
       await db

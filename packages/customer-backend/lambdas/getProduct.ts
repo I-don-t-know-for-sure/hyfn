@@ -2,7 +2,7 @@ interface GetProductProps extends Omit<MainFunctionProps, 'arg'> {}
 ('use strict');
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps } from 'hyfn-server/src';
-import { findOne, mainWrapper } from 'hyfn-server/src';
+import { mainWrapper } from 'hyfn-server/src';
 interface GetProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }

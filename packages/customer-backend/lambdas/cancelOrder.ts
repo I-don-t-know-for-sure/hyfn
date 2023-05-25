@@ -7,7 +7,7 @@ import {
   ORDER_TYPE_PICKUP,
   USER_TYPE_DRIVER,
 } from 'hyfn-types';
-import { findOne, mainWrapper, updateOne, MainFunctionProps, withTransaction } from 'hyfn-server';
+import { mainWrapper, MainFunctionProps } from 'hyfn-server';
 
 interface CancelOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
@@ -58,7 +58,7 @@ export const cancelOrder = async ({ arg, client, userId, db }: CancelOrderProps)
       await trx
         .updateTable('orders')
         .set({
-          orderStatus: [...orderDoc.orderStatus, 'Canceled'],
+          orderStatus: [...orderDoc.orderStatus, 'canceled'],
         })
         .where('id', '=', orderId)
         .execute();
@@ -68,7 +68,7 @@ export const cancelOrder = async ({ arg, client, userId, db }: CancelOrderProps)
       await trx
         .updateTable('orders')
         .set({
-          orderStatus: [...orderDoc.orderStatus, 'Canceled'],
+          orderStatus: [...orderDoc.orderStatus, 'canceled'],
         })
         .where('id', '=', orderId)
         .execute();

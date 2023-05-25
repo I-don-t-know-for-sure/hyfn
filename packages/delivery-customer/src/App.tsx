@@ -24,7 +24,7 @@ import ActiveOrders from "./pages/Orders/components/ActiveOrders";
 import Collection from "./pages/Collection/Collection";
 import OrderHistory from "./pages/Orders/components/OrderHistory";
 import Page from "./components/Page";
-import { test3 } from "hyfn-types";
+
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import ManageAddresses from "./pages/Addresses/Addresses";
 import CreateCustomer from "./pages/CreateCustomer/CreateCustomer";
@@ -132,8 +132,6 @@ function App() {
     }
   }, [loggedIn, notificationTokenSent]);
 
-  console.log("🚀 ~ file: App.tsx:26 ~ test3:", test3);
-  console.log("🚀 ~ file: App.tsx:26 ~ test3:", test3);
   return (
     <BrowserRouter>
       <Menu>

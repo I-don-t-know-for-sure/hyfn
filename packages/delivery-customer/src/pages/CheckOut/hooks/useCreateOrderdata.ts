@@ -6,12 +6,14 @@ import { t } from "util/i18nextFix";
 import { useMutation, useQueryClient } from "react-query";
 
 import fetchUtil from "util/fetch";
+import { useNavigate } from "react-router-dom";
 
 export const useCreateOrderData = () => {
   const queryClient = useQueryClient();
 
   const [{ coords, address }] = useLocation();
-  console.log(address, "ahahahahah");
+  const navigate = useNavigate();
+
   const { userId, userDocument, loggedIn, refetch, isLoading } = useUser();
 
   return useMutation(
@@ -36,7 +38,7 @@ export const useCreateOrderData = () => {
           ],
         });
         refetch();
-        return result;
+        navigate("/", { replace: true });
         console.log(result);
       } catch (e) {
         console.error(e);

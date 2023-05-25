@@ -2,7 +2,7 @@ interface GetStoreFrontProps extends Omit<MainFunctionProps, 'arg'> {}
 ('use strict');
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps, tCollection, tCollections } from 'hyfn-server';
-import { findOne, mainWrapper } from 'hyfn-server';
+import { mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';
 interface GetStoreFrontProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];

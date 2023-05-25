@@ -20,7 +20,7 @@ export const updateNotificationTokensHandler = async ({
   await db
     .updateTable('customers')
     .set({
-      notificationTokens: [...customerDoc.notificationTokens, notificationToken],
+      notificationTokens: [...(customerDoc.notificationTokens || []), notificationToken],
     })
     .where('userId', '=', userId)
     .executeTakeFirst();

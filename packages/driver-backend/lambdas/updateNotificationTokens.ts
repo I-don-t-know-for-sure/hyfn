@@ -23,7 +23,7 @@ export const updateNotificationTokensHandler = async ({
   await db
     .updateTable('drivers')
     .set({
-      notificationTokens: [...driverDoc.notificationTokens, notificationToken],
+      notificationTokens: [...(driverDoc.notificationTokens || []), notificationToken],
     })
     .where('userId', '=', userId)
     .executeTakeFirst();

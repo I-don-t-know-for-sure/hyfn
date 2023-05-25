@@ -9,6 +9,7 @@ import {
   NumberInputHandlers,
   Select,
   Stack,
+  Text,
   TextInput,
   Title,
   rem,
@@ -20,6 +21,8 @@ import React, { useRef, useState } from "react";
 import useUpdateUSerDocument from "./hooks/useUpdateUserDocument";
 import { useForm } from "@mantine/form";
 import { useSubscribeToHyfnPlus } from "./hooks/useSubscribeToHyfnPlus";
+import { useUser } from "contexts/userContext/User";
+import { convertDateToText } from "hyfn-client";
 
 interface AccountSettingsProps {}
 
@@ -33,6 +36,7 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({}) => {
   const handlers = useRef<NumberInputHandlers>();
   const { mutate } = useUpdateUSerDocument();
   const { mutate: subscribeToHyfnPlus } = useSubscribeToHyfnPlus();
+  const { userDocument } = useUser();
 
   return (
     <Container mt={8}>
@@ -80,7 +84,16 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({}) => {
               {t("Hyfn+ subscription")}
             </Title>
           </Group>
+
           <Stack align="center">
+            {userDocument.expirationDate !== null &&
+              userDocument.expirationDate !== undefined && (
+                <Text>
+                  {`${t("Expiration date")} : ${convertDateToText(
+                    userDocument.expirationDate
+                  )}`}
+                </Text>
+              )}
             <Group spacing={5}>
               <ActionIcon
                 size={42}

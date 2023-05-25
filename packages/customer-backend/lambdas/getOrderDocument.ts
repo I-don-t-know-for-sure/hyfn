@@ -16,7 +16,7 @@ export const getOrderDocumentHandler = async ({ arg, client, db }: MainFunctionP
 interface GetOrderDocumentProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import { ObjectId } from 'mongodb';
+
 import { mainWrapper } from 'hyfn-server/src';
 import { MainFunctionProps } from 'hyfn-server/src';
 export const handler = async (event) => {

@@ -14,13 +14,11 @@ export const createOrderData = async ({ arg, client, userId, db }: CreateOrderDa
     .selectAll()
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
-  // const arg = event;
+
   const orderCart = arg[0];
   const buyerInfo = arg[1];
   const metchesOrder = orderCart[0];
-  const { country, city } = metchesOrder;
-  // const { country } = arg[0];
-  // const customerInfo = arg[0];
+
   if (!Array.isArray(orderCart)) {
     throw new Error('wrong');
   }
@@ -33,31 +31,10 @@ export const createOrderData = async ({ arg, client, userId, db }: CreateOrderDa
   if (orderTypesDifferent) {
     throw new Error('stores in order can`t have orderType of delivery and pickup');
   }
-  // temp
-  // const customerDoc = await client.db('generalData').collection('customerInfo').findOne(
-  //   {
-  //    id: new ObjectId(id),
-  //   },
-  //   {},
-  // );
-
-  // if (customerDoc.order) {
-  //   var diffrent = false;
-  //   // or stores are diffrent
-  //   for (let i = 0; i < orderCart?.length; i++) {
-  //     const store = orderCart[i];
-  //     if (store.id !== orders[i]?.id) {
-  //       diffrent = true;
-  //     }
-  //   }
-  // check this out when free // customerDoc?.order?.orders?.length !== orderCart?.length || diffrent
 
   await updateAllOrder({ arg, client, customerDoc, db });
-  // }
+
   return JSON.stringify('success');
-  // Ensures that the client will close when you finish/error
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: createOrderData });

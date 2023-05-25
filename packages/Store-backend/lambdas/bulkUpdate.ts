@@ -17,11 +17,11 @@ export const bulkUpdateHandler = async ({ arg, client, userId, db }: MainFunctio
   var result;
 
   const { productsArray } = arg[0];
-  const storeDoc = await db
-    .selectFrom('stores')
-    .selectAll()
-    .where('usersIds', '@>', sql`ARRAY[${sql.join([userId])}]::uuid[]`)
-    .executeTakeFirstOrThrow();
+  // const storeDoc = await db
+  //   .selectFrom('stores')
+  //   .selectAll()
+  //   .where('usersIds', '@>', sql`ARRAY[${sql.join([userId])}]::uuid[]`)
+  //   .executeTakeFirstOrThrow();
 
   const validatedArray = productsArray;
 

@@ -1,5 +1,4 @@
 export const getActiveOrdersHandler = async ({ arg, client, db, userId }: MainFunctionProps) => {
-  const { id, lastDoc } = arg[0];
   const store = await db
     .selectFrom('stores')
     .selectAll()
@@ -24,21 +23,8 @@ interface GetActiveOrdersProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-import { ObjectId } from 'mongodb';
-import {
-  ORDER_STATUS_DELIVERED,
-  ORDER_TYPE_PICKUP,
-  USER_TYPE_DRIVER,
-  USER_TYPE_STORE,
-} from 'hyfn-types';
-import {
-  MainFunctionProps,
-  buildJson,
-  mainWrapper,
-  tOrderProducts,
-  tOrders,
-  tStores,
-} from 'hyfn-server';
+
+import { MainFunctionProps, buildJson, mainWrapper, tOrderProducts } from 'hyfn-server';
 import { sql } from 'kysely';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: getActiveOrdersHandler });

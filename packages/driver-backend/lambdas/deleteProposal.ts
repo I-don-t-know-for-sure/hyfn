@@ -27,7 +27,7 @@ export const deleteProposal = async ({ arg, client, userId, db }: DeleteProposal
   if (!orderDoc) {
     throw new Error('order not found');
   }
-  if (orderDoc.orderStatus.includes('Canceled')) {
+  if (orderDoc.orderStatus.includes('canceled')) {
     throw new Error('Order canceled');
   }
   if (orderDoc.acceptedProposal) {

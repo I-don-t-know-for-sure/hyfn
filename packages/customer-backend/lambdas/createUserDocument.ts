@@ -1,7 +1,7 @@
 interface CreateUserDocumentProps extends Omit<MainFunctionProps, 'arg'> {}
 ('use strict');
 import { MainFunctionProps } from 'hyfn-server/src';
-import { insertOne, mainWrapper } from 'hyfn-server/src';
+import { mainWrapper } from 'hyfn-server/src';
 interface CreateUserDocumentProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }

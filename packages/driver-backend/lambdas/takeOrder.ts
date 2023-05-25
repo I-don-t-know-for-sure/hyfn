@@ -8,7 +8,7 @@ import {
   deliveryServiceFee,
 } from 'hyfn-types';
 import { add, largerEq, multiply, subtract } from 'mathjs';
-import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { z } from 'zod';
 import { sql } from 'kysely';
 interface TakeOrderProps extends Omit<MainFunctionProps, 'arg'> {

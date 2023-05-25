@@ -18,7 +18,7 @@ import {
 } from 'hyfn-types';
 import { v4 as uuidV4 } from 'uuid';
 import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
-import { MainFunctionProps, decryptData, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, decryptData } from 'hyfn-server';
 import { mainWrapper } from 'hyfn-server';
 import { createLocalCardConfigurationObject } from 'hyfn-server/src';
 import { add } from 'mathjs';
@@ -138,7 +138,7 @@ const createlocalCardTransaction = async ({
         .executeTakeFirstOrThrow();
       if (orderDoc.storeId !== storeDoc.id) throw new Error('store id does not match with order');
       // const storeOrder = orderDoc.orders.find((store) => store.id === storeId);
-      if (orderDoc?.orderStatus[orderDoc?.orderStatus?.length - 1] === 'Canceled') {
+      if (orderDoc?.orderStatus[orderDoc?.orderStatus?.length - 1] === 'canceled') {
         throw new Error('store order was canceled');
       }
       if (orderDoc.storeStatus.includes('paid')) {

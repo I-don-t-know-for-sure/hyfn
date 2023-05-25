@@ -1,4 +1,4 @@
-import { MainFunctionProps, firebaseApp, mainWrapper, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, firebaseApp, mainWrapper } from 'hyfn-server';
 import admin from 'firebase-admin';
 import * as fs from 'fs';
 interface SendNotificationProps extends Omit<MainFunctionProps, 'arg'> {

@@ -3,7 +3,7 @@ interface GetDriverInfoProps extends Omit<MainFunctionProps, 'arg'> {
 }
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps } from 'hyfn-server/src';
-import { findOne, mainWrapper } from 'hyfn-server/src';
+import { mainWrapper } from 'hyfn-server/src';
 export const GetDriverInfo = async ({ arg, client, db }: MainFunctionProps) => {
   const { driverId } = arg[0];
 

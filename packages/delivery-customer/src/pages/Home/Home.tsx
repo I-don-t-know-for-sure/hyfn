@@ -18,7 +18,7 @@ import useGetStores from "./hooks/useGetStores";
 import { Carousel } from "@mantine/carousel";
 
 import useHomeConfig from "./config";
-import { test2 } from "hyfn-types";
+
 import { t } from "../../util/i18nextFix";
 
 import { useLocation } from "../../contexts/locationContext/LocationContext";
@@ -28,8 +28,6 @@ import { useSendNotification } from "./hooks/useSendNotification";
 // yarn add https://github.com/MyOrg/my-lib.git#branch
 
 const Home: React.FC = () => {
-  console.log("🚀 ~ file: Home.tsx:11 ~ test2:", test2);
-
   const [filter, setFilter] = useState("all");
   const [nearby, setNearby] = useState(false);
   const [{ city }] = useLocation();

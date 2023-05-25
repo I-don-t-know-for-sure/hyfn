@@ -1,4 +1,4 @@
-export const setProductAsPickedUpHandler = async ({ arg, client }) => {
+export const setProductAsPickedUpHandler = async ({ arg, client }: MainFunctionProps) => {
   var result;
   const { QTYFound, productId, storeId, country, orderId } = arg[0];
   // const orderDoc = await findOne({id: new ObjectId(orderId)}, {}, client.db("base").collection('orders'))

@@ -1,7 +1,7 @@
 interface GetCustomerDataProps extends Omit<MainFunctionProps, 'arg'> {}
 ('use strict');
 import { MainFunctionProps } from 'hyfn-server';
-import { findOne, mainWrapper } from 'hyfn-server';
+import { mainWrapper } from 'hyfn-server';
 interface GetCustomerDataProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }

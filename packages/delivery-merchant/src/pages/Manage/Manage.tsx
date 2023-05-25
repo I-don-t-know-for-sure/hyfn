@@ -68,6 +68,9 @@ const ManageProducts: React.FC = () => {
   }, [filterText, data, searchResults, isLoading, areResultsLoading]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const navigate = useNavigate();
+  const length = data?.pages?.reduce((accu, crr) => {
+    return accu + crr?.length;
+  }, 0);
   return (
     <>
       {/* <Helmet>
@@ -321,10 +324,10 @@ const ManageProducts: React.FC = () => {
             // }}
             onClick={() =>
               fetchNextPage({
-                pageParam:
-                  data?.pages[data?.pages?.length - 1][
-                    data?.pages[data.pages?.length - 1]?.length - 1
-                  ]?.id,
+                pageParam: length,
+                // data?.pages[data?.pages?.length - 1][
+                //   data?.pages[data.pages?.length - 1]?.length - 1
+                // ]?.id,
               })
             }
           >
