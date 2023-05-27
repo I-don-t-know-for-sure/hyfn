@@ -8,8 +8,8 @@ interface GetCollectionProductsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
 export const getCollectionProducts = async ({ arg, client, db }: GetCollectionProductsProps) => {
-  const { country, storefront, collectionid, documents = 25 } = arg[0];
-  const lastDoc = arg[1];
+  const { country, storefront, collectionid, documents = 25, lastDocNumber } = arg[0];
+
   const collectionProductRelations = await db
     .selectFrom('collectionsProducts')
     .innerJoin('products', (join) =>
@@ -29,6 +29,7 @@ export const getCollectionProducts = async ({ arg, client, db }: GetCollectionPr
       ]).as(tProducts._)
     )
     .where('collectionsProducts.collectionId', '=', collectionid)
+    .offset(lastDocNumber || 0)
     .limit(5)
     .execute();
 

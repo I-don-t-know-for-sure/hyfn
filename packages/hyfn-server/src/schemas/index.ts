@@ -120,7 +120,13 @@ export function buildJson<T extends Object>(
   var str = ``;
   const keys = shape;
   for (const key of keys) {
-    str = str + `'${String(key)}', ${table._ as any}.${table[String(key)]},`;
+    str =
+      str +
+      `'${String(key)}', ${table._ as any}.${
+        Array.isArray(table[String(key)])
+          ? table[String(key)][0]._
+          : table[String(key)]
+      },`;
   }
   str = str.slice(0, -1);
 

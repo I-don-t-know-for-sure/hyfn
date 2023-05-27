@@ -4,7 +4,7 @@ import * as z from "zod";
 export const productDescriptions = pgTable("product_descriptions", {
   id: uuid("id").defaultRandom().primaryKey(),
   productId: uuid("product_id").notNull(),
-  description: varchar("description"),
+  description: varchar("description").notNull(),
 });
 
 const schema = createSelectSchema(productDescriptions);

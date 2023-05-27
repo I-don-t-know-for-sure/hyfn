@@ -1,14 +1,14 @@
 interface GetStoreFrontsProps extends Omit<MainFunctionProps, 'arg'> {}
 import { ObjectId } from 'mongodb';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { sql } from 'kysely';
 
 interface GetStoreFrontsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 export const getStoreFronts = async ({ arg, client, db }: GetStoreFrontsProps) => {
-  const { country, city, coords, nearby } = arg[0];
-  const { filter: storeType } = arg[1];
-  const lastDoc = arg[2];
+  const { country, city, coords, nearby, filter: storeType, lastDocNumber } = arg[0];
+
   const query =
     nearby && storeType !== 'all'
       ? {
@@ -42,13 +42,18 @@ export const getStoreFronts = async ({ arg, client, db }: GetStoreFrontsProps) =
       : {
           city,
         };
-  const stores = await db
+  var qb = db
     .selectFrom('stores')
     .select(['storeName', 'description', 'image', 'id', 'storeType'])
-    .limit(5)
-    .execute();
+    .limit(5);
+  if (!!storeType && storeType !== 'all') {
+    qb = qb.where('storeType', '@>', [storeType]);
+  }
+  // if(nearby){
+  //   qb.where(sql``)
+  // }
+  const stores = qb.execute();
   return stores;
-  // const stores = await db.selectFrom('stores').selectAll().execute()
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getStoreFronts });

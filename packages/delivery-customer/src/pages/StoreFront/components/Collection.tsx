@@ -8,6 +8,7 @@ import { useGetCollectionProducts } from "pages/Collection/hooks/useGetCollectio
 import React, { useEffect, useRef, useState } from "react";
 
 import { Link } from "react-router-dom";
+import { getPagesLength } from "hyfn-client";
 
 interface CollectionProps {
   collectionName: string;
@@ -33,24 +34,6 @@ const Collection: React.FC<CollectionProps> = ({
   const { setCartInfo, addProductToCart, reduceOrRemoveProductFromCart } =
     useCart();
 
-  // const CustomRightArrow = ({ onClick, ...rest }: any) => {
-  //   const {
-  //     onMove,
-  //     carouselState: { currentSlide, deviceType },
-  //   } = rest;
-  //   // onMove means if dragging or swiping in progress.
-  //   return <Button onClick={() => onClick()} />;
-  // };
-
-  // const CustomLeftArrow = ({ onClick, ...rest }: any) => {
-  //   const {
-  //     onMove,
-  //     carouselState: { currentSlide, deviceType },
-  //   } = rest;
-  //   // onMove means if dragging or swiping in progress.
-  //   return <Button onClick={() => onClick()} />;
-  // };
-
   const elementRef = useRef<HTMLDivElement>(null);
   const isOnScreen = useOnScreen(elementRef);
   const {
@@ -68,6 +51,7 @@ const Collection: React.FC<CollectionProps> = ({
   });
   console.log("🚀 ~ file: Collection.tsx:67 ~ products:", products);
   const [slideIndex, setSlideIndex] = useState(0);
+  const [slideIndexChanged, setSlideIndexChanged] = useState(false);
   useEffect(() => {
     console.log(
       "🚀 ~ file: Collection.tsx:145 ~ index:",
@@ -76,14 +60,13 @@ const Collection: React.FC<CollectionProps> = ({
     );
     if (
       slideIndex ===
-      products?.pages?.flatMap((product) => product)?.length - 1
+        products?.pages?.flatMap((product) => product)?.length - 1 &&
+      slideIndexChanged
     ) {
       fetchNextPage({
-        pageParam:
-          products?.pages[products.pages.length - 1][
-            products?.pages[products.pages.length - 1].length - 1
-          ]?.id,
+        pageParam: getPagesLength(products),
       });
+      setSlideIndexChanged(false);
     }
   }, [slideIndex, products]);
   return (
@@ -120,6 +103,7 @@ const Collection: React.FC<CollectionProps> = ({
             // slideSize={'10%'}
             onSlideChange={(index) => {
               setSlideIndex(index);
+              setSlideIndexChanged(true);
             }}
             // autoPlay={false}
             // autoPlaySpeed={-999999999999}

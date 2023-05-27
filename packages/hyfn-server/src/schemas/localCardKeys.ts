@@ -5,13 +5,12 @@ import * as z from "zod";
 export const localCardKeys = pgTable("local_card_keys", {
   id: uuid("id").defaultRandom().primaryKey(),
 
-  terminalId: varchar("terminal_id"),
+  terminalId: varchar("terminal_id").notNull(),
 
-  merchantId: varchar("merchant_id"),
+  merchantId: varchar("merchant_id").notNull(),
 
-  secretKey: varchar("secret_key"),
+  secretKey: varchar("secret_key").notNull(),
   inUse: boolean("in_use").default(true),
-  storeId: varchar("store_id"),
 });
 
 const schmea = createSelectSchema(localCardKeys);

@@ -143,7 +143,6 @@ const Menu: React.FC = ({ children }) => {
   useEffect(() => {
     scrollTo({ x: 0, y: 0 });
   }, [location]);
-  const sales = data?.sales?.toFixed(2);
 
   const [fixedComponent] = useFixedComponent();
   const FixedComponenet =
@@ -166,18 +165,6 @@ const Menu: React.FC = ({ children }) => {
               alignItems: "center",
             }}
           >
-            {!isMobile && (
-              <Card
-                shadow={"lg"}
-                p={"xs"}
-                // m={'0px 4px'}
-              >
-                <Group sx={{}} position="apart">
-                  <Text>{t("Sales")}</Text>:<Text>{sales || 0}</Text>
-                </Group>{" "}
-              </Card>
-            )}
-
             <Badge color={userDocument?.opened ? "green" : "red"}>
               {userDocument?.opened ? t("Open") : t("Closed")}
             </Badge>

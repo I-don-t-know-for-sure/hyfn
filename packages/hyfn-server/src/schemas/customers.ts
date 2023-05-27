@@ -14,14 +14,14 @@ import * as z from "zod";
 export const customers = pgTable("customers", {
   id: uuid("id").defaultRandom().primaryKey(),
 
-  userId: varchar("user_id"),
-  name: varchar("name"),
-  notificationTokens: varchar("notification_tokens").array(),
+  userId: varchar("user_id").notNull(),
+  name: varchar("name").notNull(),
+  notificationTokens: varchar("notification_tokens").array().notNull(),
   transactionId: uuid("transaction_id"),
-  orderId: varchar("order_id"),
-  addresses: jsonb("addresses").array(),
-  reportsIds: uuid("reports_ids").array(),
-  subscribedToHyfnPlus: boolean("subscribed_to_hyfn_plus"),
+
+  addresses: jsonb("addresses").array().notNull(),
+  reportsIds: uuid("reports_ids").array().notNull(),
+  subscribedToHyfnPlus: boolean("subscribed_to_hyfn_plus").default(false),
   expirationDate: timestamp("expiration_date"),
 });
 const schema = createSelectSchema(customers);

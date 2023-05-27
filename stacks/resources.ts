@@ -1,4 +1,10 @@
-import { Bucket, Function, StackContext, toCdkDuration } from "sst/constructs";
+import {
+  Bucket,
+  Function,
+  RDS,
+  StackContext,
+  toCdkDuration,
+} from "sst/constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as kms from "aws-cdk-lib/aws-kms";
 import * as iam from "aws-cdk-lib/aws-iam";

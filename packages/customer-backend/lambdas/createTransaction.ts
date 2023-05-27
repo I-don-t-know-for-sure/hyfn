@@ -4,19 +4,14 @@ interface CreateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg'>
 import { ObjectId } from 'mongodb';
 import {
   ORDER_TYPE_PICKUP,
-  STORE_STATUS_ACCEPTED,
-  STORE_STATUS_PAID,
-  STORE_STATUS_PENDING,
-  TRANSACTION_TYPE_DRIVER_MANAGMENT,
   adminName,
   hyfnPlusSubscriptionPrice,
   managementPayment,
-  paymentMethods,
   serviceFeePayment,
   storePayment,
   subscriptionPayment,
 } from 'hyfn-types';
-import { v4 as uuidV4 } from 'uuid';
+
 import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
 import { MainFunctionProps, decryptData } from 'hyfn-server';
 import { mainWrapper } from 'hyfn-server';
@@ -238,6 +233,7 @@ const createlocalCardTransaction = async ({
           transactionMethod: 'localCard',
           type,
           numberOfMonths,
+          storeId: adminName,
         })
         .returning('id')
         .executeTakeFirst();

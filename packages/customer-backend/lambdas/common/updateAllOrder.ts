@@ -183,15 +183,17 @@ export const updateAllOrder = async ({
         customerLong: parseFloat(buyerInfo.customerCoords[1]),
         totalCost: parseFloat(totalCost as any),
         serviceFee: parseFloat(serviceFee as any),
-        orderStatus: ['Active'],
+        orderStatus: ['active'],
         storeStatus: ['pending'],
         customerStatus: ['initial'],
         customerId: customerDoc.id,
         storeId: storeId,
+        deliveryFee: 0,
+        reportsIds: [],
 
         ...(orderCart[0].orderType === 'Delivery'
           ? { driverStatus: ['initial'], proposals: [], proposalsIds: [], deliveryFeePaid: false }
-          : {}),
+          : { driverStatus: [], proposals: [], proposalsIds: [] }),
       })
       .returning('id')
       .executeTakeFirst();
@@ -202,6 +204,8 @@ export const updateAllOrder = async ({
         addedProductsDocs.map((product) => ({
           title: product.title,
           // description: product.description,
+          options: product.options || [],
+          hasOptions: product.hasOptions || false,
           price: parseFloat(product.price),
           prevPrice: parseFloat(product.prevPrice),
           images: product.images,
@@ -210,6 +214,7 @@ export const updateAllOrder = async ({
           storeId: storeId,
           orderId: order.id,
           pickupStatus: ['initial'],
+          qtyFound: 0,
         }))
       )
       .execute();

@@ -1,6 +1,6 @@
 export const getProductsForCollectionHandler = async ({ arg, client, db }: MainFunctionProps) => {
   var result;
-  const { country, storeId, collectionId, lastDoc } = arg[0];
+  const { country, storeId, collectionId, lastDocNumber } = arg[0];
   // if (lastDoc) {
   //   result = await client
   //     .db('base')
@@ -39,16 +39,15 @@ export const getProductsForCollectionHandler = async ({ arg, client, db }: MainF
   //   )
   //   .limit(20)
   //   .toArray();
-  const product = await db
+  const products = await db
     .selectFrom('products')
-    .select(['id', 'title'])
+    .select(['id as value', 'title as label'])
     .where('storeId', '=', storeId)
-    .limit(5)
+    .offset(lastDocNumber || 0)
+    .limit(10)
     .execute();
-  result = product.map((product) => {
-    return { value: product.id, label: product.title };
-  });
-  return result;
+
+  return products;
   // Ensures that the client will close when you finish/error
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
 };

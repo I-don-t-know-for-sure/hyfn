@@ -1,10 +1,5 @@
 ('use strict');
-import {
-  MainFunctionProps,
-  mainWrapper,
-  tCollections_products,
-  withTransaction,
-} from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';
 import { ObjectId } from 'mongodb';
 interface UpdateCollectionProps extends Omit<MainFunctionProps, 'arg'> {
@@ -19,9 +14,7 @@ export const updateCollectionHandler = async ({
   const {
     title,
     description,
-    collectionType,
-    mustMatch,
-    conditionArray,
+
     isActive,
     addedProductsArray,
     removedProductsArray,

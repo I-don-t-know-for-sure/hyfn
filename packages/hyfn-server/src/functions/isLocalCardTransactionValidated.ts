@@ -28,7 +28,11 @@ export const isLocalCardTransactionValidated = async ({
       )
     : amountFromTransaction;
   const transactionDocAmount = parseInt(
-    /* Math.round */ (amountWithFee * 1000).toFixed(3)
+    Math.round(amountWithFee * 1000).toFixed(3)
+  );
+  console.log(
+    "🚀 ~ file: isLocalCardTransactionValidated.ts:33 ~ transactionDocAmount:",
+    transactionDocAmount
   );
   const now = new Date();
 
@@ -76,6 +80,10 @@ export const isLocalCardTransactionValidated = async ({
 
   const transactionAmount = parseInt(
     result.data.Transactions[0].DateTransactions[0].Amnt
+  );
+  console.log(
+    "🚀 ~ file: isLocalCardTransactionValidated.ts:81 ~ transactionAmount:",
+    transactionAmount
   );
 
   if (!equal(transactionAmount, transactionDocAmount)) {

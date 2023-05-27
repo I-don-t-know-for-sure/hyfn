@@ -30,6 +30,7 @@
     "aws-jwt-verify": "^4.0.0",
     "drizzle-orm": "^0.25.4",
     "drizzle-zod": "^0.4.1",
+    "kysely": "^0.25.0",
     "pg": "^8.10.0",
     "uuid": "^9.0.0"
   }

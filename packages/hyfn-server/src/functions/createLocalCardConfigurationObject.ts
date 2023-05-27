@@ -34,7 +34,7 @@ export function createLocalCardConfigurationObject({
   const configurationObject = {
     MID: MerchantId,
     TID: TerminalId,
-    AmountTrxn: parseInt(Math.round(amountWithFee * 1000).toFixed(2)),
+    AmountTrxn: parseInt(Math.round(amountWithFee * 1000).toFixed(3)),
     MerchantReference: transactionId,
     TrxDateTime: `${now.getTime()}`,
 

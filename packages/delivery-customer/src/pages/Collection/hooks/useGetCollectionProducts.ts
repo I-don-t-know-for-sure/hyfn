@@ -20,7 +20,7 @@ export const useGetCollectionProducts = ({
 
   return useInfiniteQuery(
     [COLLECTION, collectionid],
-    async ({ pageParam = "" }) => {
+    async ({ pageParam = 0 }) => {
       console.log(
         // JSON.stringify([{ country, storefront, collectionid }, chunck])
         pageParam
@@ -28,7 +28,15 @@ export const useGetCollectionProducts = ({
       console.log(pageParam);
 
       const result = await fetchUtil({
-        reqData: [{ country, storefront, collectionid, documents }, pageParam],
+        reqData: [
+          {
+            country,
+            storefront,
+            collectionid,
+            documents,
+            lastDocNumber: pageParam,
+          },
+        ],
         url: `${import.meta.env.VITE_APP_BASE_URL}/getCollectionProducts`,
       });
       return result;

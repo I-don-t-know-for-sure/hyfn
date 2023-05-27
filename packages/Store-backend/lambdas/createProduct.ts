@@ -46,13 +46,15 @@ export const createProductHandler = async ({ arg, client, userId, db }: CreatePr
         description: description,
         storeId: id,
         city,
-        options: modifiedOptions,
+        options: modifiedOptions || [],
         isActive,
         hasOptions: hasOptions,
         images: images,
         price: price,
         prevPrice: prevPrice,
         currency: currency,
+        measurementSystem: measurementSystem,
+        whiteBackgroundImages: [],
       })
       .returning('id')
       .executeTakeFirst();

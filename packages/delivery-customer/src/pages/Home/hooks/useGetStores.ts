@@ -15,17 +15,17 @@ const useGetStores = ({
   nearby?: boolean;
   city: string;
 }) => {
-  const [location] = useLocation();
+  const [{ coords }] = useLocation();
   const { userDocument } = useUser();
   // const { data } = useRefreshCustomUserData();
   console.log(location);
 
   return useInfiniteQuery(
     [STORES, nearby, filter, city],
-    async ({ pageParam = "" }) => {
+    async ({ pageParam = 0 }) => {
       return await fetchUtil({
         url: `${import.meta.env.VITE_APP_BASE_URL}/getStoreFronts`,
-        reqData: [{ ...location, nearby }, { filter }, pageParam],
+        reqData: [{ coords, nearby, filter, lastDocNumber: pageParam }],
       });
     },
     {

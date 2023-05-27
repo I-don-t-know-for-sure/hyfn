@@ -2,7 +2,7 @@ interface FindOrdersProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-import { MainFunctionProps, buildJson, mainWrapper, tStores } from 'hyfn-server';
+import { MainFunctionProps, buildJson, mainWrapper, tOrders, tStores } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { ORDER_TYPE_DELIVERY, COLLECTION, USER_TYPE_DRIVER } from 'hyfn-types';
 import { sql } from 'kysely';
@@ -20,9 +20,13 @@ export const mainFunction = async ({ arg, client, event, db }: MainFunctionProps
     .select(buildJson(tStores, '*').as('stores'))
     .groupBy('orders.id')
     .groupBy('stores.id')
-    // .where(({ not, cmpr }) =>
-    //   not(cmpr('driverStatus', '@>', sql`array[${sql.join(['set'])}]::varchar[]`))
-    // )
+    .where(({ not, cmpr, and }) =>
+      and([
+        not(cmpr('driverStatus', '@>', sql`array[${sql.join(['set'])}]::varchar[]`)),
+
+        cmpr('orderType', '=', 'Delivery'),
+      ])
+    )
     .limit(5)
     .execute();
 

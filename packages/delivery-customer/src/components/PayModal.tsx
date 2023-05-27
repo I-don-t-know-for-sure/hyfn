@@ -17,6 +17,7 @@ import {
   serviceFeePayment,
   managementPayment,
   storePayment,
+  currencies,
 } from "hyfn-types";
 import { add } from "mathjs";
 import TransactionList from "components/TransactionList";
@@ -121,12 +122,12 @@ const PayModal: React.FC<PayModalProps> = ({
           <Stack m={"sm"}>
             <Group position="apart">
               <Text>{t("Order total")}</Text>
-              <Text>{`${store.currency} ${orderTotal}`}</Text>
+              <Text>{`${currencies[store.country]} ${orderTotal}`}</Text>
             </Group>
             <Group position="apart">
               <Text>{t("Service fee")}</Text>
               <Stack spacing={2}>
-                <Text>{`${store.currency} ${add(
+                <Text>{`${currencies[store.country]} ${add(
                   orderSaleFee,
                   order.serviceFee
                 )}`}</Text>
@@ -152,40 +153,45 @@ const PayModal: React.FC<PayModalProps> = ({
                 )}
               </Stack>
             </Group>
-            <Group position="apart">
-              <Text>{t("Delivery fee")}</Text>
-              <Stack spacing={2}>
-                <Text>{`${store.currency} ${order.deliveryFee}`}</Text>
-                {!!order.deliveryFee && (
-                  <Button
-                    onClick={() => {
-                      createTransaction({
-                        type: managementPayment,
-                        country,
-                        orderId,
-                      });
-                    }}
-                  >
-                    {t("Pay")}
-                  </Button>
-                  // <PayWithLocalCardButton
-                  //   createLocalCardTransaction={
-                  //     createManagementLocalCardTransaction
-                  //   }
-                  //   flag={LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT}
-                  //   isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
-                  //   orderId={orderId}
-                  //   storeId={storeId}
-                  // />
-                )}
-              </Stack>
-            </Group>
-
+            {!!order.deliveryFee && (
+              <Group position="apart">
+                <Text>{t("Delivery fee")}</Text>
+                <Stack spacing={2}>
+                  <Text>{`${currencies[store.country]} ${
+                    order.deliveryFee
+                  }`}</Text>
+                  {true && (
+                    <Button
+                      onClick={() => {
+                        createTransaction({
+                          type: managementPayment,
+                          country,
+                          orderId,
+                        });
+                      }}
+                    >
+                      {t("Pay")}
+                    </Button>
+                    // <PayWithLocalCardButton
+                    //   createLocalCardTransaction={
+                    //     createManagementLocalCardTransaction
+                    //   }
+                    //   flag={LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT}
+                    //   isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
+                    //   orderId={orderId}
+                    //   storeId={storeId}
+                    // />
+                  )}
+                </Stack>
+              </Group>
+            )}
             <Group position="apart">
               <Text>{t("Order Total after fee")}</Text>
 
               <Stack spacing={2}>
-                <Text>{`${store.currency} ${orderTotalAfterFee}`}</Text>
+                <Text>{`${
+                  currencies[store.country]
+                } ${orderTotalAfterFee}`}</Text>
                 {!!orderTotalAfterFee && (
                   <Button
                     onClick={() => {

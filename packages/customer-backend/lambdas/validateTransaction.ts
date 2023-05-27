@@ -103,7 +103,7 @@ export const validateLocalCardTransaction = async ({
         .where('userId', '=', userId)
         .executeTakeFirstOrThrow();
       // create a date and add the number of months from the transaction
-      const date = new Date(customerDoc.expirationDate || undefined);
+      const date = new Date(customerDoc.expirationDate || new Date());
       date.setMonth(date.getMonth() + transaction.numberOfMonths);
 
       await db

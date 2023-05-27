@@ -32,7 +32,7 @@ export const getProducts = async ({ arg, client, userId, db }: MainFunctionProps
     .select(['id', 'title', 'isActive'])
     .where('storeId', '=', id)
     .offset(lastDocNumber || 0)
-    .limit(1)
+    .limit(10)
     .execute();
   return products;
 };

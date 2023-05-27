@@ -11,19 +11,21 @@ import * as z from "zod";
 export const drivers = pgTable("drivers", {
   id: uuid("id").defaultRandom().primaryKey(),
 
-  driverName: varchar("driver_name"),
+  driverName: varchar("driver_name").notNull(),
 
-  driverPhone: varchar("driver_phone"),
-  tarnsportationMethod: varchar("tarnsportation_method", { enum: ["Car"] }),
-  userId: varchar("user_id"),
+  driverPhone: varchar("driver_phone").notNull(),
+  tarnsportationMethod: varchar("tarnsportation_method", {
+    enum: ["Car"],
+  }).notNull(),
+  userId: varchar("user_id").notNull(),
   verified: boolean("verified").default(false),
-  balance: decimal("balance"),
+  balance: decimal("balance").notNull(),
   driverManagement: varchar("driver_management"),
-  notificationTokens: varchar("notification_tokens").array(),
-  usedBalance: decimal("used_balance"),
+  notificationTokens: varchar("notification_tokens").array().notNull(),
+  usedBalance: decimal("used_balance").notNull(),
   // reported: boolean("reported"),
-  reportsIds: uuid("reports_ids").array(),
-  removeDriverAfterOrder: boolean("remove_driver_after_order"),
+  reportsIds: uuid("reports_ids").array().notNull(),
+  removeDriverAfterOrder: boolean("remove_driver_after_order").default(false),
 });
 
 const schema = createSelectSchema(drivers);

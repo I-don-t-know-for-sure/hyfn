@@ -17,6 +17,7 @@ import { useGetCollectionProducts } from "../hooks/useGetCollectionProducts";
 import { useGetProductsForCollection } from "../hooks/useGetProductsForCollection";
 
 import { CollectionCard } from "../types";
+import { getPagesLength } from "hyfn-client";
 
 interface ProductsSelectionProps extends CollectionCard {
   collectionId?: string;
@@ -208,10 +209,7 @@ const ProductsSelection: React.FC<ProductsSelectionProps> = ({
               <Button
                 onClick={() => {
                   fetchNextProducts({
-                    pageParam:
-                      products?.pages[products?.pages?.length - 1][
-                        products?.pages[products.pages?.length - 1]?.length - 1
-                      ]?.value,
+                    pageParam: getPagesLength(products),
                   });
                 }}
               >

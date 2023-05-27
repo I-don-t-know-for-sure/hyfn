@@ -12,30 +12,34 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
-import { citiesArray } from "hyfn-types";
+import { citiesArray, measurementSystemArray } from "hyfn-types";
 import * as z from "zod";
 // these are created when a customer makes an order to keep things
 // stable and we are able to keep everything even after a store deletes a product
 export const orderProducts = pgTable("order_products", {
   id: uuid("id").defaultRandom().primaryKey(),
-  storeId: varchar("store_id", { enum: ["test"] }),
-  price: numeric("price"),
-  orderId: uuid("order_id"),
-  currency: varchar("currency", { enum: [""] }),
-  prevPrice: numeric("prev_price"),
-  title: varchar("title"),
+  storeId: varchar("store_id").notNull(),
+  price: numeric("price").notNull(),
+  orderId: uuid("order_id").notNull(),
 
-  options: jsonb("options"),
-  measurementSystem: varchar("measurement_system", { enum: [""] }),
+  prevPrice: numeric("prev_price").notNull(),
+  title: varchar("title").notNull(),
 
-  hasOptions: boolean("has_options").default(false),
+  options: jsonb("options").notNull(),
+  measurementSystem: varchar("measurement_system", {
+    enum: measurementSystemArray,
+  }),
+
+  hasOptions: boolean("has_options").default(false).notNull(),
   pickupStatus: varchar("pickup_status", {
     enum: ["initial", "pickedUp", "notFound"],
-  }).array(),
-  qtyFound: numeric("qty_found"),
-  images: varchar("images").array(),
-  city: varchar("city", { enum: citiesArray }),
-  qty: numeric("qty"),
+  })
+    .array()
+    .notNull(),
+  qtyFound: numeric("qty_found").notNull(),
+  images: varchar("images").array().notNull(),
+
+  qty: numeric("qty").notNull(),
   instructions: varchar("instructions"),
 });
 
@@ -47,15 +51,19 @@ export const zOrderProducts = z.object({
   description: z.string(),
 
   price: z.number(),
-  currency: z.enum([""]),
+
   prevPrice: z.number(),
   qtyFound: z.number(),
   hasOptions: z.boolean(),
   pickupStatus: z.array(z.enum(["initial", "pickedUp", "notFound"])),
   options: z.array(
     z.object({
+      minimumNumberOfOptionsForUserToSelect: z.number(),
+      maximumNumberOfOptionsForUserToSelect: z.number(),
+      key: z.string(),
+      isRequired: z.boolean(),
       optionName: z.string(),
-      values: z.array(z.any()),
+      optionValues: z.array(z.any()),
     })
   ),
 });

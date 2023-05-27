@@ -16,13 +16,13 @@ export const useGetProductsForCollection = ({
 
   return useInfiniteQuery(
     [allProductsForCollection, collectionId],
-    async ({ pageParam }) => {
+    async ({ pageParam = 0 }) => {
       try {
         const result = await fetchUtil({
           reqData: [
             {
               storeId: userDocument.id,
-              lastDoc: pageParam,
+              lastDocNumber: pageParam,
               collectionId,
             },
           ],

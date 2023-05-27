@@ -24,38 +24,40 @@ export const orders = pgTable("orders", {
 
   storeStatus: varchar("store_status", {
     enum: ["pending", "accepted", "paid", "preparing", "ready", "pickedUp"],
-  }).array(),
-  storeId: uuid("store_id"),
+  })
+    .array()
+    .notNull(),
+  storeId: uuid("store_id").notNull(),
   driverId: uuid("driver_id"),
-  customerId: uuid("customer_id"),
-  customerStatus: varchar("customer_status").array(),
-  driverStatus: varchar("driver_status").array(),
+  customerId: uuid("customer_id").notNull(),
+  customerStatus: varchar("customer_status").array().notNull(),
+  driverStatus: varchar("driver_status").array().notNull(),
   storePickupConfirmation: uuid("store_pickup_confirmation").defaultRandom(),
   paymentWindowCloseAt: timestamp("payment_window_close_at"),
 
-  customerLat: numeric("customer_lat"),
-  customerLong: numeric("customer_long"),
+  customerLat: numeric("customer_lat").notNull(),
+  customerLong: numeric("customer_long").notNull(),
   customerAddress: varchar("customer_address"),
 
   city: varchar("city", { enum: citiesArray }),
-  orderCost: numeric("order_cost"),
-  storeServiceFee: numeric("store_service_fee"),
-  deliveryFee: numeric("delivery_fee"),
+  orderCost: numeric("order_cost").notNull(),
+  storeServiceFee: numeric("store_service_fee").notNull(),
+  deliveryFee: numeric("delivery_fee").notNull(),
   orderDate: timestamp("order_date").defaultNow(),
   deliveryDate: timestamp("delivery_date").defaultNow(),
-  serviceFee: numeric("service_fee"),
+  serviceFee: numeric("service_fee").notNull(),
   serviceFeePaid: boolean("service_fee_paid").default(false),
-  orderType: varchar("order_type", { enum: ["Delivery", "Pickup"] }),
-  proposals: jsonb("proposals").array(),
-  totalCost: numeric("total_cost"),
+  orderType: varchar("order_type", { enum: ["Delivery", "Pickup"] }).notNull(),
+  proposals: jsonb("proposals").array().notNull(),
+  totalCost: numeric("total_cost").notNull(),
   confirmationCode: uuid("confirmation_code").defaultRandom(),
-  proposalsIds: varchar("proposals_ids").array(),
+  proposalsIds: varchar("proposals_ids").array().notNull(),
   acceptedProposal: varchar("accepted_proposal"),
   driverManagement: varchar("driver_management"),
 
-  orderStatus: varchar("order_status").array(),
-  reportsIds: uuid("reports_ids").array(),
-  deliveryFeePaid: boolean("delivery_fee_paid"),
+  orderStatus: varchar("order_status").array().notNull(),
+  reportsIds: uuid("reports_ids").array().notNull(),
+  deliveryFeePaid: boolean("delivery_fee_paid").default(false),
 });
 
 const schema = createSelectSchema(orders);

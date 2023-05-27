@@ -12,28 +12,27 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import { citiesArray } from "hyfn-types";
+import { citiesArray, measurementSystemArray } from "hyfn-types";
 import * as z from "zod";
 
 export const products = pgTable("products", {
   id: uuid("id").defaultRandom().primaryKey(),
-  storeId: uuid("store_id"),
-  price: numeric("price"),
+  storeId: uuid("store_id").notNull(),
+  price: numeric("price").notNull(),
 
-  currency: varchar("currency", { enum: [""] }),
-  prevPrice: numeric("prev_price"),
-  title: varchar("title"),
-  description: varchar("description"),
-  pricing: jsonb("pricing"),
+  prevPrice: numeric("prev_price").notNull(),
+  title: varchar("title").notNull(),
+  description: varchar("description").notNull(),
 
-  options: jsonb("options").array(),
-  measurementSystem: varchar("measurement_system", { enum: [""] }),
-  whiteBackgroundImages: varchar("white_background_images").array(),
+  options: jsonb("options").array().notNull(),
+  measurementSystem: varchar("measurement_system", {
+    enum: measurementSystemArray,
+  }).notNull(),
+  whiteBackgroundImages: varchar("white_background_images").array().notNull(),
   isActive: boolean("is_active").default(false),
   hasOptions: boolean("has_options").default(false),
 
-  images: varchar("images").array(),
-  city: varchar("city", { enum: citiesArray }),
+  images: varchar("images").array().notNull(),
 });
 
 const schema = createInsertSchema(products);
@@ -44,7 +43,7 @@ export const zProduct = z.object({
   description: z.string(),
 
   price: z.number(),
-  currency: z.enum([""]),
+
   prevPrice: z.number(),
 
   options: z.array(

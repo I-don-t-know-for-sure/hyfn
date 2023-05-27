@@ -14,6 +14,9 @@ export const createUserDocument = async ({ arg, client, userId, db }: MainFuncti
     .values({
       userId,
       name: customerInfo.name,
+      addresses: [],
+      notificationTokens: [],
+      reportsIds: [],
     })
     .executeTakeFirstOrThrow();
   result = 'success';

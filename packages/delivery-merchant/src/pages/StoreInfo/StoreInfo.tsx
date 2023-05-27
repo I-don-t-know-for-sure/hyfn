@@ -71,7 +71,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
         description: data.description,
         storeType: data.storeType || data.businessType,
         storePhone: data.storePhone || data.businessPhone,
-        coords: `${data?.coords?.coordinates[1]},${data?.coords?.coordinates[0]}`,
+        coords: `${data?.lat},${data?.long}`,
         // coords: "",
         image: data.image,
         address: data?.address,

@@ -1,5 +1,5 @@
 ('use strict');
-import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { currencies, gibbrish } from 'hyfn-types';
 import { re } from 'mathjs';
 interface CreateStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {
@@ -12,6 +12,7 @@ export const createStoreDocumentHandler = async ({
   userId,
 }: MainFunctionProps) => {
   const storeInfo = arg[0];
+  console.log('🚀 ~ file: createStoreDocument.ts:15 ~ storeInfo:', storeInfo);
   const storeName = storeInfo.storeName;
   const storeType = storeInfo.storeType.includes('Restaurant')
     ? ['Restaurant']
@@ -31,6 +32,7 @@ export const createStoreDocumentHandler = async ({
       await db
         .insertInto('stores')
         .values({
+          notificationToken: [],
           acceptingOrders: false,
           address: rest.address,
           balance: 0,

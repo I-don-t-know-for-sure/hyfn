@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "dcc345fb-4402-497e-8c7a-1035fe2208b1",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "6e8e3f83-0c26-4531-b9ce-1925b058c0ca",
+  "prevId": "dcc345fb-4402-497e-8c7a-1035fe2208b1",
   "tables": {
     "collections": {
       "name": "collections",
@@ -605,12 +605,6 @@
         "description": {
           "name": "description",
           "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "pricing": {
-          "name": "pricing",
-          "type": "jsonb",
           "primaryKey": false,
           "notNull": true
         },

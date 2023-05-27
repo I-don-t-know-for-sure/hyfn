@@ -18,7 +18,7 @@ export const getProductsForBulkUpdateHandler = async ({
       'price',
     ])
     .where('id', '=', sql`any(array[${sql.join(products)}]::uuid[])`)
-    .limit(2)
+    .limit(100)
     .execute();
   return productsForBulkUpdate;
 };

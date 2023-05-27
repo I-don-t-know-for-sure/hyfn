@@ -46,7 +46,7 @@ export const updateManagementInfoHandler = async ({
       managementAddress: newInfo.managementAddress,
       managementName: newInfo.managementName,
       managementPhone: newInfo.managementPhone,
-      verified: true,
+      // verified: true,
     })
     .where('userId', '=', userId)
     .executeTakeFirst();
@@ -55,17 +55,8 @@ export const updateManagementInfoHandler = async ({
 interface UpdateManagementInfoProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import {
-  MainFunctionProps,
-  mainWrapper,
-  tDriverManagement,
-  tDriverManagements,
-  takeFisrtOrThrow,
-  takeMany,
-  zDriverManagement,
-} from 'hyfn-server';
-import { MAXIMUM_MANAGEMENT_CUT } from 'hyfn-types';
-import { sql } from 'kysely';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+
 const { equal } = require('mathjs');
 export const handler = async (event) => {
   return await mainWrapper({

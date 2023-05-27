@@ -12,9 +12,9 @@ import { createSelectSchema } from "drizzle-zod";
 import * as z from "zod";
 export const reports = pgTable("reports", {
   id: uuid("id").defaultRandom().primaryKey(),
-  reportDate: timestamp("report_date"),
-  orderId: uuid("order_id"),
-  driverId: uuid("driver_id"),
+  reportDate: timestamp("report_date").defaultNow(),
+  orderId: uuid("order_id").notNull(),
+  driverId: uuid("driver_id").notNull(),
 });
 
 const schema = createSelectSchema(reports);

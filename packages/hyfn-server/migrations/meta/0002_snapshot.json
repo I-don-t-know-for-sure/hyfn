@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "dcc345fb-4402-497e-8c7a-1035fe2208b1",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "9abf7e2f-b889-4633-8e99-9b9ea45c724a",
+  "prevId": "6e8e3f83-0c26-4531-b9ce-1925b058c0ca",
   "tables": {
     "collections": {
       "name": "collections",
@@ -485,7 +485,7 @@
           "name": "service_fee",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "service_fee_paid": {
           "name": "service_fee_paid",
@@ -498,7 +498,7 @@
           "name": "order_type",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "proposals": {
           "name": "proposals",
@@ -584,12 +584,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "currency": {
-          "name": "currency",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "prev_price": {
           "name": "prev_price",
           "type": "numeric",
@@ -605,12 +599,6 @@
         "description": {
           "name": "description",
           "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "pricing": {
-          "name": "pricing",
-          "type": "jsonb",
           "primaryKey": false,
           "notNull": true
         },
@@ -649,12 +637,6 @@
         "images": {
           "name": "images",
           "type": "varchar[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "city": {
-          "name": "city",
-          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         }
@@ -728,12 +710,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
-        },
-        "currency": {
-          "name": "currency",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
         },
         "users_ids": {
           "name": "users_ids",
@@ -994,12 +970,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "currency": {
-          "name": "currency",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "prev_price": {
           "name": "prev_price",
           "type": "numeric",
@@ -1046,12 +1016,6 @@
         "images": {
           "name": "images",
           "type": "varchar[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "city": {
-          "name": "city",
-          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },

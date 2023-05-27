@@ -1,5 +1,6 @@
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { sql } from 'kysely';
 import { ObjectId } from 'mongodb';
 interface DuplicateProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
@@ -15,7 +16,7 @@ export const duplicateProductHandler = async ({
   const storeDoc = await db
     .selectFrom('stores')
     .selectAll()
-    .where('usersIds', '@>', [userId])
+    .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]`)
     .executeTakeFirstOrThrow();
   if (!storeDoc) throw new Error('store not found');
   const storeId = storeDoc.id;

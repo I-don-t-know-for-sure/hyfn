@@ -20,9 +20,8 @@ export const useDuplicateProduct = () => {
   return useMutation(
     async ({ productId, times }: { productId: string; times: number }) => {
       try {
-        const { country } = userDocument.storeDoc as { country: string };
         const result = await fetchUtil({
-          reqData: [{ country, productId, times }],
+          reqData: [{ productId, times }],
           url: `${import.meta.env.VITE_APP_BASE_URL}/duplicateProduct`,
         });
 

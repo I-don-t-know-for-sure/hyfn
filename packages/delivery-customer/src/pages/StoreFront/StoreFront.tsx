@@ -49,19 +49,13 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
     country,
     storefront,
   });
-  console.log(data);
 
-  //const [data, setdata] = useState<storeFront>();
-
-  // const [data, setdata] = useState<storeFront>();
   const [{ coords }] = useLocation();
   const [distance, setDistance] = useState("0");
-  const { customerData } = useCustomerData();
+
   const [inCartStore, setInCartStore] = useState<any>({});
 
   const [orderType, setOrderType] = useState<"Pickup" | "Delivery">("Delivery");
-  const { mutate: likeMutation } = useLikeProduct();
-  console.log(orderType);
 
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
@@ -82,11 +76,6 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
   function deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
-  const { mutate } = useRateStore();
-
-  const rateStore = (rating: number) => {
-    mutate({ country, storeId: storefront, rating, city });
-  };
 
   useEffect(() => {
     if (data && !isLoading && isFetched) {
@@ -108,7 +97,7 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
   useEffect(() => {
     if (isFetched && !isLoading && data) {
       const cartStore = cart[data?.id];
-      //const cartStore = cart.find((store) => store.id === data.id);
+
       setInCartStore(cartStore);
       if (typeof cartStore?.orderType === "string") {
         setOrderType(cartStore?.orderType);
@@ -211,24 +200,7 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
                 >
                   <Text>{data.description}</Text>
                   <Text m={"auto 2px"}>.</Text>
-                  {/* <Text>{data.currentRating}</Text>
-                  
-                  <AiFillStar
-                    style={{
-                      margin: "auto 2px",
-                    }}
-                    size={12}
-                  />
-                  <Text>{data.ratingCount}</Text>
-                  <Text>{t("ratings")}</Text>
-                  <Text
-                    sx={{
-                      height: "100%",
-                    }}
-                    m={"auto 6px"}
-                  >
-                    .
-                  </Text> */}
+
                   <Text>{`${parseFloat(distance).toFixed(2)} km`}</Text>
                 </Box>
                 <Text
@@ -248,49 +220,9 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
                   alignItems: "center",
                 }}
               >
-                {/* <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    margin: '6px auto',
-                  }}
-                >
-                  {' '}
-                  <Chip
-                    checked={orderType === 'Delivery'}
-                    onChange={(e) => {
-                      if (cart[data?.id]) {
-                        changeOrderType(data, 'Delivery', setCartInfo);
-                      }
-                      setOrderType('Delivery');
-                    }}
-                    mr={2}
-                  >
-                    {t('Delivery')}
-                  </Chip>
-                  <Chip
-                    ml={2}
-                    onChange={(e) => {
-                      console.log(data?.storeType.includes('restaurant'), 'hghghghgh');
-                      if (data?.storeType.includes('restaurant')) {
-                        if (cart[data?.id]) {
-                          changeOrderType(data, 'Pickup', setCartInfo);
-                        }
-                        setOrderType('Pickup');
-                      }
-                    }}
-                    checked={orderType === 'Pickup'}
-                  >
-                    {t('Pickup')}
-                  </Chip>
-                </Box> */}
                 <StoreDetailsModal storeDetails={data} />
               </Box>
             </Box>
-            {/* <StarRating
-              customerRating={data.customerRating}
-              onRate={rateStore}
-            /> */}
           </Box>
         </Box>
         {data.collections.map((collection) => {
@@ -306,61 +238,6 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
               collectionId={collection.id}
               storefront={data}
             />
-            // <Box mb={63}>
-            //   <Box
-            //     sx={{
-            //       display: "flex",
-            //       justifyContent: "space-between",
-            //     }}
-            //   >
-            //     <Text weight={700} sx={{ fontSize: "24px" }}>
-            //       {data[collection].collectionName}
-            //     </Text>
-            //     <Button
-            //       variant="subtle"
-            //       component={Link}
-            //       to={`/collection/${storefront}/${data[collection].collectionId}/${country}`}
-            //       state={{ city, country, storeInfo: data }}
-            //     >
-            //       {t("show all")}
-            //     </Button>
-            //   </Box>
-
-            //   <Carousel autoPlay={false}  responsive={responsive}>
-            //     {data[collection].products.map((product) => {
-            //       const addProduct = () => {
-            //         addProductToCart(
-            //           data,
-            //           product,
-            //           setCartInfo,
-            //           city,
-            //           country,
-            //           orderType
-            //         );
-            //       };
-            //       const reduceOrRemoveProduct = () => {
-            //         reduceOrRemoveProductFromCart(data, product, setCartInfo);
-            //       };
-            //       const productUrl = product.hasOptions
-            //         ? `/product/${data.id}/${country}/${city}/${product.id}`
-            //         : `/product/withnotoptions/${data.id}/${country}/${city}/${product.id}`;
-            //       return (
-            //         <Product
-            //           product={product}
-            //           productUrl={productUrl}
-            //           orderType={orderType}
-            //           addProduct={addProduct}
-            //           addedProducts={addedProducts}
-            //           reduceOrRemoveProduct={reduceOrRemoveProduct}
-            //           likeMutation={likeMutation}
-            //           city={city}
-            //           country={country}
-            //           storefront={storefront}
-            //         />
-            //       );
-            //     })}
-            //   </Carousel>
-            // </Box>
           );
         })}
       </Container>

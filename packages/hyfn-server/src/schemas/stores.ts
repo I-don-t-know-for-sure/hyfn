@@ -44,37 +44,37 @@ type Users = {
 
 export const stores = pgTable("stores", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: varchar("user_id"),
+  userId: varchar("user_id").notNull(),
 
   storeType: varchar("store_type", {
     enum: [...storeTypesArray],
-  }).array(),
-  storeName: varchar("store_name"),
-  storePhone: varchar("store_phone"),
+  })
+    .array()
+    .notNull(),
+  storeName: varchar("store_name").notNull(),
+  storePhone: varchar("store_phone").notNull(),
   country: varchar("country", {
     enum: countriesArray,
-  }),
-  city: varchar("city", { enum: citiesArray }),
+  }).notNull(),
+  city: varchar("city", { enum: citiesArray }).notNull(),
 
-  description: varchar("description"),
-  address: varchar("address"),
+  description: varchar("description").notNull(),
+  address: varchar("address").notNull(),
   storeInfoFilled: boolean("store_info_filled").default(false),
-  currency: varchar("currency", { enum: ["LYD"] }),
-  usersIds: uuid("users_ids").array(),
-  users: jsonb("users").array(),
+
+  usersIds: uuid("users_ids").array().notNull(),
+  users: jsonb("users").array().notNull(),
   timeOfPayment: timestamp("time_of_payment"),
   expirationDate: timestamp("expiration_date"),
   numberOfMonths: numeric("number_of_months", { precision: 3, scale: 0 }),
-  // TerminalId: varchar("TerminalId"),
-  // MerchantId: varchar("MerchantId"),
-  // secretKey: varchar("secretKey"),
-  lat: numeric("lat"),
-  long: numeric("long"),
-  opened: boolean("opened").default(false),
-  balance: numeric("balance"),
 
-  image: varchar("image").array(),
-  notificationToken: varchar("notification_token").array(),
+  lat: numeric("lat").notNull(),
+  long: numeric("long").notNull(),
+  opened: boolean("opened").default(false),
+  balance: numeric("balance").notNull(),
+
+  image: varchar("image").array().notNull(),
+  notificationTokens: varchar("notification_tokens").array().notNull(),
   storeOwnerInfoFilled: boolean("store_owner_info_filled").default(false),
   ownerLastName: varchar("owner_last_name"),
   ownerFirstName: varchar("owner_first_name"),
