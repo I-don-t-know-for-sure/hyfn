@@ -15,7 +15,7 @@ import { useMutation, useQueryClient } from "react-query";
 
 import { CollectionCard, CollectionInfo } from "../types";
 import TypeCard from "./TypeCard";
-import { User } from "realm-web";
+
 import StatusCard from "./CollectionCard";
 import { t } from "utils/i18nextFix";
 import fetchUtil from "utils/fetch";

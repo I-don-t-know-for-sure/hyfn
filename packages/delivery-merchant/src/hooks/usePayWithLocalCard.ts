@@ -1,24 +1,23 @@
-import { useEffect } from 'react'
-import hmacSHA256 from 'crypto-js/hmac-sha256'
-import { BSON } from 'realm-web'
+import { useEffect } from "react";
+import hmacSHA256 from "crypto-js/hmac-sha256";
 
 declare global {
   interface Window {
-    Lightbox: any
+    Lightbox: any;
   }
 }
 
 export const usePayWithLocalCard = () => {
   useEffect(() => {
-    const script = document.createElement('script')
-    script.src = import.meta.env.VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL
+    const script = document.createElement("script");
+    script.src = import.meta.env.VITE_APP_MOAMALAT_PAYMEN_GATEWAY_URL;
     // script.async = true;
-    document.body.appendChild(script)
+    document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script)
-    }
-  }, [])
+      document.body.removeChild(script);
+    };
+  }, []);
 
   // useEffect(() => {
   //   if (load) {
@@ -43,4 +42,4 @@ export const usePayWithLocalCard = () => {
   //     window.Lightbox.Checkout.showPaymentPage();
   //   }
   // });
-}
+};

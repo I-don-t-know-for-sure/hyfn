@@ -34,7 +34,7 @@ import { t } from "utils/i18nextFix";
 import { useStoreStateControl } from "hooks/useStoreStateControle";
 
 import { useFixedComponent } from "contexts/fixedComponentContext/FixedComponentProvider";
-import { User } from "realm-web";
+
 import { useUserCheck } from "hooks/useUserCheck";
 import useGetStoreInfo from "hooks/useGetStoreInfo";
 import { useUser } from "contexts/userContext/User";
