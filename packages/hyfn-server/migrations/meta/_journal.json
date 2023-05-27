@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1685096672548,
-      "tag": "0000_chilly_thanos",
-      "breakpoints": false
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1685097294230,
-      "tag": "0001_overrated_joshua_kane",
-      "breakpoints": false
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1685126962758,
-      "tag": "0002_tearful_cobalt_man",
+      "when": 1685147101860,
+      "tag": "0000_sour_korg",
       "breakpoints": false
     }
   ]

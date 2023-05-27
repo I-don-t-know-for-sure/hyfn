@@ -84,9 +84,9 @@ CREATE TABLE IF NOT EXISTS "orders" (
 	"delivery_fee" numeric NOT NULL,
 	"order_date" timestamp DEFAULT now(),
 	"delivery_date" timestamp DEFAULT now(),
-	"service_fee" numeric,
+	"service_fee" numeric NOT NULL,
 	"service_fee_paid" boolean DEFAULT false,
-	"order_type" varchar,
+	"order_type" varchar NOT NULL,
 	"proposals" jsonb[] NOT NULL,
 	"total_cost" numeric NOT NULL,
 	"confirmation_code" uuid DEFAULT gen_random_uuid(),
@@ -102,18 +102,15 @@ CREATE TABLE IF NOT EXISTS "products" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"store_id" uuid NOT NULL,
 	"price" numeric NOT NULL,
-	"currency" varchar NOT NULL,
 	"prev_price" numeric NOT NULL,
 	"title" varchar NOT NULL,
 	"description" varchar NOT NULL,
-	"pricing" jsonb NOT NULL,
 	"options" jsonb[] NOT NULL,
 	"measurement_system" varchar NOT NULL,
 	"white_background_images" varchar[] NOT NULL,
 	"is_active" boolean DEFAULT false,
 	"has_options" boolean DEFAULT false,
-	"images" varchar[] NOT NULL,
-	"city" varchar NOT NULL
+	"images" varchar[] NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "stores" (
@@ -127,7 +124,6 @@ CREATE TABLE IF NOT EXISTS "stores" (
 	"description" varchar NOT NULL,
 	"address" varchar NOT NULL,
 	"store_info_filled" boolean DEFAULT false,
-	"currency" varchar NOT NULL,
 	"users_ids" uuid[] NOT NULL,
 	"users" jsonb[] NOT NULL,
 	"time_of_payment" timestamp,
@@ -174,7 +170,6 @@ CREATE TABLE IF NOT EXISTS "order_products" (
 	"store_id" varchar NOT NULL,
 	"price" numeric NOT NULL,
 	"order_id" uuid NOT NULL,
-	"currency" varchar NOT NULL,
 	"prev_price" numeric NOT NULL,
 	"title" varchar NOT NULL,
 	"options" jsonb NOT NULL,
@@ -183,7 +178,6 @@ CREATE TABLE IF NOT EXISTS "order_products" (
 	"pickup_status" varchar[] NOT NULL,
 	"qty_found" numeric NOT NULL,
 	"images" varchar[] NOT NULL,
-	"city" varchar NOT NULL,
 	"qty" numeric NOT NULL,
 	"instructions" varchar
 );
