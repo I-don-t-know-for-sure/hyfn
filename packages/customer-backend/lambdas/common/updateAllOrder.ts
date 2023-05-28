@@ -33,7 +33,7 @@ export const updateAllOrder = async ({
     }
 
     var storesArray: any[] = [];
-    console.log('🚀 ~ file: utils.js ~ line 140 ~ updateAllOrder ~ storesArray', storesArray);
+
     for (let i = 0; i < orderCart.length; i++) {
       const store = orderCart[i];
 
@@ -42,27 +42,21 @@ export const updateAllOrder = async ({
         .selectAll()
         .where('id', '=', store.id)
         .executeTakeFirstOrThrow();
+      if (!storeDoc.acceptingOrders) throw new Error('store is not accepting orders');
       storeId = storeDoc.id;
-      // if (storeDoc.city !== city || storeDoc.country !== country) {
-      //   throw new Error('location do not match');
-      // }
-      // // const currency = storeDoc.currency
-      // if (store.country !== country && store.city !== city) {
-      //   throw new Error('can not order from different cities or countries ');
-      // }
 
-      // if (store.orderType === 'Pickup') {
-      //   continue;
-      // }
+      // we will remove this or add another condition when we start allowing stores to have their own drivers
+      if (store.orderType === 'Delivery' && storeDoc.storeType.includes('restaurant')) {
+        throw new Error('Restaurants can  not take delivery orders yet');
+      }
       var addedProductsDocs: any[] = [];
       if (storeDoc.expirationDate < new Date()) {
         throw new Error('expired subscription');
       }
-      console.log(storeDoc, 'ddd');
+
       for (let x = 0; x < store.addedProducts.length; x++) {
         console.log(addedProductsDocs);
         const product = store.addedProducts[x];
-        console.log('🚀 ~ file: utils.js:171 ~ updateAllOrder ~ product:', product);
 
         const productDoc = await trx
           .selectFrom('products')

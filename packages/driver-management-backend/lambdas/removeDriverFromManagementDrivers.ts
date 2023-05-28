@@ -1,8 +1,8 @@
 export const removeDriverFromManagementDriversHandler = async ({
   arg,
-  client,
+
   userId,
-  session,
+
   db,
 }: MainFunctionProps) => {
   const { driverId } = arg[0];
@@ -12,8 +12,7 @@ export const removeDriverFromManagementDriversHandler = async ({
     .selectAll()
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
-  const { id, verified } = userDocument;
-  const managementId = id.toString();
+  const { id } = userDocument;
 
   const driverDoc = await db
     .selectFrom('drivers')
@@ -24,36 +23,19 @@ export const removeDriverFromManagementDriversHandler = async ({
   if (!storeTrustsDriver) {
     throw new Error('this driver is not in your list');
   }
-  // const activeOrders = await client
-  //   .db('base')
-  //   .collection('orders')
-  //   .find(
-  //     {
-  //       status: {
-  //         $elemMatch: {
-  //          id: id.toString(),
-  //           userType: USER_TYPE_DRIVER,
-  //           status: { $ne: USER_STATUS_DELIVERED },
-  //         },
-  //       },
-  //     },
-  //     { session }
-  //   )
-  //   .limit(1)
-  //   .toArray();
+
   const activeOrders = await db
     .selectFrom('orders')
     .select('id')
     .where(({ and, cmpr, not }) =>
       and([
         cmpr('driverId', '=', driverDoc.id),
-        not(
-          cmpr('orderStatus', '@>', sql`array[${sql.join(['delivered'] as tOrder['orderStatus'])}]`)
-        ),
+        not(cmpr('orderStatus', '@>', sql`array[${sql.join(['delivered'])}]::varchar[]` as any)),
       ])
     )
     .limit(1)
     .execute();
+
   if (activeOrders) {
     await db
       .updateTable('drivers')
@@ -62,7 +44,7 @@ export const removeDriverFromManagementDriversHandler = async ({
       })
       .where('id', '=', driverId)
       .execute();
-    return 'driver will be removed after they delivers their orders';
+    return 'driver will be removed after they deliver their orders';
   }
 
   await db

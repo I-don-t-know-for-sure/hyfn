@@ -32,7 +32,7 @@ const createLocalCardTransactionForWallet = async ({
       amount,
       storeId: adminName,
       transactionDate: now,
-
+      transactionMethod: 'localCard',
       type: 'storeWallet',
       status: ['initial'],
     })

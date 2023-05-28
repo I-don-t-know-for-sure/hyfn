@@ -14,8 +14,6 @@ interface BulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 export const bulkUpdateHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
-  var result;
-
   const { productsArray } = arg[0];
   // const storeDoc = await db
   //   .selectFrom('stores')
@@ -56,8 +54,7 @@ export const bulkUpdateHandler = async ({ arg, client, userId, db }: MainFunctio
             'images',
             'options',
             'hasOptions',
-            'city',
-            'currency',
+
             '_',
           ] satisfies (keyof typeof tProducts)[]
         ).includes(key as any)
@@ -77,8 +74,6 @@ export const bulkUpdateHandler = async ({ arg, client, userId, db }: MainFunctio
       measurementSystem: sql.raw(updateObj[tProducts.measurementSystem]),
     })
     .execute();
-
-  return result;
 };
 export const handler = async (event, ctx, callback) => {
   const response = await mainWrapper({ ctx, event, callback, mainFunction: bulkUpdateHandler });

@@ -16,12 +16,23 @@ export const openAndCloseStoreHandler = async ({
     const storeDoc = await trx
       .selectFrom('stores')
 
-      .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]`)
+      .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]` as any)
       .innerJoin('localCardKeys', 'localCardKeys.id', 'localCardApiKeyId')
       .selectAll('stores')
       .select(['inUse', 'localCardKeys.id as cardId'])
       .executeTakeFirstOrThrow();
 
+    const activeOrders = await db
+      .selectFrom('orders')
+      .where('storeId', '=', storeDoc.id)
+      .where(({ not, cmpr }) =>
+        not(cmpr('orderStatus', '@>', sql`array[${sql.join(['delivered'])}]::varchar[]` as any))
+      )
+      .select('id')
+      .limit(1)
+      .execute();
+
+    if (activeOrders.length > 0) throw new Error('you still have active orders');
     if (!storeDoc.localCardApiKeyId) {
       throw new Error('no payment method');
     }

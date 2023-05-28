@@ -6,38 +6,6 @@ export const updateManagementInfoHandler = async ({
   db,
 }: MainFunctionProps) => {
   const { balance, usedBalance, ...newInfo } = arg[0];
-  // const newCut = parseFloat(newInfo.managementCut);
-
-  const userDocument = await db
-    .selectFrom('driverManagements')
-    .selectAll()
-    .where('userId', '=', userId)
-    .executeTakeFirstOrThrow();
-
-  const { /*managementCut*/ id } = userDocument;
-  // const newManagementCut = newCut
-  //   ? newCut === 1
-  //     ? 1
-  //     : newCut >= MAXIMUM_MANAGEMENT_CUT
-  //     ? MAXIMUM_MANAGEMENT_CUT
-  //     : newCut
-  //   : managementCut;
-  const driverManagementId = id.toString();
-  //     if (
-  //       !equal(
-  //         parseFloat(newManagementCut.toFixed(2)),
-  //         parseInt(managementCut))
-  //       )
-  //      {
-  //       await client.db('generalData').collection('drivers').updateMany( { driverManagement: driverManagementId },
-  //  {
-  //           $set: {
-  //             managementCut: parseFloat(newManagementCut.toFixed(2)),
-  //           },
-  //         },
-  //  { session },
-  //       );
-  //     }
 
   await db
     .updateTable('driverManagements')
@@ -57,7 +25,6 @@ interface UpdateManagementInfoProps extends Omit<MainFunctionProps, 'arg'> {
 }
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
-const { equal } = require('mathjs');
 export const handler = async (event) => {
   return await mainWrapper({
     event,

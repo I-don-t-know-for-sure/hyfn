@@ -41,9 +41,6 @@ const updateProposal = async ({ arg, client, userId, db }: UpdateProposalProps) 
   if (orderDoc.acceptedProposal) {
     throw new Error('customer already accepted a proposal');
   }
-  if (smaller(driverDoc.balance, orderDoc.orderCost)) {
-    throw new Error('driver does not have enough balance');
-  }
 
   const updatedProposals = orderDoc.proposals.map((proposal) => {
     if (proposal.driverId === driverDoc.id) {

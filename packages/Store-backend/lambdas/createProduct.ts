@@ -45,14 +45,14 @@ export const createProductHandler = async ({ arg, client, userId, db }: CreatePr
         title: title,
         description: description,
         storeId: id,
-        city,
+
         options: modifiedOptions || [],
         isActive,
         hasOptions: hasOptions,
         images: images,
         price: price,
         prevPrice: prevPrice,
-        currency: currency,
+
         measurementSystem: measurementSystem,
         whiteBackgroundImages: [],
       })

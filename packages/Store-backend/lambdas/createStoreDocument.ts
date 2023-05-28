@@ -32,7 +32,7 @@ export const createStoreDocumentHandler = async ({
       await db
         .insertInto('stores')
         .values({
-          notificationToken: [],
+          notificationTokens: [],
           acceptingOrders: false,
           address: rest.address,
           balance: 0,
@@ -42,14 +42,14 @@ export const createStoreDocumentHandler = async ({
           city: city,
           country: country,
           opened: false,
-          image: [''],
+          image: [],
           usersIds: [userId],
           users: [{ userType: 'owner', userId: userId }],
           storeName: storeName,
           description: rest.description,
           storeType: storeType,
           storePhone: storePhone,
-          currency: currencies[country],
+
           monthlySubscriptionPaid: false,
         })
         .executeTakeFirst();

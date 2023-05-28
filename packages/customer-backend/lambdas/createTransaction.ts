@@ -66,9 +66,9 @@ const createlocalCardTransaction = async ({
       if (customerDoc.id !== orderDoc.customerId) {
         throw new Error('user id does not match');
       }
-      // if (orderDoc?.serviceFeePaid) {
-      //   throw new Error('service fee already paid');
-      // }
+      if (orderDoc?.serviceFeePaid) {
+        throw new Error('service fee already paid');
+      }
       const amount = orderDoc.serviceFee;
 
       const now = new Date();
@@ -139,12 +139,11 @@ const createlocalCardTransaction = async ({
       if (orderDoc.storeStatus.includes('paid')) {
         throw new Error('store is paid');
       }
-
-      const now = new Date();
-
       if (!orderDoc.storeStatus.includes('accepted')) {
         throw new Error('Store did not accept order yet');
       }
+
+      const now = new Date();
       const paymentWindowCloseAt = new Date(orderDoc?.paymentWindowCloseAt);
       paymentWindowCloseAt.setHours(paymentWindowCloseAt.getHours() + 2);
 
@@ -188,7 +187,7 @@ const createlocalCardTransaction = async ({
           customerId,
           orderId,
           storeId,
-          // paymentMethod
+
           transactionMethod: 'localCard',
 
           amount: amountToPay,
@@ -301,6 +300,7 @@ const createlocalCardTransaction = async ({
           status: ['initial'],
           orderId,
           type: 'managementPayment',
+          transactionMethod: 'localCard',
         })
         .returning('id')
         .executeTakeFirst();
