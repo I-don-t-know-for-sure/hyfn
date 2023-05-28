@@ -54,7 +54,7 @@ const UserProvider: React.FC = ({ children }) => {
           return;
         }
       }
-      setUserDocument(data);
+      setUserDocument(data as any);
     }
   }, [isLoading, isFetched, data]);
 

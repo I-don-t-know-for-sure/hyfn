@@ -6,7 +6,6 @@ interface CreateUserDocumentProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
 export const createUserDocument = async ({ arg, client, userId, db }: MainFunctionProps) => {
-  var result;
   const { country, ...customerInfo } = arg[0];
 
   await db
@@ -19,8 +18,7 @@ export const createUserDocument = async ({ arg, client, userId, db }: MainFuncti
       reportsIds: [],
     })
     .executeTakeFirstOrThrow();
-  result = 'success';
-  return result;
+  return 'success';
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: createUserDocument });

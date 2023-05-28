@@ -1,28 +1,55 @@
+import { acceptProposal } from './acceptProposal';
+import { createUserDocument } from './createUserDocument';
 import { getStoreFronts } from './getStoreFronts';
-type LambdaHandlers = {
-  createOrderData: {
+import { updateUserDocumentHandler } from './updateUserDocument';
+export type LambdaHandlers = {
+  getStoreFronts: {
     arg: Parameters<typeof getStoreFronts>['0']['arg'];
-    return: {
-      name: string;
-    };
+    return: ReturnType<typeof getStoreFronts>;
+  };
+  acceptProposal: {
+    arg: Parameters<typeof acceptProposal>['0']['arg'];
+    return: ReturnType<typeof acceptProposal>;
+  };
+  createCustomer: {
+    arg: Parameters<typeof createUserDocument>['0']['arg'];
+    return: ReturnType<typeof createUserDocument>;
+  };
+  updateCustomer: {
+    arg: Parameters<typeof updateUserDocumentHandler>['0']['arg'];
+    return: ReturnType<typeof updateUserDocumentHandler>;
   };
 };
-type CustomerFunction<T extends keyof LambdaHandlers> = (
-  arg: LambdaHandlers[T]['arg']
-) => Promise<LambdaHandlers[T]['return']>;
-export const callAPI = async <T extends keyof LambdaHandlers>({
-  arg,
-  url,
-}: {
-  url: T;
-  arg: Parameters<CustomerFunction<T>>['0'];
-}): Promise<ReturnType<CustomerFunction<T>>> => {
-  // ...
-  return;
-};
-// This will not throw a compilation error because the type of `arg` matches
-// the type required by the `url` property.
-callAPI({
-  url: 'createOrderData',
-  arg: '',
-});
+
+/* 
+
+getStoreFronts
+createTransaction
+validateTransaction
+cancelTransaction
+sendNotification
+updateNotificationTokens
+confirmPickup
+acceptProposal
+getCustomerData
+setOrderAsDelivered
+getOrderDocument
+setProductAsNotFound
+setProductAsPickedUp
+createOrderData
+getProduct
+getStoreFront
+getActiveOrders
+getOrderHistory
+getCollectionProducts
+getBalance
+getDriverInfo
+cancelOrder
+reportOrder
+getTransactionsList
+createUserDocument
+getTransactions
+updateUserDocument
+updateAddresses
+
+*/

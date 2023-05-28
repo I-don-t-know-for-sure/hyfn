@@ -118,12 +118,12 @@ export function storeApiStack({ stack }: StackContext) {
           // functionName: "generateDescriptionClient" + stack.stage,
         },
       },
-      "POST /generateDescriptionClien": {
-        function: {
-          handler: pathToLambdas + "generateDescriptionClient.handler",
-          // functionName: "generateDescriptionClient" + stack.stage,
-        },
-      },
+      // "POST /generateDescriptionClien": {
+      //   function: {
+      //     handler: pathToLambdas + "generateDescriptionClient.handler",
+      //     // functionName: "generateDescriptionClient" + stack.stage,
+      //   },
+      // },
       "POST /stopAcceptingOrders": {
         function: {
           handler: pathToLambdas + "stopAcceptingOrders.handler",

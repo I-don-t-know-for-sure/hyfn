@@ -1,4 +1,4 @@
-export const getReportsHandler = async ({ arg, client }) => {
+export const getReportsHandler = async ({ arg, client }: GetReportsProps) => {
   const { lastDoc } = arg[0];
   if (lastDoc) {
     const results = await client

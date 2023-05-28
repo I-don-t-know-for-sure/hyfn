@@ -46,7 +46,5 @@ export default {
       .stack(managementApiStack)
       .stack(driverCognitoStack)
       .stack(driverApiStack);
-    // .stack(libraryCognitoStack)
-    // .stack(libraryApiStack)
   },
 } satisfies SSTConfig;
