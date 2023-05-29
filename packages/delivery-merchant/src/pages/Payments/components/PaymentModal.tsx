@@ -9,11 +9,13 @@ import {
   SelectItemProps,
   Text,
 } from "@mantine/core";
-import TransactionList from "components/TransactionList";
+import { TransactionList } from "hyfn-client";
 import { forwardRef, useState } from "react";
 import { PayWithLocalCard } from "./PayWithLocalCard";
 import { t } from "i18next";
 import { paymentMethods } from "config/data";
+import { useGetTransactions } from "hooks/useGetTransactions";
+import { useValidateLocalCardTransaction } from "hooks/useValidateLocalCardTransaction";
 
 interface PaymentModalProps {
   balance: number;
@@ -42,7 +44,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ balance }) => {
             justifyContent: "space-between",
           }}
         >
-          <TransactionList />
+          <TransactionList
+            useCancelTransaction={() => {
+              return {};
+            }}
+            useGetTransactions={useGetTransactions}
+            useValidateTransaction={useValidateLocalCardTransaction}
+          />
         </Box>
         <Group
           grow

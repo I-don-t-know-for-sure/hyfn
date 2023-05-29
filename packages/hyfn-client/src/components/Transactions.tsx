@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Container,
   Group,
   Loader,
   Modal,
@@ -14,19 +15,16 @@ import {
 import { t } from "i18next";
 import React, { useState } from "react";
 import CancelTransactionModal from "./CancelTransactionModal";
+import { getPagesLength } from "../functions";
 
-interface TransactionListProps {
+interface TransactionsProps {
   menu?: boolean;
   useGetTransactions: any;
-  useValidateTransaction: any;
-  useCancelTransaction: any;
 }
 
-const TransactionList: React.FC<TransactionListProps> = ({
+const Transactions: React.FC<TransactionsProps> = ({
   menu,
   useGetTransactions,
-  useValidateTransaction,
-  useCancelTransaction,
 }) => {
   const [opened, setOpened] = useState(false);
   const {
@@ -34,12 +32,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
     isLoading,
     fetchNextPage,
   } = useGetTransactions({ enabled: opened });
-  // const { mutate: validateTransaction } = useValidateLocalCardTransaction();
-  // const { mutate: validateStoreLocalCardTransaction } =
-  //   useValidateStoreLocalCardTransaction();
-  // const { mutate: validateManagementLocalCardTransaction } =
-  //   useValidateManagementLocalCardTransaction();
-  const { mutate: validateTransaction } = useValidateTransaction();
+
   console.log("🚀 ~ file: TransactionList.tsx ~ line 8 ~ data", transactions);
   return (
     <>
@@ -86,50 +79,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
                         variant="unstyled"
                       />
                     </Group>
-                    <Group
-                      grow
-                      sx={{
-                        alignItems: "baseline",
-                      }}
-                    >
-                      {!transaction.validated && (
-                        <Button
-                          onClick={() => {
-                            validateTransaction({
-                              transactionId: transaction.id,
-                            });
-
-                            // if (
-                            //   transaction.type ===
-                            //   TRANSACTION_TYPE_DRIVER_MANAGMENT
-                            // ) {
-                            //   validateManagementLocalCardTransaction({
-                            //     transactionId: transaction.id,
-                            //   });
-                            //   return;
-                            // }
-                            // if (transaction.storeId !== adminName) {
-                            //   validateStoreLocalCardTransaction({
-                            //     transactionId: transaction.id,
-                            //   });
-                            //   return;
-                            // }
-                            // validateTransaction({
-                            //   transactionId: transaction.id,
-                            // });
-                          }}
-                          mt={16}
-                        >
-                          {t("Validate") as any}
-                        </Button>
-                      )}
-                      {!transaction.status.includes("canceled") && (
-                        <CancelTransactionModal
-                          transactionId={transaction.id}
-                          useCancelTransaction={useCancelTransaction}
-                        />
-                      )}
-                    </Group>
                   </Box>
                 </Paper>
               );
@@ -145,11 +94,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
             }}
             onClick={() =>
               fetchNextPage({
-                pageParam:
-                  transactions?.pages[transactions?.pages?.length - 1][
-                    transactions?.pages[transactions.pages?.length - 1]
-                      ?.length - 1
-                  ]?.id,
+                pageParam: getPagesLength(transactions),
               })
             }
           >
@@ -188,12 +133,4 @@ const TransactionList: React.FC<TransactionListProps> = ({
   );
 };
 
-export default TransactionList;
-function TextWithLabel({ label, value }: { label: string; value: any }) {
-  return (
-    <Box>
-      <Text weight={700}>{label}</Text>
-      <Text>{value}</Text>
-    </Box>
-  );
-}
+export default Transactions;

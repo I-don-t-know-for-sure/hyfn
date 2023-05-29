@@ -5,7 +5,7 @@ import { useInfiniteQuery } from "react-query";
 import fetchUtil from "utils/fetch";
 
 export const useGetTransactions = ({ enabled }: { enabled: boolean }) => {
-  const { userId, userDocument } = useUser();
+  const { userDocument } = useUser();
 
   return useInfiniteQuery(
     [transactions],
