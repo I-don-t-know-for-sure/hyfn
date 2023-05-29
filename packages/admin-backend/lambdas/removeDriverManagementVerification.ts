@@ -1,5 +1,6 @@
 import { MainFunctionProps, mainWrapper } from "hyfn-server";
 import { ObjectId } from "mongodb";
+import { returnsObj } from "hyfn-types";
 interface RemoveDriverManagementVerificationProps
   extends Omit<MainFunctionProps, "arg"> {
   arg: any;
@@ -21,7 +22,7 @@ export const removeDriverManagementVerificationHandler = async ({
       },
       {}
     );
-  return "seccuss";
+  return returnsObj["seccuss"];
 };
 export const handler = async (event) => {
   return await mainWrapper({

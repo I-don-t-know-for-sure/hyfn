@@ -2,7 +2,7 @@ interface CancelTransactionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
+import { returnsObj } from 'hyfn-types';
 
 export const cancelTransaction = async ({ arg, client, db }: CancelTransactionProps) => {
   const result = await db.transaction().execute(async (trx) => {
@@ -14,7 +14,7 @@ export const cancelTransaction = async ({ arg, client, db }: CancelTransactionPr
       .where('id', '=', transactionId)
       .executeTakeFirstOrThrow();
     if (transactionDoc.status.includes('validated')) {
-      throw new Error('transaction validated');
+      throw new Error(returnsObj['transaction validated']);
     }
 
     await trx

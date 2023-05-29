@@ -8,6 +8,7 @@ import {
   MainFunctionProps,
   mainWrapper,
 } from "hyfn-server";
+import { returnsObj } from "hyfn-types";
 import { ObjectId } from "mongodb";
 export const completePaymentRequest = async ({
   arg,
@@ -22,7 +23,7 @@ export const completePaymentRequest = async ({
   const paymentRequestAmount = paymentRequest.amount;
 
   if (paymentRequest.validated) {
-    throw new Error("this transaction is paid");
+    throw new Error(returnsObj["this transaction is paid"]);
   }
   const driverManagementDoc = await client
     .db("generalData")
@@ -47,7 +48,7 @@ export const completePaymentRequest = async ({
     transactionId: transactionId,
   });
   if (!isApproved) {
-    throw new Error("transaction is not approved");
+    throw new Error(returnsObj["transaction is not approved"]);
   }
   await client
     .db("generalData")

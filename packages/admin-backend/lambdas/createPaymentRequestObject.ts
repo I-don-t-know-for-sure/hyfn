@@ -9,6 +9,7 @@ import {
   MainFunctionProps,
   mainWrapper,
 } from "hyfn-server";
+import { returnsObj } from "hyfn-types";
 const { ObjectId } = require("mongodb");
 export const createStoreLocalCardTransaction = async ({
   arg,
@@ -27,7 +28,7 @@ export const createStoreLocalCardTransaction = async ({
     .collection("driverManagement")
     .findOne({ id: new ObjectId(paymentRequest.merchantId) }, { session });
   if (!driverManagementDoc.localCardAPIKeyFilled) {
-    throw new Error("store does not support local card");
+    throw new Error(returnsObj["store does not support local card"]);
   }
   const {
     localCardKeys: { MerchantId, TerminalId, secretKey },
@@ -40,7 +41,7 @@ export const createStoreLocalCardTransaction = async ({
   // if (!storeDoc.storeType.includes(STORE_TYPE_RESTAURANT)) {
   //   const storeReady = storeOrder.orderStatus === STORE_STATUS_READY_FOR_PAYMENT;
   //   if (!storeReady) {
-  //     throw new Error('store not ready yet');
+  //     throw new Error(returnsObj["store not ready yet"]);
   //   }
   // }
   // if (!storeDoc.storeType.includes(STORE_TYPE_RESTAURANT)) {
@@ -53,7 +54,7 @@ export const createStoreLocalCardTransaction = async ({
   //   const now = new Date();
   //   const accepted = storeOrder.orderStatus === STORE_STATUS_ACCEPTED;
   //   if (!accepted) {
-  //     throw new Error('Store did not accept order yet');
+  //     throw new Error(returnsObj["Store did not accept order yet"]);
   //   }
   //   const paymentWindowCloseAt = new Date(storeOrder?.paymentWindowCloseAt);
   //   if (paymentWindowCloseAt <= now) {
@@ -68,11 +69,11 @@ export const createStoreLocalCardTransaction = async ({
   //       options: { arrayFilters: [{ 'store.id': new ObjectId(paymentRequestId) }] },
   //       collection: client.db("base").collection('orders'),
   //     });
-  //     throw new Error('Payment window closed');
+  //     throw new Error(returnsObj["Payment window closed"]);
   //   }
   // }
   if (paymentRequest.validated) {
-    throw new Error("not paid");
+    throw new Error(returnsObj["not paid"]);
   }
   // get order document to calculate the amount
   const now = new Date();

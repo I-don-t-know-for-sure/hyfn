@@ -10,6 +10,7 @@ import {
   mainWrapper,
   tStores,
 } from 'hyfn-server';
+import { returnsObj } from 'hyfn-types';
 import { sql } from 'kysely';
 const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionProps) => {
   const { transactionId } = arg[0];
@@ -27,7 +28,7 @@ const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionPro
   // .executeTakeFirstOrThrow();
 
   if (transaction.status[transaction.status.length - 1] === 'validated') {
-    return 'transaction already approved';
+    return returnsObj['transaction already approved'];
   }
 
   if (transaction.storeId === adminName) {
@@ -44,7 +45,7 @@ const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionPro
   });
 
   if (!isValidated) {
-    return 'transaction not approved yet or not found';
+    return returnsObj['transaction not approved yet or not found'];
   }
   const response = await db.transaction().execute(async (trx) => {
     const transaction = await trx
@@ -54,7 +55,7 @@ const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionPro
       .executeTakeFirstOrThrow();
 
     if (transaction.status[transaction.status.length - 1] === 'validated') {
-      return 'transaction already approved';
+      return returnsObj['transaction already approved'];
     }
 
     await trx
@@ -73,10 +74,10 @@ const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionPro
         })
         .where('id', '=', transaction.customerId)
         .execute();
-      return 'transaction approved';
+      return returnsObj['transaction approved'];
     }
 
-    return 'transaction approved';
+    return returnsObj['transaction approved'];
   });
 
   return response;

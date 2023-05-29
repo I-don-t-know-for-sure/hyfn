@@ -1,5 +1,5 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-
+import { returnsObj } from 'hyfn-types';
 interface CreateManagementProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -24,7 +24,7 @@ export const createManagementHandler = async ({
       verified: false,
     })
     .execute();
-  return 'sucess';
+  return returnsObj['sucess'];
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: createManagementHandler });

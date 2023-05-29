@@ -2,8 +2,8 @@ interface LeaveOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
-import { DRIVER_STATUS_NOT_SET, USER_TYPE_DRIVER } from 'hyfn-types';
+
+import { returnsObj } from 'hyfn-types';
 export const leaveOrderHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
   const result = await db.transaction().execute(async (trx) => {
     // const driverDoc = await trx
@@ -21,7 +21,7 @@ export const leaveOrderHandler = async ({ arg, client, userId, db }: MainFunctio
       .where('id', '=', orderId)
       .executeTakeFirstOrThrow();
     if (orderDoc.orderStatus.includes('delivered')) {
-      throw new Error('Order is already delivered');
+      throw new Error(returnsObj['Order is already delivered']);
     }
 
     const serviceFeePaid = orderDoc.serviceFeePaid;
@@ -33,7 +33,7 @@ export const leaveOrderHandler = async ({ arg, client, userId, db }: MainFunctio
       throw new Error('this order is blocked because it`s reported');
     }
     if (orderDoc.storeStatus.includes('paid')) {
-      throw new Error('there is a paid store');
+      throw new Error(returnsObj['there is a paid store']);
     }
 
     await trx

@@ -19,7 +19,7 @@ export const updateDriverBalanceHandler = async ({
     } = userDocument;
 
     if (!verified) {
-      throw new Error('You are not verified');
+      throw new Error(returnsObj['You are not verified']);
     }
 
     const driverDoc = await trx
@@ -38,7 +38,7 @@ export const updateDriverBalanceHandler = async ({
     const difference = subtract(newDriverBalance, previousBalance);
 
     if (driverDoc.driverManagement !== id) {
-      throw new Error('this driver is not in your list');
+      throw new Error(returnsObj['this driver is not in your list']);
     }
 
     await trx
@@ -48,7 +48,7 @@ export const updateDriverBalanceHandler = async ({
       })
       .where('id', '=', driverId)
       .execute();
-    return 'balance was updated';
+    return returnsObj['balance was updated'];
   });
   return result;
 };
@@ -56,11 +56,11 @@ interface UpdateDriverBalanceProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';
-// import { MAXIMUM_MANAGEMENT_CUT } from "hyfn-types";
+import { returnsObj } from 'hyfn-types';
 import { subtract, min, equal } from 'mathjs';
-import { ObjectId } from 'mongodb';
+
 export const handler = async (event) => {
   const result = await mainWrapper({
     event,

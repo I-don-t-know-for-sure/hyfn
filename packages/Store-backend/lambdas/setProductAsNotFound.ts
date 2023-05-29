@@ -3,6 +3,7 @@ import { mainWrapper, MainFunctionProps, tOrderProducts } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { USER_TYPE_STORE, STORE_STATUS_PENDING, STORE_STATUS_ACCEPTED } from 'hyfn-types';
 import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
 interface SetProductAsNotFoundProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -39,7 +40,7 @@ export const setProductAsNotFoundHandler = async ({
     orderDoc.storeStatus.includes('accepted')
     // storeOrder.orderStatus !== STORE_STATUS_ACCEPTED
   ) {
-    throw new Error('can not edit order products after being accepted');
+    throw new Error(returnsObj['can not edit order products after being accepted']);
   }
 
   await db

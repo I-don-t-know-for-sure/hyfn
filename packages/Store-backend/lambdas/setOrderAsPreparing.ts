@@ -1,6 +1,7 @@
-const { ObjectId } = require('mongodb');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ORDER_STATUS_PREPARING, STORE_STATUS_ACCEPTED, STORE_STATUS_PAID } from 'hyfn-types';
+import { ORDER_STATUS_PREPARING } from 'hyfn-types';
+import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
 interface SetOrderAsPreparingProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -26,28 +27,28 @@ export const setOrderAsPreparingHandler = async ({
     .where('id', '=', orderId)
     .executeTakeFirstOrThrow();
   if (orderDoc.orderStatus.includes('delivered')) {
-    throw new Error('order is Delivered');
+    throw new Error(returnsObj['order is Delivered']);
   }
 
   if (!orderDoc.storeStatus.includes('paid')) {
     throw new Error(`current state is ${orderDoc.storeStatus}`);
   }
 
-  await client
-    .db('base')
-    .collection('orders')
-    .updateOne(
-      { id: new ObjectId(orderId) },
-      {
-        $set: {
-          ['orders.$[store].orderStatus']: ORDER_STATUS_PREPARING,
-          ['status.$[store].status']: ORDER_STATUS_PREPARING,
-        },
-      },
-      {
-        arrayFilters: [{ 'store.id': new ObjectId(storeId) }],
-      }
-    );
+  // await client
+  //   .db('base')
+  //   .collection('orders')
+  //   .updateOne(
+  //     { id: new ObjectId(orderId) },
+  //     {
+  //       $set: {
+  //         ['orders.$[store].orderStatus']: ORDER_STATUS_PREPARING,
+  //         ['status.$[store].status']: ORDER_STATUS_PREPARING,
+  //       },
+  //     },
+  //     {
+  //       arrayFilters: [{ 'store.id': new ObjectId(storeId) }],
+  //     }
+  //   );
 
   await db
     .updateTable('orders')

@@ -14,27 +14,27 @@ export const setOrderAsAcceptedHandler = async ({ arg, client, db }: MainFunctio
     .where('orderId', '=', orderId)
     .execute();
   if (orderDoc?.orderStatus?.includes('delivered')) {
-    throw new Error('order is Delivered');
+    throw new Error(returnsObj['order is Delivered']);
   }
 
   const driverStatus = orderDoc.driverStatus;
 
   if (!driverStatus.includes('set') && orderDoc.orderType === 'Delivery') {
-    throw new Error('This order has no driver');
+    throw new Error(returnsObj['This order has no driver']);
   }
 
   if (orderDoc.storeStatus.includes('accepted')) {
-    throw new Error('already accepted');
+    throw new Error(returnsObj['already accepted']);
   }
   const productNotPicked = products.find(
     (product) => product?.pickupStatus[product?.pickupStatus.length - 1] === 'initial'
   );
   if (productNotPicked) {
-    throw new Error('one of the products not picked');
+    throw new Error(returnsObj['one of the products not picked']);
   }
   // if the order was canceled then we won't allow the driver to ask for payment
   if (orderDoc?.orderStatus?.includes('Canceled')) {
-    throw new Error('Order was canceled');
+    throw new Error(returnsObj['Order was canceled']);
   }
   const now = new Date();
   now.setMinutes(now.getMinutes() + PAYMENT_WINDOW);
@@ -64,6 +64,7 @@ import {
 } from 'hyfn-types';
 import { test } from 'node:test';
 import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setOrderAsAcceptedHandler });
 };

@@ -2,6 +2,7 @@ import { mainWrapper, MainFunctionProps, tOrderProducts } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { STORE_STATUS_ACCEPTED, STORE_STATUS_PENDING, USER_TYPE_STORE } from 'hyfn-types';
 import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
 interface SetProductAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -40,7 +41,7 @@ export const setProductAsPickedUpHandler = async ({
     orderDoc.storeStatus.includes('accepted')
     // storeOrder.orderStatus !== STORE_STATUS_ACCEPTED
   ) {
-    throw new Error('can not edit order products after being accepted');
+    throw new Error(returnsObj['can not edit order products after being accepted']);
   }
   await db
     .updateTable('orderProducts')

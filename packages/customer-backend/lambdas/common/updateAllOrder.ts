@@ -8,7 +8,7 @@ import {
 import { calculateOrderCost } from 'lambdas/common/utils';
 import { add, largerEq, multiply, smallerEq } from 'mathjs';
 import { MongoClient, ObjectId } from 'mongodb';
-
+import { returnsObj } from 'hyfn-types';
 export const updateAllOrder = async ({
   arg,
   client,
@@ -42,16 +42,16 @@ export const updateAllOrder = async ({
         .selectAll()
         .where('id', '=', store.id)
         .executeTakeFirstOrThrow();
-      if (!storeDoc.acceptingOrders) throw new Error('store is not accepting orders');
+      if (!storeDoc.acceptingOrders) throw new Error(returnsObj['store is not accepting orders']);
       storeId = storeDoc.id;
 
       // we will remove this or add another condition when we start allowing stores to have their own drivers
       if (store.orderType === 'Delivery' && storeDoc.storeType.includes('restaurant')) {
-        throw new Error('Restaurants can  not take delivery orders yet');
+        throw new Error(returnsObj['Restaurants can  not take delivery orders yet']);
       }
       var addedProductsDocs: any[] = [];
       if (storeDoc.expirationDate < new Date()) {
-        throw new Error('expired subscription');
+        throw new Error(returnsObj['expired subscription']);
       }
 
       for (let x = 0; x < store.addedProducts.length; x++) {
@@ -70,17 +70,17 @@ export const updateAllOrder = async ({
               (realOption) => realOption.key === option.key
             );
             // if (option.optionValues.length === 0) {
-            //   throw new Error('option does not have values');
+            //   throw new Error(returnsObj["option does not have values"]);
             // }
             if (option.optionValues.length > validOption.maximumNumberOfOptionsForUserToSelect) {
-              throw new Error('option does not meet option conditions');
+              throw new Error(returnsObj['option does not meet option conditions']);
             }
             if (validOption.isRequired) {
               if (
                 option.optionValues.length > validOption.minimumNumberOfOptionsForUserToSelect ||
                 option.optionValues.length < validOption.minimumNumberOfOptionsForUserToSelect
               ) {
-                throw new Error('option does not meet option conditions');
+                throw new Error(returnsObj['option does not meet option conditions']);
               }
             }
             const validValues = option.optionValues.map((customerValue) => {
@@ -111,7 +111,7 @@ export const updateAllOrder = async ({
     const orderCost = calculateOrderCost(storesArray);
     console.log('🚀 ~ file: utils.js:195 ~ updateAllOrder ~ orderCost', orderCost);
     if (orderCost < 50) {
-      throw new Error('can not create order with less than 50');
+      throw new Error(returnsObj['can not create order with less than 50']);
     }
     console.log(coordinates.length);
     console.log(orderCart[0].orderType);
@@ -213,5 +213,5 @@ export const updateAllOrder = async ({
       )
       .execute();
   });
-  return 'seccess';
+  return returnsObj['seccess'];
 };

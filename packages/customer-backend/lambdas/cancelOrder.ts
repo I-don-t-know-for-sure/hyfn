@@ -1,12 +1,7 @@
 interface CancelOrderProps extends Omit<MainFunctionProps, 'arg'> {}
 import { ObjectId } from 'mongodb';
-import {
-  ORDER_STATUS_PREPARING,
-  ORDER_STATUS_READY,
-  ORDER_TYPE_DELIVERY,
-  ORDER_TYPE_PICKUP,
-  USER_TYPE_DRIVER,
-} from 'hyfn-types';
+import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP } from 'hyfn-types';
+import { returnsObj } from 'hyfn-types';
 import { mainWrapper, MainFunctionProps } from 'hyfn-server';
 
 interface CancelOrderProps extends Omit<MainFunctionProps, 'arg'> {
@@ -21,7 +16,7 @@ export const cancelOrder = async ({ arg, client, userId, db }: CancelOrderProps)
       .executeTakeFirstOrThrow();
     const { orderId, country } = arg[0];
     if (!userDocument) {
-      throw new Error('document not found');
+      throw new Error(returnsObj['document not found']);
     }
 
     const orderDoc = await trx
@@ -31,21 +26,21 @@ export const cancelOrder = async ({ arg, client, userId, db }: CancelOrderProps)
       .executeTakeFirstOrThrow();
 
     if (!orderDoc) {
-      throw new Error('j');
+      throw new Error(returnsObj['j']);
     }
 
     if (orderDoc.customerId !== userDocument.id) {
-      throw new Error('this user did not make this order');
+      throw new Error(returnsObj['this user did not make this order']);
     }
     // check if the order is already delivered
     if (orderDoc.orderStatus.includes('delivered')) {
-      throw new Error('Order already delivered');
+      throw new Error(returnsObj['Order already delivered']);
     }
 
     // check if the customer paid any store. if so then they can not cancel the order
 
     if (orderDoc.storeStatus.includes('paid')) {
-      throw new Error('order has paid store');
+      throw new Error(returnsObj['order has paid store']);
     }
     // check if any of the stores orders are being prepared or already prepared
 

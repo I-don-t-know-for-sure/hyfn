@@ -4,6 +4,7 @@ interface ReportOrderProps extends Omit<MainFunctionProps, 'arg'> {
 
 import { MainFunctionProps, mainWrapper, tDrivers } from 'hyfn-server';
 import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
 export const reportOrderHandler = async ({ arg, client, db, userId }: MainFunctionProps) => {
   const result = await db.transaction().execute(async (trx) => {
     const { report, orderId, country } = arg[0];
@@ -22,7 +23,7 @@ export const reportOrderHandler = async ({ arg, client, db, userId }: MainFuncti
     // TODO: check the userId of the user who called this function and see
     // if it doesn't match with the userId in the orderDoc then throw
     if (orderDoc.orderStatus[orderDoc.orderStatus.length - 1] === 'delivered') {
-      throw new Error('order is already delivered');
+      throw new Error(returnsObj['order is already delivered']);
     }
     const orderType = orderDoc.orderType;
 
@@ -46,7 +47,7 @@ export const reportOrderHandler = async ({ arg, client, db, userId }: MainFuncti
     await trx
       .updateTable('drivers')
       .set({
-        reportsIds: sql`${sql.raw(tDrivers.reportsIds)} || ${[reportDoc.id]}`,
+        reportsIds: sql`${sql.raw(tDrivers.reportsIds[0]._)} || ${[reportDoc.id]}`,
       })
       .where('id', '=', driverId)
       .executeTakeFirst();
@@ -54,7 +55,7 @@ export const reportOrderHandler = async ({ arg, client, db, userId }: MainFuncti
     await trx
       .updateTable('customers')
       .set({
-        reportsIds: sql`${sql.raw(tDrivers.reportsIds)} || ${[reportDoc.id]}`,
+        reportsIds: sql`${sql.raw(tDrivers.reportsIds[0]._)} || ${[reportDoc.id]}`,
       })
       .where('id', '=', orderDoc.customerId)
       .executeTakeFirst();
@@ -62,7 +63,7 @@ export const reportOrderHandler = async ({ arg, client, db, userId }: MainFuncti
     await trx
       .updateTable('orders')
       .set({
-        reportsIds: sql`${sql.raw(tDrivers.reportsIds)} || ${[reportDoc.id]}`,
+        reportsIds: sql`${sql.raw(tDrivers.reportsIds[0]._)} || ${[reportDoc.id]}`,
       })
       .where('id', '=', orderDoc.id)
       .executeTakeFirst();

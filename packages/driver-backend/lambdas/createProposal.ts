@@ -1,9 +1,8 @@
 interface CreateProposalProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { driverSchema, USER_TYPE_DRIVER } from 'hyfn-types';
+import { returnsObj } from 'hyfn-types';
 import { smaller } from 'mathjs';
-import { ObjectId } from 'mongodb';
-import { z } from 'zod';
+
 interface CreateProposalProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -17,21 +16,21 @@ export const createProposal = async ({ arg, client, userId, db }: CreateProposal
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
   // if (driverDoc.onDuty) {
-  //   throw new Error('You are on duty');
+  //   throw new Error(returnsObj["You are on duty"]);
   // }
   if (!driverDoc) {
-    throw new Error('driver doc not found');
+    throw new Error(returnsObj['driver doc not found']);
   }
   if (driverDoc?.reportsIds?.length > 0) {
-    throw new Error('You have a reported order');
+    throw new Error(returnsObj['You have a reported order']);
   }
   console.log(driverDoc, 'hshshshssh');
 
   if (!driverDoc.verified) {
-    throw new Error('you are not verified');
+    throw new Error(returnsObj['you are not verified']);
   }
   if (!driverDoc.driverManagement) {
-    throw new Error('You are not trusted by a driver management');
+    throw new Error(returnsObj['You are not trusted by a driver management']);
   }
 
   const orderDoc = await db
@@ -43,13 +42,13 @@ export const createProposal = async ({ arg, client, userId, db }: CreateProposal
     throw new Error('order not found');
   }
   // if (orderDoc?.orderStatus?.includes('Canceled')) {
-  //   throw new Error('Order canceled');
+  //   throw new Error(returnsObj["Order canceled"]);
   // }
   if (smaller(driverDoc.balance, orderDoc.orderCost)) {
-    throw new Error('driver does not have enough balance');
+    throw new Error(returnsObj['driver does not have enough balance']);
   }
   if (orderDoc.driverId) {
-    throw new Error('Order is taken by driver');
+    throw new Error(returnsObj['Order is taken by driver']);
   }
 
   await db

@@ -1,7 +1,7 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
 import { sql } from 'kysely';
-
+import { returnsObj } from 'hyfn-types';
 ('use strict');
 interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
@@ -32,9 +32,9 @@ export const openAndCloseStoreHandler = async ({
       .limit(1)
       .execute();
 
-    if (activeOrders.length > 0) throw new Error('you still have active orders');
+    if (activeOrders.length > 0) throw new Error(returnsObj['you still have active orders']);
     if (!storeDoc.localCardApiKeyId) {
-      throw new Error('no payment method');
+      throw new Error(returnsObj['no payment method']);
     }
     const storeId = storeDoc.id;
 

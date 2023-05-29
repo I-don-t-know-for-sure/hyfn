@@ -1,16 +1,9 @@
 ('use strict');
-import { ObjectId } from 'mongodb';
-import {
-  orderSchema,
-  STORE_STATUS_PENDING,
-  USER_TYPE_CUSTOMER,
-  USER_TYPE_DRIVER,
-  deliveryServiceFee,
-} from 'hyfn-types';
+
 import { add, largerEq, multiply, subtract } from 'mathjs';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { z } from 'zod';
-import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
+
 interface TakeOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -24,15 +17,15 @@ export const takeOrderHandler = async ({ arg, client, userId, db }: MainFunction
       .where('userId', '=', userId)
       .executeTakeFirstOrThrow();
     if (!driverDoc) {
-      throw new Error('driver not found');
+      throw new Error(returnsObj['driver not found']);
     }
 
     if (driverDoc?.reportsIds?.length > 0) {
-      throw new Error('You have a reported order');
+      throw new Error(returnsObj['You have a reported order']);
     }
 
     if (!driverDoc?.driverManagement) {
-      throw new Error('You are not trusted by a driver management');
+      throw new Error(returnsObj['You are not trusted by a driver management']);
     }
 
     const orderDoc = await db
@@ -55,14 +48,14 @@ export const takeOrderHandler = async ({ arg, client, userId, db }: MainFunction
     const driverBalanceCanCoverTheOrder = largerEq(availableBalance, orderCost);
     const newUsedBalance = add(usedBalance, orderCost);
     if (!driverBalanceCanCoverTheOrder) {
-      throw new Error('Balance is not enough');
+      throw new Error(returnsObj['Balance is not enough']);
     }
 
     const proposal = orderDoc.proposals.find(
       (proposal) => proposal.driverId === orderDoc.acceptedProposal
     );
     if (!proposal) {
-      throw new Error('proposal not found');
+      throw new Error(returnsObj['proposal not found']);
     }
 
     await db

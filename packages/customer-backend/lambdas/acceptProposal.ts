@@ -1,6 +1,6 @@
 interface AcceptProposalProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-
+import { returnsObj } from 'hyfn-types';
 interface AcceptProposalProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -19,18 +19,18 @@ export const acceptProposal = async ({ arg, client, userId, db }: AcceptProposal
     .where('id', '=', orderId)
     .executeTakeFirstOrThrow();
   if (!orderDoc) {
-    throw new Error('order not found');
+    throw new Error(returnsObj['order not found']);
   }
   if (orderDoc?.orderStatus?.includes('canceled')) {
-    throw new Error('order canceled');
+    throw new Error(returnsObj['order canceled']);
   }
   const proposal = orderDoc?.proposals?.find((proposal) => proposal.driverId === driverId);
 
   if (orderDoc.customerId !== customerDoc.id) {
-    throw new Error('order is not for this user');
+    throw new Error(returnsObj['order is not for this user']);
   }
   if (!orderDoc.proposals.find((proposal) => proposal.driverId === driverId)) {
-    throw new Error('driver managemnt not found');
+    throw new Error(returnsObj['driver managemnt not found']);
   }
 
   await db

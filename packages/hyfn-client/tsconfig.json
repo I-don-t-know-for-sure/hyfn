@@ -23,7 +23,7 @@
 {
   "compilerOptions": {
     /* Enable all strict type-checking options. */
-    "strict": true,
+    "strict": false,
     "noUncheckedIndexedAccess": true,
     "allowUnreachableCode": false,
     /* Basic Options */

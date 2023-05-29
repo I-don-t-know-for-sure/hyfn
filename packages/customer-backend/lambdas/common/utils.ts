@@ -9,6 +9,7 @@ import {
   storeServiceFee,
   baseServiceFee,
 } from 'hyfn-types';
+import { returnsObj } from 'hyfn-types';
 export const updateRating = (
   oldCurrentRatingTotal = 0,
   oldRatingCount = 0,
@@ -120,7 +121,7 @@ export const getStore = async (store, client) => {
   // for (let i = 0; i < orderCart?.length; i++) {
   //   const store = orderCart[i];
   //   if (store.country !== country && store.city !== city) {
-  //     throw new Error('can not order from different cities or countries ');
+  //     throw new Error(returnsObj["can not order from different cities or countries "]);
   //   }
   //   if (store.orderType === 'Pickup') {
   //     continue;
@@ -136,11 +137,11 @@ export const getStore = async (store, client) => {
       .collection('storeInfo')
       .findOne({id: new ObjectId(store.id) }, {});
     if (storeDoc.city !== city || storeDoc.country !== country) {
-      throw new Error('location do not match');
+      throw new Error(returnsObj["location do not match"]);
     }
     // const currency = storeDoc.currency
     if (store.country !== country && store.city !== city) {
-      throw new Error('can not order from different cities or countries ');
+      throw new Error(returnsObj["can not order from different cities or countries "]);
     }
     if (store.orderType === ORDER_TYPE_DELIVERY) {
       coordinates.push(storeDoc.coords.coordinates);
@@ -154,7 +155,7 @@ export const getStore = async (store, client) => {
         '🚀 ~ file: utils.js:152 ~ updateAllOrder ~ subscriptionInfo',
         storeDoc.subscriptionInfo
       );
-      throw new Error('expired subscription');
+      throw new Error(returnsObj["expired subscription"]);
     }
     console.log(storeDoc, 'ddd');
     for (let x = 0; x < store.addedProducts.length; x++) {
@@ -172,7 +173,7 @@ export const getStore = async (store, client) => {
             (realOption) => realOption.key === option.key
           );
           // if (option.optionValues.length === 0) {
-          //   throw new Error('option does not have values');
+          //   throw new Error(returnsObj["option does not have values"]);
           // }
           if (option.optionValues.length > validOption.maximumNumberOfOptionsForUserToSelect) {
             throw new Error('option does not meet option conditions');
@@ -212,7 +213,7 @@ export const getStore = async (store, client) => {
   const orderCost = calculateOrderCost(storesArray);
   console.log('🚀 ~ file: utils.js:195 ~ updateAllOrder ~ orderCost', orderCost);
   if (orderCost < 50) {
-    throw new Error('can not create order with less than 50');
+    throw new Error(returnsObj["can not create order with less than 50"]);
   }
   console.log(coordinates.length);
   console.log(orderCart[0].orderType);

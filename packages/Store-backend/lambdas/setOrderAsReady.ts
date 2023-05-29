@@ -2,7 +2,7 @@ const { ObjectId } = require('mongodb');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ORDER_STATUS_READY, STORE_STATUS_PREPARING } from 'hyfn-types';
 import { sql } from 'kysely';
-
+import { returnsObj } from 'hyfn-types';
 interface SetOrderAsReadyProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -27,10 +27,10 @@ export const setOrderAsReadyHandler = async ({ arg, client, userId, db }: SetOrd
   }
 
   if (!orderDoc.storeStatus.includes('paid')) {
-    throw new Error('the must be in preparing state fisrt');
+    throw new Error(returnsObj['the must be in preparing state fisrt']);
   }
   // if (store.orderStatus !== STORE_STATUS_PREPARING) {
-  //   throw new Error('Not preparing');
+  //   throw new Error(returnsObj["Not preparing"]);
   // }
 
   await db

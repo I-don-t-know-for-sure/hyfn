@@ -7,6 +7,7 @@ import {
   successNotification,
 } from "hyfn-client";
 import { LambdaHandlers } from "store-backend";
+import { t } from "i18next";
 const fetchUtil = async ({
   method = "POST",
   reqData,
@@ -37,10 +38,12 @@ const fetchUtil = async ({
     body: JSON.stringify([...reqData, accessTokenObject]),
   });
   if (data.status !== 200) {
+    const message = await data.json();
     notifi &&
       notGet &&
       updateNotification({
         ...errorNotification,
+        message: t(message),
         id,
       });
     throw new Error(data.statusText);
@@ -91,10 +94,12 @@ export const fetchApi = async <T extends keyof LambdaHandlers>({
     body: JSON.stringify([...reqData, accessTokenObject]),
   });
   if (data.status !== 200) {
+    const message = await data.json();
     notifi &&
       notGet &&
       updateNotification({
         ...errorNotification,
+        message: t(message),
         id,
       });
     throw new Error(data.statusText);

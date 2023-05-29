@@ -8,6 +8,7 @@ import { findOne } from '../common/mongoUtils/findOne';
 import { updateOne } from '../common/mongoUtils/updateOne';
 import { insertOne } from '../common/mongoUtils/insertOne';
 import axios from 'axios';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {
   const mainFunction = async ({ arg, session, client }) => {
     const { customerId, OTP } = arg[0];
@@ -47,7 +48,7 @@ export const handler = async (event) => {
     console.log('🚀 ~ file: payWithSadad.js ~ line 45 ~ mainFunction ~ res', res);
 
     if (res.data.statusCode !== 0) {
-      throw new Error('something went wrong');
+      throw new Error(returnsObj['something went wrong']);
     }
 
     // if sadad payment is successful we add the amount to the customer's top up balance

@@ -1,7 +1,8 @@
 ('use strict');
-import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 const { ObjectId } = require('mongodb');
 const { subtract, smallerEq, smaller } = require('mathjs');
+import { returnsObj } from 'hyfn-types';
 interface AddDriverToManagementDriversProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -36,12 +37,12 @@ export const addDriverToManagementDriversHandler = async ({
       .executeTakeFirstOrThrow();
 
     if (driverDoc?.driverManagement) {
-      throw new Error('this driver is trusted');
+      throw new Error(returnsObj['this driver is trusted']);
     }
     console.log('bchdbchdbcbd');
     if (!verified) {
       // if (smaller(availableBalance, trustedBalance)) {
-      throw new Error('You are not verified');
+      throw new Error(returnsObj['You are not verified']);
       // }
     }
 
@@ -54,7 +55,7 @@ export const addDriverToManagementDriversHandler = async ({
       })
       .where('id', '=', driverId)
       .execute();
-    return 'driver was Add to trusted list';
+    return returnsObj['driver was Add to trusted list'];
   });
   return result;
 };

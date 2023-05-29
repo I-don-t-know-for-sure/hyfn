@@ -3,7 +3,7 @@ import { multiply, smaller } from 'mathjs';
 import { ObjectId } from 'mongodb';
 import { subscriptionCost } from 'hyfn-types';
 import { sql } from 'kysely';
-
+import { returnsObj } from 'hyfn-types';
 interface UpdateSubscibtionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -25,7 +25,7 @@ export const updateSubscibtionHandler = async ({
 
   const balance = storeDoc.balance;
   const price = multiply(numberOfMonths, subscriptionCost);
-  if (smaller(balance, price)) throw new Error('balance is not enough');
+  if (smaller(balance, price)) throw new Error(returnsObj['balance is not enough']);
 
   const addMonths = (monthsToAdd = 1, currentDate = new Date()) => {
     const currentMonth = currentDate.getMonth();

@@ -3,7 +3,7 @@ import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { add, largerEq, smaller } from 'mathjs';
 import { sql } from 'kysely';
-
+import { returnsObj } from 'hyfn-types';
 interface ReplaceOrderDriverProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -32,7 +32,7 @@ export const replaceOrderDriverHandler = async ({
 
   // check if the newdriver has enough balance
   if (smaller(driverDoc.balance, add(driverDoc.usedBalance || 0, orderDoc.orderCost as any))) {
-    throw new Error('not enough balance');
+    throw new Error(returnsObj['not enough balance']);
   }
 
   await db

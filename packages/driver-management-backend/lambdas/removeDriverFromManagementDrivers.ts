@@ -21,7 +21,7 @@ export const removeDriverFromManagementDriversHandler = async ({
     .executeTakeFirstOrThrow();
   const storeTrustsDriver = driverDoc?.driverManagement === id.toString();
   if (!storeTrustsDriver) {
-    throw new Error('this driver is not in your list');
+    throw new Error(returnsObj['this driver is not in your list']);
   }
 
   const activeOrders = await db
@@ -44,7 +44,7 @@ export const removeDriverFromManagementDriversHandler = async ({
       })
       .where('id', '=', driverId)
       .execute();
-    return 'driver will be removed after they deliver their orders';
+    return returnsObj['driver will be removed after they deliver their orders'];
   }
 
   await db
@@ -57,7 +57,7 @@ export const removeDriverFromManagementDriversHandler = async ({
     .where('id', '=', driverId)
     .execute();
 
-  return 'driver was removed from trusted list';
+  return returnsObj['driver was removed from trusted list'];
 };
 interface RemoveDriverFromManagementDriversProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
@@ -67,6 +67,7 @@ import { USER_STATUS_DELIVERED, USER_TYPE_DRIVER } from 'hyfn-types';
 import { MainFunctionProps, mainWrapper, tOrder } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {
   const result = await mainWrapper({
     event,

@@ -14,28 +14,29 @@ export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFuncti
     .findOne({ id: new ObjectId(orderId) }, {});
   // TODO:  check if the order was delivered
   if (orderDoc.delivered) {
-    throw new Error('Order is already delivered');
+    throw new Error(returnsObj['Order is already delivered']);
   }
   // TODO: check if the store was paid if true then throw an error
   const deletedStore = orderDoc.orders.find((store) => store.id === storeId);
   var storeCoords = deletedStore.coords;
   const storePaid = deletedStore.paid;
-  if (userDocument.id.toString() !== deletedStore.id) throw new Error('Store id does not match');
+  if (userDocument.id.toString() !== deletedStore.id)
+    throw new Error(returnsObj['Store id does not match']);
   const orderType = orderDoc.orderType;
-  if (storePaid) throw new Error('Store is already paid');
+  if (storePaid) throw new Error(returnsObj['Store is already paid']);
 
   const orderReported = orderDoc.reported;
   if (orderReported) throw new Error('this order is blocked because it`s reported');
 
   if (deletedStore.orderStatus !== STORE_STATUS_PENDING) {
-    throw new Error('can not edit the order after being accepted');
+    throw new Error(returnsObj['can not edit the order after being accepted']);
   }
 
   const didDriverPickStoreProduct = deletedStore.addedProducts.some((product) => {
     return !!product?.pickup;
   });
   if (didDriverPickStoreProduct) {
-    throw new Error('Driver started picking up the order');
+    throw new Error(returnsObj['Driver started picking up the order']);
   }
   const stores = orderDoc.orders.filter((store) => {
     if (store.id?.toString() !== storeId) {
@@ -46,28 +47,28 @@ export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFuncti
     }
   });
   if (deepEqual(orderDoc.orders, stores)) {
-    throw new Error('order orders did not change');
+    throw new Error(returnsObj['order orders did not change']);
   }
   const status = orderDoc.status.filter((oldStatus) => {
     return oldStatus.userType !== 'store' && oldStatus.id?.toString() !== storeId;
   });
   if (deepEqual(orderDoc.status, status)) {
-    throw new Error('order status did not change');
+    throw new Error(returnsObj['order status did not change']);
   }
 
   if (orderType === ORDER_TYPE_PICKUP) {
-    throw new Error('service fee already paid');
+    throw new Error(returnsObj['service fee already paid']);
   }
   if (orderType === ORDER_TYPE_DELIVERY) {
     if (orderDoc.serviceFeePaid) {
-      throw new Error('service fee already paid');
+      throw new Error(returnsObj['service fee already paid']);
     }
     const coords = orderDoc.coords.coordinates.filter((coord) => {
       return coord[0] !== storeCoords.coordinates[0] || coord[1] !== storeCoords.coordinates[1];
     });
 
     if (deepEqual(orderDoc.coords, coords)) {
-      throw new Error('order coords did not change');
+      throw new Error(returnsObj['order coords did not change']);
     }
     if (orderDoc.orders.length === 1) {
       await client
@@ -105,6 +106,7 @@ import {
 import deepEqual from 'deep-equal';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { z } from 'zod';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: rejectOrderHandler });
 };

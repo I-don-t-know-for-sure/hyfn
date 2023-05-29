@@ -8,6 +8,7 @@ import { KMS } from 'aws-sdk';
 import { encryptData, hex_to_ascii, MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
 const dataServicesURL = process.env.moalmlatDataService;
 
 const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFunctionProps) => {
@@ -45,7 +46,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
 
   const areKeysValid = Array.isArray(result.data.Transactions);
   if (!areKeysValid) {
-    throw new Error('your keys are not valid');
+    throw new Error(returnsObj['your keys are not valid']);
   }
   const response = await db.transaction().execute(async (trx) => {
     const localCardKey = await trx
@@ -57,7 +58,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
     // if the store already have localcardkeys then we change the keys and set the old inUse to false
     if (userDocument.localCardApiKeyId) {
       if (userDocument.localCardApiKeyId === localCardKey.id) {
-        throw new Error('this key already linked to your store');
+        throw new Error(returnsObj['this key already linked to your store']);
       }
       await trx
         .updateTable('localCardKeys')
@@ -70,7 +71,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
     }
     if (localCardKey) {
       if (localCardKey.inUse) {
-        throw new Error('these keys are already being used by another account');
+        throw new Error(returnsObj['these keys are already being used by another account']);
       }
       // establish relationship between localCardKey and store
       await trx
@@ -89,7 +90,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
         })
         .execute();
 
-      return 'success';
+      return returnsObj['success'];
     }
 
     let subscriptionInfo = calculateFreeMonth({ storeDoc: userDocument });
@@ -126,7 +127,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
       })
       .executeTakeFirst();
 
-    return 'success and added a month free';
+    return returnsObj['success and added a month free'];
   });
 
   return response;

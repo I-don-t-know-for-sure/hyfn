@@ -6,8 +6,7 @@ import { tarnsactionStatus } from 'hyfn-types';
 import { decryptData } from '../common/decrypt';
 import { mainWrapperWithSession } from '../common/mainWrapperWithSession';
 
-import { getMongoClientWithIAMRole } from '../common/mongodb';
-
+import { returnsObj } from 'hyfn-types';
 import { findOne } from '../common/mongoUtils/findOne';
 import { updateOne } from '../common/mongoUtils/updateOne';
 import axios from 'axios';
@@ -46,7 +45,7 @@ export const handler = async (event) => {
 
     const isCustomerPaying = customerDoc.transaction.isPaying;
     if (!isCustomerPaying) {
-      throw new Error('no transaction yet');
+      throw new Error(returnsObj['no transaction yet']);
     }
     const transactionId = customerDoc.transaction.transactionId;
 
@@ -69,7 +68,7 @@ export const handler = async (event) => {
 
     // write a guard cluas
     if (!res.data.statusCode === 0) {
-      throw new Error('something went wrong');
+      throw new Error(returnsObj['something went wrong']);
     }
 
     const transactionNumber = res.data.result;

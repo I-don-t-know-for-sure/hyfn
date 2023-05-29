@@ -1,6 +1,6 @@
 import { MainFunctionProps, mainWrapper, tDriverManagement } from 'hyfn-server';
 import { sql } from 'kysely';
-
+import { returnsObj } from 'hyfn-types';
 interface AddUserAsEmployeeProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -18,14 +18,15 @@ export const addUserAsEmployeeHandler = async ({
     .selectAll()
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
-  if (!managementDoc) throw new Error('management not found');
-  if (managementDoc.usersIds.includes(employeeId)) throw new Error('employee already exists');
+  if (!managementDoc) throw new Error(returnsObj['management not found']);
+  if (managementDoc.usersIds.includes(employeeId))
+    throw new Error(returnsObj['employee already exists']);
   if (
     managementDoc.users.some((user) => {
       return user.userId === employeeId;
     })
   )
-    throw new Error('employee already exists');
+    throw new Error(returnsObj['employee already exists']);
 
   await client
     .db('generalData')

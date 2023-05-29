@@ -10,16 +10,16 @@ export const setOrderAsDeliveredHandler = async ({ arg, client, userId }: MainFu
     .collection('orders')
     .findOne({ id: new ObjectId(orderId) }, {});
   if (!orderDoc) {
-    throw new Error('jbdj');
+    throw new Error(returnsObj['jbdj']);
   }
   const customerId = id;
   orderDoc.orders.map((store) => {
     if (store.paid !== true) {
-      throw new Error('not all stores are paid');
+      throw new Error(returnsObj['not all stores are paid']);
     }
   });
   // if (orderDoc.delivered) {
-  //   throw new Error('Order already delivered');
+  //   throw new Error(returnsObj["Order already delivered"]);
   // }
   await client
     .db('base')
@@ -39,6 +39,7 @@ export const setOrderAsDeliveredHandler = async ({ arg, client, userId }: MainFu
 interface SetOrderAsDeliveredProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
+import { returnsObj } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
 import { USER_STATUS_DELIVERED } from 'hyfn-types';
 import { mainWrapper } from 'hyfn-server/src';

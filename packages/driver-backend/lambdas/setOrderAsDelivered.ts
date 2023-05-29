@@ -16,10 +16,10 @@ export const setOrderAsDeliveredHandler = async ({
 
     // const driverTakenOrder = orderIds.find((id) => id === orderId);
     // if (!driverTakenOrder) {
-    //   throw new Error('driver did not take the order');
+    //   throw new Error(returnsObj["driver did not take the order"]);
     // }
     // if (!driverDoc?.onDuty) {
-    //   throw new Error('driver is not on duty');
+    //   throw new Error(returnsObj["driver is not on duty"]);
     // }
 
     const orderDoc = await trx
@@ -29,11 +29,11 @@ export const setOrderAsDeliveredHandler = async ({
       .where('driverId', '=', id)
       .executeTakeFirstOrThrow();
     if (!orderDoc.storeStatus.includes('paid')) {
-      throw new Error('not all stores are paid');
+      throw new Error(returnsObj['not all stores are paid']);
     }
-    if (!orderDoc.deliveryFeePaid) throw new Error('delivery fee not paid');
+    if (!orderDoc.deliveryFeePaid) throw new Error(returnsObj['delivery fee not paid']);
     if (orderDoc.confirmationCode !== confirmationCode) {
-      throw new Error('Confirmation Code does not match');
+      throw new Error(returnsObj['Confirmation Code does not match']);
     }
 
     await trx
@@ -93,7 +93,7 @@ interface SetOrderAsDeliveredProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-
+import { returnsObj } from 'hyfn-types';
 import { MainFunctionProps, mainWrapper, tOrder } from 'hyfn-server';
 import { sql } from 'kysely';
 export const handler = async (event) => {

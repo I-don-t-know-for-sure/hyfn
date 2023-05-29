@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+import { returnsObj } from 'hyfn-types';
 export const getCustomerInfo = async ({
   client,
   userId,
@@ -16,7 +17,7 @@ export const getCustomerInfo = async ({
     .collection('customerInfo')
     .findOne({ customerId: userId }, { ...options });
   if (!result) {
-    throw new Error('customer not found');
+    throw new Error(returnsObj['customer not found']);
   }
   return result;
 };

@@ -21,15 +21,15 @@ export const setOrderAsDeliveredHandler = async ({
     .executeTakeFirstOrThrow();
 
   // if (!storeOrder) {
-  //   throw new Error('this store is not in the order');
+  //   throw new Error(returnsObj["this store is not in the order"]);
   // }
   if (!orderDoc.storeStatus.includes('paid')) {
-    throw new Error('store not ready yet');
+    throw new Error(returnsObj['store not ready yet']);
   }
 
   if (storeDoc.storeType.includes(STORE_TYPE_RESTAURANT)) {
     if (!orderDoc.storeStatus.includes('ready')) {
-      throw new Error('Not ready');
+      throw new Error(returnsObj['Not ready']);
     }
   }
 
@@ -49,6 +49,7 @@ const { ObjectId } = require('mongodb');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { STORE_STATUS_READY, ORDER_STATUS_DELIVERED, STORE_TYPE_RESTAURANT } from 'hyfn-types';
 import { sql } from 'kysely';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setOrderAsDeliveredHandler });
 };

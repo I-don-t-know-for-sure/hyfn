@@ -1,9 +1,7 @@
 interface UpdateProposalProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { driverSchema, orderSchema } from 'hyfn-types';
-import { smaller } from 'mathjs';
-import { ObjectId } from 'mongodb';
-import { z } from 'zod';
+
+import { returnsObj } from 'hyfn-types';
 interface UpdateProposalProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -16,7 +14,7 @@ const updateProposal = async ({ arg, client, userId, db }: UpdateProposalProps) 
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
   if (!driverDoc) {
-    throw new Error('driver not found');
+    throw new Error(returnsObj['driver not found']);
   }
   if (driverDoc.reportsIds.length > 0) {
     throw new Error('You have a reported order');
@@ -24,7 +22,7 @@ const updateProposal = async ({ arg, client, userId, db }: UpdateProposalProps) 
   console.log(driverDoc, 'hshshshssh');
 
   if (!driverDoc.verified) {
-    throw new Error('you are not verified');
+    throw new Error(returnsObj['you are not verified']);
   }
   if (!driverDoc.driverManagement) {
     throw new Error('You are not trusted by a driver management');
@@ -39,7 +37,7 @@ const updateProposal = async ({ arg, client, userId, db }: UpdateProposalProps) 
     throw new Error('order not found');
   }
   if (orderDoc.acceptedProposal) {
-    throw new Error('customer already accepted a proposal');
+    throw new Error(returnsObj['customer already accepted a proposal']);
   }
 
   const updatedProposals = orderDoc.proposals.map((proposal) => {

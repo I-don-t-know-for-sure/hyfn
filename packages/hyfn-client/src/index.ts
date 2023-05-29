@@ -8,6 +8,7 @@ export const loadingNotification: NotificationProps = {
   loading: true,
   color: "green",
   message: "",
+  autoClose: false,
 };
 
 export const errorNotification: NotificationProps = {
@@ -15,6 +16,7 @@ export const errorNotification: NotificationProps = {
   loading: false,
   color: "red",
   message: "",
+  autoClose: true,
 };
 
 export const successNotification: NotificationProps = {
@@ -22,4 +24,5 @@ export const successNotification: NotificationProps = {
   loading: false,
   color: "green",
   message: "",
+  autoClose: true,
 };

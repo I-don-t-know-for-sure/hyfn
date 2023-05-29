@@ -11,20 +11,24 @@ import {
   TextInput,
   UnstyledButton,
 } from "@mantine/core";
-import { useGetTransactions } from "hooks/useGetTransactions";
 
-import { t } from "util/i18nextFix";
+import { t } from "i18next";
 import React, { useState } from "react";
-
 import CancelTransactionModal from "./CancelTransactionModal";
-
-import { useValidateTransaction } from "hooks/useValidateTransaction";
 
 interface TransactionListProps {
   menu?: boolean;
+  useGetTransactions: any;
+  useValidateTransaction: any;
+  useCancelTransaction: any;
 }
 
-const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
+const TransactionList: React.FC<TransactionListProps> = ({
+  menu,
+  useGetTransactions,
+  useValidateTransaction,
+  useCancelTransaction,
+}) => {
   const [opened, setOpened] = useState(false);
   const {
     data: transactions,
@@ -63,19 +67,19 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                       }}
                     >
                       <TextInput
-                        label={t("Store")}
+                        label={t("Store") as any}
                         value={transaction.storeId}
                         readOnly
                         variant="unstyled"
                       />
                       <TextInput
-                        label={t("Amount")}
+                        label={t("Amount") as any}
                         value={transaction.amount}
                         readOnly
                         variant="unstyled"
                       />
                       <TextInput
-                        label={t("Validated")}
+                        label={t("Validated") as any}
                         value={
                           transaction.status[transaction.status.length - 1]
                         }
@@ -117,12 +121,13 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                           }}
                           mt={16}
                         >
-                          {t("Validate")}
+                          {t("Validate") as any}
                         </Button>
                       )}
                       {!transaction.status.includes("canceled") && (
                         <CancelTransactionModal
                           transactionId={transaction.id}
+                          useCancelTransaction={useCancelTransaction}
                         />
                       )}
                     </Group>
@@ -149,7 +154,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
               })
             }
           >
-            {t("Load more")}
+            {t("Load more") as any}
           </Button>
         </Center>
       </Modal>
@@ -173,11 +178,11 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
             borderRadius: "8px",
           })}
         >
-          {t("Transactions")}
+          {t("Transactions") as any}
         </UnstyledButton>
       ) : (
         <Button fullWidth onClick={() => setOpened(true)}>
-          {t("Transactions")}
+          {t("Transactions") as any}
         </Button>
       )}
     </>

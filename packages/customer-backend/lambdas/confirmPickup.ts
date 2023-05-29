@@ -1,6 +1,6 @@
 interface ConfirmPickupProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-
+import { returnsObj } from 'hyfn-types';
 interface ConfirmPickupProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -19,14 +19,14 @@ export const confirmPickup = async ({ arg, client, userId, db }: ConfirmPickupPr
     .where('id', '=', orderId)
     .executeTakeFirstOrThrow();
   if (!orderDoc.serviceFeePaid) {
-    throw new Error('service fee not paid');
+    throw new Error(returnsObj['service fee not paid']);
   }
   if (orderDoc.customerId !== id) {
-    throw new Error('user Id does not match');
+    throw new Error(returnsObj['user Id does not match']);
   }
 
   if (orderDoc.storePickupConfirmation !== pickupConfirmation) {
-    throw new Error('pickup code did not match');
+    throw new Error(returnsObj['pickup code did not match']);
   }
 
   await db

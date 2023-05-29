@@ -8,6 +8,7 @@ import {
   subscriptionPayment,
 } from 'hyfn-types';
 import { KMS } from 'aws-sdk';
+import { returnsObj } from 'hyfn-types';
 interface validateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -82,7 +83,7 @@ export const validateLocalCardTransaction = async ({
     amount: transaction.amount,
   });
   if (!isValidated) {
-    throw new Error('transaction not validated');
+    throw new Error(returnsObj['transaction not validated']);
   }
   const result = await db.transaction().execute(async (db) => {
     const transaction = await db

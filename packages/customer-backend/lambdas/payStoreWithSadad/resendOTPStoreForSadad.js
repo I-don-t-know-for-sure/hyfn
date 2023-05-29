@@ -8,6 +8,7 @@ import { findOne } from '../common/mongoUtils/findOne';
 import { decryptData } from '../common/decrypt';
 import { mainWrapper } from '../common/mainWrapper';
 import { updateOne } from '../common/mongoUtils/updateOne';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {
   const mainFunction = async ({ arg, client }) => {
     var result;
@@ -21,7 +22,7 @@ export const handler = async (event) => {
     );
     console.log(customerDoc);
     if (!customerDoc.transaction.isPaying) {
-      throw new Error('no transaction in progress');
+      throw new Error(returnsObj['no transaction in progress']);
     }
 
     const storeAPIToken = await findOne(

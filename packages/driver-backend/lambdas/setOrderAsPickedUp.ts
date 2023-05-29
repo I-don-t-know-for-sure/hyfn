@@ -19,7 +19,8 @@ export const setOrderAsPickedUpHandler = async ({
     .where('id', '=', orderId)
     .where('driverId', '=', driverDoc.id)
     .executeTakeFirstOrThrow();
-  if (confirmationCode !== orderDoc.storePickupConfirmation) throw new Error('code does not match');
+  if (confirmationCode !== orderDoc.storePickupConfirmation)
+    throw new Error(returnsObj['code does not match']);
   await db
     .updateTable('orders')
     .set({
@@ -35,7 +36,7 @@ interface SetOrderAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-
+import { returnsObj } from 'hyfn-types';
 import { sql } from 'kysely';
 
 export const handler = async (event) => {

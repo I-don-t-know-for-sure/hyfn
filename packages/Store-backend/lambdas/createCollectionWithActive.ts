@@ -8,7 +8,7 @@ export const handlerHandler = async ({ arg, client, userId, db }: MainFunctionPr
       .where('usersIds', '@>', sql`ARRAY[${sql.join([userId])}]::uuid[]`)
       .executeTakeFirstOrThrow();
 
-    if (!storeDoc) throw new Error('store not found');
+    if (!storeDoc) throw new Error(returnsObj['store not found']);
     const id = storeDoc.id;
 
     const collectionId = await trx
@@ -47,7 +47,7 @@ interface HandlerProps extends Omit<MainFunctionProps, 'arg'> {
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';
-
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event, ctx, callback) => {
   const transactionOptions = {
     readPreference: 'primary',

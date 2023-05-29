@@ -11,7 +11,7 @@ export const disableLocalCardAPIKeysHandler = async ({
       .where('userId', '=', userId)
       .executeTakeFirstOrThrow();
     if (storeDoc.opened) {
-      throw new Error('store is open');
+      throw new Error(returnsObj['store is open']);
     }
 
     await trx.deleteFrom('localCardKey_store').where('storeId', '=', storeDoc.id).execute();
@@ -22,6 +22,7 @@ export const disableLocalCardAPIKeysHandler = async ({
 interface DisableLocalCardAPIKeysProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
+import { returnsObj } from 'hyfn-types';
 import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: disableLocalCardAPIKeysHandler });

@@ -29,7 +29,7 @@ export const addLocalCardKeysHandler = async ({ arg, client, userId, db }: MainF
   // }
   const areKeysValid = Array.isArray(result.data.Transactions);
   if (!areKeysValid) {
-    throw new Error('your keys are not valid');
+    throw new Error(returnsObj['your keys are not valid']);
   }
 
   await db
@@ -50,6 +50,7 @@ import { KMS } from 'aws-sdk';
 import { MainFunctionProps, encryptData, hex_to_ascii, mainWrapper } from 'hyfn-server';
 const { default: axios } = require('axios');
 const { HmacSHA256 } = require('crypto-js');
+import { returnsObj } from 'hyfn-types';
 const dataServicesURL = process.env.moalmlatDataService;
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: addLocalCardKeysHandler });

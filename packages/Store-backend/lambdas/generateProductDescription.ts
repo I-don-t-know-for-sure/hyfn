@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb';
 import { smaller } from 'mathjs';
 import { getDb } from 'hyfn-server/src/functions/getDb';
 import { sql } from 'kysely';
-
+import { returnsObj } from 'hyfn-types';
 const s3 = new AWS.S3({ region: process.env.region });
 const rekognition = new AWS.Rekognition({ region: 'eu-west-1' });
 export const generateProductDescriptionHandler = async ({
@@ -40,7 +40,7 @@ export const generateProductDescriptionHandler = async ({
   const price = descriptionGenerationPricePerImage * imageKeys.length;
 
   if (smaller(storeDoc.balance, price)) {
-    throw new Error('balance not enough');
+    throw new Error(returnsObj['balance not enough']);
   }
 
   await db
@@ -71,9 +71,11 @@ export const generateProductDescriptionHandler = async ({
 
       const textResult = blocks.reduce((acc, detection) => {
         if (detection.Type === 'LINE') {
-          return `${acc}${detection.DetectedText}\n`;
+          const result = `${acc}${detection.DetectedText}\n`;
+          return result;
         } else {
-          return `${acc}${detection.DetectedText} `;
+          const result = `${acc}${detection.DetectedText} `;
+          return result;
         }
       }, '');
 
@@ -152,8 +154,10 @@ export const handler = async (event) => {
 };
 
 const createChatPrompt = (prompt: any) => {
-  return `${chatBeforeInfo} ${prompt} ${chatAfterInfo}`;
+  const result = `${chatBeforeInfo} ${prompt} ${chatAfterInfo}`;
+  return result;
 };
 const createTranslatePrompt = (prompt: any) => {
-  return `${chatTranslateBefore} ${prompt} ${chatTranslateAfter}`;
+  const result = `${chatTranslateBefore} ${prompt} ${chatTranslateAfter}`;
+  return result;
 };

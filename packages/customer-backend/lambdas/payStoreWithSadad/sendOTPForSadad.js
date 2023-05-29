@@ -11,6 +11,7 @@ import { getMongoClientWithIAMRole } from '../common/mongodb';
 import { findOne } from '../common/mongoUtils/findOne';
 import { updateOne } from '../common/mongoUtils/updateOne';
 import axios from 'axios';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {
   const mainFunction = async ({ arg, session, client, event }) => {
     var result = 'initial';
@@ -45,7 +46,7 @@ export const handler = async (event) => {
     const alreadyPaid = order.orders[storeId].tarnsactionInfo.status === tarnsactionStatus.paid;
 
     if (alreadyPaid) {
-      throw new Error('already paid');
+      throw new Error(returnsObj['already paid']);
     }
 
     if (!readyForPayment) {
@@ -57,7 +58,7 @@ export const handler = async (event) => {
     const amountToPay = products.reduce((accu, product) => {
       console.log(product, 'hhdhdhdhdh');
       if (!product.pickup || Object.keys(product.pickup)?.length !== 2)
-        throw new Error('one of the products was not picked');
+        throw new Error(returnsObj['one of the products was not picked']);
 
       return accu + product.pricing.price * product?.pickup.QTYFound;
     }, 0);
@@ -107,7 +108,7 @@ export const handler = async (event) => {
     const res = await axios(config);
     console.log(res.data);
     if (!res.data.statusCode === 0) {
-      throw new Error('OTP was not sent');
+      throw new Error(returnsObj['OTP was not sent']);
     }
 
     await updateOne({

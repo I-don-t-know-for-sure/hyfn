@@ -2,7 +2,8 @@ interface DeleteProposalProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { driverSchema, USER_TYPE_DRIVER } from 'hyfn-types';
 import { smaller } from 'mathjs';
-import { ObjectId } from 'mongodb';
+
+import { returnsObj } from 'hyfn-types';
 import { z } from 'zod';
 interface DeleteProposalProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
@@ -16,7 +17,7 @@ export const deleteProposal = async ({ arg, client, userId, db }: DeleteProposal
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
   if (!driverDoc) {
-    throw new Error('driver doc not found');
+    throw new Error(returnsObj['driver doc not found']);
   }
 
   const orderDoc = await db
@@ -28,10 +29,10 @@ export const deleteProposal = async ({ arg, client, userId, db }: DeleteProposal
     throw new Error('order not found');
   }
   if (orderDoc.orderStatus.includes('canceled')) {
-    throw new Error('Order canceled');
+    throw new Error(returnsObj['Order canceled']);
   }
   if (orderDoc.acceptedProposal) {
-    throw new Error('customer already accepted a proposal');
+    throw new Error(returnsObj['customer already accepted a proposal']);
   }
   var removed = false;
   const newProposalIds = orderDoc.proposalsIds.filter((proposalId) => {

@@ -3,13 +3,14 @@ interface BulkWriteProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { returnsObj } from 'hyfn-types';
 export const bulkWriteHandler = async ({ event, arg, client, userId }: BulkWriteProps) => {
   var result;
   const storeDoc = await client
     .db('generalData')
     .collection('storeInfo')
     .findOne({ usersIds: userId }, {});
-  if (!storeDoc) throw new Error('store not found');
+  if (!storeDoc) throw new Error(returnsObj['store not found']);
   const storeId = storeDoc.id;
 
   const { productsArray } = arg[0];
@@ -77,7 +78,7 @@ export const bulkWriteHandler = async ({ event, arg, client, userId }: BulkWrite
     outputArray.push(validated);
   }
   if (outputArray?.length === 0) {
-    throw new Error('file empty');
+    throw new Error(returnsObj['file empty']);
   }
   await client.db('base').collection('products').insertMany(outputArray);
   return result;

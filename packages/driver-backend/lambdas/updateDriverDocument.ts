@@ -13,7 +13,7 @@ export const updateDriverDocumentHandler = async ({
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
   if (driverDoc.verified) {
-    throw new Error('You can not change your data after verification');
+    throw new Error(returnsObj['You can not change your data after verification']);
   }
 
   await db
@@ -32,7 +32,7 @@ interface UpdateDriverDocumentProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: updateDriverDocumentHandler });
 };

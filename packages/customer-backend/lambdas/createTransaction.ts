@@ -19,6 +19,7 @@ import { createLocalCardConfigurationObject } from 'hyfn-server/src';
 import { add } from 'mathjs';
 import { calculateAmountToPayTheStoreAndAmountToReturnTheCustomer } from 'lambdas/common/calculateAmountToPayTheStoreAndAmountToReturnTheCustomer';
 import { KMS } from 'aws-sdk';
+import { returnsObj } from 'hyfn-types';
 /**
  *  have no idea what this do
  * @param {*} str1
@@ -46,7 +47,7 @@ const createlocalCardTransaction = async ({
 
   const customerId = customerDoc.id;
   if (customerDoc.transactionId) {
-    throw new Error('transaction in progress');
+    throw new Error(returnsObj['transaction in progress']);
   }
 
   const result = await db.transaction().execute(async (trx) => {
@@ -57,14 +58,14 @@ const createlocalCardTransaction = async ({
         .where('id', '=', orderId)
         .executeTakeFirstOrThrow();
       if (!orderDoc) {
-        throw new Error('order not found');
+        throw new Error(returnsObj['order not found']);
       }
       if (orderDoc.storeStatus[orderDoc.storeStatus.length - 1] !== 'accepted') {
-        throw new Error('order not accepted yet');
+        throw new Error(returnsObj['order not accepted yet']);
       }
 
       if (customerDoc.id !== orderDoc.customerId) {
-        throw new Error('user id does not match');
+        throw new Error(returnsObj['user id does not match']);
       }
       if (orderDoc?.serviceFeePaid) {
         throw new Error('service fee already paid');
@@ -121,26 +122,27 @@ const createlocalCardTransaction = async ({
         .executeTakeFirstOrThrow();
 
       if (!storeDoc) {
-        throw new Error('store document not found');
+        throw new Error(returnsObj['store document not found']);
       }
       if (!storeDoc.localCardApiKeyId) {
-        throw new Error('store does not support local card');
+        throw new Error(returnsObj['store does not support local card']);
       }
       const orderDoc = await trx
         .selectFrom('orders')
         .selectAll()
         .where('id', '=', orderId)
         .executeTakeFirstOrThrow();
-      if (orderDoc.storeId !== storeDoc.id) throw new Error('store id does not match with order');
+      if (orderDoc.storeId !== storeDoc.id)
+        throw new Error(returnsObj['store id does not match with order']);
       // const storeOrder = orderDoc.orders.find((store) => store.id === storeId);
       if (orderDoc?.orderStatus[orderDoc?.orderStatus?.length - 1] === 'canceled') {
-        throw new Error('store order was canceled');
+        throw new Error(returnsObj['store order was canceled']);
       }
       if (orderDoc.storeStatus.includes('paid')) {
-        throw new Error('store is paid');
+        throw new Error(returnsObj['store is paid']);
       }
       if (!orderDoc.storeStatus.includes('accepted')) {
-        throw new Error('Store did not accept order yet');
+        throw new Error(returnsObj['Store did not accept order yet']);
       }
 
       const now = new Date();
@@ -156,11 +158,11 @@ const createlocalCardTransaction = async ({
           .where('id', '=', orderDoc.id)
           .executeTakeFirst();
 
-        throw new Error('Payment window closed');
+        throw new Error(returnsObj['Payment window closed']);
       }
 
       if (!orderDoc.serviceFeePaid) {
-        throw new Error('Service fee not paid');
+        throw new Error(returnsObj['Service fee not paid']);
       }
 
       const orderProducts = await trx
@@ -264,7 +266,7 @@ const createlocalCardTransaction = async ({
         .where('userId', '=', userId)
         .executeTakeFirst();
       if (userDoc.transactionId) {
-        throw new Error('there is a transaction in progress');
+        throw new Error(returnsObj['there is a transaction in progress']);
       }
 
       const orderDoc = await trx
@@ -274,13 +276,13 @@ const createlocalCardTransaction = async ({
         .executeTakeFirstOrThrow();
 
       if (orderDoc?.orderStatus?.includes('delivered')) {
-        throw new Error('Order delivered');
+        throw new Error(returnsObj['Order delivered']);
       }
       // if (orderDoc.deliveryFeePaid) {
-      //   throw new Error('delivery fee already paid');
+      //   throw new Error(returnsObj["delivery fee already paid"]);
       // }
       if (orderDoc.orderType === ORDER_TYPE_PICKUP) {
-        throw new Error('order type is pick up');
+        throw new Error(returnsObj['order type is pick up']);
       }
 
       const managementDoc = await trx
@@ -288,7 +290,7 @@ const createlocalCardTransaction = async ({
         .selectAll()
         .where('id', '=', orderDoc.driverManagement)
         .executeTakeFirstOrThrow();
-      if (!managementDoc.localCardKeyFilled) throw new Error('no payment method');
+      if (!managementDoc.localCardKeyFilled) throw new Error(returnsObj['no payment method']);
       const { terminalId, merchantId, secureKey: encryptedSecretKey } = managementDoc;
 
       const newTransaction = await trx

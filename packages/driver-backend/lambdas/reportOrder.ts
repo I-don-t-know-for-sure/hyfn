@@ -10,7 +10,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
     // TODO: check the userId of the user who called this function and see
     // if it doesn't match with the userId in the orderDoc then throw
     if (orderDoc.orderStatus.includes('delivered')) {
-      throw new Error('order is already delivered');
+      throw new Error(returnsObj['order is already delivered']);
     }
     const orderType = orderDoc.orderType;
     if (orderType === ORDER_TYPE_DELIVERY) {
@@ -61,7 +61,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
 interface ReportOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import { ObjectId } from 'mongodb';
+import { returnsObj } from 'hyfn-types';
 import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP } from 'hyfn-types';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';

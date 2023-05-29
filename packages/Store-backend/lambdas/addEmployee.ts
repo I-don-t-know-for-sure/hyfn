@@ -1,6 +1,6 @@
 import { MainFunctionProps, mainWrapper, tStores } from 'hyfn-server';
 import { sql } from 'kysely';
-
+import { returnsObj } from 'hyfn-types';
 interface AddUserAsEmployeeProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -19,8 +19,9 @@ export const addUserAsEmployeeHandler = async ({
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
   // if (!storeDoc) throw 'Store not found';
-  if (storeDoc.usersIds.includes(employeeId)) throw new Error('employee already exists');
-  if (storeDoc.users[employeeId]) throw new Error('employee already exists');
+  if (storeDoc.usersIds.includes(employeeId))
+    throw new Error(returnsObj['employee already exists']);
+  if (storeDoc.users[employeeId]) throw new Error(returnsObj['employee already exists']);
   // await client
   //   .db('generalData')
   //   .collection('storeInfo')

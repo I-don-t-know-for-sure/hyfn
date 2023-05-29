@@ -24,7 +24,7 @@ export const deleteCollectionHandler = async ({
       .executeTakeFirst();
   });
 
-  return 'success';
+  return returnsObj['success'];
   // Ensures that the client will close when you finish/error
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
@@ -36,6 +36,7 @@ interface DeleteCollectionProps extends Omit<MainFunctionProps, 'arg'> {
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';
 import { ObjectId } from 'mongodb';
+import { returnsObj } from 'hyfn-types';
 export const handler = async (event, ctx) => {
   // await argValidations(arg);
   const transactionOptions = {

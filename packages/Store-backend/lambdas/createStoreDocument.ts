@@ -2,6 +2,7 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { currencies, gibbrish } from 'hyfn-types';
 import { re } from 'mathjs';
+import { returnsObj } from 'hyfn-types';
 interface CreateStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
@@ -54,7 +55,7 @@ export const createStoreDocumentHandler = async ({
         })
         .executeTakeFirst();
     } else {
-      throw new Error('wrong');
+      throw new Error(returnsObj['wrong']);
     }
   }
 };

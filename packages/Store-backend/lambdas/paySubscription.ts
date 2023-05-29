@@ -6,7 +6,7 @@ export const paySubscriptionHandler = async ({ arg, client }: MainFunctionProps)
     .collection('storeInfo')
     .findOne({ id: new ObjectId(storeId) }, {});
   // if (!customerDoc.isPaying) {
-  //   return "no transaction in progress";
+  //   return returnsObj["no transaction in progress"];
   // }
   const config = {
     method: 'post',
@@ -80,6 +80,7 @@ interface PaySubscriptionProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+import { returnsObj } from 'hyfn-types';
 import { ObjectId } from 'mongodb';
 export const handler = async (event, ctx) => {
   return await mainWrapper({
