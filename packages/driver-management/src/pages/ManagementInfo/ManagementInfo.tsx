@@ -23,6 +23,8 @@ import { MAXIMUM_MANAGEMENT_CUT } from "hyfn-types";
 import { useAddLocalCardKeys } from "./hooks/useAddLocalCardKeys";
 import { useDisableLocalCardKeys } from "./hooks/useDisableLocalCardKeys";
 import { useAddEmployee } from "./hooks/useAddEmployee";
+import { Transactions } from "hyfn-client";
+import { useGetTransactions } from "hooks/useGetTransactions";
 
 interface ManagementInfoProps {}
 

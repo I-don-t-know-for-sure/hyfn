@@ -4,32 +4,34 @@ import {
   Card,
   Center,
   Container,
-  Group,
   Loader,
-  Paper,
-  Text,
   TextInput,
 } from "@mantine/core";
-import { useUser } from "contexts/userContext/User";
-import { t } from "../../utils/i18nextFix";
+
+import { t } from "i18next";
 import React, { useEffect, useState } from "react";
-import AddToWalletModal from "./components/AddToWalletModal";
+
 import DriverCard from "./components/DriverCard";
 import DriversTable from "./components/DriversTable";
-import WalletModal from "./components/WalletModal";
-import { DriversManagement as Managment } from "hyfn-client";
-import { useAddDriverToManagementDrivers } from "./hooks/useAddDriverToStoreDrivers";
-import { useGetStoreDrivers } from "./hooks/useGetStoreDrivers";
-import { useRemoveDriverFromManagementDrivers } from "./hooks/useRemoveDriverFromStoreDrivers";
-import { useSearchDriverByID } from "./hooks/useSearchDriverByID";
-import { useUpdateDriverBalance } from "./hooks/useUpdateDriverBalance";
+
 import { AiFillCloseCircle } from "react-icons/ai";
-import { z } from "zod";
 
-interface DriversManagementProps {}
+interface DriversManagementProps {
+  useUpdateDriverBalance: any;
+  useSearchDriverByID: any;
+  useRemoveDriverFromManagementDrivers: any;
+  useGetStoreDrivers: any;
+  useAddDriverToManagementDrivers: any;
+}
 
-const DriversManagement: React.FC<DriversManagementProps> = ({}) => {
-  /*   const [searchValue, setSearchValue] = useState("");
+const DriversManagement: React.FC<DriversManagementProps> = ({
+  useAddDriverToManagementDrivers,
+  useGetStoreDrivers,
+  useRemoveDriverFromManagementDrivers,
+  useSearchDriverByID,
+  useUpdateDriverBalance,
+}) => {
+  const [searchValue, setSearchValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const {
     data: drivers,
@@ -46,29 +48,13 @@ const DriversManagement: React.FC<DriversManagementProps> = ({}) => {
     useRemoveDriverFromManagementDrivers();
   const { mutate: updateDriverBalance } = useUpdateDriverBalance();
   const [driversArray, setDriversArray] = useState([]);
-  const { userDocument } = useUser();
+
   useEffect(() => {
     setDriversArray(drivers?.pages?.flatMap((page) => page));
   }, [drivers]);
-  const mySchema = z
-    .object({
-      myString: z.string().min(5),
-      myUnion: z.union([z.number(), z.boolean()]),
-    })
-    .describe("My neat object schema");
- */
 
   return (
-    <Managment
-      useAddDriverToManagementDrivers={useAddDriverToManagementDrivers}
-      useGetStoreDrivers={useGetStoreDrivers}
-      useRemoveDriverFromManagementDrivers={
-        useRemoveDriverFromManagementDrivers
-      }
-      useSearchDriverByID={useSearchDriverByID}
-      useUpdateDriverBalance={useUpdateDriverBalance}
-    />
-    /*  <Container>
+    <Container>
       <Card
         shadow={"lg"}
         radius={"md"}
@@ -104,14 +90,14 @@ const DriversManagement: React.FC<DriversManagementProps> = ({}) => {
               setIsSearching(true);
             }}
           >
-            {t("Search")}
+            {t("Search") as any}
           </Button>
         </Center>
         {isSearching ? (
           isSearchResultLoading ? (
             <Loader />
           ) : typeof searchResult === "string" ? (
-            t(searchResult)
+            (t(searchResult) as any)
           ) : (
             <DriverCard
               addDriver={addDriverToStoreDrivers}
@@ -139,10 +125,10 @@ const DriversManagement: React.FC<DriversManagementProps> = ({}) => {
             fetchNextPage({ pageParam: driversArray[driversArray.length - 1] })
           }
         >
-          {t("Load more")}
+          {t("Load more") as any}
         </Button>
       </Center>
-    </Container> */
+    </Container>
   );
 };
 

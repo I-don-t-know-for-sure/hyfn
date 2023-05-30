@@ -11,15 +11,13 @@ export const getTransactions = async ({ arg, client, userId, db }: GetTransactio
   const userDoc = await db
     .selectFrom('driverManagements')
     .selectAll()
-    .where('usersIds', '@>', sql`array[${sql.join([userId])}]`)
+    .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]`)
     .executeTakeFirstOrThrow();
 
   return await db
     .selectFrom('transactions')
     .selectAll()
-    .where(({ or, cmpr }) =>
-      or([cmpr('customerId', '=', userDoc.id), cmpr('storeId', '=', userDoc.id)])
-    )
+    .where('storeId', '=', userDoc.id)
     .execute();
 };
 
