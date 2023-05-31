@@ -1,17 +1,32 @@
-import { boolean, pgTable, serial, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  pgTable,
+  serial,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import * as z from "zod";
 
-export const localCardKeys = pgTable("local_card_keys", {
-  id: uuid("id").defaultRandom().primaryKey(),
+export const localCardKeys = pgTable(
+  "local_card_keys",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
 
-  terminalId: varchar("terminal_id").notNull(),
+    terminalId: varchar("terminal_id").notNull(),
 
-  merchantId: varchar("merchant_id").notNull(),
+    merchantId: varchar("merchant_id").notNull(),
 
-  secretKey: varchar("secret_key").notNull(),
-  inUse: boolean("in_use").default(true),
-});
+    secretKey: varchar("secret_key").notNull(),
+    inUse: boolean("in_use").default(true),
+  },
+  (table) => {
+    return {
+      merchantIdx: index("merchant_idx").on(table.merchantId),
+    };
+  }
+);
 
 const schmea = createSelectSchema(localCardKeys);
 export const zLocalCardKeys = z.object({

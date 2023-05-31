@@ -2,6 +2,7 @@ import { InferModel } from "drizzle-orm";
 
 import {
   boolean,
+  index,
   json,
   jsonb,
   numeric,
@@ -12,28 +13,36 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import { citiesArray, measurementSystemArray } from "hyfn-types";
+import { measurementSystemArray } from "hyfn-types";
 import * as z from "zod";
 
-export const products = pgTable("products", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  storeId: uuid("store_id").notNull(),
-  price: numeric("price").notNull(),
+export const products = pgTable(
+  "products",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    storeId: uuid("store_id").notNull(),
+    price: numeric("price").notNull(),
 
-  prevPrice: numeric("prev_price").notNull(),
-  title: varchar("title").notNull(),
-  description: varchar("description").notNull(),
+    prevPrice: numeric("prev_price").notNull(),
+    title: varchar("title").notNull(),
+    description: varchar("description").notNull(),
 
-  options: jsonb("options").array().notNull(),
-  measurementSystem: varchar("measurement_system", {
-    enum: measurementSystemArray,
-  }).notNull(),
-  whiteBackgroundImages: varchar("white_background_images").array().notNull(),
-  isActive: boolean("is_active").default(false),
-  hasOptions: boolean("has_options").default(false),
+    options: jsonb("options").array().notNull(),
+    measurementSystem: varchar("measurement_system", {
+      enum: measurementSystemArray,
+    }).notNull(),
+    whiteBackgroundImages: varchar("white_background_images").array().notNull(),
+    isActive: boolean("is_active").default(false),
+    hasOptions: boolean("has_options").default(false),
 
-  images: varchar("images").array().notNull(),
-});
+    images: varchar("images").array().notNull(),
+  },
+  (table) => {
+    return {
+      storeIdx: index("store_idx").on(table.storeId),
+    };
+  }
+);
 
 const schema = createInsertSchema(products);
 export const zProduct = z.object({

@@ -5,26 +5,37 @@ import {
   uuid,
   integer,
   timestamp,
+  index,
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import { transactionMethods, transactionTypesArray } from "hyfn-types";
 import * as z from "zod";
 
-export const transactions = pgTable("transactions", {
-  id: uuid("id").defaultRandom().primaryKey(),
+export const transactions = pgTable(
+  "transactions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
 
-  customerId: varchar("customer_id").notNull(),
-  amount: decimal("amount"),
-  storeId: varchar("store_id").notNull(),
-  transactionDate: timestamp("transaction_date").defaultNow(),
-  type: varchar("type", { enum: transactionTypesArray }).notNull(),
-  status: varchar("status").array().notNull(),
-  transactionMethod: varchar("transaction_method", {
-    enum: transactionMethods,
-  }).notNull(),
-  numberOfMonths: integer("number_of_months"),
-  orderId: varchar("order_id"),
-});
+    customerId: varchar("customer_id").notNull(),
+    amount: decimal("amount"),
+    storeId: varchar("store_id").notNull(),
+    transactionDate: timestamp("transaction_date").defaultNow(),
+    type: varchar("type", { enum: transactionTypesArray }).notNull(),
+    status: varchar("status").array().notNull(),
+    transactionMethod: varchar("transaction_method", {
+      enum: transactionMethods,
+    }).notNull(),
+    numberOfMonths: integer("number_of_months"),
+    orderId: varchar("order_id"),
+  },
+  (table) => {
+    return {
+      customerIdx: index("customer_idx").on(table.customerId),
+      storeIdx: index("store_idx").on(table.storeId),
+      orderIdx: index("order_idx").on(table.orderId),
+    };
+  }
+);
 
 const schema = createSelectSchema(transactions);
 export const zTransaction = z.object({

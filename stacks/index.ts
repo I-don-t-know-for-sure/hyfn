@@ -113,12 +113,13 @@ export const adminUrl = ({
 }) => {
   return `${method} /${url}`;
 };
+type CustomerLambdaHandlers = CustomerHandlers & TransactionsHandler;
 export const customerUrl = ({
   method,
   url,
 }: {
   method: Methods;
-  url: keyof CustomerHandlers;
+  url: keyof CustomerLambdaHandlers;
 }) => {
   return `${method} /${url}`;
 };

@@ -1,5 +1,7 @@
+import { storeAppText } from "hyfn-types";
+import { t } from "i18next";
 import { useQuery } from "react-query";
-import fetchUtil, { fetchApi } from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetUserDocument = ({ userId }: { userId: string }) => {
   // const { userId } = useUser()
@@ -7,10 +9,9 @@ export const useGetUserDocument = ({ userId }: { userId: string }) => {
     [userId],
     async () => {
       try {
-        console.log("shshshshjcdjcbdjcbdhcbhdbchbhd");
-
         if (!userId) {
-          return false;
+          // return false;
+          throw new Error(t(storeAppText["user id not found"]));
         }
         // const userDoc = await fetchUtil({
         //   reqData: [{ userId: userId }],
@@ -24,7 +25,7 @@ export const useGetUserDocument = ({ userId }: { userId: string }) => {
 
         return userDoc;
       } catch (error) {
-        return new Error(error as string);
+        throw new Error(error as string);
       }
     },
     {

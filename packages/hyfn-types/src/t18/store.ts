@@ -1,6 +1,7 @@
 import { returnsObj, returnsObjArabic } from "../returnMessages";
 
 export const storeAppText = {
+  "user id not found": "no user id",
   Confirm: "Confirm",
   "Rate and Confirm": "Rate and Confirm",
   "Confirm Pickup": "Confirm Pickup",
@@ -341,6 +342,7 @@ export const storeAppText = {
 };
 
 export const storeAppArabicText = {
+  "user id not found": "",
   Confirm: "تأكيد",
   "Rate and Confirm": "تقييم وتأكيد",
   "Confirm Pickup": "تأكيد الاستلام",

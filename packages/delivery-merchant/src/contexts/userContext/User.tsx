@@ -27,7 +27,7 @@ interface UserControl {
 }
 
 const UserProvider: React.FC = ({ children }) => {
-  const [userDocument, setUserDocument] = useLocalStorage({
+  const [userDocument, setUserDocument] = useLocalStorage<any>({
     key: USER_DOCUMENT,
   });
   const [userId, setUserId] = useLocalStorage({
@@ -40,9 +40,11 @@ const UserProvider: React.FC = ({ children }) => {
   });
 
   useGetUserId({ loggedIn, setUserId });
-  const { data, isLoading, isFetched, refetch } = useGetUserDocument({
-    userId,
-  });
+  const { data, isLoading, isFetched, refetch, error, isSuccess } =
+    useGetUserDocument({
+      userId,
+    });
+
   const queryClient = useQueryClient();
   useEffect(() => {
     console.log("🚀 ~ file: User.tsx:11 ~ data", data);
@@ -54,7 +56,7 @@ const UserProvider: React.FC = ({ children }) => {
           return;
         }
       }
-      setUserDocument(data as any);
+      setUserDocument(data);
     }
   }, [isLoading, isFetched, data]);
 

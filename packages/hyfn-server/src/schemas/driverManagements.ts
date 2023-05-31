@@ -7,31 +7,42 @@ import {
   uuid,
   jsonb,
   numeric,
+  uniqueIndex,
+  index,
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import { countriesArray } from "hyfn-types";
 import * as z from "zod";
 
-export const driverManagements = pgTable("driver_managements", {
-  id: uuid("id").defaultRandom().primaryKey(),
+export const driverManagements = pgTable(
+  "driver_managements",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
 
-  managementName: varchar("management_name").notNull(),
-  managementPhone: varchar("management_phone").notNull(),
-  managementAddress: varchar("management_address").notNull(),
-  country: varchar("country", {
-    enum: countriesArray,
-  }).notNull(),
-  userId: uuid("user_id").notNull(),
-  usersIds: uuid("users_ids").array().notNull(),
-  users: jsonb("users").array().notNull(),
-  verified: boolean("verified").default(false),
-  profits: numeric("profits"),
-  // terminalId: varchar("terminal_id"),
-  // merchantId: varchar("merchant_id"),
-  // secureKey: varchar("secure_key"),
-  // localCardKeyFilled: boolean("local_card_key_filled").default(false),
-  localCardApiKeyId: uuid("local_card_api_key_id"),
-});
+    managementName: varchar("management_name").notNull(),
+    managementPhone: varchar("management_phone").notNull(),
+    managementAddress: varchar("management_address").notNull(),
+    country: varchar("country", {
+      enum: countriesArray,
+    }).notNull(),
+    userId: uuid("user_id").notNull(),
+    usersIds: uuid("users_ids").array().notNull(),
+    users: jsonb("users").array().notNull(),
+    verified: boolean("verified").default(false),
+    profits: numeric("profits"),
+
+    localCardApiKeyId: uuid("local_card_api_key_id"),
+  },
+  (table) => {
+    return {
+      userIdx: uniqueIndex("user_idx").on(table.userId),
+      usersIds: index("users_idsx").on(table.usersIds),
+      localCardApiKeyIdx: uniqueIndex("local_card_api_key_idx").on(
+        table.localCardApiKeyId
+      ),
+    };
+  }
+);
 const schema = createSelectSchema(driverManagements);
 export const zDriverManagement = z.object({
   ...schema.shape,
