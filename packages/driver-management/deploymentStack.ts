@@ -1,5 +1,5 @@
 import { StackContext, StaticSite, use } from "sst/constructs";
-import { getStage } from "../../stacks/getStage";
+import { getStage } from "../../stacks";
 
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";

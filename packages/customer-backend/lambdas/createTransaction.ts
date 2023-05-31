@@ -32,7 +32,7 @@ import { returnsObj } from 'hyfn-types';
 interface createLocalCardTransaction extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-const createlocalCardTransaction = async ({
+export const createlocalCardTransaction = async ({
   arg,
   client,
   userId,

@@ -9,7 +9,7 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { getStage } from "../stacks/getStage";
+import { getStage } from ".";
 
 import { config } from "../envVaraibles";
 // import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";

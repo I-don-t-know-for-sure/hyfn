@@ -6,7 +6,7 @@ import { MainFunctionProps, buildJson, mainWrapper, tOrders, tStores } from 'hyf
 import { ObjectId } from 'mongodb';
 import { ORDER_TYPE_DELIVERY, COLLECTION, USER_TYPE_DRIVER } from 'hyfn-types';
 import { sql } from 'kysely';
-export const mainFunction = async ({ arg, client, event, db }: MainFunctionProps) => {
+export const getAvailableOrders = async ({ arg, client, event, db }: MainFunctionProps) => {
   console.log('🚀 ~ file: findOrders.ts:7 ~ COLLECTION:', COLLECTION);
   // await findOrderValidations(arg);
   console.log(event);
@@ -39,7 +39,7 @@ export const mainFunction = async ({ arg, client, event, db }: MainFunctionProps
   // Ensures that the client will close when you finish/error
 };
 export const handler = async (event) => {
-  return await mainWrapper({ event, mainFunction });
+  return await mainWrapper({ event, mainFunction: getAvailableOrders });
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };

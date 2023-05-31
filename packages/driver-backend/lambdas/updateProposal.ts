@@ -5,7 +5,7 @@ import { returnsObj } from 'hyfn-types';
 interface UpdateProposalProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-const updateProposal = async ({ arg, client, userId, db }: UpdateProposalProps) => {
+export const updateProposal = async ({ arg, client, userId, db }: UpdateProposalProps) => {
   const { country, orderId, price } = arg[0];
 
   const driverDoc = await db

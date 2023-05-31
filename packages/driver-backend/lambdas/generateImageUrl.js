@@ -5,60 +5,61 @@ import { mainWrapper } from 'hyfn-server';
 const aws = require('aws-sdk');
 const crypto = require('crypto');
 const { promisify } = require('util');
-export const handler = async (event) => {
-  const mainFunction = async ({ arg, session, client, event }) => {
-    var result;
 
-    const numberOfGeneratedURLs = arg[0];
+export const generateImageUrl = async ({ arg, session, client, event }) => {
+  var result;
 
-    const randomBytes = promisify(crypto.randomBytes);
+  const numberOfGeneratedURLs = arg[0];
 
-    const region = process.env.region;
-    const bucketName = process.env.bucketName;
-    const { accessKeyId, secretAccessKey } = {
-      //accessKeyId: "AKIAYTHGFE3UDZTFZJYR",
-      //secretAccessKey: "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",
-      accessKeyId: process.env.accessKeyId,
-      secretAccessKey: process.env.secretAccessKey,
-    };
+  const randomBytes = promisify(crypto.randomBytes);
 
-    console.log(accessKeyId, secretAccessKey);
-    const s3 = new aws.S3({
-      region,
-
-      accessKeyId,
-      secretAccessKey,
-      signetureVersion: 'v4',
-    });
-    const screens = ['driver-verification'];
-    const generatedURLs = [];
-    const generatedNames = [];
-
-    for (let i = 0; i < numberOfGeneratedURLs; i++) {
-      const rawBytes = await randomBytes(16);
-      const imageName = rawBytes.toString('hex');
-      const imageVarients = [];
-
-      for (let x = 0; x < screens.length; x++) {
-        const params = {
-          Bucket: bucketName,
-          Key: `${screens[x]}/${imageName}`,
-          Expires: 60,
-        };
-
-        const uploadURL = await s3.getSignedUrlPromise('putObject', params);
-
-        imageVarients.push(uploadURL);
-      }
-      generatedURLs.push(imageVarients);
-      generatedNames.push(imageName);
-    }
-
-    result = { generatedURLs, generatedNames };
-
-    return result;
+  const region = process.env.region;
+  const bucketName = process.env.bucketName;
+  const { accessKeyId, secretAccessKey } = {
+    //accessKeyId: "AKIAYTHGFE3UDZTFZJYR",
+    //secretAccessKey: "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",
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey,
   };
-  return await mainWrapper({ event, mainFunction });
+
+  console.log(accessKeyId, secretAccessKey);
+  const s3 = new aws.S3({
+    region,
+
+    accessKeyId,
+    secretAccessKey,
+    signetureVersion: 'v4',
+  });
+  const screens = ['driver-verification'];
+  const generatedURLs = [];
+  const generatedNames = [];
+
+  for (let i = 0; i < numberOfGeneratedURLs; i++) {
+    const rawBytes = await randomBytes(16);
+    const imageName = rawBytes.toString('hex');
+    const imageVarients = [];
+
+    for (let x = 0; x < screens.length; x++) {
+      const params = {
+        Bucket: bucketName,
+        Key: `${screens[x]}/${imageName}`,
+        Expires: 60,
+      };
+
+      const uploadURL = await s3.getSignedUrlPromise('putObject', params);
+
+      imageVarients.push(uploadURL);
+    }
+    generatedURLs.push(imageVarients);
+    generatedNames.push(imageName);
+  }
+
+  result = { generatedURLs, generatedNames };
+
+  return result;
+};
+export const handler = async (event) => {
+  return await mainWrapper({ event, mainFunction: generateImageUrl });
   // Ensures that the client will close when you finish/error
 
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration

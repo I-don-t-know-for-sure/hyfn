@@ -13,10 +13,10 @@ export const addDriverToManagementDriversHandler = async ({
   db,
 }: MainFunctionProps) => {
   const result = db.transaction().execute(async (trx) => {
-    const { driverId, balance } = arg[0];
+    const { driverId, balance, management = 'driverManagements' } = arg[0];
 
     const userDocument = await trx
-      .selectFrom('driverManagements')
+      .selectFrom(management === 'driverManagements' ? 'driverManagements' : 'stores')
       .selectAll()
       .where('userId', '=', userId)
       .executeTakeFirstOrThrow();

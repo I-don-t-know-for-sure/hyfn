@@ -5,12 +5,12 @@ export const updateDriverBalanceHandler = async ({
   db,
 }: MainFunctionProps) => {
   const result = await db.transaction().execute(async (trx) => {
+    const { driverId, newBalance /*newCut*/, management = 'driverManagements' } = arg[0];
     const userDocument = await trx
-      .selectFrom('driverManagements')
+      .selectFrom(management === 'driverManagements' ? 'driverManagements' : 'stores')
       .selectAll()
       .where('userId', '=', userId)
       .executeTakeFirstOrThrow();
-    const { driverId, newBalance /*newCut*/ } = arg[0];
     const newDriverBalance = parseInt(newBalance);
     const {
       id,

@@ -31,6 +31,8 @@ import {
   useResendOTP,
   useSendOTP,
 } from "./hooks/useMakePayment";
+import { DriversManagement as Managment } from "hyfn-client";
+
 import { useUpdatePaymentSettings } from "./hooks/useUpdatePaymentSettings";
 import useUpdateStoreOwnerInfo from "./hooks/useUpdateStoreOwnerInfo";
 
@@ -46,6 +48,11 @@ import { useUpdateLocalCardSettings } from "./hooks/useUpdateLocalCardSettings";
 import PaymentModal from "./components/PaymentModal";
 import { useUpdateSubscription } from "./hooks/useUpdateSubscription";
 import { useAddEmployee } from "./hooks/useAddEmployee";
+import { useAddDriverToManagementDrivers } from "./managementHooks/useAddDriverToStoreDrivers";
+import { useGetStoreDrivers } from "./managementHooks/useGetStoreDrivers";
+import { useRemoveDriverFromManagementDrivers } from "./managementHooks/useRemoveDriverFromStoreDrivers";
+import { useSearchDriverByID } from "./managementHooks/useSearchDriverByID";
+import { useUpdateDriverBalance } from "./managementHooks/useUpdateDriverBalance";
 
 interface PaymentsProps {}
 
@@ -288,6 +295,15 @@ const Payments: React.FC<PaymentsProps> = () => {
                 </Button>
               </Stack>
             </Card>
+            <Managment
+              useAddDriverToManagementDrivers={useAddDriverToManagementDrivers}
+              useGetStoreDrivers={useGetStoreDrivers}
+              useRemoveDriverFromManagementDrivers={
+                useRemoveDriverFromManagementDrivers
+              }
+              useSearchDriverByID={useSearchDriverByID}
+              useUpdateDriverBalance={useUpdateDriverBalance}
+            />
           </Stack>
         )
       )}

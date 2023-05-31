@@ -1,12 +1,12 @@
 export const getTrustedDriversHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
+  const { storeId, lastDoc, management = 'driverManagements' } = arg[0];
   const userDocument = await db
-    .selectFrom('driverManagements')
+    .selectFrom(management === 'driverManagements' ? 'driverManagements' : 'stores')
     .select('id')
     .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]`)
     .executeTakeFirstOrThrow();
   const { id } = userDocument;
   const driverManagementId = id;
-  const { storeId, lastDoc } = arg[0];
 
   const drivers = await db
     .selectFrom('drivers')

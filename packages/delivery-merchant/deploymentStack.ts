@@ -1,5 +1,5 @@
 import { Cognito, StackContext, StaticSite, use } from "sst/constructs";
-import { getStage } from "../../stacks/getStage";
+import { getStage } from "../../stacks";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { frConfig } from "../../frEnvVaraibles";

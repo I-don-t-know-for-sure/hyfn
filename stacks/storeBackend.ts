@@ -12,12 +12,13 @@ import {
 import * as iam from "aws-cdk-lib/aws-iam";
 import { config } from "../envVaraibles";
 
-import { getStage } from "./getStage";
-
-import { CfnOutput, Fn } from "aws-cdk-lib";
+import { driversManagement, getStage, storeUrl } from ".";
+import { CfnOutput } from "aws-cdk-lib";
 import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
 
 const pathToLambdas = "./packages/Store-backend/lambdas/";
+const pathToDriverManagementLambdas =
+  "./packages/driver-management-backend/lambdas/";
 
 const localhost = "http://localhost:";
 
@@ -106,7 +107,7 @@ export function storeApiStack({ stack }: StackContext) {
       },
     },
     routes: {
-      "POST /getProducts": {
+      [storeUrl({ method: "POST", url: "getProducts" })]: {
         function: {
           handler: pathToLambdas + "getProducts.handler",
           // functionName: "getProducts" + stack.stage,
@@ -118,12 +119,7 @@ export function storeApiStack({ stack }: StackContext) {
           // functionName: "generateDescriptionClient" + stack.stage,
         },
       },
-      // "POST /generateDescriptionClien": {
-      //   function: {
-      //     handler: pathToLambdas + "generateDescriptionClient.handler",
-      //     // functionName: "generateDescriptionClient" + stack.stage,
-      //   },
-      // },
+
       "POST /stopAcceptingOrders": {
         function: {
           handler: pathToLambdas + "stopAcceptingOrders.handler",
@@ -193,11 +189,11 @@ export function storeApiStack({ stack }: StackContext) {
       //     handler: pathToLambdas + "setOrderAsDelivered.handler",
       //   },
       // },
-      "POST /getDriverInfo": {
-        function: {
-          handler: pathToLambdas + "getDriverInfo.handler",
-        },
-      },
+      // "POST /getDriverInfo": {
+      //   function: {
+      //     handler: pathToLambdas + "getDriverInfo.handler",
+      //   },
+      // },
       "POST /addLocalCardPaymentAPIKey": {
         function: {
           handler: pathToLambdas + "addLocalCardPaymentAPIKey.handler",
@@ -379,6 +375,7 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getCollectionStoreFrontProducts.handler",
         },
       },
+      ...driversManagement,
     },
   });
 

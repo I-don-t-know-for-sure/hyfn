@@ -5,10 +5,10 @@ export const removeDriverFromManagementDriversHandler = async ({
 
   db,
 }: MainFunctionProps) => {
-  const { driverId } = arg[0];
+  const { driverId, management = 'driverManagements' } = arg[0];
 
   const userDocument = await db
-    .selectFrom('driverManagements')
+    .selectFrom(management === 'driverManagements' ? 'driverManagements' : 'stores')
     .selectAll()
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();

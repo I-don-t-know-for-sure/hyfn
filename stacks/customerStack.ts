@@ -8,16 +8,15 @@ import {
 } from "sst/constructs";
 
 import * as iam from "aws-cdk-lib/aws-iam";
-// import { paymentApp } from '../packages/payment-app/paymentAppStack';
-import { getStage } from "../stacks/getStage";
-import { frConfig } from "../frEnvVaraibles";
+
+import { getStage } from ".";
+
 import { config } from "../envVaraibles";
-// import { authBucketStack, imagesBucketStack, kmsStack } from './resources';
+
 import { CfnOutput, Fn } from "aws-cdk-lib";
 import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
 
 const pathToLambdas = "./packages/customer-backend/lambdas/";
-const localhost = "http://localhost:";
 
 export function customerApiStack({ stack }: StackContext) {
   // const { key } = use(kmsStack);
@@ -32,12 +31,7 @@ export function customerApiStack({ stack }: StackContext) {
   const { key } = use(kmsStack);
   const keyArn = key.keyArn;
   const imagesBucketName = s3Bucket.bucketName;
-  // const keyArn = Fn.importValue(`secretesKmsKey-${stack.stage}`);
-  // const imagesBucketName = Fn.importValue(`imagesBucket-${stack.stage}`);
-  // const userPoolId = Fn.importValue(`customerUserPoolId-${stack.stage}`);
-  // const userPoolClientId = Fn.importValue(
-  //   `customerUserPoolClient-${stack.stage}`
-  // );
+
   const api = new Api(stack, "customerApi", {
     defaults: {
       function: {
@@ -220,7 +214,6 @@ export function customerApiStack({ stack }: StackContext) {
 
       "POST /getTransactionsList": {
         function: {
-          functionName: "getTransactionsList" + stack.stage,
           handler: pathToLambdas + "getTransactionsList.handler",
         },
       },

@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb';
 interface GetAcceptedProposalsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-const getProposals = async ({ arg, client, userId, db }: GetAcceptedProposalsProps) => {
+export const getProposals = async ({ arg, client, userId, db }: GetAcceptedProposalsProps) => {
   const { country, driverManagementId, lastDoc, flag } = arg[0];
   const queryDoc =
     flag === ACCEPTED_PROPOSALS_FLAG

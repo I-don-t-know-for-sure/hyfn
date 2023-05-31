@@ -6,7 +6,7 @@ import { mainWrapper } from 'hyfn-server/src';
 interface GetProductProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-const getProduct = async ({ arg, client, db }: GetProductProps) => {
+export const getProduct = async ({ arg, client, db }: GetProductProps) => {
   var result;
   const { storefront, productId, city, country } = arg[0];
   const withStoreDoc = arg[1];

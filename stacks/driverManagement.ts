@@ -9,7 +9,7 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { getStage } from "./getStage";
+import { driversManagement, getStage } from ".";
 import { frConfig } from "../frEnvVaraibles";
 import { config } from "../envVaraibles";
 
@@ -83,16 +83,6 @@ export function managementApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getTransactions.handler",
         },
       },
-      "POST /getAllDrivers": {
-        function: {
-          handler: pathToLambdas + "getAllDrivers.handler",
-        },
-      },
-      "POST /replaceOrderDriver": {
-        function: {
-          handler: pathToLambdas + "replaceOrderDriver.handler",
-        },
-      },
 
       "POST /DisableLocalCardKeys": {
         function: {
@@ -104,27 +94,13 @@ export function managementApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "reportOrder.handler",
         },
       },
-      "POST /searchDriverById": {
-        function: {
-          handler: pathToLambdas + "searchDriverById.handler",
-        },
-      },
-      "POST /getTrustedDrivers": {
-        function: {
-          handler: pathToLambdas + "getTrustedDrivers.handler",
-        },
-      },
+
       "POST /getManagement": {
         function: {
           handler: pathToLambdas + "getManagement.handler",
         },
       },
 
-      "POST /addDriverToManagementDrivers": {
-        function: {
-          handler: pathToLambdas + "addDriverToManagementDrivers.handler",
-        },
-      },
       "POST /createManagement": {
         function: {
           handler: pathToLambdas + "createManagement.handler",
@@ -135,31 +111,19 @@ export function managementApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getActiveOrders.handler",
         },
       },
-      "POST /getDriverInfo": {
-        function: {
-          handler: pathToLambdas + "getDriverInfo.handler",
-        },
-      },
+
       "POST /getOrderHistory": {
         function: {
           handler: pathToLambdas + "getOrderHistory.handler",
         },
       },
-      "POST /updateDriverBalance": {
-        function: {
-          handler: pathToLambdas + "updateDriverBalance.handler",
-        },
-      },
+
       "POST /updateManagementInfo": {
         function: {
           handler: pathToLambdas + "updateManagementInfo.handler",
         },
       },
-      "POST /removeFromManagementDrivers": {
-        function: {
-          handler: pathToLambdas + "removeDriverFromManagementDrivers.handler",
-        },
-      },
+      ...driversManagement,
     },
   });
   const permissions = new iam.PolicyStatement({

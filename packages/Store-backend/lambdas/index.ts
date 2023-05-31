@@ -1,4 +1,5 @@
 import { addUserAsEmployeeHandler } from './addEmployee';
+import { cancelTransaction } from './cancelTransaction';
 import { disableLocalCardAPIKeysHandler } from './disableLocalCardAPIKeys';
 import { generateDescriptionClientHandler } from './generateDescriptionClient';
 import { generateImageReaderPutUrlHandler } from './generateImageReaderPutUrl';
@@ -219,5 +220,9 @@ export type LambdaHandlers = {
   openAndCloseStore: {
     arg: Parameters<typeof getStoreDocumentHandler>['0']['arg'];
     return: ReturnType<typeof getStoreDocumentHandler>;
+  };
+  cancelTransaction: {
+    arg: Parameters<typeof cancelTransaction>['0']['arg'];
+    return: ReturnType<typeof cancelTransaction>;
   };
 };
