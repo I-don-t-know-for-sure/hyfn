@@ -6,16 +6,15 @@ import axios from 'axios';
 import { calculateFreeMonth } from './common/calculateFreeMonth';
 import { KMS } from 'aws-sdk';
 import { encryptData, hex_to_ascii, MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
-import { sql } from 'kysely';
+
 import { returnsObj } from 'hyfn-types';
 const dataServicesURL = process.env.moalmlatDataService;
 
 const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFunctionProps) => {
-  const { TerminalId, MerchantId, secretKey } = arg[0];
+  const { TerminalId, MerchantId, secretKey, flag = 'store' } = arg[0];
 
   const userDocument = await db
-    .selectFrom('stores')
+    .selectFrom(flag === 'store' ? 'stores' : 'driverManagements')
     .selectAll()
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
@@ -64,7 +63,6 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
         .updateTable('localCardKeys')
         .set({
           inUse: false,
-          storeId: '',
         })
         .where('id', '=', userDocument.localCardApiKeyId)
         .execute();
@@ -75,7 +73,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
       }
       // establish relationship between localCardKey and store
       await trx
-        .updateTable('stores')
+        .updateTable(flag === 'store' ? 'stores' : 'driverManagements')
         .set({
           localCardApiKeyId: localCardKey.id,
         })
@@ -104,17 +102,19 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
       })
       .returning('id')
       .executeTakeFirst();
-    await trx
-      .updateTable('stores')
-      .set({
-        monthlySubscriptionPaid: true,
-        timeOfPayment: subscriptionInfo.timeOfPayment,
-        expirationDate: subscriptionInfo.expirationDate,
-        numberOfMonths: subscriptionInfo.numberOfMonths,
-        localCardApiKeyId: insertedLocalCardKey.id,
-      })
-      .where('userId', '=', userId)
-      .execute();
+    if (flag === 'store') {
+      await trx
+        .updateTable('stores')
+        .set({
+          monthlySubscriptionPaid: true,
+          timeOfPayment: subscriptionInfo.timeOfPayment,
+          expirationDate: subscriptionInfo.expirationDate,
+          numberOfMonths: subscriptionInfo.numberOfMonths,
+          localCardApiKeyId: insertedLocalCardKey.id,
+        })
+        .where('userId', '=', userId)
+        .execute();
+    }
     // establish relationship between localCardKey and store
 
     // add to the activity that this store at least had a relationship with this localCardKey
@@ -127,7 +127,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
       })
       .executeTakeFirst();
 
-    return returnsObj['success and added a month free'];
+    return flag === 'store' ? returnsObj['success and added a month free'] : returnsObj['success'];
   });
 
   return response;

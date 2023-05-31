@@ -26,10 +26,11 @@ export const driverManagements = pgTable("driver_managements", {
   users: jsonb("users").array().notNull(),
   verified: boolean("verified").default(false),
   profits: numeric("profits"),
-  terminalId: varchar("terminal_id"),
-  merchantId: varchar("merchant_id"),
-  secureKey: varchar("secure_key"),
-  localCardKeyFilled: boolean("local_card_key_filled").default(false),
+  // terminalId: varchar("terminal_id"),
+  // merchantId: varchar("merchant_id"),
+  // secureKey: varchar("secure_key"),
+  // localCardKeyFilled: boolean("local_card_key_filled").default(false),
+  localCardApiKeyId: uuid("local_card_api_key_id"),
 });
 const schema = createSelectSchema(driverManagements);
 export const zDriverManagement = z.object({

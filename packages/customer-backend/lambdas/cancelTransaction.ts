@@ -6,7 +6,7 @@ import { returnsObj } from 'hyfn-types';
 
 export const cancelTransaction = async ({ arg, client, db }: CancelTransactionProps) => {
   const result = await db.transaction().execute(async (trx) => {
-    const { transactionId } = arg[0];
+    const { transactionId, flag = 'customer' } = arg[0];
 
     const transactionDoc = await trx
       .selectFrom('transactions')
@@ -26,7 +26,7 @@ export const cancelTransaction = async ({ arg, client, db }: CancelTransactionPr
       .executeTakeFirst();
 
     await trx
-      .updateTable('customers')
+      .updateTable(flag === 'flag' ? 'customers' : 'stores')
       .set({
         transactionId: null,
       })

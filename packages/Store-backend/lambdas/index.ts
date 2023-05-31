@@ -145,10 +145,7 @@ export type LambdaHandlers = {
     arg: Parameters<typeof getStoreDocumentHandler>['0']['arg'];
     return: ReturnType<typeof getStoreDocumentHandler>;
   };
-  addLocalCardPaymentAPIKey: {
-    arg: Parameters<typeof getStoreDocumentHandler>['0']['arg'];
-    return: ReturnType<typeof getStoreDocumentHandler>;
-  };
+
   getDriverInfo: {
     arg: Parameters<typeof getStoreDocumentHandler>['0']['arg'];
     return: ReturnType<typeof getStoreDocumentHandler>;
@@ -224,5 +221,12 @@ export type LambdaHandlers = {
   cancelTransaction: {
     arg: Parameters<typeof cancelTransaction>['0']['arg'];
     return: ReturnType<typeof cancelTransaction>;
+  };
+};
+
+export type AddLocalCardPaymentAPIKey = {
+  addLocalCardPaymentAPIKey: {
+    arg: Parameters<typeof getStoreDocumentHandler>['0']['arg'];
+    return: ReturnType<typeof getStoreDocumentHandler>;
   };
 };

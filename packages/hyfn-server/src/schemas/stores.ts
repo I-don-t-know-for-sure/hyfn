@@ -17,31 +17,6 @@ import { citiesArray, countriesArray, storeTypesArray } from "hyfn-types";
 import * as z from "zod";
 // const cities = pgEnum("cities", citiesArray);
 
-type StoreDoc = {
-  id: string;
-  storeFrontId: string;
-  country: string;
-  city: string;
-};
-
-type SubscriptionInfo = {
-  timeOfPayment: string;
-  numberOfMonths: number;
-  expirationDate: string;
-};
-
-type LocalCardAPIKey = {
-  TerminalId: string;
-  MerchantId: string;
-  secretKey: string;
-};
-
-type Users = {
-  [key: string]: {
-    userType: "employee" | "owner";
-  };
-};
-
 export const stores = pgTable("stores", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: varchar("user_id").notNull(),
@@ -84,6 +59,7 @@ export const stores = pgTable("stores", {
   monthlySubscriptionPaid: boolean("monthly_subscription_paid").default(false),
   // subscriptionInfo: jsonb("subscriptionInfo"),
   localCardApiKeyId: uuid("local_card_api_key_id"),
+  transactionId: uuid("transaction_id"),
 
   acceptingOrders: boolean("accepting_orders").default(false),
   includeLocalCardFeeToPrice: boolean(

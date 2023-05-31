@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "c2e41556-8692-4567-874c-e33408a056c6",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "cf95cf68-0881-44ec-8b83-acfbc0513f23",
+  "prevId": "11956913-4645-412d-a351-5c33a3630635",
   "tables": {
     "collections": {
       "name": "collections",
@@ -210,30 +210,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "terminal_id": {
-          "name": "terminal_id",
-          "type": "varchar",
+        "local_card_api_key_id": {
+          "name": "local_card_api_key_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
-        },
-        "merchant_id": {
-          "name": "merchant_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "secure_key": {
-          "name": "secure_key",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "local_card_key_filled": {
-          "name": "local_card_key_filled",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
         }
       },
       "indexes": {},
@@ -819,6 +800,12 @@
         },
         "local_card_api_key_id": {
           "name": "local_card_api_key_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transaction_id": {
+          "name": "transaction_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false

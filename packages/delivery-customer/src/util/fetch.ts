@@ -6,7 +6,7 @@ import {
   loadingNotification,
   successNotification,
 } from "hyfn-client";
-import { LambdaHandlers } from "customer-backend";
+import { LambdaHandlers, TransactionsHandler } from "customer-backend";
 const fetchUtil = async ({
   method = "POST",
   reqData,
@@ -58,10 +58,12 @@ const fetchUtil = async ({
 
 export default fetchUtil;
 
-type Function<T extends keyof LambdaHandlers> = (
-  arg: LambdaHandlers[T]["arg"]
-) => LambdaHandlers[T]["return"];
-export const fetchApi = async <T extends keyof LambdaHandlers>({
+type Handlers = LambdaHandlers & TransactionsHandler;
+
+type Function<T extends keyof Handlers> = (
+  arg: Handlers[T]["arg"]
+) => Handlers[T]["return"];
+export const fetchApi = async <T extends keyof Handlers>({
   arg: reqData,
   url,
   method = "POST",

@@ -58,13 +58,16 @@ export const validateLocalCardTransaction = async ({
   if (transaction.type === managementPayment) {
     const driverManagement = await db
       .selectFrom('driverManagements')
-      .selectAll()
+      .innerJoin('localCardKeys', 'driverManagements.localCardApiKeyId', 'localCardKeys.id')
+      .selectAll('driverManagements')
+      .select(['localCardKeys.merchantId', 'localCardKeys.secretKey', 'localCardKeys.terminalId'])
       .where('id', '=', transaction.storeId)
       .executeTakeFirstOrThrow();
+
     var {
       terminalId: TerminalId,
       merchantId: MerchantId,
-      secureKey: encryptedSecretKey,
+      secretKey: encryptedSecretKey,
     }: any = driverManagement;
 
     var secretKey: any = await decryptData({

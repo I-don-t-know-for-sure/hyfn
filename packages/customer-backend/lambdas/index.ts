@@ -135,4 +135,8 @@ export type TransactionsHandler = {
     arg: Parameters<typeof getTransactionsList>['0']['arg'];
     return: ReturnType<typeof getTransactionsList>;
   };
+  cancelTransaction: {
+    arg: Parameters<typeof cancelTransaction>['0']['arg'];
+    return: ReturnType<typeof cancelTransaction>;
+  };
 };

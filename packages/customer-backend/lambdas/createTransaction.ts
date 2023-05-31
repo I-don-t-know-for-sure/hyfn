@@ -287,11 +287,13 @@ export const createlocalCardTransaction = async ({
 
       const managementDoc = await trx
         .selectFrom('driverManagements')
-        .selectAll()
+        .innerJoin('localCardKeys', 'driverManagements.localCardApiKeyId', 'localCardKeys.id')
+        .selectAll('driverManagements')
+        .select(['localCardKeys.merchantId', 'localCardKeys.secretKey', 'localCardKeys.terminalId'])
         .where('id', '=', orderDoc.driverManagement)
         .executeTakeFirstOrThrow();
-      if (!managementDoc.localCardKeyFilled) throw new Error(returnsObj['no payment method']);
-      const { terminalId, merchantId, secureKey: encryptedSecretKey } = managementDoc;
+      if (!managementDoc.localCardApiKeyId) throw new Error(returnsObj['no payment method']);
+      const { terminalId, merchantId, secretKey: encryptedSecretKey } = managementDoc;
 
       const newTransaction = await trx
         .insertInto('transactions')

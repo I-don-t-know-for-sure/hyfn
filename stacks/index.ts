@@ -1,7 +1,14 @@
 import { LambdaHandlers } from "../packages/Store-backend/lambdas";
-import { LambdaHandlers as ManagementHandlers } from "../packages/driver-management-backend/lambdas";
+import {
+  LambdaHandlers as ManagementHandlers,
+  DriverManagementHandlers,
+  ReadOnlyTransactions,
+} from "../packages/driver-management-backend/lambdas";
 
-import { LambdaHandlers as CustomerHandlers } from "../packages/customer-backend/lambdas";
+import {
+  LambdaHandlers as CustomerHandlers,
+  TransactionsHandler,
+} from "../packages/customer-backend/lambdas";
 import { LambdaHandlers as DriverHandlers } from "../packages/driver-backend/lambdas";
 import { LambdaHandlers as AdminHandlers } from "../packages/admin-backend/lambdas";
 
@@ -76,7 +83,11 @@ export const storeUrl = ({
   url,
 }: {
   method: Methods;
-  url: keyof LambdaHandlers;
+  url:
+    | keyof LambdaHandlers
+    | keyof DriverManagementHandlers
+    | keyof ReadOnlyTransactions
+    | keyof TransactionsHandler;
 }) => {
   return `${method} /${url}`;
 };
@@ -86,7 +97,10 @@ export const managementUrl = ({
   url,
 }: {
   method: Methods;
-  url: keyof ManagementHandlers;
+  url:
+    | keyof ManagementHandlers
+    | keyof DriverManagementHandlers
+    | keyof ReadOnlyTransactions;
 }) => {
   return `${method} /${url}`;
 };
