@@ -20,10 +20,11 @@ import {
   ORDER_TYPE_DELIVERY,
   STORE_STATUS_READY,
   STORE_TYPE_RESTAURANT,
+  storeAppText,
 } from "hyfn-types";
 import { t } from "utils/i18nextFix";
 import InstructionsModal from "./InstructionsModak";
-import SetProductAsInactiveButton from "./setProductAsInactive";
+
 import ImageModal from "components/ImageModal";
 import ControlButton from "./ControlButton";
 import { useSetProductAsPickedUp } from "../hooks/useSetProductAsPickedUp";
@@ -306,7 +307,7 @@ export function ActiveOrder({
                       });
                     }}
                   >
-                    {t("Accept Order")}
+                    {t(storeAppText["Accept Order"])}
                   </Button>
                 </>
               )}

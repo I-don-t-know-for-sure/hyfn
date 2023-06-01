@@ -1,16 +1,22 @@
-import { Button, Group, Modal } from "@mantine/core";
+import { Button, Group, Modal, Stack } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React, { useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { useQRCodeReader } from "hyfn-client";
+import { useUser } from "contexts/userContext/User";
 
 interface DeliveredModalProps {
   delivered: ({ confirmationCode }: { confirmationCode: string }) => void;
+  storeId: string;
 }
 
-const DeliveredModal: React.FC<DeliveredModalProps> = ({ delivered }) => {
+const DeliveredModal: React.FC<DeliveredModalProps> = ({
+  delivered,
+  storeId,
+}) => {
   const [opened, setOpened] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState<string | null>(null);
+  const { userDocument } = useUser();
   const { initializeCamera, stopCamera } = useQRCodeReader({
     setConfirmationCode,
   });
@@ -24,10 +30,10 @@ const DeliveredModal: React.FC<DeliveredModalProps> = ({ delivered }) => {
           setOpened(false);
         }}
       >
-        <div id="reader"></div>
-        <Group position="apart">
+        <Stack>
+          <div id="reader"></div>
           <Button onClick={initializeCamera}>{t("Scan QR code")}</Button>
-          {confirmationCode && (
+          {(confirmationCode || storeId === userDocument.driverManagement) && (
             <Button
               onClick={() => {
                 delivered({ confirmationCode });
@@ -36,7 +42,7 @@ const DeliveredModal: React.FC<DeliveredModalProps> = ({ delivered }) => {
               {t("Set as delivered")}
             </Button>
           )}
-        </Group>
+        </Stack>
       </Modal>
 
       <Button fullWidth onClick={() => setOpened(true)}>

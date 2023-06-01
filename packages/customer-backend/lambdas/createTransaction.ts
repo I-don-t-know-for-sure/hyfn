@@ -20,18 +20,19 @@ import { add } from 'mathjs';
 import { calculateAmountToPayTheStoreAndAmountToReturnTheCustomer } from './common/calculateAmountToPayTheStoreAndAmountToReturnTheCustomer';
 import { KMS } from 'aws-sdk';
 import { returnsObj } from 'hyfn-types';
-/**
- *  have no idea what this do
- * @param {*} str1
- * @returns
- *
- */
-/**
- * inserts new transaction document to transactions collection and returns the lightbox configuration object
- */
 interface createLocalCardTransaction extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
+/**
+ 
+ */
+/**
+ * *  have no idea what this do
+ * @param {*} str1
+ * @returns
+ *
+ * inserts new transaction document to transactions collection and returns the lightbox configuration object
+ */
 export const createlocalCardTransaction = async ({
   arg,
   client,
@@ -127,20 +128,32 @@ export const createlocalCardTransaction = async ({
       if (!storeDoc.localCardApiKeyId) {
         throw new Error(returnsObj['store does not support local card']);
       }
+
       const orderDoc = await trx
         .selectFrom('orders')
         .selectAll()
         .where('id', '=', orderId)
         .executeTakeFirstOrThrow();
+      if (orderDoc.storeStatus[orderDoc.storeStatus.length - 1] === 'accepted') {
+        if (orderDoc.orderType === 'Pickup')
+          throw new Error(returnsObj['pickup orders can be paid only on pickup']);
+
+        if (orderDoc.storeId === orderDoc.driverManagement)
+          throw new Error(returnsObj['this order can be paid only on delivery']);
+      }
+
       if (orderDoc.storeId !== storeDoc.id)
         throw new Error(returnsObj['store id does not match with order']);
+
       // const storeOrder = orderDoc.orders.find((store) => store.id === storeId);
       if (orderDoc?.orderStatus[orderDoc?.orderStatus?.length - 1] === 'canceled') {
         throw new Error(returnsObj['store order was canceled']);
       }
+
       if (orderDoc.storeStatus.includes('paid')) {
         throw new Error(returnsObj['store is paid']);
       }
+
       if (!orderDoc.storeStatus.includes('accepted')) {
         throw new Error(returnsObj['Store did not accept order yet']);
       }

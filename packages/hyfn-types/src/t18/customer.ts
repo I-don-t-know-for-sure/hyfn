@@ -1,6 +1,8 @@
 import { returnsObj, returnsObjArabic } from "../returnMessages";
 
 export const customerAppText = {
+  "Only store drivers are allowed to take store orders":
+    "Only store drivers are allowed to take store orders",
   "This action is not recommended": "This action is not recommended",
   Cancel: "Cancel",
   Cancal: "Cancal",
@@ -242,6 +244,7 @@ export const customerAppText = {
 };
 
 export const customerAppArabicText = {
+  "Only store drivers are allowed to take store orders": "",
   "Have an account already?": "هل لديك حساب بالفعل؟",
   "Common questions": "اسئلة شائعة",
   "Start selling": "ابدأ البيع",

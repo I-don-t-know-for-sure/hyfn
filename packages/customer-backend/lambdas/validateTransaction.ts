@@ -131,10 +131,25 @@ export const validateLocalCardTransaction = async ({
     }
 
     if (type === serviceFeePayment) {
+      const orderDoc = await db
+        .selectFrom('orders')
+        .innerJoin('stores', 'orders.storeId', 'stores.id')
+        .selectAll('orders')
+        .select(['stores.storeType'])
+        .where('id', '=', transaction.orderId)
+        .executeTakeFirst();
       await db
         .updateTable('orders')
         .set({
           serviceFeePaid: true,
+          ...(orderDoc.orderType === 'Pickup' || orderDoc.driverManagement === orderDoc.storeId
+            ? {
+                storeStatus: [
+                  ...(orderDoc.storeStatus || []),
+                  orderDoc.storeType.includes('restaurant') ? 'preparing' : 'ready',
+                ],
+              }
+            : {}),
         })
         .where('id', '=', transaction.orderId)
         .executeTakeFirst();

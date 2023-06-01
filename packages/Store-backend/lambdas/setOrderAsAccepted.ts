@@ -1,6 +1,5 @@
-export const setOrderAsAcceptedHandler = async ({ arg, client, db }: MainFunctionProps) => {
+export const setOrderAsAcceptedHandler = async ({ arg, db }: SetOrderAsAcceptedProps) => {
   const { orderId, country, storeId } = arg[0];
-  type Order = z.infer<typeof orderSchema>;
 
   const orderDoc = await db
     .selectFrom('orders')
@@ -13,6 +12,11 @@ export const setOrderAsAcceptedHandler = async ({ arg, client, db }: MainFunctio
     .selectAll()
     .where('orderId', '=', orderId)
     .execute();
+  const storeDoc = await db
+    .selectFrom('stores')
+    .where('id', '=', orderDoc.storeId)
+    .select(['storeType'])
+    .executeTakeFirstOrThrow();
   if (orderDoc?.orderStatus?.includes('delivered')) {
     throw new Error(returnsObj['order is Delivered']);
   }
@@ -33,37 +37,68 @@ export const setOrderAsAcceptedHandler = async ({ arg, client, db }: MainFunctio
     throw new Error(returnsObj['one of the products not picked']);
   }
   // if the order was canceled then we won't allow the driver to ask for payment
-  if (orderDoc?.orderStatus?.includes('Canceled')) {
+  if (orderDoc?.orderStatus?.includes('canceled')) {
     throw new Error(returnsObj['Order was canceled']);
   }
   const now = new Date();
   now.setMinutes(now.getMinutes() + PAYMENT_WINDOW);
 
+  if (orderDoc.orderType === 'Pickup' || orderDoc.storeId === orderDoc.driverManagement) {
+    if (orderDoc.serviceFeePaid) {
+      await db
+        .updateTable('orders')
+        .set({
+          storeStatus: [
+            ...orderDoc.storeStatus,
+            'accepted',
+            orderDoc.serviceFeePaid && storeDoc.storeType.includes('restaurant')
+              ? 'preparing'
+              : 'ready',
+          ],
+
+          paymentWindowCloseAt: now,
+        })
+        .where('id', '=', orderId)
+        .executeTakeFirstOrThrow();
+      // send notification to the driver to tell them that the order is ready for pickup
+      return returnsObj[
+        `set to ${storeDoc.storeType.includes('restaurant') ? 'preparing' : 'ready'}`
+      ];
+    }
+    await db
+      .updateTable('orders')
+      .set({
+        storeStatus: [...orderDoc.storeStatus, 'accepted'],
+        paymentWindowCloseAt: now,
+      })
+      .where('id', '=', orderId)
+      .executeTakeFirstOrThrow();
+    // send notification to the customer to tell them to pay the service fee
+    return returnsObj[
+      `success and will be set to ${
+        storeDoc.storeType.includes('restaurant') ? 'preparing' : 'ready'
+      }`
+    ];
+  }
+
   await db
     .updateTable('orders')
     .set({
       storeStatus: [...orderDoc.storeStatus, 'accepted'],
-      paymentWindowCloseAt: now.toJSON(),
+      paymentWindowCloseAt: now,
     })
     .where('id', '=', orderId)
     .executeTakeFirstOrThrow();
+
   return 'success';
 };
 interface SetOrderAsAcceptedProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { orderSchema, USER_TYPE_DRIVER } from 'hyfn-types';
-import { ObjectId } from 'mongodb';
-import { z } from 'zod';
-import {
-  ORDER_STATUS_ACCEPTED,
-  STORE_STATUS_PENDING,
-  PAYMENT_WINDOW,
-  ORDER_TYPE_DELIVERY,
-} from 'hyfn-types';
-import { test } from 'node:test';
-import { sql } from 'kysely';
+
+import { PAYMENT_WINDOW } from 'hyfn-types';
+
 import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: setOrderAsAcceptedHandler });

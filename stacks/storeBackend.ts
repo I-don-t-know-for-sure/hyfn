@@ -359,7 +359,12 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getCollectionStoreFrontProducts.handler",
         },
       },
-      // ...driversManagement,
+      [storeUrl({ method: "POST", url: "updateStoreDriverSettings" })]: {
+        function: {
+          handler: pathToLambdas + "updateStoreDriverSettings.handler",
+        },
+      },
+      ...driversManagement,
       ...localCardKey,
       ...transactions,
     },

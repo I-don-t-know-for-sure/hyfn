@@ -1,4 +1,13 @@
 export const returnsObj = {
+  "pickup orders can be paid only on pickup":
+    "pickup orders can be paid only on pickup",
+  "this order can be paid only on delivery":
+    "this order can be paid only on delivery",
+  "success and will be set to ready": "success and will be set to ready",
+  "set to ready": "set to ready",
+  "success and will be set to preparing":
+    "success and will be set to preparing",
+  "set to preparing": "set to preparing",
   "employee already exists": "employee already exists",
   success: "success",
   "success and added a month free": "success and added a month free",
@@ -143,6 +152,12 @@ export const returnsObj = {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const returnsObjArabic = {
+  "pickup orders can be paid only on pickup": "",
+  "this order can be paid only on delivery": "",
+  "success and will be set to ready": "",
+  "set to ready": "",
+  "success and will be set to preparing": "",
+  "set to preparing": "",
   "employee already exists": "الموظف موجود بالفعل",
   success: "تم بنجاح",
   "success and added a month free": "تم بنجاح وتمت إضافة شهر مجانًا",

@@ -15,12 +15,28 @@ export const setOrderAsPickedUpHandler = async ({
     .executeTakeFirst();
   const orderDoc = await db
     .selectFrom('orders')
-    .select(['id', 'storePickupConfirmation'])
+    .select([
+      'id',
+      'storePickupConfirmation',
+      'storeId',
+      'driverManagement',
+      'serviceFeePaid',
+      'driverId',
+    ])
     .where('id', '=', orderId)
     .where('driverId', '=', driverDoc.id)
     .executeTakeFirstOrThrow();
-  if (confirmationCode !== orderDoc.storePickupConfirmation)
-    throw new Error(returnsObj['code does not match']);
+  if (!orderDoc.serviceFeePaid) {
+    throw new Error(returnsObj['service fee not paid']);
+  }
+  if (orderDoc.driverId !== driverDoc.id) {
+    throw new Error(returnsObj['driver id does not match']);
+  }
+
+  if (orderDoc.storeId !== orderDoc.driverManagement) {
+    if (confirmationCode !== orderDoc.storePickupConfirmation)
+      throw new Error(returnsObj['code does not match']);
+  }
   await db
     .updateTable('orders')
     .set({

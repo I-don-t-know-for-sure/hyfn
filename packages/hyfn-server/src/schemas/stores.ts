@@ -71,6 +71,9 @@ export const stores = pgTable(
     includeLocalCardFeeToPrice: boolean(
       "include_local_card_fee_to_price"
     ).default(true),
+    onlyStoreDriversCanTakeOrders: boolean(
+      "only_store_drivers_can_take_orders"
+    ).default(false),
   },
   (table) => {
     return {

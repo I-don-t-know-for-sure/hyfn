@@ -130,7 +130,7 @@ export function driverApiStack({ stack }: StackContext) {
       },
       "POST /confirmPickup": {
         function: {
-          handler: pathToLambdas + "confirmPickup.handler",
+          handler: pathToLambdas + "setOrderAsPickedUp.handler",
         },
       },
       "POST /createDriverDocument": {

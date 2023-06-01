@@ -11,6 +11,7 @@ import {
   numeric,
   timestamp,
   index,
+  foreignKey,
 } from "drizzle-orm/pg-core";
 import { citiesArray } from "hyfn-types";
 
@@ -19,6 +20,7 @@ import { InferModel, sql } from "drizzle-orm";
 import { createSelectSchema } from "drizzle-zod";
 
 import * as z from "zod";
+import { stores } from "./stores";
 
 export const orders = pgTable(
   "orders",
@@ -62,8 +64,12 @@ export const orders = pgTable(
     driverManagement: varchar("driver_management"),
 
     orderStatus: varchar("order_status").array().notNull(),
+
     reportsIds: uuid("reports_ids").array().notNull(),
     deliveryFeePaid: boolean("delivery_fee_paid").default(false),
+    onlyStoreDriversCanTakeOrders: boolean("only_store_drivers_can_take_orders")
+      .notNull()
+      .default(false),
   },
   (table) => {
     return {
@@ -76,6 +82,13 @@ export const orders = pgTable(
       customerStatusx: index("customer_statusx").on(table.customerStatus),
       acceptedProposalx: index("accepted_proposalx").on(table.acceptedProposal),
       driverManagementx: index("driver_managementx").on(table.driverManagement),
+      onlyStoreDriversCanTakeOrders: index(
+        "only_store_drivers_can_take_orders"
+      ).on(table.onlyStoreDriversCanTakeOrders),
+      storeSettings: foreignKey({
+        columns: [table.storeId, table.onlyStoreDriversCanTakeOrders],
+        foreignColumns: [stores.id, stores.onlyStoreDriversCanTakeOrders],
+      }),
     };
   }
 );
