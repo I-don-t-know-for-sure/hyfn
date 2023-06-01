@@ -9,7 +9,7 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { driversManagement, getStage } from ".";
+import { localCardKey, driversManagement, getStage } from ".";
 import { frConfig } from "../frEnvVaraibles";
 import { config } from "../envVaraibles";
 
@@ -84,11 +84,6 @@ export function managementApiStack({ stack }: StackContext) {
         },
       },
 
-      "POST /DisableLocalCardKeys": {
-        function: {
-          handler: pathToLambdas + "DisableLocalCardKeys.handler",
-        },
-      },
       "POST /reportOrder": {
         function: {
           handler: pathToLambdas + "reportOrder.handler",
@@ -124,6 +119,7 @@ export function managementApiStack({ stack }: StackContext) {
         },
       },
       ...driversManagement,
+      ...localCardKey,
     },
   });
   const permissions = new iam.PolicyStatement({

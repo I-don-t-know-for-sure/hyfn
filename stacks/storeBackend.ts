@@ -12,7 +12,13 @@ import {
 import * as iam from "aws-cdk-lib/aws-iam";
 import { config } from "../envVaraibles";
 
-import { driversManagement, getStage, storeUrl } from ".";
+import {
+  localCardKey,
+  driversManagement,
+  getStage,
+  storeUrl,
+  transactions,
+} from ".";
 import { CfnOutput } from "aws-cdk-lib";
 import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
 
@@ -174,11 +180,7 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "updateLocalCardSettings.handler",
         },
       },
-      "POST /disableLocalCardAPIKeys": {
-        function: {
-          handler: pathToLambdas + "disableLocalCardAPIKeys.handler",
-        },
-      },
+
       "POST /setOrderAsAccepted": {
         function: {
           handler: pathToLambdas + "setOrderAsAccepted.handler",
@@ -194,11 +196,7 @@ export function storeApiStack({ stack }: StackContext) {
       //     handler: pathToLambdas + "getDriverInfo.handler",
       //   },
       // },
-      "POST /addLocalCardPaymentAPIKey": {
-        function: {
-          handler: pathToLambdas + "addLocalCardPaymentAPIKey.handler",
-        },
-      },
+
       "POST /setOrderAsReady": {
         function: {
           handler: pathToLambdas + "setOrderAsReady.handler",
@@ -231,11 +229,7 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "createProduct.handler",
         },
       },
-      "POST /getTransactionsList": {
-        function: {
-          handler: pathToLambdas + "getTransactionsList.handler",
-        },
-      },
+
       "POST /validateLocalCardTransaction": {
         function: {
           handler: pathToLambdas + "validateLocalCardTransaction.handler",
@@ -376,6 +370,8 @@ export function storeApiStack({ stack }: StackContext) {
         },
       },
       ...driversManagement,
+      ...localCardKey,
+      ...transactions,
     },
   });
 

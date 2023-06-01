@@ -24,7 +24,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
         .insertInto('reports')
         .values({
           orderId,
-          reportDate: new Date().toDateString(),
+          reportDate: new Date(),
           driverId: orderDoc.driverId,
         })
         .returning('id')

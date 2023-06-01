@@ -5,7 +5,7 @@ import {
   storeAndCustomerServiceFee,
   storeServiceFee,
 } from 'hyfn-types';
-import { calculateOrderCost } from 'lambdas/common/utils';
+import { calculateOrderCost } from './utils';
 import { add, largerEq, multiply, smallerEq } from 'mathjs';
 import { MongoClient, ObjectId } from 'mongodb';
 import { returnsObj } from 'hyfn-types';

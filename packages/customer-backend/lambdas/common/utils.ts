@@ -1,15 +1,7 @@
-import axios from 'axios';
-import { randomUUID } from 'crypto';
-import { add, largerEq, multiply, smaller, smallerEq, subtract } from 'mathjs';
+import { add, multiply, subtract } from 'mathjs';
 import { ObjectId } from 'mongodb';
-import {
-  ORDER_TYPE_DELIVERY,
-  deliveryServiceFee,
-  storeAndCustomerServiceFee,
-  storeServiceFee,
-  baseServiceFee,
-} from 'hyfn-types';
-import { returnsObj } from 'hyfn-types';
+import { storeServiceFee } from 'hyfn-types';
+
 export const updateRating = (
   oldCurrentRatingTotal = 0,
   oldRatingCount = 0,

@@ -1,8 +1,7 @@
-export const getOrderHistoryHandler = async ({ arg, client }) => {
-  var result;
+export const getOrderHistoryHandler = async ({ arg, client, db }: GetOrderHistoryProps) => {
   const { driverId, country, lastDoc } = arg[0];
   if (lastDoc) {
-    result = await client
+    return await client
       .db('base')
       .collection('orders')
       .find({
@@ -11,9 +10,9 @@ export const getOrderHistoryHandler = async ({ arg, client }) => {
       })
       .limit(20)
       .toArray();
-    return result;
   }
-  result = await client
+
+  return await client
     .db('base')
     .collection('orders')
     .find({
@@ -21,15 +20,14 @@ export const getOrderHistoryHandler = async ({ arg, client }) => {
     })
     .limit(20)
     .toArray();
-  return result;
 };
 interface GetOrderHistoryProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-import { mainWrapper } from 'hyfn-server';
+import { mainWrapper, MainFunctionProps } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { MainFunctionProps, USER_STATUS_DELIVERED } from 'hyfn-types';
+import { USER_STATUS_DELIVERED } from 'hyfn-types';
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: getOrderHistoryHandler });
 };

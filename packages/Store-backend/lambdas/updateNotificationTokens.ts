@@ -8,21 +8,21 @@ interface UpdateNotificationTokensProps extends Omit<MainFunctionProps, 'arg'> {
 
 export const updateNotificationTokensHandler = async ({
   arg,
-  client,
+
   userId,
   db,
 }: UpdateNotificationTokensProps) => {
   const { notificationToken } = arg[0];
   const storeDoc = await db
     .selectFrom('stores')
-    .select(['notificationToken'])
+    .select(['notificationTokens'])
     .where('usersIds', '@>', sql`ARRAY[${sql.join([userId])}]::uuid[]`)
     .executeTakeFirstOrThrow();
 
   await db
     .updateTable('stores')
     .set({
-      notificationToken: [...storeDoc.notificationToken, notificationToken],
+      notificationTokens: [...storeDoc.notificationTokens, notificationToken],
     })
     .where('usersIds', '@>', sql`ARRAY[${sql.join([userId])}]::uuid[]`)
     .execute();

@@ -24,7 +24,7 @@ export const getCollectionProducts = async ({ arg, client, db }: GetCollectionPr
         'prevPrice',
         'price',
         'title',
-        'currency',
+
         'hasOptions',
       ]).as(tProducts._)
     )

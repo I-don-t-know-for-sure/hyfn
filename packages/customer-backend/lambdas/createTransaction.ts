@@ -17,7 +17,7 @@ import { MainFunctionProps, decryptData } from 'hyfn-server';
 import { mainWrapper } from 'hyfn-server';
 import { createLocalCardConfigurationObject } from 'hyfn-server/src';
 import { add } from 'mathjs';
-import { calculateAmountToPayTheStoreAndAmountToReturnTheCustomer } from 'lambdas/common/calculateAmountToPayTheStoreAndAmountToReturnTheCustomer';
+import { calculateAmountToPayTheStoreAndAmountToReturnTheCustomer } from './common/calculateAmountToPayTheStoreAndAmountToReturnTheCustomer';
 import { KMS } from 'aws-sdk';
 import { returnsObj } from 'hyfn-types';
 /**

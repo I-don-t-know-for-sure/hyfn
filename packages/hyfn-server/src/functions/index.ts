@@ -18,5 +18,5 @@ export {
   _502,
 } from "./api_Respones";
 
-export { MainFunctionProps, MainWrapperProps } from "./types";
+export type { MainFunctionProps, MainWrapperProps } from "./types";
 export { default as firebaseApp } from "./getFirebaseApp";

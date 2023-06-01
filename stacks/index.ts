@@ -1,16 +1,77 @@
-import { LambdaHandlers } from "../packages/Store-backend/lambdas";
-import {
+import type {
+  LambdaHandlers,
+  AddLocalCardPaymentAPIKey,
+} from "../packages/Store-backend/lambdas";
+import type {
   LambdaHandlers as ManagementHandlers,
   DriverManagementHandlers,
   ReadOnlyTransactions,
 } from "../packages/driver-management-backend/lambdas";
 
-import {
+import type {
   LambdaHandlers as CustomerHandlers,
   TransactionsHandler,
 } from "../packages/customer-backend/lambdas";
-import { LambdaHandlers as DriverHandlers } from "../packages/driver-backend/lambdas";
-import { LambdaHandlers as AdminHandlers } from "../packages/admin-backend/lambdas";
+import type { LambdaHandlers as DriverHandlers } from "../packages/driver-backend/lambdas";
+import type { LambdaHandlers as AdminHandlers } from "../packages/admin-backend/lambdas";
+
+type Methods = "POST" | "GET";
+export const storeUrl = ({
+  method,
+  url,
+}: {
+  method: Methods;
+  url:
+    | keyof LambdaHandlers
+    | keyof DriverManagementHandlers
+    | keyof ReadOnlyTransactions
+    | keyof TransactionsHandler
+    | keyof AddLocalCardPaymentAPIKey;
+}) => {
+  return `${method} /${url}`;
+};
+
+export const managementUrl = ({
+  method,
+  url,
+}: {
+  method: Methods;
+  url:
+    | keyof ManagementHandlers
+    | keyof DriverManagementHandlers
+    | keyof ReadOnlyTransactions
+    | keyof AddLocalCardPaymentAPIKey;
+}) => {
+  return `${method} /${url}`;
+};
+export const adminUrl = ({
+  method,
+  url,
+}: {
+  method: Methods;
+  url: keyof AdminHandlers;
+}) => {
+  return `${method} /${url}`;
+};
+type CustomerLambdaHandlers = CustomerHandlers & TransactionsHandler;
+export const customerUrl = ({
+  method,
+  url,
+}: {
+  method: Methods;
+  url: keyof CustomerLambdaHandlers;
+}) => {
+  return `${method} /${url}`;
+};
+export const driverUrl = ({
+  method,
+  url,
+}: {
+  method: Methods;
+  url: keyof DriverHandlers;
+}) => {
+  return `${method} /${url}`;
+};
 
 export const getStage = (stage: any) => {
   if (stage === "development") {
@@ -26,6 +87,8 @@ export const getStage = (stage: any) => {
 };
 const pathToLambdas = "./packages/driver-management-backend/lambdas/";
 const pathToLambdasCustomer = "./packages/customer-backend/lambdas/";
+const pathToLambdasStore = "./packages/Store-backend/lambdas/";
+// stores & managements
 export const driversManagement = {
   "POST /removeFromManagementDrivers": {
     function: {
@@ -68,7 +131,7 @@ export const driversManagement = {
     },
   },
 };
-
+// customers & stores
 export const transactions = {
   "POST /getTransactionsList": {
     function: {
@@ -77,58 +140,16 @@ export const transactions = {
   },
 };
 
-type Methods = "POST" | "GET";
-export const storeUrl = ({
-  method,
-  url,
-}: {
-  method: Methods;
-  url:
-    | keyof LambdaHandlers
-    | keyof DriverManagementHandlers
-    | keyof ReadOnlyTransactions
-    | keyof TransactionsHandler;
-}) => {
-  return `${method} /${url}`;
-};
-
-export const managementUrl = ({
-  method,
-  url,
-}: {
-  method: Methods;
-  url:
-    | keyof ManagementHandlers
-    | keyof DriverManagementHandlers
-    | keyof ReadOnlyTransactions;
-}) => {
-  return `${method} /${url}`;
-};
-export const adminUrl = ({
-  method,
-  url,
-}: {
-  method: Methods;
-  url: keyof AdminHandlers;
-}) => {
-  return `${method} /${url}`;
-};
-type CustomerLambdaHandlers = CustomerHandlers & TransactionsHandler;
-export const customerUrl = ({
-  method,
-  url,
-}: {
-  method: Methods;
-  url: keyof CustomerLambdaHandlers;
-}) => {
-  return `${method} /${url}`;
-};
-export const driverUrl = ({
-  method,
-  url,
-}: {
-  method: Methods;
-  url: keyof DriverHandlers;
-}) => {
-  return `${method} /${url}`;
+// stores & managements
+export const localCardKey = {
+  [storeUrl({ method: "POST", url: "addLocalCardPaymentAPIKey" })]: {
+    function: {
+      handler: pathToLambdasStore + "addLocalCardPaymentAPIKey.handler",
+    },
+  },
+  [storeUrl({ method: "POST", url: "disableLocalCardAPIKeys" })]: {
+    function: {
+      handler: pathToLambdasStore + "disableLocalCardAPIKeys.handler",
+    },
+  },
 };

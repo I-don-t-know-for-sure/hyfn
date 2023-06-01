@@ -3,18 +3,28 @@ export const disableLocalCardAPIKeysHandler = async ({
   client,
   userId,
   db,
-}: MainFunctionProps) => {
+}: DisableLocalCardAPIKeysProps) => {
   const response = await db.transaction().execute(async (trx) => {
-    const storeDoc = await trx
-      .selectFrom('stores')
+    const { flag = 'store' } = arg[0];
+
+    const userDoc = await trx
+      .selectFrom(flag === 'store' ? 'stores' : 'driverManagements')
       .selectAll()
       .where('userId', '=', userId)
       .executeTakeFirstOrThrow();
-    if (storeDoc.opened) {
-      throw new Error(returnsObj['store is open']);
+    if (flag === 'store') {
+      if (userDoc.opened) {
+        throw new Error(returnsObj['store is open']);
+      }
     }
 
-    await trx.deleteFrom('localCardKeys').where('id', '=', storeDoc.localCardApiKeyId).execute();
+    await db
+      .updateTable(flag === 'store' ? 'stores' : 'driverManagements')
+      .set({
+        localCardApiKeyId: null,
+      })
+      .where('userId', '=', userId)
+      .execute();
   });
 
   return response;

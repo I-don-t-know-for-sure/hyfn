@@ -9,7 +9,7 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { getStage } from ".";
+import { getStage, transactions } from ".";
 
 import { config } from "../envVaraibles";
 
@@ -212,12 +212,6 @@ export function customerApiStack({ stack }: StackContext) {
         },
       },
 
-      "POST /getTransactionsList": {
-        function: {
-          handler: pathToLambdas + "getTransactionsList.handler",
-        },
-      },
-
       "POST /createUserDocument": {
         function: {
           functionName: "createUserDocument" + stack.stage,
@@ -242,6 +236,7 @@ export function customerApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "updateAddresses.handler",
         },
       },
+      ...transactions,
     },
   });
   const permissions = new iam.PolicyStatement({

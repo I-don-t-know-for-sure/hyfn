@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import { ar } from "./arabic";
+
 import { customerAppArabicText, customerAppText } from "hyfn-types";
 const edited = i18n
   // detect user language

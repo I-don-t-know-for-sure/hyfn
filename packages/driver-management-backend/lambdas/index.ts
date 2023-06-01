@@ -1,7 +1,6 @@
-import { disableLocalCardKeysHandler } from './DisableLocalCardKeys';
 import { addDriverToManagementDriversHandler } from './addDriverToManagementDrivers';
 import { addUserAsEmployeeHandler } from './addEmployee';
-import { addLocalCardKeysHandler } from './addLocalCardKeys';
+
 import { createManagementHandler } from './createManagement';
 import { getActiveOrdersHandler } from './getActiveOrders';
 import { getAllDriversHandler } from './getAllDrivers';
@@ -21,18 +20,12 @@ export type LambdaHandlers = {
     arg: Parameters<typeof getManagementHandler>['0']['arg'];
     return: ReturnType<typeof getManagementHandler>;
   };
-  addLocalCardKeys: {
-    arg: Parameters<typeof addLocalCardKeysHandler>['0']['arg'];
-    return: ReturnType<typeof addLocalCardKeysHandler>;
-  };
+
   addEmployee: {
     arg: Parameters<typeof addUserAsEmployeeHandler>['0']['arg'];
     return: ReturnType<typeof addUserAsEmployeeHandler>;
   };
-  DisableLocalCardKeys: {
-    arg: Parameters<typeof disableLocalCardKeysHandler>['0']['arg'];
-    return: ReturnType<typeof disableLocalCardKeysHandler>;
-  };
+
   reportOrder: {
     arg: Parameters<typeof reportOrderHandler>['0']['arg'];
     return: ReturnType<typeof reportOrderHandler>;
