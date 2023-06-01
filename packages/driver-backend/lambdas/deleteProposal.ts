@@ -1,7 +1,5 @@
 interface DeleteProposalProps extends Omit<MainFunctionProps, 'arg'> {}
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { driverSchema, USER_TYPE_DRIVER } from 'hyfn-types';
-import { smaller } from 'mathjs';
 
 import { returnsObj } from 'hyfn-types';
 import { z } from 'zod';
