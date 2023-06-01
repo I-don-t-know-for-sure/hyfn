@@ -17,7 +17,7 @@ import {
 
 import { Store } from "config/types";
 
-import { t } from "utils/i18nextFix";
+import { t } from "i18next";
 
 import React, { useEffect } from "react";
 // import { Helmet } from 'react-helmet-async'
@@ -26,6 +26,7 @@ import { getCountryInfo } from "utils/countryInfo";
 import useGetStoreInfo from "../../hooks/useGetStoreInfo";
 import { useUpdateStoreInfo } from "./hooks/useUpdateStoreInfo";
 import { useForm } from "@mantine/form";
+import { storeTypesArray } from "hyfn-types";
 
 interface StoreInfoProps {}
 
@@ -49,6 +50,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
   const form = useForm({
     initialValues: initialInfo,
   });
+  console.log("🚀 ~ file: StoreInfo.tsx:53 ~ form:", form);
 
   const err = (e) => {
     alert(e);
@@ -227,46 +229,9 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
                 <MultiSelect
                   label={t("Store Type")}
                   required
-                  data={[
-                    { value: "restaurant", label: t("Restaurant") },
-                    { value: "grocery", label: t("Grocery") },
-                    { value: "clothes", label: t("Clothes") },
-                    { value: "shoes", label: t("Shoes") },
-
-                    { value: "stationery", label: t("Stationery") },
-                    { value: "electronics", label: t("Electronics") },
-                    {
-                      value: "repair and spare parts",
-                      label: t("Repair and spare parts"),
-                    },
-                    {
-                      value: "construction materials",
-                      label: t("construction materials"),
-                    },
-                    { value: "furniture", label: t("furniture") },
-                    {
-                      value: "bakery",
-                      label: t("Bakery"),
-                    },
-                    {
-                      value: "sweets",
-                      label: t("Sweets"),
-                    },
-                    {
-                      value: "watches, jewwlry, and accessories",
-                      label: t("Watches, jewwlry, and accessories"),
-                    },
-                    {
-                      value: "mother and child accessories",
-                      label: t("Mother and child accessories"),
-                    },
-                    {
-                      value: "cleaning meterials",
-                      label: t("cleaning meterials"),
-                    },
-                    { value: "games", label: t("Games") },
-                    { value: "meat store", label: t("Meat store") },
-                  ]}
+                  data={storeTypesArray.map((type) => {
+                    return { label: t(type), value: type };
+                  })}
                   aria-label="Store Type"
                   onChange={(e) => {
                     if (e.includes("restaurant")) {

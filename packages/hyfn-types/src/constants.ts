@@ -1,14 +1,18 @@
-export const chatBeforeInfo = "the following";
-export const chatAfterInfo =
-  'is product information. from the information I gave you, Give me a detailed description of this product. I want the answer straight and without filler words. for example the name of the product is simply "<NAME_OF_PRODUCT>" with <NAME_OF_PRODUCT> being the actual name of the product. write the result in html';
-export const chatTranslateBefore = "translate the following";
-export const chatTranslateAfter =
-  'to arabic if its not already in arabic, if its already in arabic return "." and keep it in html';
+import { t } from "i18next";
 
 export const hyfnPlusSubscriptionPrice = 10;
 
 export const descriptionGenerationPricePerImage = 0.1;
 export const backgroundRemovalPerImage = 0.1;
+export const ORDER_STATUS_PICKED = "picked up";
+export const TRANSACTION_TYPE_STORE = "store";
+export const TRANSACTION_TYPE_ADMIN = "hyfn";
+export const LOCAL_CARD_TRANSACTION_FLAG_STORE = "store";
+export const LOCAL_CARD_TRANSACTION_FLAG_SERVICE_FEE = "serviceFee";
+export const TRANSACTION_TYPE_DRIVER_MANAGMENT = "driverManagement";
+export const TRANSACTION_TYPE_MANAGMENT = "driverManagement";
+export const LOCAL_CARD_TRANSACTION_FLAG_DRIVER_MANAGEMENT = "management";
+export const LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT = "management";
 
 /// customer payment
 // export const TRANSACTION_TYPE_SUBSCRIPTION = "storeSubsscription";
@@ -27,14 +31,6 @@ export const transactionTypesArray = [
   // TRANSACTION_TYPE_SUBSCRIPTION,
 ] as const;
 
-export const something = "sjdjncjd";
-export const measurementSystem = [
-  { label: "Kilo", value: "Kilo" },
-  { label: "Liter", value: "Liter" },
-
-  { label: "Unit", value: "Unit" },
-];
-
 export const ACTIVE_ORDERS = "activeOrders";
 export const ACCEPTED_PROPOSALS_FLAG = "accepted";
 export const ALL_PROPOSALS_FLAG = "all";
@@ -44,23 +40,7 @@ export const customerServiceFee = 0.03;
 export const baseServiceFee = 2.5;
 
 export const monthlySubscriptionCost = 50;
-export const progressNotification = {
-  autoClose: false,
-  loading: true,
-};
 
-export const successNotification = {
-  autoClose: true,
-  loading: false,
-  color: "green",
-};
-
-export const errorNotificatin = {
-  autoClose: true,
-  loading: false,
-  color: "red",
-};
-export const currencies = { Libya: "LYD" };
 export const storeInfo = "storeInfo";
 export const customData = "customData";
 export const collections = "collections";
@@ -93,53 +73,13 @@ export const USER_DOCUMENT = "userDocument";
 export const USER_ID = "userID";
 export const LOGGED_IN = "loggedIn";
 export const STORE_TYPE_RESTAURANT = "restaurant";
-export const storeTypes = [
-  { value: "restaurant", label: "Restaurant" },
-  { value: "grocery", label: "Grocery" },
-  { value: "clothes", label: "Clothes" },
-  { value: "shoes", label: "Shoes" },
-  { value: "stationery", label: "Stationery" },
 
-  {
-    value: "WJA",
-    label: "Watches, jewlery, and accessories",
-  },
-  {
-    value: "MCA",
-    label: "Mother and child accessories",
-  },
-  {
-    value: "CM",
-    label: "Cleaning meterials",
-  },
-  { value: "games", label: "Games" },
-  // { value: 'electronics', label: 'Electronics' },
-  // {
-  //   value: 'repair and spare parts',
-  //   label: 'Repair and spare parts',
-  // },
-  //   {
-  //     value: "construction materials",
-  //     label: t("Construction materials"),
-  //   },
-  // { value: 'furniture', label: 'Furniture' },
-];
 // query keys
 export const GET_DRIVER_INFO = "getDriverInfo";
 export const paymentMethods = {
   sadad: "Sadad",
   localCard: "Local card",
 };
-export const paymentMethodsArray = [
-  // {
-  //   label: 'Sadad',
-  //   value: 'sadad',
-  // },
-  {
-    label: "Local card",
-    value: "localCard",
-  },
-];
 
 export const tarnsactionStatus = {
   paying: "Paying",
@@ -207,122 +147,28 @@ export const MAXIMUM_MANAGEMENT_CUT = 1;
 
 // query keys
 
-export const cities = {
-  Libya: {
-    Tripoli: "Tripoli",
-    Ajdabiya: "Ajdabiya",
-    Zuwara: "Zuwara",
-    Yafran: "Yafran",
-    Nalut: "Nalut",
-    Gharyan: "Gharyan",
-    "Al Bayda": "Al Bayda",
-    "Bani Walid": "Bani Walid",
-    "Al-Marj": "Al-Marj",
-    Mizda: "Mizda",
-    Benghazi: "Benghazi",
-    Awbari: "Awbari",
-    Tobruk: "Tobruk",
-    "Al-Khums": "Al-Khums",
-    Murzuk: "Murzuk",
-    Shahat: "Shahat",
-    Sabratah: "Sabratah",
-    Ghat: "Ghat",
-    Sirte: "Sirte",
-    Tajura: "Tajura",
-    Misrata: "Misrata",
-    Zawiya: "Zawiya",
-    Sabha: "Sabha",
-    Brak: "Brak",
-    Ghadamis: "Ghadamis",
-    "Al Abyar": "Al Abyar",
-    Tarhunah: "Tarhunah",
-    Derna: "Derna",
-    Waddan: "Waddan",
-    Awjila: "Awjila",
-    Suluq: "Suluq",
-    Zelten: "Zelten",
-    Qatrun: "Qatrun",
-    "Al Qubbah": "Al Qubbah",
-    Tocra: "Tocra",
-    Jalu: "Jalu",
-    Zliten: "Zliten",
-    "Al Jamīl": "Al Jamīl",
-    Brega: "Brega",
-    Farzougha: "Farzougha",
-    Sorman: "Sorman",
-    Msallata: "Msallata",
-    Kikla: "Kikla",
-  },
-};
-
 export const COLLECTION_TYPE_MANUAL = "manual";
 
-export const countries = {
-  Libya: "Libya",
-};
 ///////////////////////////////////////////////////////// enums ////////////////////////////////////////////////////////////
 export const collectionTypesArray = [COLLECTION_TYPE_MANUAL];
 export const measurementSystemArray = ["Kilo", "Liter", "Unit"] as const;
-export const transactionMethods = ["localCard", "sadad"] as const;
+
+export const transactionMethods = ["localCard"] as const;
+
 export const storeTypesArray = [
   "restaurant",
   "grocery",
   "clothes",
   "shoes",
   "stationery",
-  "WJA", // WJA
-  "MCA",
-  "CM",
+  "watches, jewlery, and accessories",
+  "mother and child accessories",
+  "cleaning meterials",
   "games",
+  "bakery",
+  "sweets",
+  "meat store",
 ] as const;
-export const countriesArray = ["Libya"] as const;
-export const citiesArray = [
-  "Tripoli",
-  "Ajdabiya",
-  "Zuwara",
-  "Yafran",
-  "Nalut",
-  "Gharyan",
-  "Al Bayda",
-  "Bani Walid",
-  "Al-Marj",
-  "Mizda",
-  "Benghazi",
-  "Awbari",
-  "Tobruk",
-  "Al-Khums",
-  "Murzuk",
-  "Shahat",
-  "Sabratah",
-  "Ghat",
-  "Sirte",
-  "Tajura",
-  "Misrata",
-  "Zawiya",
-  "Sabha",
-  "Brak",
-  "Ghadamis",
-  "Al Abyar",
-  "Tarhunah",
-  "Derna",
-  "Waddan",
-  "Awjila",
-  "Suluq",
-  "Zelten",
-  "Qatrun",
-  "Al Qubbah",
-  "Tocra",
-  "Jalu",
-  "Zliten",
-  "Al Jamīl",
-  "Brega",
-  "Farzougha",
-  "Sorman",
-  "Msallata",
-  "Kikla",
-] as const;
-
-export const currenciesArray = ["LYD"];
 
 export const userTypesArray = [
   USER_TYPE_CUSTOMER,
@@ -337,21 +183,3 @@ export const orderStatusArray = [
   ORDER_STATUS_PAID,
 ];
 //////////////////////////////////////////////////////////// enums /////////////////////////////////////////////////////////
-
-export const commonQuestions = [
-  {
-    question: "ما هي الخدمات التي نقدمها؟",
-    answer:
-      '<p style="text-align: right">ندير منصة للطلب والتوصيل عبر الانترنت عن طريق ثلاث تطبيقات</p><p style="text-align: right"> التطبيق الرئيسي</p><p style="text-align: right">يمكن هذا التطبيق المستخدِم من الشراء بالدينار الليبي عن طريق وسائل الدفع الالكتروني كل ما يعرض في التطبيق من منتجات</p><p style="text-align: right"> تطبيق السائق</p><p style="text-align: right">يوفر للسائق واجهة مستخدم للتعامل مع الطلبات و التواصل مع الزبائن</p><p style="text-align: right"> تطبيق التاجر</p><p style="text-align: right">يوفر للتاجر واجهة مستخدم سهلة الاستعمال لإدارة منتجاته على المنصة</p>',
-  },
-  {
-    question: "هل الأسعار على منصتنا هي نفس الأسعار في المتجر؟",
-    answer:
-      '<p style="text-align: right">يتم تحديد أسعار المنتجات على المنصة من قبل المتاجر التي تبيعها</p>',
-  },
-  {
-    question: "كم تكلفة الخدمات اللي تقدمها الشركة؟",
-    answer:
-      '<div dir="ltr"> <h3 style="text-align: right">تكلفة الخدمات للزبون</h3><p style="text-align: right">نحن نفرض رسوم خدمة بنسبة 2.5 دينار + 2% من كل طلب يتم إجراؤه من خلال منصتنا</p><p style="text-align: right" dir="ltr">مع العضوية الاختيارية، يمكنك الاستمتاع بإجراء الطلبات دون دفع رسوم الخدمة</p><h3 style="text-align: right">تكلفة الخدمات للتاجر</h3><p style="text-align: right">تكلفة الاشتراك الشهري لخدماتنا للتاجر 50 دينار</p></div>',
-  },
-];

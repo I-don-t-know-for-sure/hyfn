@@ -17,15 +17,14 @@ import { t } from "i18next";
 
 interface ProductType {
   id: any;
-  textInfo: {
-    title: string;
-    description: string;
-  };
-  pricing: {
-    price: number;
-    currency: string;
-  };
-  options: { hasOptions: boolean };
+
+  title: string;
+  description: string;
+
+  price: number;
+  currency: string;
+
+  hasOptions: boolean;
   images: string[];
 
   measurementSystem: string;
@@ -73,7 +72,7 @@ const Product: React.FC<ProductProps> = ({
         position: "relative",
       }}
     >
-      {!product?.options?.hasOptions && (
+      {!product?.hasOptions && (
         <Box
           sx={{
             zIndex: 999,
@@ -85,7 +84,7 @@ const Product: React.FC<ProductProps> = ({
           <ProductControler
             addproduct={addProduct}
             reduceOrRemoveProduct={reduceOrRemoveProduct}
-            qty={addedProducts ? addedProducts[product.id]?.qty : 0}
+            qty={addedProducts ? addedProducts[product?.id]?.qty : 0}
           />
         </Box>
       )}
@@ -134,21 +133,18 @@ const Product: React.FC<ProductProps> = ({
           <Image radius={6} imageName={product.images[0]} />
 
           <Box>
-            <Text weight={700}>{product.textInfo.title}</Text>
+            <Text weight={700}>{product.title}</Text>
           </Box>
           <Box>
             <Group spacing={3}>
-              <Text>{product?.pricing?.currency || "LYD"}</Text>
+              <Text>{product?.currency || "LYD"}</Text>
               <Text
                 sx={(theme) => ({
                   fontSize: "24px",
                   color: theme.primaryColor,
                 })}
               >
-                {` ${
-                  product.pricing.price -
-                  product.pricing.price * storeServiceFee
-                } `}
+                {` ${product.price - product.price * storeServiceFee} `}
               </Text>
               <Text>{t("Per")}</Text>
               <Text color="red">{t(product?.measurementSystem)}</Text>

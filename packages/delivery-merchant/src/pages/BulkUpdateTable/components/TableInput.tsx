@@ -1,10 +1,11 @@
 import { Checkbox, Select, TextInput } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { measurementSystem } from "hyfn-types";
+import { measurementSystemArray } from "hyfn-types";
 import React, { useEffect, useRef, useState } from "react";
 import { ActionTypes } from "../BulkUpdateTable";
 import DescriptionModal from "./DescriptionModal";
 import ImageModal from "./ImageModal";
+import { t } from "i18next";
 
 interface TableInputProps {
   value: any;
@@ -72,7 +73,9 @@ const TableInput: React.FC<TableInputProps> = ({
   ) : value === "measurementSystem" ? (
     <Select
       defaultValue={keyValue}
-      data={measurementSystem}
+      data={measurementSystemArray.map((system) => {
+        return { label: t(system), value: system };
+      })}
       onChange={(e) => {
         console.log(keyValue);
 

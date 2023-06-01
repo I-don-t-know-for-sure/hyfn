@@ -17,13 +17,12 @@ import useGetStores from "./hooks/useGetStores";
 
 import { Carousel } from "@mantine/carousel";
 
-import useHomeConfig from "./config";
-
 import { t } from "../../util/i18nextFix";
 
 import { useLocation } from "../../contexts/locationContext/LocationContext";
 import { z } from "zod";
 import { useSendNotification } from "./hooks/useSendNotification";
+import { storeTypesArray } from "hyfn-types";
 
 // yarn add https://github.com/MyOrg/my-lib.git#branch
 
@@ -85,7 +84,6 @@ const Home: React.FC = () => {
       items: 2.5,
     },
   };
-  const sections = useHomeConfig();
 
   return (
     <Box
@@ -95,41 +93,45 @@ const Home: React.FC = () => {
       }}
     >
       <Carousel align={"start"} slideSize={"20%"}>
-        {sections.map((section) => {
-          return (
-            <Carousel.Slide key={section.value}>
-              <Box
-                mt={24}
-                mb={24}
-                sx={{
-                  width: "100%",
-                }}
-              >
-                <Chip
-                  onClick={() => {
-                    if (filter === section.value) {
-                      setFilter("all");
-                    } else {
-                      setFilter(section.value);
-                    }
-                  }}
-                  checked={filter === section.value}
+        {storeTypesArray
+          .map((type) => {
+            return { label: t(type), value: type };
+          })
+          .map((section) => {
+            return (
+              <Carousel.Slide key={section.value}>
+                <Box
+                  mt={24}
+                  mb={24}
                   sx={{
-                    margin: "auto",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-around",
-                    alignContent: "center",
-
-                    width: "fit-content",
+                    width: "100%",
                   }}
                 >
-                  {t(section.label)}
-                </Chip>
-              </Box>
-            </Carousel.Slide>
-          );
-        })}
+                  <Chip
+                    onClick={() => {
+                      if (filter === section.value) {
+                        setFilter("all");
+                      } else {
+                        setFilter(section.value);
+                      }
+                    }}
+                    checked={filter === section.value}
+                    sx={{
+                      margin: "auto",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-around",
+                      alignContent: "center",
+
+                      width: "fit-content",
+                    }}
+                  >
+                    {t(section.label)}
+                  </Chip>
+                </Box>
+              </Carousel.Slide>
+            );
+          })}
       </Carousel>
 
       {isError ? (

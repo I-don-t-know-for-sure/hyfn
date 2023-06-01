@@ -59,6 +59,7 @@ const Product: React.FC<ProductProps> = ({
 
   currency,
 }) => {
+  if (!product) return;
   return (
     <Box
       sx={{

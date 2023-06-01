@@ -12,11 +12,11 @@ import {
   TextInput,
   Tooltip,
 } from "@mantine/core";
-import { storeTypes } from "hyfn-types";
 
 import { t } from "util/i18nextFix";
 import React, { useState } from "react";
 import { BsInfoCircle } from "react-icons/bs";
+import { storeTypesArray } from "hyfn-types";
 
 interface StoreDetailsModalProps {
   storeDetails: any;
@@ -127,7 +127,9 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
             sx={{
               width: "100%",
             }}
-            data={storeTypes}
+            data={storeTypesArray.map((type) => {
+              return { label: t(type), value: type };
+            })}
             value={storeDetails.storeType}
             readOnly
           />

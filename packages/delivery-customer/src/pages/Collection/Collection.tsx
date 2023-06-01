@@ -129,12 +129,12 @@ const Collection: React.FC<CollectionProps> = ({}) => {
                     setCartInfo
                   );
                 };
-                const productUrl = product?.options?.hasOptions
-                  ? `/product/${storeInfo.id}/${country}/${city}/${product.id}`
-                  : `/product/withnotoptions/${storeInfo.id}/${country}/${city}/${product.id}`;
+                const productUrl = product?.hasOptions
+                  ? `/product/${storeInfo?.id}/${country}/${city}/${product?.id}`
+                  : `/product/withnotoptions/${storeInfo?.id}/${country}/${city}/${product?.id}`;
                 return (
                   <Product
-                    key={product.id}
+                    key={product?.id}
                     product={product}
                     productUrl={productUrl}
                     addProduct={addProduct}
@@ -143,7 +143,7 @@ const Collection: React.FC<CollectionProps> = ({}) => {
                     // likeMutation={likeMutation}
                     city={city}
                     country={country}
-                    storefront={storeInfo.id}
+                    storefront={storeInfo?.id}
                   />
                 );
               });

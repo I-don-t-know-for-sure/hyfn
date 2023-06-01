@@ -12,7 +12,7 @@ import {
 import { useUser } from "contexts/userContext/User";
 
 import {
-  paymentMethodsArray,
+  transactionMethods,
   storeServiceFee,
   serviceFeePayment,
   managementPayment,
@@ -62,8 +62,8 @@ const PayModal: React.FC<PayModalProps> = ({
   const { mutate: createTransaction } = useCreateTransaction();
   const [{ country }] = useLocation();
   const [opened, setOpened] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(
-    paymentMethodsArray[0].value
+  const [paymentMethod, setPaymentMethod] = useState<string>(
+    transactionMethods[0]
   );
   const { userDocument } = useUser();
   const balance = userDocument.balance;
@@ -79,7 +79,9 @@ const PayModal: React.FC<PayModalProps> = ({
       <Modal opened={opened} onClose={() => setOpened(false)}>
         <Stack spacing={12}>
           <Select
-            data={paymentMethodsArray}
+            data={transactionMethods.map((method) => {
+              return { label: t(method), value: method };
+            })}
             onChange={(e) => setPaymentMethod(e)}
             value={paymentMethod}
             label={t("Choose a payment method")}

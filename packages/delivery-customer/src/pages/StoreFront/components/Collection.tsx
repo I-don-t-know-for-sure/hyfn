@@ -130,8 +130,8 @@ const Collection: React.FC<CollectionProps> = ({
                   );
                 };
                 const productUrl = product?.hasOptions
-                  ? `/product/${storefront.id}/${country}/${city}/${product.id}`
-                  : `/product/withnotoptions/${storefront.id}/${country}/${city}/${product.id}`;
+                  ? `/product/${storefront?.id}/${country}/${city}/${product?.id}`
+                  : `/product/withnotoptions/${storefront?.id}/${country}/${city}/${product?.id}`;
                 return (
                   <Carousel.Slide
                     sx={{

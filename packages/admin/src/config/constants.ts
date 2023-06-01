@@ -60,16 +60,6 @@ export const storeTypes = [
   { value: "clothes", label: "Clothes" },
   { value: "shoes", label: "Shoes" },
   { value: "stationery", label: "Stationery" },
-  // { value: 'electronics', label: 'Electronics' },
-  // {
-  //   value: 'repair and spare parts',
-  //   label: 'Repair and spare parts',
-  // },
-  //   {
-  //     value: "construction materials",
-  //     label: t("Construction materials"),
-  //   },
-  // { value: 'furniture', label: 'Furniture' },
 
   {
     value: "watches, jewlery, and accessories",
