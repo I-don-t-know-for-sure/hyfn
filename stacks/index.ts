@@ -15,6 +15,9 @@ import type {
 import type { LambdaHandlers as DriverHandlers } from "../packages/driver-backend/lambdas";
 import type { LambdaHandlers as AdminHandlers } from "../packages/admin-backend/lambdas";
 
+const pathToLambdas = "./packages/driver-management-backend/lambdas/";
+const pathToLambdasCustomer = "./packages/customer-backend/lambdas/";
+const pathToLambdasStore = "./packages/Store-backend/lambdas/";
 type Methods = "POST" | "GET";
 export const storeUrl = ({
   method,
@@ -85,9 +88,6 @@ export const getStage = (stage: any) => {
   }
   return "development";
 };
-const pathToLambdas = "./packages/driver-management-backend/lambdas/";
-const pathToLambdasCustomer = "./packages/customer-backend/lambdas/";
-const pathToLambdasStore = "./packages/Store-backend/lambdas/";
 // stores & managements
 export const driversManagement = {
   "POST /removeFromManagementDrivers": {

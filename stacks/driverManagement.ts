@@ -67,12 +67,6 @@ export function managementApiStack({ stack }: StackContext) {
     },
 
     routes: {
-      "POST /addLocalCardKeys": {
-        function: {
-          handler: pathToLambdas + "addLocalCardKeys.handler",
-        },
-      },
-
       "POST /addEmployee": {
         function: {
           handler: pathToLambdas + "addEmployee.handler",
