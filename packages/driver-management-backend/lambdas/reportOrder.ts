@@ -63,7 +63,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
 interface ReportOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import { MainFunctionProps, mainWrapper, withTransaction } from 'hyfn-server';
+import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { ORDER_TYPE_DELIVERY } from 'hyfn-types';
 import { sql } from 'kysely';
 import { ObjectId } from 'mongodb';
