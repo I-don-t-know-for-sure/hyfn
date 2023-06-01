@@ -295,7 +295,7 @@ const Payments: React.FC<PaymentsProps> = () => {
                 </Button>
               </Stack>
             </Card>
-            <Managment
+            {/* <Managment
               useAddDriverToManagementDrivers={useAddDriverToManagementDrivers}
               useGetStoreDrivers={useGetStoreDrivers}
               useRemoveDriverFromManagementDrivers={
@@ -303,7 +303,7 @@ const Payments: React.FC<PaymentsProps> = () => {
               }
               useSearchDriverByID={useSearchDriverByID}
               useUpdateDriverBalance={useUpdateDriverBalance}
-            />
+            /> */}
           </Stack>
         )
       )}

@@ -186,16 +186,6 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "setOrderAsAccepted.handler",
         },
       },
-      // "POST /setOrderAsDelivered": {
-      //   function: {
-      //     handler: pathToLambdas + "setOrderAsDelivered.handler",
-      //   },
-      // },
-      // "POST /getDriverInfo": {
-      //   function: {
-      //     handler: pathToLambdas + "getDriverInfo.handler",
-      //   },
-      // },
 
       "POST /setOrderAsReady": {
         function: {
@@ -369,7 +359,7 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getCollectionStoreFrontProducts.handler",
         },
       },
-      ...driversManagement,
+      // ...driversManagement,
       ...localCardKey,
       ...transactions,
     },
