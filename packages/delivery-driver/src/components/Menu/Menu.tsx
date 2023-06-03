@@ -20,7 +20,8 @@ import {
   LoadingOverlay,
   Text,
   Stack,
-} from "@mantine/core";
+  CopyTextButton,
+} from "hyfn-client";
 import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { Link, useLocation as useRouteLocation } from "react-router-dom";
@@ -77,7 +78,7 @@ const StyledNav: React.FC = ({ children, ...rest }) => {
   const { classes } = useStyles();
   return (
     <Box component="nav" className={classes.styledNav} {...rest}>
-      {children}
+      {children as any}
     </Box>
   );
 };
@@ -90,7 +91,7 @@ const Wrapper: React.FC = ({ children }) => {
     },
   }));
   const { classes } = useStyles();
-  return <Box className={classes.wrapper}>{children}</Box>;
+  return <Box className={classes.wrapper}>{children as any}</Box>;
 };
 
 const BodyWrapper: React.FC = ({ children }) => {
@@ -101,7 +102,7 @@ const BodyWrapper: React.FC = ({ children }) => {
     },
   }));
   const { classes } = useStyles();
-  return <Box className={classes.bodyWrapper}>{children}</Box>;
+  return <Box className={classes.bodyWrapper}>{children as any}</Box>;
 };
 
 const Inner: React.FC<{ showMenu: boolean; isMobile: boolean }> = ({
@@ -126,7 +127,7 @@ const Inner: React.FC<{ showMenu: boolean; isMobile: boolean }> = ({
     })
   );
   const { classes } = useStyles({ showMenu });
-  return <Box className={classes.inner}>{children}</Box>;
+  return <Box className={classes.inner}>{children as any}</Box>;
 };
 
 const Menu: React.FC = ({ children }) => {
@@ -535,7 +536,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   justifyContent: "space-around",
                 }}
               >
-                <CopyButton value={user?.id} />
+                <CopyTextButton value={user?.id} />
                 <Group>
                   <Text weight={700}>{`${t("Balance")}: ${
                     typeof user?.balance?.toFixed(2) !== "undefined"

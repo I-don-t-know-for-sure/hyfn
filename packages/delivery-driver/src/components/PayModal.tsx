@@ -1,16 +1,16 @@
-import { Box, Button, Group, Image, Modal, Table } from '@mantine/core'
-import { t } from 'utils/i18nextFix'
-import React, { useState } from 'react'
+import { Box, Button, Group, Image, Modal, Table } from "hyfn-client";
+import { t } from "utils/i18nextFix";
+import React, { useState } from "react";
 
 interface PayModalProps {
-  pay: () => void
-  storeProducts: any[]
+  pay: () => void;
+  storeProducts: any[];
 }
 
 const PayModal: React.FC<PayModalProps> = ({ pay, storeProducts }) => {
-  console.log(storeProducts)
+  console.log(storeProducts);
 
-  const [opened, setOpened] = useState(false)
+  const [opened, setOpened] = useState(false);
 
   return (
     <>
@@ -19,9 +19,9 @@ const PayModal: React.FC<PayModalProps> = ({ pay, storeProducts }) => {
           <Table>
             <thead>
               <tr>
-                <th>{t('Name')}</th>
-                <th>{t('QTY found')}</th>
-                <th>{t('Image')}</th>
+                <th>{t("Name")}</th>
+                <th>{t("QTY found")}</th>
+                <th>{t("Image")}</th>
               </tr>
             </thead>
             <tbody>
@@ -34,14 +34,16 @@ const PayModal: React.FC<PayModalProps> = ({ pay, storeProducts }) => {
                       <Image
                         radius={4}
                         sx={{
-                          maxWidth: '45px',
-                          maxHeight: '45px',
+                          maxWidth: "45px",
+                          maxHeight: "45px",
                         }}
-                        src={`${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${product.images[0]}`}
+                        src={`${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${
+                          product.images[0]
+                        }`}
                       />
                     </td>
                   </tr>
-                )
+                );
               })}
             </tbody>
           </Table>
@@ -53,7 +55,7 @@ const PayModal: React.FC<PayModalProps> = ({ pay, storeProducts }) => {
           }}
           onClick={pay}
         >
-          {t('Pay')}
+          {t("Pay")}
         </Button>
       </Modal>
 
@@ -63,14 +65,14 @@ const PayModal: React.FC<PayModalProps> = ({ pay, storeProducts }) => {
             zIndex: 999,
           }}
           onClick={() => {
-            setOpened(true)
+            setOpened(true);
           }}
         >
-          {t('Pay')}
+          {t("Pay")}
         </Button>
       </Group>
     </>
-  )
-}
+  );
+};
 
-export default PayModal
+export default PayModal;

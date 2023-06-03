@@ -6,12 +6,12 @@ import {
   Container,
   Group,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
 
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";

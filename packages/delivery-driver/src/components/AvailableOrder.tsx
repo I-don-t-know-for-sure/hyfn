@@ -1,6 +1,6 @@
-import { Button, Card, Group, Text } from "@mantine/core";
+import { Button, Card, CopyTextButton, Group, Text } from "hyfn-client";
 import { DateTimePicker } from "@mantine/dates";
-import { CopyButton } from "hyfn-client";
+
 import { useTakeOrder } from "Pages/Proposals/hooks/useTakeOrder";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -32,7 +32,7 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
       <Group>
         <Text>{order?.id}</Text>
 
-        <CopyButton
+        <CopyTextButton
           value={`${order?.stores[0].lat},${order?.stores[0].long}`}
         />
         <DateTimePicker
@@ -51,12 +51,14 @@ const AvailableOrder: React.FC<AvailableOrderProps> = ({
           maxWidth: "400px",
         }}
       >
-        <ProposalModal
-          orderId={order.id}
-          proposal={order?.proposals?.find(
-            (proposal) => proposal?.driverId === userDocument.id
-          )}
-        />
+        {!acceptedProposal.managementId && (
+          <ProposalModal
+            orderId={order.id}
+            proposal={order?.proposals?.find(
+              (proposal) => proposal?.driverId === userDocument.id
+            )}
+          />
+        )}
         {driverManagement === acceptedProposal.managementId && (
           <Group>
             <Button

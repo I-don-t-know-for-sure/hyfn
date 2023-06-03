@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { useLocation } from "react-router";
 import { useValidateTransaction } from "../hooks/useValidateTransaction";
-import { LoadingOverlay, useMantineColorScheme } from "@mantine/core";
+import { LoadingOverlay, useMantineColorScheme } from "hyfn-client";
 
 interface PayProps {
   // validation: (any: any) => void;

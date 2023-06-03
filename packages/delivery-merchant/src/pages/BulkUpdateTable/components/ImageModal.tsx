@@ -10,7 +10,7 @@ import {
   Modal,
   Text,
 } from "hyfn-client";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { ActionTypes } from "../BulkUpdateTable";
 import ValueComponent from "components/PreviewImage";
@@ -41,7 +41,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        sx={{
+        style={{
           width: "500px",
         }}
       >

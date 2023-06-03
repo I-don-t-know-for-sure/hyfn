@@ -5,7 +5,7 @@ import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import { useEffect, useRef, useState } from "react";
 
-import { Button } from "@mantine/core";
+import { Button } from "hyfn-client";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // delete L.Icon.Default.prototype._getIconUrl;

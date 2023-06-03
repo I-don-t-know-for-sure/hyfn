@@ -1,6 +1,6 @@
-import { Box, Button, ThemeIcon } from "@mantine/core";
+import { Box, Button, ThemeIcon } from "hyfn-client";
 import PickupModal from "components/PickupModal";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 
 interface ControlButtonProps {

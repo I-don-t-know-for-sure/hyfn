@@ -8,7 +8,7 @@ import {
   Text,
 } from "hyfn-client";
 import FullTextEditor from "components/FullTextEditor";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { ActionTypes } from "../BulkUpdateTable";
 import ValueComponent from "components/PreviewImage";

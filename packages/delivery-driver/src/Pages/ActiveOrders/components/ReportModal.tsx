@@ -1,36 +1,48 @@
-import { Button, Menu, Modal, Stack, TextInput, Textarea, UnstyledButton } from '@mantine/core'
+import {
+  Button,
+  Menu,
+  Modal,
+  Stack,
+  TextInput,
+  Textarea,
+  UnstyledButton,
+} from "hyfn-client";
 
-import { t } from 'utils/i18nextFix'
-import React, { useState } from 'react'
-import { useReportOrder } from '../hooks/useReportOrder'
+import { t } from "utils/i18nextFix";
+import React, { useState } from "react";
+import { useReportOrder } from "../hooks/useReportOrder";
 
 interface ReportModalProps {
-  orderId: string
+  orderId: string;
 }
 
 const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
-  const [opened, setOpened] = useState(false)
-  const [report, setReport] = useState('')
-  const { mutate: submitReport } = useReportOrder()
+  const [opened, setOpened] = useState(false);
+  const [report, setReport] = useState("");
+  const { mutate: submitReport } = useReportOrder();
   return (
     <>
       <Modal
         opened={opened}
         onClose={() => {
-          setOpened(false)
+          setOpened(false);
         }}
       >
         <Stack>
-          <Textarea label={t('Your Report')} value={report} onChange={(e) => setReport(e.target.value)} />
+          <Textarea
+            label={t("Your Report")}
+            value={report}
+            onChange={(e) => setReport(e.target.value)}
+          />
           {/* <FullTextEditor value={textEditor} setValue={setTextEditor} /> */}
           <Button
             mt={14}
             fullWidth
             onClick={() => {
-              submitReport({ orderId, report: { report } })
+              submitReport({ orderId, report: { report } });
             }}
           >
-            {t('Submit')}
+            {t("Submit")}
           </Button>
         </Stack>
       </Modal>
@@ -38,15 +50,15 @@ const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
         variant="subtle"
         color="red"
         onClick={() => {
-          console.log('open')
+          console.log("open");
 
-          setOpened(true)
+          setOpened(true);
         }}
         sx={{
-          color: 'red',
+          color: "red",
         }}
       >
-        {t('Report')}
+        {t("Report")}
       </Button>
       {/* <Menu.Item
         color="red"
@@ -59,7 +71,7 @@ const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
         {t('Report')}
       </Menu.Item> */}
     </>
-  )
-}
+  );
+};
 
-export default ReportModal
+export default ReportModal;

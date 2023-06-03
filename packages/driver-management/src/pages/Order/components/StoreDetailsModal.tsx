@@ -11,10 +11,10 @@ import {
   Text,
   TextInput,
   Tooltip,
-} from "@mantine/core";
+} from "hyfn-client";
 import { storeTypesArray } from "hyfn-types";
 
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 
 import React, { useState } from "react";
 import { BsInfoCircle } from "react-icons/bs";

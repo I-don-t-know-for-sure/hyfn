@@ -1,13 +1,13 @@
-import { ActionIcon, Button, Modal, Text } from '@mantine/core'
-import { t } from 'utils/i18nextFix'
-import React, { useState } from 'react'
+import { ActionIcon, Button, Modal, Text } from "hyfn-client";
+import { t } from "utils/i18nextFix";
+import React, { useState } from "react";
 
 interface WalletModalProps {
-  balance: number
+  balance: number;
 }
 
 const WalletModal: React.FC<WalletModalProps> = ({ balance }) => {
-  const [opened, setOpened] = useState(false)
+  const [opened, setOpened] = useState(false);
 
   return (
     <>
@@ -16,10 +16,10 @@ const WalletModal: React.FC<WalletModalProps> = ({ balance }) => {
       </Modal>
       <Button
         onClick={() => {
-          setOpened(true)
+          setOpened(true);
         }}
       >
-        {`${t('Wallet')} : ${balance}`}
+        {`${t("Wallet")} : ${balance}`}
       </Button>
       {/* <ActionIcon
         sx={{
@@ -30,7 +30,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ balance }) => {
         <Text>{`${t('Balance')} : ${balance}`}</Text>
       </ActionIcon> */}
     </>
-  )
-}
+  );
+};
 
-export default WalletModal
+export default WalletModal;

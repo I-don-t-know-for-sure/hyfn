@@ -1,5 +1,5 @@
 /* import { Button, FileInput, Modal, Stack } from "hyfn-client";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { useGenerateProductDescription } from "../hooks/useGenerateProductDescription";
 
@@ -72,7 +72,7 @@ export default GenerateDescriptionModal;
  */
 
 import { Button, FileInput, Modal, Stack } from "hyfn-client";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { useGenerateProductDescription } from "../hooks/useGenerateProductDescription";
 

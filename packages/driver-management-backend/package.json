@@ -5,27 +5,7 @@
   "main": "lambdas/index.ts",
   "module": "lambdas/index.ts",
   "types": "lambdas/index.ts",
-  "dependencies": {
-    "@aws-sdk/client-kms": "^3.271.0",
-    "@serverless/eslint-config": "^5.0.1",
-    "aws-sdk": "^2.1314.0",
-    "aws4": "^1.11.0",
-    "axios": "^1.3.3",
-    "crypto-js": "^4.1.1",
-    "eslint-plugin-import": "^2.26.0",
-    "git-list-updated": "^1.2.1",
-    "hyfn-server": "^1.0.3",
-    "jimp": "^0.16.1",
-    "mathjs": "^11.5.1",
-    "mongodb": "^4.7.0",
-    "prettier": "^2.7.1",
-    "react-i18next": "^11.18.1",
-    "serverless-dotenv-plugin": "^4.0.2",
-    "serverless-webpack": "^5.7.1",
-    "webpack": "^5.73.0",
-    "yup": "^0.32.11",
-    "zod": "^3.20.6"
-  },
+  "dependencies": {},
   "scripts": {
     "envs": "node ./fetch-envs.js",
     "createDatabaseUser": "node ./createDatabaseUser.js",
@@ -40,12 +20,5 @@
     "start": "sst bind --region eu-west-3 --stage development  vite",
     "build-ts": "tsc --build ./tsconfig.json"
   },
-  "devDependencies": {
-    "@serverless/typescript": "^3.27.0",
-    "eslint": "^8.26.0",
-    "serverless-iam-roles-per-function": "^3.2.0",
-    "ts-loader": "^9.4.2",
-    "typescript": "^4.9.5",
-    "zod-to-json-schema": "^3.20.4"
-  }
+  "devDependencies": {}
 }

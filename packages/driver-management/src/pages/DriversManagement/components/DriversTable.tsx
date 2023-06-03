@@ -1,24 +1,28 @@
-import { Button, Center, Table, Text } from '@mantine/core'
-import { t } from 'utils/i18nextFix'
-import React from 'react'
-import DriverCard from './DriverCard'
-import DriverModal from './DriverModal'
+import { Button, Center, Table, Text } from "hyfn-client";
+import { t } from "utils/i18nextFix";
+import React from "react";
+import DriverCard from "./DriverCard";
+import DriverModal from "./DriverModal";
 
 interface DriversListProps {
-  drivers: any[]
-  removeDriver: any
-  updateDriverBalance: any
+  drivers: any[];
+  removeDriver: any;
+  updateDriverBalance: any;
 }
 
-const DriversTable: React.FC<DriversListProps> = ({ drivers, removeDriver, updateDriverBalance }) => {
+const DriversTable: React.FC<DriversListProps> = ({
+  drivers,
+  removeDriver,
+  updateDriverBalance,
+}) => {
   return (
     <>
       {drivers?.length > 0 ? (
         <Table>
           <thead>
             <tr>
-              <th>{t('Driver name')}</th>
-              <th>{t('Actions')}</th>
+              <th>{t("Driver name")}</th>
+              <th>{t("Actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -34,21 +38,21 @@ const DriversTable: React.FC<DriversListProps> = ({ drivers, removeDriver, updat
                     />
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </Table>
       ) : (
         <Center
           sx={{
-            height: '100%',
+            height: "100%",
           }}
         >
-          <Text>{t('You don`t have drivers yet')}</Text>
+          <Text>{t("You don`t have drivers yet")}</Text>
         </Center>
       )}
     </>
-  )
-}
+  );
+};
 
-export default DriversTable
+export default DriversTable;

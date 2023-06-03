@@ -7,7 +7,7 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 
@@ -54,7 +54,7 @@ const AddDriverModal: React.FC<AddDriverModalProps> = ({
         <Stack>
           <NumberInput
             value={balanceToAdd}
-            onChange={(e) => setBalanceToAdd(e)}
+            onChange={(e) => setBalanceToAdd(e as number)}
             label={t("Balance to add to the driver")}
           />
           <Button

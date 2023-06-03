@@ -1,5 +1,3 @@
-import { t } from "i18next";
-
 export const hyfnPlusSubscriptionPrice = 10;
 
 export const descriptionGenerationPricePerImage = 0.1;

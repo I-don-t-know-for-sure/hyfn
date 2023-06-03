@@ -1,5 +1,5 @@
 import { storeAppText } from "hyfn-types";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import { useQuery } from "react-query";
 import { fetchApi } from "utils/fetch";
 

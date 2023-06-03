@@ -78,7 +78,7 @@ const Wrapper: React.FC = ({ children }) => {
     },
   }));
   const { classes } = useStyles();
-  return <Box className={classes.wrapper}>{children}</Box>;
+  return <Box className={classes.wrapper}>{children as any}</Box>;
 };
 
 const BodyWrapper: React.FC = ({ children }) => {
@@ -90,7 +90,7 @@ const BodyWrapper: React.FC = ({ children }) => {
     },
   }));
   const { classes } = useStyles();
-  return <Box className={classes.bodyWrapper}>{children}</Box>;
+  return <Box className={classes.bodyWrapper}>{children as any}</Box>;
 };
 
 const Inner: React.FC<{
@@ -117,7 +117,7 @@ const Inner: React.FC<{
     })
   );
   const { classes } = useStyles({ showMenu });
-  return <Box className={classes.inner}>{children}</Box>;
+  return <Box className={classes.inner}>{children as any}</Box>;
 };
 
 const Menu: React.FC = ({ children }) => {

@@ -16,7 +16,6 @@ interface GetActiveOrdersProps extends Omit<MainFunctionProps, 'arg'> {
 export const getActiveOrders = async ({ arg, client, db }: GetActiveOrdersProps) => {
   const { customerId, status, country, lastDoc } = arg[0];
 
-  console.log('🚀 ~ file: getActiveOrders.ts:19 ~ getActiveOrders ~ test:', test);
   const orders = await db
     .selectFrom('orders')
     .innerJoin('orderProducts', (join) => join.onRef('orders.id', '=', 'orderProducts.orderId'))

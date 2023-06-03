@@ -15,8 +15,8 @@ import {
   TextInput,
   Title,
   useMantineColorScheme,
-} from "@mantine/core";
-import { Tab } from "@mantine/core/lib/Tabs/Tab/Tab";
+} from "hyfn-client";
+
 import { currencies } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { usePayWithLocalCard } from "hooks/usePayWithLocalCard";
@@ -166,7 +166,7 @@ const BalanceModal: React.FC<AddToWalletModalProps> = ({}) => {
                     }
                     hideControls
                     value={value}
-                    onChange={(val) => setValue(val)}
+                    onChange={(val) => setValue(val as number)}
                     handlersRef={handlers}
                     min={10}
                     step={5}
@@ -244,7 +244,7 @@ const BalanceModal: React.FC<AddToWalletModalProps> = ({}) => {
                     }
                     hideControls
                     value={request}
-                    onChange={(val) => setRequest(val)}
+                    onChange={(val) => setRequest(val as number)}
                     handlersRef={requestHandlers}
                     min={10}
                     step={5}

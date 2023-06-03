@@ -3,7 +3,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
   PaperStylesParams,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useColorScheme, useLocalStorage } from "@mantine/hooks";
 
 // import { Helmet, HelmetProvider } from "react-helmet-async";
@@ -13,6 +13,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { UserProvider } from "hyfn-client";
 import { ReactProps } from "config/types";
 import { useGetUserDocument } from "hooks/useGetUserDocument";
+import { Auth } from "aws-amplify";
 
 const Providers: React.FC<ReactProps> = ({ children }) => {
   const queryClient = new QueryClient();
@@ -49,11 +50,11 @@ const Providers: React.FC<ReactProps> = ({ children }) => {
         theme={{
           colorScheme: colorScheme,
           breakpoints: {
-            xs: 370,
-            sm: 576,
-            md: 870,
-            lg: 990,
-            xl: 1200,
+            xs: "370",
+            sm: "576",
+            md: "870",
+            lg: "990",
+            xl: "1200",
           },
           components: {
             Paper: {
@@ -85,6 +86,7 @@ const Providers: React.FC<ReactProps> = ({ children }) => {
           <UserProvider
             useGetUserDocument={useGetUserDocument}
             queryClient={queryClient}
+            Auth={Auth}
           >
             {children as any}
           </UserProvider>

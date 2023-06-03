@@ -38,7 +38,7 @@ const DuplicateModal: React.FC<DuplicateModalProps> = ({ productId }) => {
             <NumberInput
               hideControls
               value={value}
-              onChange={(val) => setValue(val)}
+              onChange={(val) => setValue(val as number)}
               handlersRef={handlers}
               max={30}
               min={1}

@@ -20,7 +20,8 @@ import {
   useMantineColorScheme,
   useMantineTheme,
   LoadingOverlay,
-} from "@mantine/core";
+  CopyTextButton,
+} from "hyfn-client";
 import { CopyButton } from "hyfn-client";
 import { useMediaQuery, useWindowScroll } from "@mantine/hooks";
 import { ReactNode, useEffect, useState } from "react";
@@ -79,7 +80,7 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
     },
   }));
   const { classes } = useStyles();
-  return <Box className={classes.wrapper}>{children}</Box>;
+  return <Box className={classes.wrapper}>{children as any}</Box>;
 };
 interface BodyWrapperProps extends ReactProps {}
 const BodyWrapper: React.FC<BodyWrapperProps> = ({ children }) => {
@@ -91,7 +92,7 @@ const BodyWrapper: React.FC<BodyWrapperProps> = ({ children }) => {
     },
   }));
   const { classes } = useStyles();
-  return <Box className={classes.bodyWrapper}>{children}</Box>;
+  return <Box className={classes.bodyWrapper}>{children as any}</Box>;
 };
 interface InnerProps extends ReactProps {
   showMenu: boolean;
@@ -123,7 +124,7 @@ const Inner: React.FC<InnerProps> = ({
     })
   );
   const { classes } = useStyles({ showMenu });
-  return <Box className={classes.inner}>{children}</Box>;
+  return <Box className={classes.inner}>{children as any}</Box>;
 };
 
 const Menu: React.FC<ReactProps> = ({ children }) => {
@@ -252,7 +253,7 @@ const Menu: React.FC<ReactProps> = ({ children }) => {
             zIndex={4}
             padding={"sm"}
             opened={opened}
-            sx={{
+            style={{
               position: "relative",
             }}
             onClose={() => {
@@ -388,7 +389,7 @@ const Menu: React.FC<ReactProps> = ({ children }) => {
   maxWidth: ""
 }}> */}
 
-                <CopyButton value={userDocument?.id} />
+                <CopyTextButton value={userDocument?.id} />
                 {/* </Box> */}
 
                 {/* <Group>

@@ -1,4 +1,4 @@
-import { Button, Center, Container, Loader, Text } from "@mantine/core";
+import { Button, Center, Container, Loader, Text } from "hyfn-client";
 import React from "react";
 import { t } from "utils/i18nextFix";
 import { useGetProposals } from "../hooks/useGetProposals";

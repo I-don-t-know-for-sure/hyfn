@@ -15,7 +15,7 @@ import {
   Stack,
   Table,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import DeliveredModal from "components/DeliveredModal";
 import PayModal from "components/PayModal";
@@ -90,7 +90,7 @@ const RestuarantOrder: React.FC<ActiveOrderProps> = () => {
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <Text>{error}</Text>
+        <Text>{error as any}</Text>
       ) : (
         order?.pages?.length > 0 &&
         order?.pages.map((page) => {

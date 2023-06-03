@@ -5,23 +5,7 @@
   "main": "lambdas/index.ts",
   "module": "lambdas/index.ts",
   "types": "lambdas/index.ts",
-  "dependencies": {
-    "aws-sdk": "^2.1189.0",
-    "aws4": "^1.11.0",
-    "axios": "^0.27.2",
-    "crypto-js": "^4.1.1",
-    "deep-equal": "^2.0.5",
-    "digest-fetch": "^1.2.1",
-    "hyfn-server": "^1.0.3",
-    "jimp": "^0.16.0",
-    "mathjs": "^11.5.1",
-    "mongodb": "^4.7.0",
-    "mongoose": "^7.0.1",
-    "prettier": "^2.7.1",
-    "request": "^2.88.2",
-    "stream-to-buffer": "^0.1.0",
-    "zod": "^3.20.6"
-  },
+  "dependencies": {},
   "scripts": {
     "envs": "node ./fetch-envs.js",
     "createDatabaseUser": "node ./createDatabaseUser.js",
@@ -33,15 +17,7 @@
     "start": "sst bind --region eu-west-3 --stage development  vite",
     "build-ts": "tsc --build ./tsconfig.json"
   },
-  "devDependencies": {
-    "@serverless/typescript": "^3.27.0",
-    "@types/aws-lambda": "^8.10.111",
-    "@types/node": "^18.15.0",
-    "eslint": "^8.26.0",
-    "serverless": "^3.24.0",
-    "typescript": "^4.9.5",
-    "zod-to-json-schema": "^3.20.4"
-  },
+  "devDependencies": {},
   "eslintConfig": {
     "extends": "@serverless/eslint-config/node",
     "root": true

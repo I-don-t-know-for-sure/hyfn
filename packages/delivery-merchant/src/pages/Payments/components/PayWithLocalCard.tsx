@@ -87,7 +87,7 @@ export const PayWithLocalCard: React.FC = () => {
       </Group> */}
       <NumberInput
         value={amount}
-        onChange={(e) => setAmount(e)}
+        onChange={(e) => setAmount(e as number)}
         label={t("Amount")}
       />
       <Center>

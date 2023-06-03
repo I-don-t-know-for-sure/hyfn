@@ -20,7 +20,7 @@ import {
   useMantineColorScheme,
   useMantineTheme,
   LoadingOverlay,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useMediaQuery, useWindowScroll } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -30,7 +30,7 @@ import Panel from "./components/Panel";
 import { MENU_HEIGHT, SIDEBAR_WIDTH_FULL, useConfigData } from "./config";
 import { useTranslation } from "react-i18next";
 import { BsMoonStars, BsSun } from "react-icons/bs";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 import { useUserCheck } from "../../hooks/useUserCheck";
 import { useUser } from "../../contexts/userContext/User";
 

@@ -11,43 +11,43 @@ import {
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
-} from '@mantine/core'
-import { useTranslation } from 'react-i18next'
-import { AiFillTag } from 'react-icons/ai'
-import { BsMoonStars, BsSun } from 'react-icons/bs'
-import { MdLanguage } from 'react-icons/md'
+} from "hyfn-client";
+import { useTranslation } from "react-i18next";
+import { AiFillTag } from "react-icons/ai";
+import { BsMoonStars, BsSun } from "react-icons/bs";
+import { MdLanguage } from "react-icons/md";
 
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
-import { LinkProps, Lngs } from '../config'
+import { LinkProps, Lngs } from "../config";
 
 const PanelBody: React.FC<{
-  links: LinkProps[]
-  activeLink: string
-  lngs: Lngs
+  links: LinkProps[];
+  activeLink: string;
+  lngs: Lngs;
 }> = ({ links, activeLink, lngs }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     panelBody: {
-      display: 'flex',
-      flexDirection: 'column',
+      display: "flex",
+      flexDirection: "column",
       padding: theme.spacing.xs,
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      height: '80vh',
-      justifyContent: 'space-between',
+      overflowY: "auto",
+      overflowX: "hidden",
+      height: "80vh",
+      justifyContent: "space-between",
     },
-  }))
+  }));
 
-  const { classes } = useStyles()
-  const theme = useMantineTheme()
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
-  const dark = colorScheme === 'dark'
-  const { i18n } = useTranslation()
+  const { classes } = useStyles();
+  const theme = useMantineTheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
+  const { i18n } = useTranslation();
   return (
     <Box className={classes.panelBody}>
       <Box>
         {links.map((section) => {
-          const Icon = section.icon
+          const Icon = section.icon;
           if (section.link) {
             return (
               <UnstyledButton
@@ -55,15 +55,21 @@ const PanelBody: React.FC<{
                 to={section.link}
                 key={section.label}
                 sx={{
-                  padding: ' 12px 12px',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  padding: " 12px 12px",
+                  textDecoration: "none",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                   fontWeight: 500,
-                  color: activeLink === section.link ? theme.primaryColor : '-moz-initial',
-                  '&:hover': {
-                    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
+                  color:
+                    activeLink === section.link
+                      ? theme.primaryColor
+                      : "-moz-initial",
+                  "&:hover": {
+                    backgroundColor:
+                      theme.colorScheme === "dark"
+                        ? theme.colors.dark[5]
+                        : theme.colors.gray[0],
                   },
                 }}
               >
@@ -71,10 +77,10 @@ const PanelBody: React.FC<{
                   style={{
                     marginRight: theme.spacing.md,
                   }}
-                />{' '}
+                />{" "}
                 {section.label}
               </UnstyledButton>
-            )
+            );
           }
           return (
             <Accordion
@@ -90,15 +96,17 @@ const PanelBody: React.FC<{
               <Accordion.Item
                 value={section.label}
                 sx={{
-                  border: '0px',
+                  border: "0px",
                 }}
               >
-                <Accordion.Control icon={<Icon />}>{section.label}</Accordion.Control>
+                <Accordion.Control icon={<Icon />}>
+                  {section.label}
+                </Accordion.Control>
                 <Box
                   sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
                   }}
                 >
                   {section.items.map((item) => (
@@ -107,17 +115,22 @@ const PanelBody: React.FC<{
                       to={item.link}
                       key={item.label}
                       sx={{
-                        padding: ' 12px 12px',
-                        textDecoration: 'none',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
+                        padding: " 12px 12px",
+                        textDecoration: "none",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
                         fontWeight: 500,
-                        color: activeLink.includes(item.link.toLowerCase().trim())
+                        color: activeLink.includes(
+                          item.link.toLowerCase().trim()
+                        )
                           ? theme.primaryColor
-                          : '-moz-initial',
-                        '&:hover': {
-                          backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
+                          : "-moz-initial",
+                        "&:hover": {
+                          backgroundColor:
+                            theme.colorScheme === "dark"
+                              ? theme.colors.dark[5]
+                              : theme.colors.gray[0],
                         },
                       }}
                     >
@@ -127,14 +140,14 @@ const PanelBody: React.FC<{
                 </Box>
               </Accordion.Item>
             </Accordion>
-          )
+          );
         })}
       </Box>
 
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'end',
+          display: "flex",
+          justifyContent: "end",
         }}
       >
         <Menu>
@@ -147,7 +160,7 @@ const PanelBody: React.FC<{
             {Object.keys(lngs).map((lang) => (
               <Menu.Item
                 onClick={() => {
-                  i18n.changeLanguage(lang)
+                  i18n.changeLanguage(lang);
                 }}
               >
                 {lngs[lang].nativeName}
@@ -157,12 +170,12 @@ const PanelBody: React.FC<{
         </Menu>
         <Space
           sx={{
-            width: '12px',
+            width: "12px",
           }}
         />
         <ActionIcon
           variant="outline"
-          color={dark ? 'yellow' : 'blue'}
+          color={dark ? "yellow" : "blue"}
           onClick={() => toggleColorScheme()}
           title="Toggle color scheme"
         >
@@ -170,7 +183,7 @@ const PanelBody: React.FC<{
         </ActionIcon>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default PanelBody
+export default PanelBody;

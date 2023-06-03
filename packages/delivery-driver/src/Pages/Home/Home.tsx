@@ -9,7 +9,7 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L, { marker } from "leaflet";

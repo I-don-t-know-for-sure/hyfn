@@ -10,7 +10,7 @@ import {
   Stack,
   TextInput,
   Title,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useForm } from "@mantine/form";
 
 import { t } from "../../utils/i18nextFix";

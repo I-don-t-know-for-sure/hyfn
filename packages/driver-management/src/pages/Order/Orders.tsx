@@ -12,9 +12,9 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useGetAllDrivers } from "./hooks/useGetAllDrivers";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import { USER_TYPE_DRIVER } from "hyfn-types";
 import ReplaceDriverModal from "./components/ReplaceDriverModal";
 import StoreDetailsModal from "./components/StoreDetailsModal";

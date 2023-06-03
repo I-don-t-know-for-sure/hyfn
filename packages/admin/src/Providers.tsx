@@ -3,7 +3,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
   PaperStylesParams,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useColorScheme, useLocalStorage } from "@mantine/hooks";
 
 import React, { useEffect, useState } from "react";

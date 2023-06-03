@@ -7,7 +7,7 @@ import {
   successNotification,
 } from "hyfn-client";
 import { LambdaHandlers } from "store-backend";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 const fetchUtil = async ({
   method = "POST",
   reqData,

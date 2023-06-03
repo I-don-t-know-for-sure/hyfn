@@ -1,4 +1,4 @@
-import { Box, createStyles } from "@mantine/core";
+import { Box, createStyles } from "hyfn-client";
 import { LinkProps, SIDEBAR_WIDTH_FULL } from "../config";
 import PanelBody from "./PanelBody";
 

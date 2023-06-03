@@ -5,10 +5,10 @@ export * from "./hooks";
 export * from "./functions";
 export * from "./context";
 export * from "./pages";
-export * from "@mantine/notifications";
+// export * from "@mantine/notifications";
 export * from "@mantine/core";
 
-export { NotificationProps } from "@mantine/notifications";
+// export { NotificationProps };
 
 export * from "@mantine/carousel";
 export * from "@mantine/hooks";

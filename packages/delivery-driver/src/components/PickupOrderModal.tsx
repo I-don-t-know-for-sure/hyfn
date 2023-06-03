@@ -1,8 +1,8 @@
-import { Badge, Button, Group, Modal, Stack } from "@mantine/core";
+import { Badge, Button, Group, Modal, Stack } from "hyfn-client";
 import { useUser } from "contexts/userContext/User";
 import { usePickupOrder } from "hooks/usePickupOrder";
 import { useQRCodeReader } from "hyfn-client";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 
 interface PickupOrderModalProps {

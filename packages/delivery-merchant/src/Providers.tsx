@@ -12,6 +12,7 @@ import FixedComponentProvider from "contexts/fixedComponentContext/FixedComponen
 import { MantineContext, UserProvider } from "hyfn-client";
 
 import { useGetUserDocument } from "hooks/useGetUserDocument";
+import { Auth } from "aws-amplify";
 
 const Providers: React.FC = ({ children }) => {
   const queryClient = new QueryClient();
@@ -86,6 +87,7 @@ const Providers: React.FC = ({ children }) => {
               <UserProvider
                 useGetUserDocument={useGetUserDocument}
                 queryClient={queryClient}
+                Auth={Auth}
               >
                 <FixedComponentProvider>{children}</FixedComponentProvider>
               </UserProvider>

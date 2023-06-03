@@ -1,4 +1,4 @@
-import { ActionIcon, Menu } from "@mantine/core";
+import { ActionIcon, Menu } from "hyfn-client";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { MdLanguage } from "react-icons/md";

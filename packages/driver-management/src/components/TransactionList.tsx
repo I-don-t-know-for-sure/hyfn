@@ -9,7 +9,7 @@ import {
   Paper,
   Text,
   UnstyledButton,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useGetTransactions } from "hooks/useGetTransactions";
 
 import { useValidateLocalCardTransaction } from "hooks/useValidateLocalCardTransaction";

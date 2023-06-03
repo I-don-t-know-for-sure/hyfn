@@ -1,5 +1,5 @@
-import { Badge, Button, Group, Modal, Stack, Text } from "@mantine/core";
-import { t } from "i18next";
+import { Badge, Button, Group, Modal, Stack, Text } from "hyfn-client";
+import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 import { useSetDeliveryFeePaid } from "../hooks/useSetDeliveryFeePaid";
 

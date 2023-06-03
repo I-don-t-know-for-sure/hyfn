@@ -3,20 +3,17 @@ import {
   ColorSchemeProvider,
   MantineProvider,
   useMantineColorScheme,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 import LocationProvider from "contexts/locationContext/LocationContext";
 import { UserProvider } from "hyfn-client";
-import {
-  DatesProvider,
-  MonthPickerInput,
-  DatePickerInput,
-} from "@mantine/dates";
+import { DatesProvider } from "@mantine/dates";
 import "dayjs/locale/ar-ly";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useGetUserDocument } from "hooks/useGetUserDocument";
+import { Auth } from "aws-amplify";
 
 const Providers: React.FC = ({ children }) => {
   const queryClient = new QueryClient();
@@ -71,6 +68,7 @@ const Providers: React.FC = ({ children }) => {
               <UserProvider
                 useGetUserDocument={useGetUserDocument}
                 queryClient={queryClient}
+                Auth={Auth}
               >
                 <DatesProvider
                   settings={{

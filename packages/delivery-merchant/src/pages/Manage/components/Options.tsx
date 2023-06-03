@@ -380,7 +380,11 @@ const Options: React.FC<OptionsProps> = ({
                   // }}
                   value={value?.maximumNumberOfOptionsForUserToSelect}
                   onChange={(e) => {
-                    handleMaximumSelectableOptionsChange(e, productInfo, value);
+                    handleMaximumSelectableOptionsChange(
+                      e as number,
+                      productInfo,
+                      value
+                    );
                   }}
                 />
                 {value.isRequired && (
@@ -401,7 +405,7 @@ const Options: React.FC<OptionsProps> = ({
                     value={value?.minimumNumberOfOptionsForUserToSelect}
                     onChange={(e) => {
                       handleMinimumSelectableOptionsChange(
-                        e,
+                        e as number,
                         productInfo,
                         value
                       );
@@ -492,7 +496,7 @@ const Options: React.FC<OptionsProps> = ({
                           key={optionValue.key}
                           onChange={(e) => {
                             handleOptionValuePriceChange(
-                              e,
+                              e as number,
                               productInfo,
                               optionValue,
                               value,

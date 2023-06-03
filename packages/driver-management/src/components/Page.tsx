@@ -1,10 +1,10 @@
-import { Loader } from '@mantine/core'
-import { useUser } from 'contexts/userContext/User'
-import { useEffect, useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router'
+import { Loader } from "hyfn-client";
+import { useUser } from "contexts/userContext/User";
+import { useEffect, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router";
 
 function Page({ children }: { children: JSX.Element }) {
-  const { userDocument: user, isLoading, loggedIn } = useUser()
+  const { userDocument: user, isLoading, loggedIn } = useUser();
 
   // // const { data, isLoading, isFetched } = useGetUserInfo()
   // const navigate = useNavigate()
@@ -52,7 +52,7 @@ function Page({ children }: { children: JSX.Element }) {
   //   // }
   //   setSkipOnce(false)
   // }, [isLoading, location.pathname, user])
-  return isLoading && !user ? <Loader /> : children
+  return isLoading && !user ? <Loader /> : children;
 }
 
-export default Page
+export default Page;

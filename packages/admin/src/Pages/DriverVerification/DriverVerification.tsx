@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { t } from "utils/i18nextFix";
 import { DRIVER_VERIFICATION } from "hyfn-types";
 import { useSetDriverAsVerified } from "./hooks/useSetDriverAsVerified";

@@ -1,4 +1,5 @@
-import { RichTextEditor, Link } from "@mantine/tiptap";
+import { RichTextEditor, Link } from "hyfn-client";
+
 import { useEditor } from "@tiptap/react";
 import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
@@ -22,7 +23,7 @@ const FullTextEditor: React.FC<FullTextEditorProps> = ({ setValue, value }) => {
     extensions: [
       StarterKit,
       Underline,
-      Link,
+      Link as any,
       Superscript,
       SubScript,
       Highlight,
@@ -92,7 +93,7 @@ const FullTextEditor: React.FC<FullTextEditorProps> = ({ setValue, value }) => {
         content: classes.content,
         controlsGroup: classes.controlsGroup,
       }}
-      editor={editor}
+      editor={editor as any}
     >
       <RichTextEditor.Toolbar sticky stickyOffset={60}>
         <RichTextEditor.ControlsGroup>

@@ -1,13 +1,14 @@
 import {
   Button,
   Container,
+  CopyTextButton,
   Group,
   Paper,
   Select,
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useForm } from "@mantine/form";
 import React from "react";
 import { useCreateManagerAccount } from "./hooks/useCreateManagerAccount";
@@ -36,7 +37,7 @@ const CreateManagerAccount: React.FC<CreateManagerAccountProps> = ({}) => {
         <Paper>
           <Stack align="center">
             <Text> {t("If you are an employee copy your id below.")} </Text>
-            <CopyButton value={userId} />
+            <CopyTextButton value={userId} />
           </Stack>
         </Paper>
         <Paper>

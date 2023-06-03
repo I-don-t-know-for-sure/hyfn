@@ -291,9 +291,11 @@ export const createlocalCardTransaction = async ({
       if (orderDoc?.orderStatus?.includes('delivered')) {
         throw new Error(returnsObj['Order delivered']);
       }
-      // if (orderDoc.deliveryFeePaid) {
-      //   throw new Error(returnsObj["delivery fee already paid"]);
-      // }
+      if (orderDoc.deliveryFeePaid) {
+        throw new Error(returnsObj['delivery fee already paid']);
+      }
+      if (!orderDoc.serviceFeePaid) throw new Error(returnsObj['service fee not paid']);
+      if (!orderDoc.storeStatus.includes('paid')) throw new Error(returnsObj['store not paid']);
       if (orderDoc.orderType === ORDER_TYPE_PICKUP) {
         throw new Error(returnsObj['order type is pick up']);
       }
@@ -303,7 +305,7 @@ export const createlocalCardTransaction = async ({
         .innerJoin('localCardKeys', 'driverManagements.localCardApiKeyId', 'localCardKeys.id')
         .selectAll('driverManagements')
         .select(['localCardKeys.merchantId', 'localCardKeys.secretKey', 'localCardKeys.terminalId'])
-        .where('id', '=', orderDoc.driverManagement)
+        .where('driverManagements.id', '=', orderDoc.driverManagement)
         .executeTakeFirstOrThrow();
       if (!managementDoc.localCardApiKeyId) throw new Error(returnsObj['no payment method']);
       const { terminalId, merchantId, secretKey: encryptedSecretKey } = managementDoc;

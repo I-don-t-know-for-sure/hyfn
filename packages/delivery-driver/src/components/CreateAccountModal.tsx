@@ -1,79 +1,95 @@
-import { Modal } from '@mantine/core'
-import { useForm } from '@mantine/form'
-import { useUser } from 'contexts/userContext/User'
-import { useCreateDriver } from 'hooks/useCreateDriver'
-import React, { useEffect, useState } from 'react'
+import { Modal } from "hyfn-client";
+import { useForm } from "@mantine/form";
+import { useUser } from "contexts/userContext/User";
+import { useCreateDriver } from "hooks/useCreateDriver";
+import React, { useEffect, useState } from "react";
 
-import { Button, Card, Container, FileInput, Group, NativeSelect, Paper, Stack, TextInput, Title } from '@mantine/core'
+import {
+  Button,
+  Card,
+  Container,
+  FileInput,
+  Group,
+  NativeSelect,
+  Paper,
+  Stack,
+  TextInput,
+  Title,
+} from "hyfn-client";
 
-import { t } from 'utils/i18nextFix'
+import { t } from "utils/i18nextFix";
 
-import { useNavigate } from 'react-router'
+import { useNavigate } from "react-router";
 
 interface CreateAccountModalProps {
-  opened: boolean
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>
+  opened: boolean;
+  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CreateAccountModal: React.FC<CreateAccountModalProps> = ({ opened, setOpened }) => {
-  const { mutate } = useCreateDriver()
-  const navigate = useNavigate()
+const CreateAccountModal: React.FC<CreateAccountModalProps> = ({
+  opened,
+  setOpened,
+}) => {
+  const { mutate } = useCreateDriver();
+  const navigate = useNavigate();
   const form = useForm({
     initialValues: {
-      driverName: '',
+      driverName: "",
 
-      driverPhone: '',
+      driverPhone: "",
 
-      passportNumber: '',
-      tarnsportationMethod: 'car',
+      passportNumber: "",
+      tarnsportationMethod: "car",
     },
-  })
-  const { loggedIn, userDocument } = useUser()
+  });
+  const { loggedIn, userDocument } = useUser();
 
   useEffect(() => {
     if (loggedIn) {
-      if (typeof userDocument === 'object') {
+      if (typeof userDocument === "object") {
         if (Object.keys(userDocument).length > 0) {
-          navigate('/', { replace: true })
+          navigate("/", { replace: true });
         }
       }
     }
     if (!loggedIn) {
-      navigate('/signup', { replace: true })
+      navigate("/signup", { replace: true });
     }
-  }, [loggedIn, userDocument])
+  }, [loggedIn, userDocument]);
 
-  const [passportPic, setPassportPic] = useState<File | null>(null)
-  const [passportAndFacePic, setPassportAndFacePic] = useState<File | null>(null)
+  const [passportPic, setPassportPic] = useState<File | null>(null);
+  const [passportAndFacePic, setPassportAndFacePic] = useState<File | null>(
+    null
+  );
   return (
     <>
       <Modal
         opened={opened}
         onClose={() => {
-          setOpened(false)
+          setOpened(false);
         }}
       >
         <Container>
           <form
             onSubmit={form.onSubmit(async (values) => {
               try {
-                console.log(values)
+                console.log(values);
 
-                mutate({ ...values, passportPic, passportAndFacePic })
+                mutate({ ...values, passportPic, passportAndFacePic });
               } catch (e) {
-                console.error(e)
+                console.error(e);
               }
             })}
           >
             <Title order={3} mb={8}>
-              {t('Personal Info')}
+              {t("Personal Info")}
             </Title>
             <Stack>
               <TextInput
                 type="text"
                 // required
-                label={t('Full name')}
-                {...form.getInputProps('driverName')}
+                label={t("Full name")}
+                {...form.getInputProps("driverName")}
               />
 
               {/* <Group grow>
@@ -88,22 +104,27 @@ const CreateAccountModal: React.FC<CreateAccountModalProps> = ({ opened, setOpen
               <TextInput
                 type="number"
                 // required
-                label={t('driverPhone')}
-                {...form.getInputProps('driverPhone')}
+                label={t("driverPhone")}
+                {...form.getInputProps("driverPhone")}
               />
               <TextInput
                 type="text"
                 // required
-                label={t('Passport number')}
-                {...form.getInputProps('passportNumber')}
+                label={t("Passport number")}
+                {...form.getInputProps("passportNumber")}
               />
 
-              <FileInput required value={passportPic} onChange={setPassportPic} label={t('Passport Picture')} />
+              <FileInput
+                required
+                value={passportPic}
+                onChange={setPassportPic}
+                label={t("Passport Picture")}
+              />
               <FileInput
                 required
                 value={passportAndFacePic}
                 onChange={setPassportAndFacePic}
-                label={t('Passport and face pic')}
+                label={t("Passport and face pic")}
               />
             </Stack>
             {/* <Group
@@ -147,18 +168,18 @@ const CreateAccountModal: React.FC<CreateAccountModalProps> = ({ opened, setOpen
             </Title>
 
             <NativeSelect
-              label={t('Transprotaion method')}
+              label={t("Transprotaion method")}
               data={[
-                { value: 'car', label: t('Car') },
-                { value: 'motorcycle', label: t('Motorcycle') },
-                { value: 'truck', label: t('Truck') },
-                { value: 'van', label: t('Van') },
+                { value: "car", label: t("Car") },
+                { value: "motorcycle", label: t("Motorcycle") },
+                { value: "truck", label: t("Truck") },
+                { value: "van", label: t("Van") },
               ]}
               onChange={(e) => {
-                console.log(e)
-                console.log('hshsh')
+                console.log(e);
+                console.log("hshsh");
 
-                form.setFieldValue('tarnsportationMethod', e.target.value)
+                form.setFieldValue("tarnsportationMethod", e.target.value);
               }}
               value={form.values.tarnsportationMethod}
             />
@@ -207,19 +228,19 @@ const CreateAccountModal: React.FC<CreateAccountModalProps> = ({ opened, setOpen
               <Button
                 fullWidth
                 sx={{
-                  maxWidth: '450px',
+                  maxWidth: "450px",
                 }}
-                m={'0px auto'}
+                m={"0px auto"}
                 type="submit"
               >
-                {t('Create Account')}
+                {t("Create Account")}
               </Button>
             </Group>
           </form>
         </Container>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default CreateAccountModal
+export default CreateAccountModal;

@@ -12,7 +12,7 @@ import {
 import { TransactionList } from "hyfn-client";
 import { forwardRef, useState } from "react";
 import { PayWithLocalCard } from "./PayWithLocalCard";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import { paymentMethods } from "config/data";
 import { useGetTransactions } from "hooks/useGetTransactions";
 import { useValidateLocalCardTransaction } from "hooks/useValidateLocalCardTransaction";

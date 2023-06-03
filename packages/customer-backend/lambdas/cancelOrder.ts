@@ -1,5 +1,5 @@
 interface CancelOrderProps extends Omit<MainFunctionProps, 'arg'> {}
-import { ObjectId } from 'mongodb';
+
 import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP } from 'hyfn-types';
 import { returnsObj } from 'hyfn-types';
 import { mainWrapper, MainFunctionProps } from 'hyfn-server';

@@ -6,7 +6,7 @@ import {
   Stack,
   TextInput,
 } from "hyfn-client";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 import { useAddEmployee } from "./hooks/useAddEmployee";
 import { DriversManagement as Managment } from "hyfn-client";

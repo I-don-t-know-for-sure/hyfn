@@ -10,9 +10,9 @@ import {
   Text,
   Title,
   useMantineColorScheme,
-} from "@mantine/core";
+} from "hyfn-client";
 import { usePayWithLocalCard } from "hooks/usePayWithLocalCard";
-import { t } from 'utils/i18nextFix';
+import { t } from "utils/i18nextFix";
 
 import React, { useEffect, useRef, useState } from "react";
 import { useCreateLocalCardTransactionForWallet } from "../hooks/useCreateLocalCardTransactionForWallet";
@@ -55,7 +55,9 @@ const AddToWalletModal: React.FC<AddToWalletModalProps> = ({ balance }) => {
         "?" +
         new URLSearchParams({
           ...configurationObject,
-          url: `${import.meta.env.VITE_APP_BASE_URL}/validateLocalCardTransaction`,
+          url: `${
+            import.meta.env.VITE_APP_BASE_URL
+          }/validateLocalCardTransaction`,
           colorScheme,
         }).toString();
       window.open(`${import.meta.env.VITE_APP_PAYMENT_APP_URL}` + queryString);
@@ -104,7 +106,7 @@ const AddToWalletModal: React.FC<AddToWalletModalProps> = ({ balance }) => {
                 }
                 hideControls
                 value={value}
-                onChange={(val) => setValue(val)}
+                onChange={(val) => setValue(val as number)}
                 handlersRef={handlers}
                 min={10}
                 step={5}

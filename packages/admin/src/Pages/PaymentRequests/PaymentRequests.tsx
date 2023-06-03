@@ -8,7 +8,7 @@ import {
   Stack,
   TextInput,
   useMantineColorScheme,
-} from "@mantine/core";
+} from "hyfn-client";
 import React, { useEffect } from "react";
 import { useGetPaymentRequests } from "./hooks/useGetPaymentRequests";
 import { t } from "utils/i18nextFix";

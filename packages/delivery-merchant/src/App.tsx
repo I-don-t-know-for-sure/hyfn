@@ -7,7 +7,7 @@ import UpdateCollection from "pages/Collections/components/UpdateCollection";
 import ManageCollections from "pages/Collections/ManageCollections";
 
 import { SignUp } from "hyfn-client";
-// import { LogIn } from "hyfn-client";
+import { LogIn } from "hyfn-client";
 
 import Product from "pages/Manage/components/Product";
 import UpdateProduct from "./pages/Manage/components/UpdateProduct";
@@ -38,7 +38,6 @@ import fetchUtil from "utils/fetch";
 import Page from "components/Page";
 import { log } from "console";
 import { useUser } from "contexts/userContext/User";
-import LogIn from "pages/LogIn/LogIn";
 
 function App() {
   Amplify.configure({

@@ -3,7 +3,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
   useMantineColorScheme,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useLocalStorage } from "@mantine/hooks";
 
 import React from "react";
@@ -30,11 +30,11 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         theme={{
           colorScheme,
           breakpoints: {
-            xs: 370,
-            sm: 576,
-            md: 870,
-            lg: 980,
-            xl: 1200,
+            xs: "370",
+            sm: "576",
+            md: "870",
+            lg: "980",
+            xl: "1200",
           },
 
           primaryColor: "green",

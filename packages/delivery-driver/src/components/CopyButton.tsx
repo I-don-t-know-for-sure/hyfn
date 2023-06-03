@@ -1,8 +1,14 @@
-import { ActionIcon, Tooltip, CopyButton as OriginalCopyButton, Group, Text } from '@mantine/core'
-import React from 'react'
+import {
+  ActionIcon,
+  Tooltip,
+  CopyButton as OriginalCopyButton,
+  Group,
+  Text,
+} from "hyfn-client";
+import React from "react";
 
 interface CopyButtonProps {
-  value: string
+  value: string;
 }
 
 const CopyButton: React.FC<CopyButtonProps> = ({ value }) => {
@@ -11,8 +17,12 @@ const CopyButton: React.FC<CopyButtonProps> = ({ value }) => {
       <Text weight={700}>{value}</Text>
       <OriginalCopyButton value={value} timeout={2000}>
         {({ copied, copy }) => (
-          <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-            <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy}>
+          <Tooltip
+            label={copied ? "Copied" : "Copy"}
+            withArrow
+            position="right"
+          >
+            <ActionIcon color={copied ? "teal" : "gray"} onClick={copy}>
               {copied ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +72,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ value }) => {
         )}
       </OriginalCopyButton>
     </Group>
-  )
-}
+  );
+};
 
-export default CopyButton
+export default CopyButton;

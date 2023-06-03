@@ -17,8 +17,6 @@ import {
 
 import { Store } from "config/types";
 
-import { t } from "i18next";
-
 import React, { useEffect } from "react";
 // import { Helmet } from 'react-helmet-async'
 import { getCountryInfo } from "utils/countryInfo";
@@ -27,6 +25,7 @@ import useGetStoreInfo from "../../hooks/useGetStoreInfo";
 import { useUpdateStoreInfo } from "./hooks/useUpdateStoreInfo";
 import { useForm } from "@mantine/form";
 import { storeTypesArray } from "hyfn-types";
+import { t } from "utils/i18nextFix";
 
 interface StoreInfoProps {}
 
@@ -97,7 +96,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <Text>{error}</Text>
+        <Text>{error as any}</Text>
       ) : (
         data && (
           <Stack>

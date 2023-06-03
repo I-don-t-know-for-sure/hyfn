@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ActionTypes } from "../BulkUpdateTable";
 import DescriptionModal from "./DescriptionModal";
 import ImageModal from "./ImageModal";
-import { t } from "i18next";
+import { t } from "utils/i18nextFix";
 
 interface TableInputProps {
   value: any;

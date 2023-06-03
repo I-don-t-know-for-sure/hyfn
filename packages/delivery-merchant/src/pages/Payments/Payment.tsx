@@ -246,7 +246,7 @@ const Payments: React.FC<PaymentsProps> = () => {
                   <NumberInput
                     hideControls
                     value={value}
-                    onChange={(val) => setValue(val)}
+                    onChange={(val) => setValue(val as number)}
                     handlersRef={handlers}
                     // max={10}
                     min={1}

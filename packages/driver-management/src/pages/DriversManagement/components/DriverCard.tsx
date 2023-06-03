@@ -1,19 +1,19 @@
-import { Card, Group, Text } from '@mantine/core'
-import React from 'react'
-import AddDriverModal from './AddDriverModal'
+import { Card, Group, Text } from "hyfn-client";
+import React from "react";
+import AddDriverModal from "./AddDriverModal";
 
 interface DriverCardProps {
-  driverInfo: any
-  addDriver: any
+  driverInfo: any;
+  addDriver: any;
 }
 
 const DriverCard: React.FC<DriverCardProps> = ({ driverInfo, addDriver }) => {
   return (
     <Card
-      shadow={'md'}
+      shadow={"md"}
       sx={{
-        maxWidth: '500px',
-        margin: '0px auto',
+        maxWidth: "500px",
+        margin: "0px auto",
       }}
     >
       <Group position="apart">
@@ -21,7 +21,7 @@ const DriverCard: React.FC<DriverCardProps> = ({ driverInfo, addDriver }) => {
         <AddDriverModal driver={driverInfo} addDriver={addDriver} />
       </Group>
     </Card>
-  )
-}
+  );
+};
 
-export default DriverCard
+export default DriverCard;
