@@ -9,10 +9,10 @@ import {
   Text,
   UnstyledButton,
   useMantineTheme,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import { commonQuestions } from "hyfn-types";
-import { t } from "i18next";
+import { t } from "util/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FooterCentered } from "./components/Footer";

@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Container, Group, Text } from "@mantine/core";
+import { Badge, Button, Card, Container, Group, Text } from "hyfn-client";
 import { Auth } from "aws-amplify";
 
 import React, { useState } from "react";

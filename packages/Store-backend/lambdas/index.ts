@@ -10,7 +10,7 @@ import { setProductAsPickedUpHandler } from './setProductAsPickedUp';
 import { stopAcceptingOrders } from './stopAcceptingOrders';
 import { updateLocalCardSettingsHandler } from './updateLocalCardSettings';
 import { updateNotificationTokensHandler } from './updateNotificationTokens';
-import { updateStoreDriverSettings } from './updateStoreDriversSetting';
+import { updateStoreDriverSettings } from './updateStoreDriversSettings';
 import { updateSubscibtionHandler } from './updateSubscibtion';
 
 export type LambdaHandlers = {
@@ -219,7 +219,7 @@ export type LambdaHandlers = {
     arg: Parameters<typeof getStoreDocumentHandler>['0']['arg'];
     return: ReturnType<typeof getStoreDocumentHandler>;
   };
-  updateStoreDriverSettings: {
+  updateStoreDriversSettings: {
     arg: Parameters<typeof updateStoreDriverSettings>['0']['arg'];
     return: ReturnType<typeof updateStoreDriverSettings>;
   };

@@ -359,9 +359,9 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getCollectionStoreFrontProducts.handler",
         },
       },
-      [storeUrl({ method: "POST", url: "updateStoreDriverSettings" })]: {
+      [storeUrl({ method: "POST", url: "updateStoreDriversSettings" })]: {
         function: {
-          handler: pathToLambdas + "updateStoreDriverSettings.handler",
+          handler: pathToLambdas + "updateStoreDriversSettings.handler",
         },
       },
       ...driversManagement,

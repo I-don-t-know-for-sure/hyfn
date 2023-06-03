@@ -1,14 +1,14 @@
-import { ActionIcon, Popover, Text } from '@mantine/core'
-import { t } from 'utils/i18nextFix'
-import React, { useState } from 'react'
-import { BsInfoCircle } from 'react-icons/bs'
+import { ActionIcon, Popover, Text } from "hyfn-client";
+import { t } from "utils/i18nextFix";
+import React, { useState } from "react";
+import { BsInfoCircle } from "react-icons/bs";
 
 interface InfoPopoverProps {
-  infoText: string
+  infoText: string;
 }
 
 const InfoPopover: React.FC<InfoPopoverProps> = ({ infoText }) => {
-  const [opened, setOpened] = useState(false)
+  const [opened, setOpened] = useState(false);
   return (
     <Popover position="bottom" opened={opened} onClose={() => setOpened(false)}>
       <Popover.Target>
@@ -18,19 +18,19 @@ const InfoPopover: React.FC<InfoPopoverProps> = ({ infoText }) => {
       </Popover.Target>
       <Popover.Dropdown
         sx={{
-          maxWidth: '350px',
+          maxWidth: "350px",
         }}
       >
         <Text
           sx={{
-            maxWidth: '350px',
+            maxWidth: "350px",
           }}
         >
           {t(`${infoText}`)}
         </Text>
       </Popover.Dropdown>
     </Popover>
-  )
-}
+  );
+};
 
-export default InfoPopover
+export default InfoPopover;

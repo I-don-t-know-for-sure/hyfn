@@ -20,7 +20,7 @@ import {
   useMantineColorScheme,
   useMantineTheme,
   LoadingOverlay,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useMediaQuery, useWindowScroll } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";

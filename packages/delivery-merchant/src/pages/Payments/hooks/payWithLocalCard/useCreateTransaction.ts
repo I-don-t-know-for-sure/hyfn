@@ -1,4 +1,4 @@
-import { useMantineColorScheme } from "@mantine/core";
+import { useMantineColorScheme } from "hyfn-client";
 import { randomId, useColorScheme } from "@mantine/hooks";
 import { useUser } from "contexts/userContext/User";
 import { goToLightbox } from "hyfn-client";

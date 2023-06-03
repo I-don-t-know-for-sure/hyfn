@@ -16,7 +16,7 @@ import {
   Paper,
   Space,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import { ImageModal } from "hyfn-client";
 import { useCart } from "../../contexts/cartContext/Provider";
 import React, { useEffect, useRef, useState } from "react";

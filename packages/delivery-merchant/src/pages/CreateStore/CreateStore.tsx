@@ -13,8 +13,8 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
-import { CopyButton } from "hyfn-client";
+} from "hyfn-client";
+import { CopyTextButton } from "hyfn-client";
 import { Store } from "config/types";
 
 import { t } from "utils/i18nextFix";
@@ -100,7 +100,7 @@ const CreateStore: React.FC<StoreInfoProps> = ({}) => {
                 "If you are a store employee, copy your user ID and give it to the admin. if  you are a store owner, you can create your store here"
               )}
             </Text>
-            <CopyButton value={userId} />
+            <CopyTextButton value={userId} />
           </Stack>
         </Card>
 

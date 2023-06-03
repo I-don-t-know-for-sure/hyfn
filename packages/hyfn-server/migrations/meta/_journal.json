@@ -29,6 +29,20 @@
       "when": 1685574803691,
       "tag": "0003_careful_hex",
       "breakpoints": false
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1685723370505,
+      "tag": "0004_stormy_rattler",
+      "breakpoints": false
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1685724845548,
+      "tag": "0005_chilly_wallop",
+      "breakpoints": false
     }
   ]
 }

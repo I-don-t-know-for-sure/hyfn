@@ -13,7 +13,7 @@ import {
   TextInput,
   Title,
   rem,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import { t } from "../../util/i18nextFix";
 import React, { useRef, useState } from "react";

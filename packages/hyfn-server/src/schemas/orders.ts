@@ -67,6 +67,11 @@ export const orders = pgTable(
 
     reportsIds: uuid("reports_ids").array().notNull(),
     deliveryFeePaid: boolean("delivery_fee_paid").default(false),
+    /* 
+when the store update their value we should update all active orders that have no driver yet.
+when the driver leaves an order we should sync this field with the store field
+
+     */
     onlyStoreDriversCanTakeOrders: boolean("only_store_drivers_can_take_orders")
       .notNull()
       .default(false),
@@ -85,10 +90,10 @@ export const orders = pgTable(
       onlyStoreDriversCanTakeOrders: index(
         "only_store_drivers_can_take_orders"
       ).on(table.onlyStoreDriversCanTakeOrders),
-      storeSettings: foreignKey({
-        columns: [table.storeId, table.onlyStoreDriversCanTakeOrders],
-        foreignColumns: [stores.id, stores.onlyStoreDriversCanTakeOrders],
-      }),
+      // storeSettings: foreignKey({
+      //   columns: [table.storeId, table.onlyStoreDriversCanTakeOrders],
+      //   foreignColumns: [stores.id, stores.onlyStoreDriversCanTakeOrders],
+      // }),
     };
   }
 );

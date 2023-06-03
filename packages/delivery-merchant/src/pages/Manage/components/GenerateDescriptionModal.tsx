@@ -1,4 +1,4 @@
-/* import { Button, FileInput, Modal, Stack } from "@mantine/core";
+/* import { Button, FileInput, Modal, Stack } from "hyfn-client";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import { useGenerateProductDescription } from "../hooks/useGenerateProductDescription";
@@ -71,7 +71,7 @@ const GenerateDescriptionModal: React.FC<GenerateDescriptionModalProps> = ({
 export default GenerateDescriptionModal;
  */
 
-import { Button, FileInput, Modal, Stack } from "@mantine/core";
+import { Button, FileInput, Modal, Stack } from "hyfn-client";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import { useGenerateProductDescription } from "../hooks/useGenerateProductDescription";

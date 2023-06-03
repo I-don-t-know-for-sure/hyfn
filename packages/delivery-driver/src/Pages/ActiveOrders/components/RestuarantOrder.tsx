@@ -231,6 +231,7 @@ const RestuarantOrder: React.FC<ActiveOrderProps> = () => {
                           label={t("Map")}
                         />
                         <PickupOrderModal
+                          storeId={order.storeId}
                           orderId={order.id}
                           pickedUp={store.orderStatus === ORDER_STATUS_PICKED}
                         />
@@ -297,7 +298,10 @@ const RestuarantOrder: React.FC<ActiveOrderProps> = () => {
                 })}
 
                 <Group grow mt={8}>
-                  <DeliveredModal delivered={setOrderAsDelivered} />
+                  <DeliveredModal
+                    storeId={order.storeId}
+                    delivered={setOrderAsDelivered}
+                  />
                 </Group>
               </Card>
             );

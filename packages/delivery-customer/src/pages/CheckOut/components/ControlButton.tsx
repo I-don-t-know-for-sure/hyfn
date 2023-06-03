@@ -1,8 +1,8 @@
-import { Box, Button, ThemeIcon } from '@mantine/core';
-import PickupModal from 'components/PickupModal';
+import { Box, Button, ThemeIcon } from "hyfn-client";
+import PickupModal from "components/PickupModal";
 
-import { t } from 'util/i18nextFix';;
-import React, { useState } from 'react';
+import { t } from "util/i18nextFix";
+import React, { useState } from "react";
 
 interface ControlButtonProps {
   productQTY: any;
@@ -11,7 +11,12 @@ interface ControlButtonProps {
   found?: any;
 }
 
-const ControlButton: React.FC<ControlButtonProps> = ({ productQTY, pickUp, notFound, found }) => {
+const ControlButton: React.FC<ControlButtonProps> = ({
+  productQTY,
+  pickUp,
+  notFound,
+  found,
+}) => {
   const [edit, setEdit] = useState(false);
   const modifiedPickUp = (count: any) => {
     pickUp(count);
@@ -26,9 +31,9 @@ const ControlButton: React.FC<ControlButtonProps> = ({ productQTY, pickUp, notFo
       {edit ? (
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-around",
           }}
         >
           {/* <Box
@@ -42,12 +47,17 @@ const ControlButton: React.FC<ControlButtonProps> = ({ productQTY, pickUp, notFo
         > */}
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
           >
-            <PickupModal qty={productQTY} pickup={modifiedPickUp} notFound={modifiedNotFound} found={found} />
+            <PickupModal
+              qty={productQTY}
+              pickup={modifiedPickUp}
+              notFound={modifiedNotFound}
+              found={found}
+            />
             <Button
               onClick={() => {
                 setEdit(false);
@@ -57,13 +67,13 @@ const ControlButton: React.FC<ControlButtonProps> = ({ productQTY, pickUp, notFo
                 maxWidth: 100,
               }}
             >
-              {t('Cancel')}
+              {t("Cancel")}
             </Button>
             {/* </Box> */}
           </Box>
         </Box>
       ) : (
-        <Button onClick={() => setEdit(true)}>{t('Edit')}</Button>
+        <Button onClick={() => setEdit(true)}>{t("Edit")}</Button>
       )}
     </>
   );

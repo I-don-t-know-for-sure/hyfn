@@ -1,4 +1,4 @@
-import { Button, Group, Modal, Stack, TextInput } from "@mantine/core";
+import { Button, Group, Modal, Stack, TextInput } from "hyfn-client";
 import { useLocation } from "contexts/locationContext/LocationContext";
 import React, { useState } from "react";
 import { t } from "util/i18nextFix";

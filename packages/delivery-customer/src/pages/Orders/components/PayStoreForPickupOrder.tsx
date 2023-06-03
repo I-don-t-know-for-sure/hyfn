@@ -8,7 +8,7 @@ import {
   Stack,
   Table,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 // import PayWithLocalCard from 'components/PayWithLocalCard';
 import {
   STORE_TYPE_RESTAURANT,

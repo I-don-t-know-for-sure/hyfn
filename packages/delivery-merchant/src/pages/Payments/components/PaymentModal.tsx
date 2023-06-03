@@ -8,7 +8,7 @@ import {
   Select,
   SelectItemProps,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import { TransactionList } from "hyfn-client";
 import { forwardRef, useState } from "react";
 import { PayWithLocalCard } from "./PayWithLocalCard";

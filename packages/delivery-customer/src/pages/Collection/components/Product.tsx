@@ -6,14 +6,14 @@ import {
   Text,
   UnstyledButton,
   useMantineTheme,
-} from "@mantine/core";
+} from "hyfn-client";
 import Image from "../../../components/Image";
 import ProductControler from "../../../components/ProductControler";
 import { storeServiceFee } from "hyfn-types";
 import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
-import { t } from "i18next";
+import { t } from "util/i18nextFix";
 
 interface ProductType {
   id: any;

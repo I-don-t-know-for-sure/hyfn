@@ -1,4 +1,4 @@
-import { Box, Button, Group, Modal, Select, Text } from "@mantine/core";
+import { Box, Button, Group, Modal, Select, Text } from "hyfn-client";
 
 import { paymentMethods } from "config/data";
 import { t } from "util/i18nextFix";

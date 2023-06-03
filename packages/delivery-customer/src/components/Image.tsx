@@ -1,6 +1,6 @@
 import { useImage } from "contexts/imageContext/ImageProvider";
 import React from "react";
-import { Image as BaseImage, ImageProps } from "@mantine/core";
+import { Image as BaseImage, ImageProps } from "hyfn-client";
 import { useMediaQuery } from "@mantine/hooks";
 
 interface ImageProp extends ImageProps {

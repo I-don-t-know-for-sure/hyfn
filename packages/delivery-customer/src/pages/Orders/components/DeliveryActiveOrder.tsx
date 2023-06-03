@@ -10,7 +10,7 @@ import {
   LoadingOverlay,
   Table,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import React from "react";
 import { largerEq } from "mathjs";
 import TransactionModal from "./TransactionModal";
@@ -32,7 +32,7 @@ import ProposalsModal from "./ProposalsModal";
 import { ORDER_STATUS_ACCEPTED } from "hyfn-types";
 import PayModal from "components/PayModal";
 import DeliveredModal from "components/DeliveredModal";
-import { CopyButton } from "hyfn-client";
+import { CopyTextButton } from "hyfn-client";
 
 interface DeliveryActiveOrderProps {
   index: any;
@@ -184,7 +184,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
             },
           })}
         >
-          <CopyButton justText value={order.id} />
+          <CopyTextButton justText value={order.id} />
         </Box>
 
         {order.orderType === ORDER_TYPE_DELIVERY && !order.acceptedProposal && (

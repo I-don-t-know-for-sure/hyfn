@@ -1,11 +1,4 @@
-import {
-  Button,
-  Card,
-  Container,
-  Group,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Button, Card, Container, Group, TextInput, Title } from "hyfn-client";
 import { useForm } from "@mantine/form";
 
 import { t } from "../../util/i18nextFix";

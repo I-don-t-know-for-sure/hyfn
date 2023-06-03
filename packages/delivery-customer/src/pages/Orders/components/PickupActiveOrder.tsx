@@ -13,7 +13,7 @@ import {
   Stack,
   Table,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import React from "react";
 import { IoMdCopy } from "react-icons/io";
 

@@ -6,7 +6,7 @@ import {
   rem,
   Text,
   UnstyledButton,
-} from "@mantine/core";
+} from "hyfn-client";
 import {
   IconBrandTwitter,
   IconBrandYoutube,

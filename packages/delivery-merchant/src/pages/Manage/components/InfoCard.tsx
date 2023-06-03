@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { t } from "utils/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { ProductInfo, ProductsCard } from "../types";

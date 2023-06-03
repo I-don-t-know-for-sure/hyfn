@@ -1,23 +1,30 @@
-import { Button, Center, Container, Modal } from '@mantine/core';
+import { Button, Center, Container, Modal } from "hyfn-client";
 
-import { useConfirmOrderDelivery } from 'hooks/useDeliveryConfirmation';
+import { useConfirmOrderDelivery } from "hooks/useDeliveryConfirmation";
 
-import React, { useState } from 'react';
-import QRCode from 'react-qr-code';
-import { t } from 'util/i18nextFix';
+import React, { useState } from "react";
+import QRCode from "react-qr-code";
+import { t } from "util/i18nextFix";
 
 interface DeliveryConfirmationModalProps {
   orderId: string;
   confirmationCode: string;
 }
 
-const DeliveryConfirmationModal: React.FC<DeliveryConfirmationModalProps> = ({ orderId, confirmationCode }) => {
+const DeliveryConfirmationModal: React.FC<DeliveryConfirmationModalProps> = ({
+  orderId,
+  confirmationCode,
+}) => {
   const [opened, setOpened] = useState(false);
   const { mutate } = useConfirmOrderDelivery();
   const [rating, setRating] = useState<number>();
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={t('Confirm')}>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title={t("Confirm")}
+      >
         <Container>
           {/* <StarRating onRate={(newRating: number) => setRating(newRating)} />
 
@@ -25,22 +32,25 @@ const DeliveryConfirmationModal: React.FC<DeliveryConfirmationModalProps> = ({ o
             {t("Rate and Confirm")}
           </Button> */}
 
-          <Container sx={{ backgroundColor: 'white' }}>
-            <Center m={'sm'}>
-              <QRCode style={{ margin: '10px auto' }} value={confirmationCode} />
+          <Container sx={{ backgroundColor: "white" }}>
+            <Center m={"sm"}>
+              <QRCode
+                style={{ margin: "10px auto" }}
+                value={confirmationCode}
+              />
             </Center>
           </Container>
         </Container>
       </Modal>
       <Button
         fullWidth
-        m={'24px  auto 0px auto'}
+        m={"24px  auto 0px auto"}
         onClick={() => setOpened(true)}
         sx={{
-          maxWidth: '450px',
+          maxWidth: "450px",
         }}
       >
-        {t('Confirm Delivery')}
+        {t("Confirm Delivery")}
       </Button>
     </>
   );

@@ -5,8 +5,8 @@ import {
   Container,
   Loader,
   TextInput,
-} from "@mantine/core";
-import { t } from 'utils/i18nextFix';
+} from "hyfn-client";
+import { t } from "utils/i18nextFix";
 import React from "react";
 import { ProductsCard } from "../types";
 

@@ -11,7 +11,7 @@ import {
   NumberInputHandlers,
   Space,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useCart } from "../../contexts/cartContext/Provider";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
@@ -19,7 +19,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 import Image from "../../components/Image";
-import { Image as CoreImage } from "@mantine/core";
+import { Image as CoreImage } from "hyfn-client";
 import { useFixedComponent } from "../../contexts/fixedComponentContext/FixedComponentProvider";
 
 import { randomId } from "@mantine/hooks";

@@ -1,18 +1,21 @@
-import { Box, Button, Group, NumberInput, TextInput } from '@mantine/core';
+import { Box, Button, Group, NumberInput, TextInput } from "hyfn-client";
 
-import { t } from 'util/i18nextFix';;
-import React, { useEffect, useState } from 'react';
-import { useIncreaseBalanceWithSadad } from '../hooks/payWithSadad/useCompletePaymentWithSadad';
-import { useResendOTP } from '../hooks/payWithSadad/useResendOTP';
-import { useSendOTP } from '../hooks/payWithSadad/useSendOTP';
-import { useForm } from '@mantine/form';
+import { t } from "util/i18nextFix";
+import React, { useEffect, useState } from "react";
+import { useIncreaseBalanceWithSadad } from "../hooks/payWithSadad/useCompletePaymentWithSadad";
+import { useResendOTP } from "../hooks/payWithSadad/useResendOTP";
+import { useSendOTP } from "../hooks/payWithSadad/useSendOTP";
+import { useForm } from "@mantine/form";
 
 interface PayWithSadadProps {
   serviceFee: any;
   balanceNumber: any;
 }
 
-const PayWithSadad: React.FC<PayWithSadadProps> = ({ serviceFee, balanceNumber }) => {
+const PayWithSadad: React.FC<PayWithSadadProps> = ({
+  serviceFee,
+  balanceNumber,
+}) => {
   const { mutate: makePaymentWithSadad } = useIncreaseBalanceWithSadad();
   const { mutate: sendOTP } = useSendOTP();
   const { mutate: resendOTP } = useResendOTP();
@@ -21,43 +24,54 @@ const PayWithSadad: React.FC<PayWithSadadProps> = ({ serviceFee, balanceNumber }
   const paymentForm = useForm({
     initialValues: {
       amountToBeAdded: serviceFee,
-      OTP: '',
-      customerPhone: '',
-      birthYear: '',
+      OTP: "",
+      customerPhone: "",
+      birthYear: "",
     },
   });
   useEffect(() => {
-    paymentForm.setFieldValue('amountToBeAdded', balanceNumber ? +balanceNumber - serviceFee : serviceFee);
+    paymentForm.setFieldValue(
+      "amountToBeAdded",
+      balanceNumber ? +balanceNumber - serviceFee : serviceFee
+    );
   }, [serviceFee]);
 
   return (
     <Box>
       <Box
         sx={(theme) => ({
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'baseline',
-          [theme.fn.smallerThan('md')]: {
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "baseline",
+          [theme.fn.smallerThan("md")]: {
             marginTop: 12,
           },
         })}
       >
-        <Group grow m={'8px auto'}>
+        <Group grow m={"8px auto"}>
           <NumberInput
             formatter={(value) =>
-              !Number.isNaN(parseFloat(value)) ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '') : '$ '
+              !Number.isNaN(parseFloat(value))
+                ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, "")
+                : "$ "
             }
             precision={2}
-            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-            {...paymentForm.getInputProps('amountToBeAdded')}
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            {...paymentForm.getInputProps("amountToBeAdded")}
             // max={balanceNumber ? serviceFee - +balanceNumber : serviceFee}
-            placeholder={t('edit if you want')}
+            placeholder={t("edit if you want")}
             disabled
           />
         </Group>
-        <Group grow sx={{}} m={'auto'}>
-          <TextInput {...paymentForm.getInputProps('customerPhone')} placeholder={t('write the paying phone number')} />
-          <TextInput {...paymentForm.getInputProps('birthYear')} placeholder={t('write your birth year')} />
+        <Group grow sx={{}} m={"auto"}>
+          <TextInput
+            {...paymentForm.getInputProps("customerPhone")}
+            placeholder={t("write the paying phone number")}
+          />
+          <TextInput
+            {...paymentForm.getInputProps("birthYear")}
+            placeholder={t("write your birth year")}
+          />
         </Group>
         <Group grow mt={12}>
           <Button
@@ -72,23 +86,26 @@ const PayWithSadad: React.FC<PayWithSadadProps> = ({ serviceFee, balanceNumber }
                   });
             }}
           >
-            {otpSent ? t('Resend OTP') : t('Send OTP')}
+            {otpSent ? t("Resend OTP") : t("Send OTP")}
           </Button>
         </Group>
       </Box>
       <Group
         grow
         sx={(theme) => ({
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'baseline',
-          [theme.fn.smallerThan('md')]: {
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "baseline",
+          [theme.fn.smallerThan("md")]: {
             marginTop: 12,
           },
         })}
       >
-        <TextInput {...paymentForm.getInputProps('OTP')} placeholder={t('write the OTP here')} />
+        <TextInput
+          {...paymentForm.getInputProps("OTP")}
+          placeholder={t("write the OTP here")}
+        />
         <Button
           onClick={() => {
             makePaymentWithSadad({
@@ -96,7 +113,7 @@ const PayWithSadad: React.FC<PayWithSadadProps> = ({ serviceFee, balanceNumber }
             });
           }}
         >
-          {t('Make payment')}
+          {t("Make payment")}
         </Button>
       </Group>
     </Box>

@@ -11,7 +11,7 @@ import {
   Text,
   TextInput,
   UnstyledButton,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useWindowScroll } from "@mantine/hooks";
 
 import { t } from "utils/i18nextFix";

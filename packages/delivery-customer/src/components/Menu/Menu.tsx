@@ -22,7 +22,7 @@ import {
   Stack,
   Image,
   Flex,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useMediaQuery } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
@@ -56,7 +56,8 @@ import { useTranslation } from "react-i18next";
 import { useUserCheck } from "../../hooks/useUserCheck";
 import { useGetUserDocument } from "../../hooks/useGetUserDocument";
 import TransactionList from "../TransactionList";
-import { useUser } from "../../contexts/userContext/User";
+// import { useUser } from "../../contexts/userContext/User";
+import { useUser } from "hyfn-client";
 import { useRefreshBalance } from "../../hooks/useRefreshBalance";
 
 const StyledNav: React.FC = ({ children, ...rest }) => {

@@ -1,9 +1,5 @@
-import {
-  ColorScheme,
-  ColorSchemeProvider,
-  MantineProvider,
-  PaperStylesParams,
-} from "@mantine/core";
+import { ColorScheme, MantineProvider, PaperStylesParams } from "hyfn-client";
+import { ColorSchemeProvider } from "hyfn-client";
 import { useColorScheme, useLocalStorage } from "@mantine/hooks";
 import SearchProvider from "contexts/searchContext/SearchProvider";
 import React, { useEffect, useState } from "react";
@@ -13,7 +9,9 @@ import { NotificationsProvider } from "@mantine/notifications";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import FixedComponentProvider from "contexts/fixedComponentContext/FixedComponentProvider";
-import UserProvider from "contexts/userContext/User";
+import { MantineContext, UserProvider } from "hyfn-client";
+
+import { useGetUserDocument } from "hooks/useGetUserDocument";
 
 const Providers: React.FC = ({ children }) => {
   const queryClient = new QueryClient();
@@ -51,11 +49,11 @@ const Providers: React.FC = ({ children }) => {
           theme={{
             colorScheme: colorScheme,
             breakpoints: {
-              xs: 370,
-              sm: 576,
-              md: 870,
-              lg: 990,
-              xl: 1200,
+              xs: "370px",
+              sm: "576px",
+              md: "870px",
+              lg: "990px",
+              xl: "1200px",
             },
             components: {
               Paper: {
@@ -85,7 +83,10 @@ const Providers: React.FC = ({ children }) => {
         >
           <SearchProvider>
             <QueryClientProvider client={queryClient}>
-              <UserProvider>
+              <UserProvider
+                useGetUserDocument={useGetUserDocument}
+                queryClient={queryClient}
+              >
                 <FixedComponentProvider>{children}</FixedComponentProvider>
               </UserProvider>
             </QueryClientProvider>

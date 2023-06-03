@@ -1,4 +1,4 @@
-import { Button, Center, Container, Loader, Text } from "@mantine/core";
+import { Button, Center, Container, Loader, Text } from "hyfn-client";
 
 import { usePagination } from "hooks/usePagination";
 

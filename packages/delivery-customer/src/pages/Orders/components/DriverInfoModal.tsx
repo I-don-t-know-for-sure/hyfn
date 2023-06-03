@@ -1,8 +1,8 @@
-import { Button, Group, Image, Modal, Stack } from '@mantine/core';
-import React, { useState } from 'react';
-import { t } from 'util/i18nextFix';;
+import { Button, Group, Image, Modal, Stack } from "hyfn-client";
+import React, { useState } from "react";
+import { t } from "util/i18nextFix";
 
-import { useGetDriverInfo } from '../hooks/useGetDriverInfo';
+import { useGetDriverInfo } from "../hooks/useGetDriverInfo";
 
 interface DriverInfoModalProps {
   driverId: string;
@@ -11,20 +11,26 @@ interface DriverInfoModalProps {
 const DriverInfoModal: React.FC<DriverInfoModalProps> = ({ driverId }) => {
   const [opened, setOpened] = useState(false);
   const { data, isLoading, isFetched } = useGetDriverInfo({ driverId, opened });
-  console.log('🚀 ~ file: DriverInfoModal.tsx:16 ~ data', data);
+  console.log("🚀 ~ file: DriverInfoModal.tsx:16 ~ data", data);
 
   const driverCheckedBy8Stores = data?.storeVerifications?.length === 8;
-  console.log('🚀 ~ file: DriverInfoModal.tsx:17 ~ data', data);
+  console.log("🚀 ~ file: DriverInfoModal.tsx:17 ~ data", data);
   return (
     <>
       <Modal opened={opened} onClose={() => setOpened(false)}>
         <Stack>
           <Group grow>
             <Image
-              src={`${import.meta.env.VITE_APP_BUCKET_URL}/driver-verification/${data?.passportPic}`}
-              alt={t('Passport pic')}
+              src={`${
+                import.meta.env.VITE_APP_BUCKET_URL
+              }/driver-verification/${data?.passportPic}`}
+              alt={t("Passport pic")}
             />
-            <Image src={`${import.meta.env.VITE_APP_BUCKET_URL}/driver-verification/${data?.passportAndFacePic}`} />
+            <Image
+              src={`${
+                import.meta.env.VITE_APP_BUCKET_URL
+              }/driver-verification/${data?.passportAndFacePic}`}
+            />
           </Group>
         </Stack>
       </Modal>
@@ -33,7 +39,7 @@ const DriverInfoModal: React.FC<DriverInfoModalProps> = ({ driverId }) => {
           setOpened(true);
         }}
       >
-        {t('Driver Info')}
+        {t("Driver Info")}
       </Button>
     </>
   );

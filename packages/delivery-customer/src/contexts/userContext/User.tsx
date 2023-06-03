@@ -8,6 +8,7 @@ import { useGetUserId } from "hooks/useGetUserId";
 
 import { createContext, useContext, useEffect } from "react";
 import { useQueryClient } from "react-query";
+import { useUser as userHook } from "hyfn-client";
 
 export const UserContext = createContext(undefined);
 
@@ -212,13 +213,15 @@ const UserProvider: React.FC = ({ children }) => {
   );
 };
 
-export const useUser = () => {
-  const user: UserControl = useContext(UserContext);
-  if (!user) {
-    throw new Error("call inside the component tree");
-  }
+// export const useUser = () => {
+//   const user: UserControl = useContext(UserContext);
+//   if (!user) {
+//     throw new Error("call inside the component tree");
+//   }
 
-  return user;
-};
+//   return user;
+// };
+
+export const useUser = userHook;
 
 export default UserProvider;

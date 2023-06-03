@@ -7,7 +7,7 @@ import {
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 import LocationProvider from "contexts/locationContext/LocationContext";
-import UserProvider from "contexts/userContext/User";
+import { UserProvider } from "hyfn-client";
 import {
   DatesProvider,
   MonthPickerInput,
@@ -16,6 +16,7 @@ import {
 import "dayjs/locale/ar-ly";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { useGetUserDocument } from "hooks/useGetUserDocument";
 
 const Providers: React.FC = ({ children }) => {
   const queryClient = new QueryClient();
@@ -67,7 +68,10 @@ const Providers: React.FC = ({ children }) => {
         <NotificationsProvider>
           <LocationProvider>
             <QueryClientProvider client={queryClient}>
-              <UserProvider>
+              <UserProvider
+                useGetUserDocument={useGetUserDocument}
+                queryClient={queryClient}
+              >
                 <DatesProvider
                   settings={{
                     locale: "ar-ly",

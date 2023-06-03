@@ -9,7 +9,7 @@ import {
   LoadingOverlay,
   SimpleGrid,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import { Store } from "config/types";
 import React, { useEffect, useState } from "react";
 import StoreCard from "./components/StoreCard";

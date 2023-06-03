@@ -9,7 +9,7 @@ import {
   Stack,
   Table,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { randomId, useMediaQuery } from "@mantine/hooks";
 import { useFixedComponent } from "contexts/fixedComponentContext/FixedComponentProvider";
 import { t } from "utils/i18nextFix";

@@ -1,4 +1,4 @@
-import { Button, Loader, Modal } from "@mantine/core";
+import { Button, Loader, Modal } from "hyfn-client";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import React, { useState } from "react";

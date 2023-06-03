@@ -7,29 +7,40 @@ import {
   Group,
   TextInput,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
+import React from "react";
+import { t } from "i18next";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import Translation from "../../components/Translation";
+
+import { lngs } from "hyfn-types";
+import { useUser } from "../../context/User";
+
 import { showNotification, updateNotification } from "@mantine/notifications";
 
-import { lngs } from "components/Menu/config";
-import Translation from "components/Translation";
-import { useUser } from "contexts/userContext/User";
-import { useGetCurrentSession } from "hooks/useGetCurrentSession";
-import { useGetUserDocument } from "hooks/useGetUserDocument";
-import { t } from "utils/i18nextFix";
-import { useEffect, useState } from "react";
+import { useForm } from "@mantine/form";
 
-import { Link, useNavigate } from "react-router-dom";
+export const SignUp: React.FC = () => {
+  // const { registerUser, user } = useRealmApp();
 
-const SignUp: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { signUp, confirmSignUp, userId, loggedIn, resendConfirmationEmail } =
+    useUser();
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
   const [exception, setException] = useState({
     exception: false,
     message: "",
     code: "",
   });
-  const testingFile = import.meta.env.VITE_APP_Test;
-  console.log("🚀 ~ file: SignUp.tsx:53 ~ testingFile", testingFile);
-  const { signUp, confirmSignUp, userId } = useUser();
+
+  const navigate = useNavigate();
+  const [customerInfo, setCustomerInfo] = useLocalStorage<any>({
+    key: "customerInfo",
+  });
+
   const form = useForm({
     initialValues: {
       email: "",
@@ -37,25 +48,11 @@ const SignUp: React.FC = () => {
     },
   });
 
-  const [, setDriverInfo] = useLocalStorage<any>({
-    key: "driverInfo",
-  });
-
-  const [signUpSuccess, setSignUpSuccess] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
-
-  useGetUserDocument({ userId });
-  const navigate = useNavigate();
-
-  const { data } = useGetCurrentSession();
-
   useEffect(() => {
-    if (data) {
-      console.log(data);
-
-      navigate("/", { replace: true });
+    if (loggedIn) {
+      navigate("/home", { replace: true });
     }
-  }, [data]);
+  }, [loggedIn, navigate]);
 
   return (
     <Container
@@ -69,16 +66,17 @@ const SignUp: React.FC = () => {
       }}
     >
       {exception.exception && (
-        <Alert title={t("User Already Exists")} color={"red"}>
-          {t("An account with this information already exists")}
+        <Alert title={t("User Already Exists") as any} color={"red"}>
+          {t("An account with this information already exists") as any}
         </Alert>
       )}
       <Card
-        withBorder
+        shadow={"md"}
+        m={" auto"}
         sx={{
-          width: "90%",
-          maxWidth: 500,
-          margin: "20px auto",
+          width: "380px",
+          // alignSelf: 'center',
+          // justifySelf: 'center',
         }}
       >
         {signUpSuccess ? (
@@ -92,7 +90,7 @@ const SignUp: React.FC = () => {
             <TextInput
               mb={16}
               sx={{ width: "100%" }}
-              label={t("Confirmation code")}
+              label={t("Confirmation code") as any}
               value={verificationCode}
               onChange={(e) => {
                 setVerificationCode(e.target.value);
@@ -105,7 +103,7 @@ const SignUp: React.FC = () => {
                   await confirmSignUp({
                     email: form.values.email,
                     code: verificationCode,
-                    navigate,
+                    // navigate,
                   });
                 } catch (error) {
                   const { status, message, name, code } = error as {
@@ -115,10 +113,12 @@ const SignUp: React.FC = () => {
                     name: string;
                   };
                   setException({ exception: true, code, message });
+
+                  console.error(error);
                 }
               }}
             >
-              {t("Confirm account")}
+              {t("Confirm account") as any}
             </Button>
           </Container>
         ) : (
@@ -126,6 +126,8 @@ const SignUp: React.FC = () => {
             onSubmit={form.onSubmit(async (values) => {
               const id = randomId();
               try {
+                setException({ exception: false, code: "", message: "" });
+
                 showNotification({
                   title: "",
                   message: "",
@@ -133,15 +135,14 @@ const SignUp: React.FC = () => {
                   autoClose: false,
                   id,
                 });
-                const { email, password } = values;
-                console.log(values);
-                //await logOut();
-
-                const trimmedEmail = email.trim();
-
-                await signUp({ email: trimmedEmail, password });
-
+                const { email, password, ...rest } = values;
+                const trimmedEmail = values.email.trim();
+                await signUp({
+                  email: trimmedEmail,
+                  password: values.password,
+                });
                 setSignUpSuccess(true);
+                setCustomerInfo({ email, ...rest });
                 updateNotification({
                   title: "",
                   message: "",
@@ -150,7 +151,6 @@ const SignUp: React.FC = () => {
                   autoClose: false,
                   id,
                 });
-                // await logIn(values.email, values.password);
               } catch (e) {
                 const { status, message, name, code } = e as {
                   message: string;
@@ -161,96 +161,49 @@ const SignUp: React.FC = () => {
 
                 console.log("already in use");
                 setException({ exception: true, code, message });
+
                 updateNotification({
-                  message: "",
-                  id,
+                  title: t("An Error  occurred"),
+                  message: t("Error") as any,
                   color: "red",
                   loading: false,
                   autoClose: true,
+                  id,
                 });
                 console.error(e);
               }
-              //  mutate(values);
             })}
           >
             <TextInput
+              type="email"
+              required
+              label={t("Email") as any}
               {...form.getInputProps("email")}
-              label={"Email"}
-              // required
             />
             <TextInput
-              {...form.getInputProps("password")}
-              label={"password"}
+              label={t("Password") as any}
               type="password"
-              // required
+              {...form.getInputProps("password")}
             />
-            <Group
-              mb={2}
-              m={"12px auto"}
-              position="center"
-              grow
-              sx={{
-                maxWidth: "400px",
-              }}
-            >
-              <Button mt={"6px"} type="submit">
-                {t("Create Account")}
-              </Button>
-            </Group>
+            <Button fullWidth mt={16} type="submit">
+              {t("Signup") as any}
+            </Button>{" "}
           </form>
         )}
-
         <Box
           sx={{
-            width: "100%",
+            margin: "16px auto 6px auto",
             display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            justifyContent: "space-around",
+            alignItems: "baseline",
           }}
         >
           <Box>
-            {t("already have an account?")}{" "}
-            <Link to={"/login"}>{t("Login")}</Link>{" "}
+            {t("have an account?") as any} <Link to="/login">{t("Login")}</Link>
           </Box>
-
           <Translation lngs={lngs} />
         </Box>
       </Card>
     </Container>
-
-    // <Card shadow={"sm"} p="lg" sx={{ maxWidth: 300 }} mx="auto">
-    //   hi mom sign me up
-    //
-    //     <TextInput
-    //       type="text"
-    // //       required
-    //       label={"Business Name"}
-    //       {...form.getInputProps("businessName")}
-    //     />
-    //     <TextInput
-    //       type="number"
-    //       required
-    //       label={"BusinessPhone"}
-    //       {...form.getInputProps("businessPhone")}
-    //     />
-
-    //     <TextInput
-    //       type="email"
-    //       required
-    //       label="email"
-    //       {...form.getInputProps("email")}
-    //     />
-    //     <TextInput
-    //       label="password"
-    //       type="password"
-    //       {...form.getInputProps("password")}
-    //     />
-
-    //     <Button type="submit">SignUp</Button>
-    //   </form>
-    // </Card>
   );
 };
-
-export default SignUp;

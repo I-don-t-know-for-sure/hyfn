@@ -10,7 +10,7 @@ import {
   Paper,
   Text,
   Title,
-} from "@mantine/core";
+} from "hyfn-client";
 import { t } from "utils/i18nextFix";
 import { forwardRef, useEffect, useState } from "react";
 import { CollectionCard } from "../types";

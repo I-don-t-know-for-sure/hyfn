@@ -7,7 +7,7 @@ import {
   Stack,
   Tabs,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import { MENU_HEIGHT } from "components/Menu/config";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";

@@ -1,3 +1,5 @@
+// npx drizzle-kit generate:pg
+
 import { zCollection, collections } from "./collections";
 import { zDriverManagement, driverManagements } from "./driverManagements";
 import { zDriver, drivers } from "./drivers";
@@ -19,7 +21,7 @@ export * from "./drivers";
 export * from "./collections";
 
 import { ZodArray, ZodObject, ZodType } from "zod";
-import { v4 as uuidv4 } from "uuid";
+
 import { zCollectionsProducts } from "./collections_products";
 
 import { zLocalCardKeyStoreActivity } from "./localCardKey_store_activity";
@@ -175,9 +177,6 @@ export const updateJsonColumn = (obj: any, column: string) => {
   return `jsonb_strip_nulls(${res})`;
 };
 
-// const takeFisrtOrThrow = () => {
-
-// }
 export function takeFisrtOrThrow<T extends z.ZodType<any>>(
   schema: T,
   value: z.infer<T>,

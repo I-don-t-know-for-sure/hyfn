@@ -1,6 +1,6 @@
-import { Badge, Button, Group, Modal, Text } from '@mantine/core';
-import { t } from 'util/i18nextFix';;
-import { useState } from 'react';
+import { Badge, Button, Group, Modal, Text } from "hyfn-client";
+import { t } from "util/i18nextFix";
+import { useState } from "react";
 interface OptionsModalProps {
   options: any[];
 }
@@ -12,10 +12,10 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ options }) => {
         {options.map((option) => {
           return (
             <Group key={option.key}>
-              <Text weight={700}>{option.optionName}</Text> :{' '}
+              <Text weight={700}>{option.optionName}</Text> :{" "}
               {option.optionValues.map((value) => {
                 return (
-                  <Badge key={value.key} m={'0px 6px'} size="md">
+                  <Badge key={value.key} m={"0px 6px"} size="md">
                     {value.value}
                   </Badge>
                 );
@@ -24,7 +24,7 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ options }) => {
           );
         })}
       </Modal>
-      <Button onClick={() => setOpened(true)}>{t('Show')}</Button>
+      <Button onClick={() => setOpened(true)}>{t("Show")}</Button>
     </>
   );
 };

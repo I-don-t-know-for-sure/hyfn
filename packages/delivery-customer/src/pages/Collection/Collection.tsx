@@ -1,4 +1,4 @@
-import { Box, Container, Loader, SimpleGrid, Text } from "@mantine/core";
+import { Box, Container, Loader, SimpleGrid, Text } from "hyfn-client";
 import Product from "./components/Product";
 import { useCart } from "../../contexts/cartContext/Provider";
 import { storeFront } from "../../config/types";

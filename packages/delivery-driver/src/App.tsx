@@ -2,10 +2,10 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Menu from "./components/Menu/Menu";
 import Page from "./components/Page";
-import SignUp from "./Pages/SignUp/SignUp";
+import { SignUp } from "hyfn-client";
+import { LogIn } from "hyfn-client";
 
 import Home from "./Pages/Home/Home";
-import LogIn from "Pages/Login/LogIn";
 
 import Account from "Pages/Account/Account";
 import ActiveOrders from "Pages/ActiveOrders/ActiveOrders";

@@ -1,4 +1,4 @@
-import { Button, Center, Chip, Container, Stack, Text } from "@mantine/core";
+import { Button, Center, Chip, Container, Stack, Text } from "hyfn-client";
 
 import { useCart } from "../../contexts/cartContext/Provider";
 

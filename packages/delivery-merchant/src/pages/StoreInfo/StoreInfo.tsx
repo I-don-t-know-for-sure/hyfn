@@ -13,7 +13,7 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import { Store } from "config/types";
 

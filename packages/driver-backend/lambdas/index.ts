@@ -1,4 +1,3 @@
-import { confirmPickup } from './confirmPickup';
 import { createDriverDocumentHandler } from './createDriverDocument';
 import { createProposal } from './createProposal';
 import { deleteProposal } from './deleteProposal';
@@ -41,10 +40,7 @@ export type LambdaHandlers = {
     arg: Parameters<typeof createDriverDocumentHandler>['0']['arg'];
     return: ReturnType<typeof createDriverDocumentHandler>;
   };
-  confirmPickup: {
-    arg: Parameters<typeof confirmPickup>['0']['arg'];
-    return: ReturnType<typeof confirmPickup>;
-  };
+
   setDeliveryFeePaid: {
     arg: Parameters<typeof setDeliveryFeePaid>['0']['arg'];
     return: ReturnType<typeof setDeliveryFeePaid>;

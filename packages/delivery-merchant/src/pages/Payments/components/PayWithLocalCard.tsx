@@ -6,7 +6,7 @@ import {
   NumberInput,
   Text,
   useMantineColorScheme,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import { usePayWithLocalCard } from "hooks/usePayWithLocalCard";
 import { t } from "utils/i18nextFix";

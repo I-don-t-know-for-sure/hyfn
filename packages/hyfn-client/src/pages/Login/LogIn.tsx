@@ -13,19 +13,19 @@ import {
 import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { lngs } from "../../components/Menu/config";
+import { lngs } from "hyfn-types";
 import Translation from "../../components/Translation";
-import { useCustomerData } from "../../contexts/customerData/CustomerDataProvider";
-import { useUser } from "../../contexts/userContext/User";
-import { t } from "../../util/i18nextFix";
+
+import { t } from "i18next";
 
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import { useUser } from "../../context/User";
 
 interface LogInProps {}
 
-const LogIn: React.FC<LogInProps> = () => {
+export const LogIn: React.FC<LogInProps> = () => {
   const initialValues: { email: string; password: string } = {
     email: "",
     password: "",
@@ -36,6 +36,7 @@ const LogIn: React.FC<LogInProps> = () => {
     initialValues: initialValues,
   });
   const {
+    refetch,
     signIn,
     loggedIn,
     confirmSignUp,
@@ -49,7 +50,7 @@ const LogIn: React.FC<LogInProps> = () => {
 
   const [email, setEmail] = useState("");
 
-  const { refetch } = useCustomerData();
+  // const { refetch } = useCustomerData();
   const [verificationCode, setVerificationCode] = useState("");
 
   const [exception, setException] = useState({
@@ -64,7 +65,7 @@ const LogIn: React.FC<LogInProps> = () => {
         showNotification({
           id: randomId(),
           title: t("successful signup"),
-          message: t("just log into your account now "),
+          message: t("just log into your account now ") as any,
           autoClose: 3000,
         });
         navigate("/createcustomer", { replace: true });
@@ -101,8 +102,8 @@ const LogIn: React.FC<LogInProps> = () => {
       }}
     >
       {exception.exception && (
-        <Alert title={t(exception.code)} color={"red"}>
-          {t(exception.message)}
+        <Alert title={t(exception.code) as any} color={"red"}>
+          {t(exception.message) as any}
         </Alert>
       )}
       <Card
@@ -125,7 +126,7 @@ const LogIn: React.FC<LogInProps> = () => {
                     )
                   ) {
                     showNotification({
-                      message: t("does not match email pattern"),
+                      message: t("does not match email pattern") as any,
                       color: "red",
                     });
                     return;
@@ -146,14 +147,14 @@ const LogIn: React.FC<LogInProps> = () => {
             >
               <Stack>
                 <TextInput
-                  label={t("Confirmation code")}
+                  label={t("Confirmation code") as any}
                   {...changePasswordForm.getInputProps("confirmationCode")}
                 />
                 <TextInput
-                  label={t("New Password")}
+                  label={t("New Password") as any}
                   {...changePasswordForm.getInputProps("newPassword")}
                 />
-                <Button type="submit">{t("Change")}</Button>
+                <Button type="submit">{t("Change") as any}</Button>
               </Stack>
             </form>
           </Container>
@@ -188,14 +189,14 @@ const LogIn: React.FC<LogInProps> = () => {
               <TextInput
                 mb={16}
                 sx={{ width: "100%" }}
-                label={t("Confirmation code")}
+                label={t("Confirmation code") as any}
                 value={verificationCode}
                 onChange={(e) => {
                   setVerificationCode(e.target.value);
                 }}
               />
               <Button fullWidth type="submit">
-                {t("Confirm account")}
+                {t("Confirm account") as any}
               </Button>
             </form>
             <Button
@@ -205,13 +206,13 @@ const LogIn: React.FC<LogInProps> = () => {
                 const id = randomId();
                 try {
                   showNotification({
-                    message: t("sending confirmation email"),
+                    message: t("sending confirmation email") as any,
                     autoClose: false,
                     id,
                   });
                   resendConfirmationEmail({ username: form.values.email });
                   updateNotification({
-                    message: t("email was sent"),
+                    message: t("email was sent") as any,
                     id,
                     autoClose: true,
                     color: "green",
@@ -226,7 +227,7 @@ const LogIn: React.FC<LogInProps> = () => {
                   setException({ exception: true, code, message });
 
                   updateNotification({
-                    message: t("an error occured"),
+                    message: t("an error occured") as any,
                     id,
                     autoClose: true,
                     color: "red",
@@ -234,7 +235,7 @@ const LogIn: React.FC<LogInProps> = () => {
                 }
               }}
             >
-              {t("Resend Confirmation email")}
+              {t("Resend Confirmation email") as any}
             </Button>
           </Container>
         )}{" "}
@@ -245,7 +246,7 @@ const LogIn: React.FC<LogInProps> = () => {
               try {
                 showNotification({
                   title: t("Logging in"),
-                  message: t("In progress"),
+                  message: t("In progress") as any,
                   loading: true,
                   autoClose: false,
                   id,
@@ -267,7 +268,7 @@ const LogIn: React.FC<LogInProps> = () => {
                 }
                 updateNotification({
                   title: t("Logged in"),
-                  message: t("Successful"),
+                  message: t("Successful") as any,
                   color: "green",
                   loading: false,
                   autoClose: true,
@@ -289,7 +290,7 @@ const LogIn: React.FC<LogInProps> = () => {
                 // }
                 updateNotification({
                   title: t("An Error occurred"),
-                  message: t("Error"),
+                  message: t("Error") as any,
                   color: "red",
                   loading: false,
                   autoClose: true,
@@ -312,7 +313,7 @@ const LogIn: React.FC<LogInProps> = () => {
             />
 
             <Button mt={16} fullWidth type="submit">
-              {t("LogIn")}
+              {t("LogIn") as any}
             </Button>
           </form>
         )}
@@ -335,7 +336,7 @@ const LogIn: React.FC<LogInProps> = () => {
                 );
                 if (!validated) {
                   showNotification({
-                    message: t("Not email pattern"),
+                    message: t("Not email pattern") as any,
                     color: "red",
                   });
                   return;
@@ -350,7 +351,7 @@ const LogIn: React.FC<LogInProps> = () => {
                 }
               }}
             >
-              {t("Forgot password")}
+              {t("Forgot password") as any}
             </UnstyledButton>
           </Group>
 
@@ -360,4 +361,3 @@ const LogIn: React.FC<LogInProps> = () => {
     </Container>
   );
 };
-export default LogIn;

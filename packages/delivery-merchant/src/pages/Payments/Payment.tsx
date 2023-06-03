@@ -17,7 +17,7 @@ import {
   Text,
   TextInput,
   Title,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import { paymentMethods } from "config/data";
 

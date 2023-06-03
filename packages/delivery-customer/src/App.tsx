@@ -12,8 +12,10 @@ import Product from "./pages/Product/Product";
 import Cart from "./pages/Cart/Cart";
 import CheckOut from "./pages/CheckOut/CheckOut";
 import Explore from "./pages/Explore/Explore";
-import LogIn from "./pages/Login/LogIn";
-import SignUp from "./pages/Signup/SignUp";
+// import LogIn from "./pages/Login/LogIn";
+import { LogIn } from "hyfn-client";
+import { SignUp } from "hyfn-client";
+// import SignUp from "./pages/Signup/SignUp";
 
 import ProductWithoutOptions from "./pages/Product/ProductWithoutOptions";
 
@@ -31,8 +33,9 @@ import CreateCustomer from "./pages/CreateCustomer/CreateCustomer";
 import { Amplify } from "aws-amplify";
 import LandingPage from "pages/LandingPage/LandingPage";
 
-import { useUser } from "contexts/userContext/User";
-import { useLocalStorage } from "@mantine/hooks";
+// import { useUser } from "contexts/userContext/User";
+import { useUser } from "hyfn-client";
+import { useLocalStorage } from "hyfn-client";
 import fetchUtil from "util/fetch";
 
 function App() {

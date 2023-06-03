@@ -14,7 +14,7 @@ import {
   Divider,
   Grid,
   Stack,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import MediaCard from "./MediaCard";
 import MeasurementSystemCard from "./MeasurementSystemCard";

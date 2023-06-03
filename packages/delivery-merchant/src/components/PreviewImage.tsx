@@ -1,4 +1,4 @@
-import { Box, FileInputProps, Group, Image, Stack } from "@mantine/core";
+import { Box, FileInputProps, Group, Image, Stack } from "hyfn-client";
 import { useState } from "react";
 
 function Value({ file }: { file: File }) {

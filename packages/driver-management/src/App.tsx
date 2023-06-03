@@ -6,14 +6,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Amplify } from "aws-amplify";
 
 import DriversManagement from "pages/DriversManagement/DriversManagement";
-import SignUp from "pages/SignUp/SignUp";
-import LogIn from "pages/LogIn/LogIn";
-import ActiveOrders from "pages/ActiveOrders/ActiveOrder";
+import { SignUp } from "hyfn-client";
+import { LogIn } from "hyfn-client";
 
 import Page from "components/Page";
 import CreateManagerAccount from "pages/CreateManagerAccount/CreateManagerAccount";
 import ManagementInfo from "pages/ManagementInfo/ManagementInfo";
-import { useTestQuery } from "hooks/useTestQuery";
+
 import Orders from "pages/Order/Orders";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";

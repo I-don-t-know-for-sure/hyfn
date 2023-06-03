@@ -5,7 +5,7 @@ import {
   Container,
   Stack,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { t } from "i18next";
 import React, { useState } from "react";
 import { useAddEmployee } from "./hooks/useAddEmployee";

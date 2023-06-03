@@ -1,4 +1,4 @@
-import { useMantineColorScheme } from "@mantine/core";
+import { useMantineColorScheme } from "hyfn-client";
 import { goToLightbox } from "hyfn-client";
 import { useMutation } from "react-query";
 import fetchUtil from "util/fetch";

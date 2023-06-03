@@ -8,7 +8,7 @@ import {
   Paper,
   Radio,
   Space,
-} from "@mantine/core";
+} from "hyfn-client";
 import { randomId } from "@mantine/hooks";
 import { t } from "utils/i18nextFix";
 import React from "react";

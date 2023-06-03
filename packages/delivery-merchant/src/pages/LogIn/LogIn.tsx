@@ -8,7 +8,7 @@ import {
   Stack,
   TextInput,
   UnstyledButton,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -20,6 +20,8 @@ import { t } from "utils/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
+import { CardTest } from "hyfn-client";
+import { TestCard } from "components/test";
 
 interface LogInProps {}
 
@@ -98,6 +100,7 @@ const LogIn: React.FC<LogInProps> = () => {
         // alignItems: 'center',
       }}
     >
+      <TestCard />
       {exception.exception && (
         <Alert title={t(exception.code)} color={"red"}>
           {t(exception.message)}

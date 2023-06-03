@@ -10,8 +10,9 @@ import { useColorScheme, useLocalStorage } from "@mantine/hooks";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import UserProvider from "contexts/userContext/User";
+import { UserProvider } from "hyfn-client";
 import { ReactProps } from "config/types";
+import { useGetUserDocument } from "hooks/useGetUserDocument";
 
 const Providers: React.FC<ReactProps> = ({ children }) => {
   const queryClient = new QueryClient();
@@ -81,7 +82,12 @@ const Providers: React.FC<ReactProps> = ({ children }) => {
         // }}
       >
         <QueryClientProvider client={queryClient}>
-          <UserProvider>{children}</UserProvider>
+          <UserProvider
+            useGetUserDocument={useGetUserDocument}
+            queryClient={queryClient}
+          >
+            {children as any}
+          </UserProvider>
         </QueryClientProvider>
       </MantineProvider>
     </ColorSchemeProvider>

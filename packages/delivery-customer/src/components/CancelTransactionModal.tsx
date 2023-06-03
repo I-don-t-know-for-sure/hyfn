@@ -1,8 +1,8 @@
-import { Button, Modal, Stack, Text } from "@mantine/core";
+import { Button, Modal, Stack, Text } from "hyfn-client";
 import { useCancelTransaction } from "hooks/useCancelTransaction";
-import { t } from "i18next";
 
 import React, { useState } from "react";
+import { t } from "util/i18nextFix";
 
 interface CancelTransactionModalProps {
   transactionId: string;

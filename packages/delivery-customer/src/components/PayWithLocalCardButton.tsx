@@ -1,4 +1,4 @@
-import { Button, Center, useMantineColorScheme } from "@mantine/core";
+import { Button, Center, useMantineColorScheme } from "hyfn-client";
 
 import { t } from "util/i18nextFix";
 import React, { useEffect, useState } from "react";

@@ -9,7 +9,7 @@ import {
   Loader,
   Table,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import { useRateDriver } from "../../../hooks/useRateDriver";
 import { t } from "../../../util/i18nextFix";

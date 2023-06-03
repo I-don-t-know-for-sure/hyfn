@@ -1,4 +1,4 @@
-import { Box, Card, Text, UnstyledButton } from "@mantine/core";
+import { Box, Card, Text, UnstyledButton } from "hyfn-client";
 
 import Image from "components/Image";
 

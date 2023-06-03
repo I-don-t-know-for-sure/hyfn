@@ -1,4 +1,4 @@
-import { Checkbox, Select, TextInput } from "@mantine/core";
+import { Checkbox, Select, TextInput } from "hyfn-client";
 import { useDebouncedValue } from "@mantine/hooks";
 import { measurementSystemArray } from "hyfn-types";
 import React, { useEffect, useRef, useState } from "react";

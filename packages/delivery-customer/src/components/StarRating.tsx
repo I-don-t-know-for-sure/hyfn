@@ -1,4 +1,4 @@
-import { Box, Container, UnstyledButton, useMantineTheme } from "@mantine/core";
+import { Box, Container, UnstyledButton, useMantineTheme } from "hyfn-client";
 import React, { useEffect, useState } from "react";
 import { BsFillStarFill } from "react-icons/bs";
 

@@ -6,7 +6,7 @@ import {
   Modal,
   Stack,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import FullTextEditor from "components/FullTextEditor";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";

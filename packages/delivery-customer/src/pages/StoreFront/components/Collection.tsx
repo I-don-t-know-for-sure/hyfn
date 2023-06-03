@@ -1,5 +1,5 @@
 import { Carousel } from "@mantine/carousel";
-import { Box, Button, Center, Loader, Text } from "@mantine/core";
+import { Box, Button, Center, Loader, Text } from "hyfn-client";
 import Product from "components/Product";
 import { useCart } from "contexts/cartContext/Provider";
 import { useOnScreen } from "hooks/useOnScreen";

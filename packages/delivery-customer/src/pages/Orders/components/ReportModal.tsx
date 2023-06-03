@@ -6,7 +6,7 @@ import {
   TextInput,
   Textarea,
   UnstyledButton,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import { t } from "util/i18nextFix";
 import React, { useState } from "react";

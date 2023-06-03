@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Container, Loader, Text } from "@mantine/core";
+import { Box, Button, Chip, Container, Loader, Text } from "hyfn-client";
 
 import Image from "../../components/Image";
 
@@ -11,10 +11,6 @@ import { Link, useParams } from "react-router-dom";
 import { useLocation } from "../../contexts/locationContext/LocationContext";
 
 import StoreDetailsModal from "../../components/StoreDetailsModal";
-
-import { useLikeProduct } from "../../pages/Product/hooks/useProduct";
-
-import { useCustomerData } from "../../contexts/customerData/CustomerDataProvider";
 
 import { t } from "../../util/i18nextFix";
 

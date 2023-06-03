@@ -6,7 +6,7 @@ import {
   Container,
   Group,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";

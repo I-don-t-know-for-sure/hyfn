@@ -6,7 +6,8 @@ import CreateCollection from "pages/Collections/components/CreateCollection";
 import UpdateCollection from "pages/Collections/components/UpdateCollection";
 import ManageCollections from "pages/Collections/ManageCollections";
 
-import LogIn from "pages/LogIn/LogIn";
+import { SignUp } from "hyfn-client";
+// import { LogIn } from "hyfn-client";
 
 import Product from "pages/Manage/components/Product";
 import UpdateProduct from "./pages/Manage/components/UpdateProduct";
@@ -25,7 +26,6 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home/Home";
-import SignUp from "./pages/SignUp/SignUp";
 // import { Helmet } from "react-helmet-async";
 import { useLocalStorage } from "@mantine/hooks";
 import { useUserCheck } from "hooks/useUserCheck";
@@ -38,6 +38,7 @@ import fetchUtil from "utils/fetch";
 import Page from "components/Page";
 import { log } from "console";
 import { useUser } from "contexts/userContext/User";
+import LogIn from "pages/LogIn/LogIn";
 
 function App() {
   Amplify.configure({

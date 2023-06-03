@@ -14,7 +14,7 @@ import {
   Text,
   TextInput,
   UnstyledButton,
-} from "@mantine/core";
+} from "hyfn-client";
 import usePersistState from "hooks/usePersistState";
 import InfoCard from "components/InfoCard";
 import React, { useEffect, useState } from "react";

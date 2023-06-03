@@ -1,4 +1,4 @@
-import { Checkbox, TextInput } from "@mantine/core";
+import { Checkbox, TextInput } from "hyfn-client";
 import React from "react";
 import { ActionTypes } from "../BulkUpdateTable";
 import TableInput from "./TableInput";

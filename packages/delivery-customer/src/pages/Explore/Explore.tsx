@@ -1,4 +1,4 @@
-import { Box, Text, UnstyledButton } from "@mantine/core";
+import { Box, Text, UnstyledButton } from "hyfn-client";
 import Image from "../../components/Image";
 
 import { useLocation } from "../../contexts/locationContext/LocationContext";

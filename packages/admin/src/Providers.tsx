@@ -8,10 +8,11 @@ import { useColorScheme, useLocalStorage } from "@mantine/hooks";
 
 import React, { useEffect, useState } from "react";
 
-import UserProvider from "./contexts/userContext/User";
+import { UserProvider } from "hyfn-client";
 import { NotificationsProvider } from "@mantine/notifications";
 
 import { QueryClient, QueryClientProvider } from "react-query";
+import { useGetUserDocument } from "hooks/useGetUserDocument";
 // import { HelmetProvider } from "react-helmet-async";
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -82,7 +83,12 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           // }}
         >
           <QueryClientProvider client={queryClient}>
-            <UserProvider>{children}</UserProvider>
+            <UserProvider
+              useGetUserDocument={useGetUserDocument}
+              queryClient={queryClient}
+            >
+              {children}
+            </UserProvider>
           </QueryClientProvider>
         </MantineProvider>
       </ColorSchemeProvider>

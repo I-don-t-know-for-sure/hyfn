@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Text } from "hyfn-client";
 import { forwardRef } from "react";
 
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {

@@ -7,7 +7,7 @@ import {
   Grid,
   Stack,
   Text,
-} from "@mantine/core";
+} from "hyfn-client";
 import InfoCard from "components/InfoCard";
 import usePersistState from "hooks/usePersistState";
 import React, { useEffect, useState } from "react";

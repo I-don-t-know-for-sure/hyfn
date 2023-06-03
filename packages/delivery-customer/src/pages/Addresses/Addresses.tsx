@@ -1,13 +1,12 @@
-import { Box, Button, Card, Center, TextInput } from '@mantine/core';
-import { randomId } from '@mantine/hooks';
-import { useUser } from '../../contexts/userContext/User';
-import { useGetUserDocument } from '../../hooks/useGetUserDocument';
+import { Box, Button, Card, Center, TextInput } from "hyfn-client";
+import { randomId } from "@mantine/hooks";
+import { useUser } from "../../contexts/userContext/User";
+import { useGetUserDocument } from "../../hooks/useGetUserDocument";
 
-
-import React, { useEffect, useState } from 'react';
-import { t } from '../../util/i18nextFix';
-import Address from './components/Address';
-import { useManageAddresses } from './hooks/manageAddresses';
+import React, { useEffect, useState } from "react";
+import { t } from "../../util/i18nextFix";
+import Address from "./components/Address";
+import { useManageAddresses } from "./hooks/manageAddresses";
 
 interface ManageAddressesProps {}
 
@@ -29,37 +28,48 @@ const ManageAddresses: React.FC<ManageAddressesProps> = ({}) => {
     <>
       <Box
         sx={{
-          margin: '12px',
-          justifyContent: 'flex-end',
-          display: 'flex',
+          margin: "12px",
+          justifyContent: "flex-end",
+          display: "flex",
         }}
       >
-        <Button onClick={() => mutate({ addresses })}>{t('Update')}</Button>
+        <Button onClick={() => mutate({ addresses })}>{t("Update")}</Button>
       </Box>
       {addresses?.map((address) => {
-        return <Address key={address.key} address={address} setAddresses={setAddresses} />;
+        return (
+          <Address
+            key={address.key}
+            address={address}
+            setAddresses={setAddresses}
+          />
+        );
       })}
       <Center
         sx={{
-          margin: 'auto',
-          maxWidth: '500px',
-          display: 'flex',
-          flexDirection: 'column',
+          margin: "auto",
+          maxWidth: "500px",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <Button
           sx={{
-            width: '100%',
-            marginBottom: '24px',
+            width: "100%",
+            marginBottom: "24px",
           }}
           onClick={() =>
             setAddresses([
               ...addresses,
-              { label: 'label', coords: '3.333,3.333', key: randomId(), locationDescription: 'location Description' },
+              {
+                label: "label",
+                coords: "3.333,3.333",
+                key: randomId(),
+                locationDescription: "location Description",
+              },
             ])
           }
         >
-          {t('Add address')}
+          {t("Add address")}
         </Button>
       </Center>
     </>

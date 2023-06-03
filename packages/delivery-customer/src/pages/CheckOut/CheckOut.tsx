@@ -10,7 +10,7 @@ import {
   Skeleton,
   Text,
   TextInput,
-} from "@mantine/core";
+} from "hyfn-client";
 
 import "dayjs/locale/ru";
 import { useForm } from "@mantine/form";

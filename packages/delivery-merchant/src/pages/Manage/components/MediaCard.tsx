@@ -16,7 +16,7 @@ import {
   Stack,
   Text,
   Title,
-} from "@mantine/core";
+} from "hyfn-client";
 import { t } from "utils/i18nextFix";
 
 import { ProductsCard } from "../types";

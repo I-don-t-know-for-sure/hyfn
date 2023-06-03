@@ -1,7 +1,7 @@
-import { Box, Button, Card, Group, TextInput } from '@mantine/core';
-import { t } from '../../../util/i18nextFix';;
-import React, { useState } from 'react';
-import { convertCoordsArraytoString } from '../../../util/convertCoordsArrayToString';
+import { Box, Button, Card, Group, TextInput } from "hyfn-client";
+import { t } from "../../../util/i18nextFix";
+import React, { useState } from "react";
+import { convertCoordsArraytoString } from "../../../util/convertCoordsArrayToString";
 
 interface AddressProps {
   address: any;
@@ -10,11 +10,14 @@ interface AddressProps {
 
 const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
   const coordsType = typeof address.coords;
-  const coords = coordsType === 'string' ? address.coords : `${address.coords[1]},${address.coords[0]}`;
-  const [error, setError] = useState({ error: false, message: '' });
+  const coords =
+    coordsType === "string"
+      ? address.coords
+      : `${address.coords[1]},${address.coords[0]}`;
+  const [error, setError] = useState({ error: false, message: "" });
 
   const convertCoordsStringToArray = (coordsString: string) => {
-    const coords = coordsString.split(',');
+    const coords = coordsString.split(",");
     return [parseFloat(coords[0]), parseFloat(coords[1])];
   };
   const err = (e) => {
@@ -40,13 +43,13 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
   return (
     <Card
       sx={{
-        maxWidth: '500px',
-        margin: '24px auto',
+        maxWidth: "500px",
+        margin: "24px auto",
       }}
     >
       <TextInput
-        label={t('Label')}
-        m={'6px auto'}
+        label={t("Label")}
+        m={"6px auto"}
         value={address.label}
         onChange={(e) =>
           setAddresses((addresses) => {
@@ -66,16 +69,16 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
       <Group mb={8}>
         <TextInput
           sx={{
-            width: '65%',
+            width: "65%",
           }}
-          label={t('Coordinates')}
-          m={'6px auto'}
+          label={t("Coordinates")}
+          m={"6px auto"}
           value={convertCoordsArraytoString(address.coords)}
           error={error.error}
           onBlur={(e) => {
             const coords = convertCoordsStringToArray(address.coords);
             if (coords.length !== 2) {
-              setError({ error: true, message: 'wrong syntax' });
+              setError({ error: true, message: "wrong syntax" });
             }
 
             setAddresses((addresses) => {
@@ -86,7 +89,7 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
                 return oldAddress;
               });
             });
-            setError({ error: false, message: 'wrong syntax' });
+            setError({ error: false, message: "wrong syntax" });
           }}
           onChange={(e) => {
             setAddresses((addresses) => {
@@ -102,20 +105,20 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
 
         <Button
           sx={{
-            width: '30%',
+            width: "30%",
           }}
           mt={29}
           onClick={() => {
             navigator.geolocation.getCurrentPosition(success, err);
           }}
         >
-          {t('Current Coords')}
+          {t("Current Coords")}
         </Button>
       </Group>
 
       <TextInput
         mb={28}
-        label={t('Location description')}
+        label={t("Location description")}
         value={address?.locationDescription}
         onChange={(e) => {
           setAddresses((addresses) => {
@@ -150,7 +153,7 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
         </Button> */}
         <Button
           sx={{
-            width: '30%',
+            width: "30%",
           }}
           variant="outline"
           onClick={() => {
@@ -161,7 +164,7 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
             });
           }}
         >
-          {t('Delete')}
+          {t("Delete")}
         </Button>
       </Group>
     </Card>
