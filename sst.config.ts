@@ -13,10 +13,7 @@ import {
   managementCognitoStack,
 } from "./stacks/driverManagement";
 import { driverApiStack, driverCognitoStack } from "./stacks/driverStack";
-import {
-  libraryApiStack,
-  libraryCognitoStack,
-} from "./stacks/productsLibraryStack";
+
 import { storeApiStack, storeCognitoStack } from "./stacks/storeBackend";
 
 export default {

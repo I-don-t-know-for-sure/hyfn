@@ -7,9 +7,19 @@ export const getCollectionProductsHandler = async ({ arg, client, db }: MainFunc
     .selectFrom('collectionsProducts')
     .where('collectionId', '=', collectionId)
     .innerJoin('products', 'collectionsProducts.productId', 'products.id')
+    // .innerJoinLateral(
+    //   (eb) =>
+    //     eb
+    //       .selectFrom('products')
+    //       .selectAll()
+    //       .whereRef('products.id', '=', 'collectionsProducts.productId')
+    //       // .limit(5)
+    //       .as('products'),
+    //   (join) => join.onTrue()
+    // )
     .select(['products.id', 'products.title'])
     .offset(lastDoc > 0 ? lastDoc : 0)
-    .limit(20)
+    .limit(5)
     .execute();
 
   result = products.map((product) => {

@@ -10,13 +10,22 @@ interface GetCollectionProductsProps extends Omit<MainFunctionProps, 'arg'> {
 export const getCollectionProducts = async ({ arg, client, db }: GetCollectionProductsProps) => {
   const { country, storefront, collectionid, documents = 25, lastDocNumber } = arg[0];
 
-  const collectionProductRelations = await db
+  /* const collectionProductRelations = await db
     .selectFrom('collectionsProducts')
-    .innerJoin('products', (join) =>
-      join.onRef('collectionsProducts.productId', '=', 'products.id')
+    .where('collectionId', '=', collectionid)
+    .innerJoinLateral(
+      (eb) =>
+        eb
+          .selectFrom('products')
+          .selectAll()
+          .whereRef('products.id', '=', 'collectionsProducts.productId')
+          .limit(5)
+          .as('products'),
+      (join) => join.onTrue()
     )
 
     .select(
+      // ['products.id', 'products.isActive']
       buildJson<tProduct>(tProducts, [
         'id',
         'images',
@@ -28,14 +37,28 @@ export const getCollectionProducts = async ({ arg, client, db }: GetCollectionPr
         'hasOptions',
       ]).as(tProducts._)
     )
-    .where('collectionsProducts.collectionId', '=', collectionid)
-    .offset(lastDocNumber || 0)
+    .offset(lastDocNumber > 0 ? lastDocNumber : 0)
     .limit(5)
+    .execute(); */
+  const collectionsProducts = await db
+    .selectFrom('collectionsProducts')
+    .select(['collectionsProducts.productId'])
+    .where('collectionId', '=', collectionid)
+    .limit(5)
+    .offset(lastDocNumber > 0 ? lastDocNumber : 0)
+    .execute();
+  const productsIds = collectionsProducts.map((product) => product.productId);
+  if (productsIds.length === 0) return [];
+
+  const products = await db
+    .selectFrom('products')
+    .where('id', 'in', productsIds)
+    .select(['id', 'images', 'description', 'prevPrice', 'price', 'title', 'hasOptions'])
     .execute();
 
-  const products = collectionProductRelations.flatMap((collection) => {
-    return collection.products;
-  });
+  // const products = collectionProductRelations.flatMap((collection) => {
+  //   return collection.products;
+  // });
 
   return products;
 };

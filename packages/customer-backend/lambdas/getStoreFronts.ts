@@ -1,5 +1,5 @@
 interface GetStoreFrontsProps extends Omit<MainFunctionProps, 'arg'> {}
-import { ObjectId } from 'mongodb';
+
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';
 
@@ -47,7 +47,7 @@ export const getStoreFronts = async ({ arg, client, db }: GetStoreFrontsProps) =
     .select(['storeName', 'description', 'image', 'id', 'storeType'])
     .limit(5);
   if (!!storeType && storeType !== 'all') {
-    qb = qb.where('storeType', '@>', [storeType]);
+    qb = qb.where('storeType', '@>', sql`array[${sql.join([storeType])}]::varchar[]`);
   }
   // if(nearby){
   //   qb.where(sql``)

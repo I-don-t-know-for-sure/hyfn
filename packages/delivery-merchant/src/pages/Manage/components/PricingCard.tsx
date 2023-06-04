@@ -75,7 +75,7 @@ const PricingCard: React.FC<ProductsCard> = ({
                 onChange={(e) => {
                   onChangeHandler(e.target.value, "price");
                 }}
-                rightSectionWidth={100}
+                rightSectionWidth={120}
                 rightSection={
                   <Group
                     position="right"
@@ -109,7 +109,7 @@ const PricingCard: React.FC<ProductsCard> = ({
                 }
               />
             </Grid.Col>
-            <Grid.Col span={"auto"}>
+            {/* <Grid.Col span={"auto"}>
               <Select
                 style={{
                   width: "80px",
@@ -126,11 +126,11 @@ const PricingCard: React.FC<ProductsCard> = ({
                 //   onChangeHandler(e, "pricing", "currency");
                 // }}
               />
-            </Grid.Col>
+            </Grid.Col> */}
           </Grid>
         </>
       )}
-      <Divider />
+
       {isLoading ? (
         <Box
           sx={{

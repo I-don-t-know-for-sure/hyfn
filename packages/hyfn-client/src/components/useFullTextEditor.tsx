@@ -17,7 +17,7 @@ const FullTextEditor = () => {
   const [value, setValue] = useState("");
   const editor = useEditor({
     extensions: [
-      StarterKit as any,
+      // StarterKit,
       Underline,
       Link,
       Superscript,

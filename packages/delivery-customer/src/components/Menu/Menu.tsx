@@ -724,24 +724,9 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   bottom: 24 + MENU_HEIGHT,
                   width: "100%",
                   display: "flex",
-                  justifyContent: "space-around",
+                  justifyContent: "end",
                 }}
               >
-                <Group>
-                  {isLoading ? (
-                    <Loader />
-                  ) : (
-                    <Text weight={700}>
-                      {" "}
-                      {`${t("Balance")}: ${
-                        typeof userData?.balance?.toFixed(2) !== "undefined"
-                          ? userData?.balance?.toFixed(2)
-                          : 0
-                      }`}
-                    </Text>
-                  )}
-                </Group>
-
                 <Box
                   sx={{
                     display: "flex",
