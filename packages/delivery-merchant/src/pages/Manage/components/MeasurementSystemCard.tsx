@@ -6,7 +6,7 @@ import {
   Select,
   Skeleton,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React from "react";
 import { ProductsCard } from "../types";

@@ -1,4 +1,4 @@
-import { Button, Group, Modal } from "hyfn-client";
+import { Button, Group, Modal } from "@mantine/core";
 import { t } from "util/i18nextFix";
 import React, { useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";

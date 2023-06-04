@@ -11,7 +11,7 @@ import {
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { AiFillTag } from "react-icons/ai";
 import { BsMoonStars, BsSun } from "react-icons/bs";

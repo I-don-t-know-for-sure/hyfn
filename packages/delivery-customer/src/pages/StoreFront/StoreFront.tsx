@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Container, Loader, Text } from "hyfn-client";
+import { Box, Button, Chip, Container, Loader, Text } from "@mantine/core";
 
 import Image from "../../components/Image";
 

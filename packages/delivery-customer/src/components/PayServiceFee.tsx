@@ -1,4 +1,4 @@
-import { Box, Group, Select, Text } from "hyfn-client";
+import { Box, Group, Select, Text } from "@mantine/core";
 import { paymentMethods } from "config/data";
 import { t } from "util/i18nextFix";
 import PayWithLocalCard from "components/PayWithLocalCard";

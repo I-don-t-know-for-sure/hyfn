@@ -11,7 +11,7 @@ import {
   LoadingOverlay,
   Table,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useRefreshOrderDocument } from "../hooks/useRefreshOrderDocument";
 import TransactionModal from "./TransactionModal";
 import DriverInfoModal from "./DriverInfoModal";

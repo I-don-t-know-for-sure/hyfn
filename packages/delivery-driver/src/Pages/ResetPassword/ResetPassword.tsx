@@ -1,4 +1,11 @@
-import { Button, Card, Container, Group, TextInput, Title } from "hyfn-client";
+import {
+  Button,
+  Card,
+  Container,
+  Group,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";

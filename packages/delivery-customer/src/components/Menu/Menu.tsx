@@ -22,7 +22,7 @@ import {
   Stack,
   Image,
   Flex,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";

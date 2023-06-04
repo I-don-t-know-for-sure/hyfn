@@ -11,7 +11,7 @@ import {
   NumberInputHandlers,
   Space,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useCart } from "../../contexts/cartContext/Provider";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";

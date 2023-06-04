@@ -10,7 +10,7 @@ import {
   LoadingOverlay,
   Table,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import React from "react";
 import { largerEq } from "mathjs";
 import TransactionModal from "./TransactionModal";

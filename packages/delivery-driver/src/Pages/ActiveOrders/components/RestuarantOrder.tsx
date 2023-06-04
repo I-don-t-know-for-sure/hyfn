@@ -15,7 +15,7 @@ import {
   Stack,
   Table,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import DeliveredModal from "components/DeliveredModal";
 import PayModal from "components/PayModal";

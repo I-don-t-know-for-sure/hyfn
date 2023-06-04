@@ -1,4 +1,11 @@
-import { Box, Button, Group, NumberInput, Text, TextInput } from "hyfn-client";
+import {
+  Box,
+  Button,
+  Group,
+  NumberInput,
+  Text,
+  TextInput,
+} from "@mantine/core";
 
 import { monthlySubscriptionCost } from "hyfn-types";
 import { t } from "utils/i18nextFix";

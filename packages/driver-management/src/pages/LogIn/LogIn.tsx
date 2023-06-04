@@ -8,7 +8,7 @@ import {
   Stack,
   TextInput,
   UnstyledButton,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";

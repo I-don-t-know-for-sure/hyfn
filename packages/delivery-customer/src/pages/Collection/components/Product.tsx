@@ -6,7 +6,7 @@ import {
   Text,
   UnstyledButton,
   useMantineTheme,
-} from "hyfn-client";
+} from "@mantine/core";
 import Image from "../../../components/Image";
 import ProductControler from "../../../components/ProductControler";
 import { storeServiceFee } from "hyfn-types";

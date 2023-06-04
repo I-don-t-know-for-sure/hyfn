@@ -12,7 +12,7 @@ import {
   Table,
   Text,
   Title,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { usePagination } from "hooks/usePagination";
 

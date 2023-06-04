@@ -11,7 +11,7 @@ import {
   Select,
   Text,
   TextInput,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import { t } from "utils/i18nextFix";
 

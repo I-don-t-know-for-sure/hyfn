@@ -4,7 +4,7 @@ import {
   CopyButton as OriginalCopyButton,
   Group,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import React from "react";
 
 interface CopyButtonProps {

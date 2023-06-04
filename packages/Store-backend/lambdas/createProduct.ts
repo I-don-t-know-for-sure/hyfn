@@ -6,7 +6,6 @@ import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { sql } from 'kysely';
 
 export const createProductHandler = async ({ arg, client, userId, db }: CreateProductProps) => {
-  var result;
   const product = arg[0];
   const {
     title,

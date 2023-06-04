@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Text, UnstyledButton } from "hyfn-client";
+import { AspectRatio, Box, Text, UnstyledButton } from "@mantine/core";
 import Image from "components/Image";
 import ProductControler from "components/ProductControler";
 import { storeServiceFee } from "hyfn-types";

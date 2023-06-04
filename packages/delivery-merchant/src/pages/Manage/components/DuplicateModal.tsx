@@ -7,7 +7,7 @@ import {
   NumberInput,
   NumberInputHandlers,
   Title,
-} from "hyfn-client";
+} from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React, { useRef, useState } from "react";
 import { useDuplicateProduct } from "../hooks/useDuplicateProduct";

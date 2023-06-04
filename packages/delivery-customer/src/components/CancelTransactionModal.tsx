@@ -1,4 +1,4 @@
-import { Button, Modal, Stack, Text } from "hyfn-client";
+import { Button, Modal, Stack, Text } from "@mantine/core";
 import { useCancelTransaction } from "hooks/useCancelTransaction";
 
 import React, { useState } from "react";

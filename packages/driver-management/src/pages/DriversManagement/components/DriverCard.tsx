@@ -1,4 +1,4 @@
-import { Card, Group, Text } from "hyfn-client";
+import { Card, Group, Text } from "@mantine/core";
 import React from "react";
 import AddDriverModal from "./AddDriverModal";
 

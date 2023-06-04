@@ -9,7 +9,7 @@ import {
   Text,
   UnstyledButton,
   useMantineTheme,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import { commonQuestions } from "hyfn-types";
 import { t } from "util/i18nextFix";

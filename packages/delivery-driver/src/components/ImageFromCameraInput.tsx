@@ -1,4 +1,4 @@
-import { Box, Button, Image, Stack, UnstyledButton } from "hyfn-client";
+import { Box, Button, Image, Stack, UnstyledButton } from "@mantine/core";
 import React, { useEffect, useRef, useState } from "react";
 
 interface ImageFromCameraInputProps {}

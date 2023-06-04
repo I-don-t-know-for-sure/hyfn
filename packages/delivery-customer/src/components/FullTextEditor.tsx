@@ -21,7 +21,7 @@ export const FullTextEditor: React.FC<FullTextEditorProps> = ({
 }) => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit as any,
       Underline,
       Link,
       Superscript,

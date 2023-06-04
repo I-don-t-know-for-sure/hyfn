@@ -1,4 +1,4 @@
-import { Button, Center, Container, Modal } from "hyfn-client";
+import { Button, Center, Container, Modal } from "@mantine/core";
 
 import { useConfirmOrderDelivery } from "hooks/useDeliveryConfirmation";
 

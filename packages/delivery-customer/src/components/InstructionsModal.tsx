@@ -1,4 +1,4 @@
-import { Button, Modal, Stack, TextInput } from "hyfn-client";
+import { Button, Modal, Stack, TextInput } from "@mantine/core";
 import { t } from "util/i18nextFix";
 import React, { useState } from "react";
 

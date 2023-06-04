@@ -3,9 +3,9 @@ import {
   ColorSchemeProvider,
   MantineProvider,
   useMantineColorScheme,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import { NotificationsProvider } from "@mantine/notifications";
+
 import LocationProvider from "contexts/locationContext/LocationContext";
 import { UserProvider } from "hyfn-client";
 import { DatesProvider } from "@mantine/dates";
@@ -14,6 +14,7 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useGetUserDocument } from "hooks/useGetUserDocument";
 import { Auth } from "aws-amplify";
+import { Notifications } from "@mantine/notifications";
 
 const Providers: React.FC = ({ children }) => {
   const queryClient = new QueryClient();
@@ -62,27 +63,26 @@ const Providers: React.FC = ({ children }) => {
         withGlobalStyles
         withNormalizeCSS
       >
-        <NotificationsProvider>
-          <LocationProvider>
-            <QueryClientProvider client={queryClient}>
-              <UserProvider
-                useGetUserDocument={useGetUserDocument}
-                queryClient={queryClient}
-                Auth={Auth}
+        <Notifications />
+        <LocationProvider>
+          <QueryClientProvider client={queryClient}>
+            <UserProvider
+              useGetUserDocument={useGetUserDocument}
+              queryClient={queryClient}
+              Auth={Auth}
+            >
+              <DatesProvider
+                settings={{
+                  locale: "ar-ly",
+                  firstDayOfWeek: 0,
+                  weekendDays: [0],
+                }}
               >
-                <DatesProvider
-                  settings={{
-                    locale: "ar-ly",
-                    firstDayOfWeek: 0,
-                    weekendDays: [0],
-                  }}
-                >
-                  {children}
-                </DatesProvider>
-              </UserProvider>
-            </QueryClientProvider>
-          </LocationProvider>
-        </NotificationsProvider>
+                {children}
+              </DatesProvider>
+            </UserProvider>
+          </QueryClientProvider>
+        </LocationProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );

@@ -10,7 +10,7 @@ import {
   Loader,
   Table,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import OrderCard from "../../../pages/Orders/components/OrderCard";
 

@@ -1,4 +1,4 @@
-import { Box, Button, Group, NumberInput, TextInput } from "hyfn-client";
+import { Box, Button, Group, NumberInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 import { t } from "util/i18nextFix";

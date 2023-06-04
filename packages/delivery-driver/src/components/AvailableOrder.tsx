@@ -1,4 +1,4 @@
-import { Button, Card, CopyTextButton, Group, Text } from "hyfn-client";
+import { Button, Card, CopyTextButton, Group, Text } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 
 import { useTakeOrder } from "Pages/Proposals/hooks/useTakeOrder";

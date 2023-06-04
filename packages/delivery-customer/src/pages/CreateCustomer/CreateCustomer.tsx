@@ -1,4 +1,4 @@
-import { Box, Button, Card, Container, Group, TextInput } from "hyfn-client";
+import { Box, Button, Card, Container, Group, TextInput } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 
 import { t } from "../../util/i18nextFix";

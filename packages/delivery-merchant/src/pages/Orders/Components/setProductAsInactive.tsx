@@ -1,4 +1,4 @@
-import { Box, Button } from "hyfn-client";
+import { Box, Button } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 
 function SetProductAsInactiveButton({

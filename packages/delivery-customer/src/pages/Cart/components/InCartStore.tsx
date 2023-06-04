@@ -11,7 +11,7 @@ import {
   Stack,
   Text,
   UnstyledButton,
-} from "hyfn-client";
+} from "@mantine/core";
 import Image from "components/Image";
 import InstructionsModal from "components/InstructionsModal";
 import ProductControler from "components/ProductControler";

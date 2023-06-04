@@ -15,7 +15,7 @@ import {
   Stack,
   Text,
   Title,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { t } from "utils/i18nextFix";
 import { forwardRef, useEffect, useState } from "react";

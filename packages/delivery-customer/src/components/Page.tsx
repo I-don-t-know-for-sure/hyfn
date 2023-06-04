@@ -1,4 +1,4 @@
-import { Loader } from "hyfn-client";
+import { Loader } from "@mantine/core";
 import { useUser } from "../contexts/userContext/User";
 
 function Page({ children }: { children: JSX.Element }) {

@@ -1,4 +1,4 @@
-import { Image, ImageProps, Modal } from "hyfn-client";
+import { Image, ImageProps, Modal } from "@mantine/core";
 import { useState } from "react";
 
 const ImageModal: React.FC<ImageProps> = (props) => {

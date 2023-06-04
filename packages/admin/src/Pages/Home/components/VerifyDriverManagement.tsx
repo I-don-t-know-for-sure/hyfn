@@ -1,4 +1,4 @@
-import { Box, Button, Group, Modal, Stack, TextInput } from "hyfn-client";
+import { Box, Button, Group, Modal, Stack, TextInput } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 import { useGetDriverManagement } from "../hooks/useGetDriverManagement";

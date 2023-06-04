@@ -1,4 +1,4 @@
-import { Button, Input } from "hyfn-client";
+import { Button, Input } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 
 interface BulkUpdateProps {}

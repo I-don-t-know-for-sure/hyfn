@@ -1,20 +1,19 @@
 import {
   Button,
   Container,
-  CopyTextButton,
   Group,
   Paper,
   Select,
   Stack,
   Text,
   TextInput,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React from "react";
 import { useCreateManagerAccount } from "./hooks/useCreateManagerAccount";
 import { t } from "utils/i18nextFix";
 import { getCountryInfo } from "../../utils/countryInfo";
-import { CopyButton } from "hyfn-client";
+import { CopyButton, CopyTextButton } from "hyfn-client";
 import { useUser } from "contexts/userContext/User";
 
 interface CreateManagerAccountProps {}

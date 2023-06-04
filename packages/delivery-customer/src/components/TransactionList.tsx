@@ -9,7 +9,7 @@ import {
   Text,
   TextInput,
   UnstyledButton,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useGetTransactions } from "hooks/useGetTransactions";
 
 import { t } from "util/i18nextFix";

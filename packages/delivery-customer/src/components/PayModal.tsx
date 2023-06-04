@@ -8,7 +8,7 @@ import {
   Stack,
   Table,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useUser } from "contexts/userContext/User";
 
 import {

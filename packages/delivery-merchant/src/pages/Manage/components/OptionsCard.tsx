@@ -5,7 +5,7 @@ import {
   Container,
   Loader,
   Paper,
-} from "hyfn-client";
+} from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { t } from "utils/i18nextFix";
 import React from "react";

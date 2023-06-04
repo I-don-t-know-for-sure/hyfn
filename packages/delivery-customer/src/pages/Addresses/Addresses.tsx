@@ -1,4 +1,4 @@
-import { Box, Button, Card, Center, TextInput } from "hyfn-client";
+import { Box, Button, Card, Center, TextInput } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { useUser } from "../../contexts/userContext/User";
 import { useGetUserDocument } from "../../hooks/useGetUserDocument";

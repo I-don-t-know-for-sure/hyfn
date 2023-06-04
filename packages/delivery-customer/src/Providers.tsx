@@ -4,7 +4,7 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import { NotificationsProvider } from "@mantine/notifications";
+import { Notifications } from "@mantine/notifications";
 import CartProvider from "./contexts/cartContext/Provider";
 import CustomerDataProvider from "./contexts/customerData/CustomerDataProvider";
 import FixedComponentProvider from "./contexts/fixedComponentContext/FixedComponentProvider";
@@ -35,67 +35,66 @@ const Providers: React.FC = ({ children }) => {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
   return (
-    <NotificationsProvider>
-      <QueryClientProvider client={queryClient}>
-        <UserProvider
-          Auth={Auth}
-          useGetUserDocument={useGetUserDocument}
-          queryClient={queryClient}
-        >
-          <FixedComponentProvider>
-            <CartProvider>
-              <ColorSchemeProvider
-                colorScheme={colorScheme}
-                toggleColorScheme={toggleColorScheme}
-              >
-                <MantineProvider
-                  theme={{
-                    colorScheme,
-                    breakpoints: {
-                      xs: "370",
-                      sm: "576",
-                      md: "870",
-                      lg: "980",
-                      xl: "1200",
-                    },
+    <QueryClientProvider client={queryClient}>
+      <UserProvider
+        Auth={Auth}
+        useGetUserDocument={useGetUserDocument}
+        queryClient={queryClient}
+      >
+        <FixedComponentProvider>
+          <CartProvider>
+            <ColorSchemeProvider
+              colorScheme={colorScheme}
+              toggleColorScheme={toggleColorScheme}
+            >
+              <MantineProvider
+                theme={{
+                  colorScheme,
+                  breakpoints: {
+                    xs: "370",
+                    sm: "576",
+                    md: "870",
+                    lg: "980",
+                    xl: "1200",
+                  },
 
-                    primaryColor: "green",
-                  }}
-                  // styles={{
-                  //   Button: (theme, ButtonParams) => ({
-                  //     white: {
-                  //       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-                  //       color: theme.colorScheme === 'light' ? theme.black : theme.white,
-                  //     },
-                  //   }),
-                  // }}
-                  withGlobalStyles
-                  withNormalizeCSS
-                >
-                  <ImageProvider>
-                    <LocationProvider>
-                      <SearchProvider>
-                        <CustomerDataProvider>
-                          <DatesProvider
-                            settings={{
-                              locale: "ar-ly",
-                              firstDayOfWeek: 0,
-                              weekendDays: [0],
-                            }}
-                          >
-                            {children}
-                          </DatesProvider>
-                        </CustomerDataProvider>
-                      </SearchProvider>
-                    </LocationProvider>
-                  </ImageProvider>
-                </MantineProvider>
-              </ColorSchemeProvider>
-            </CartProvider>
-          </FixedComponentProvider>
-        </UserProvider>
-      </QueryClientProvider>
-    </NotificationsProvider>
+                  primaryColor: "green",
+                }}
+                // styles={{
+                //   Button: (theme, ButtonParams) => ({
+                //     white: {
+                //       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+                //       color: theme.colorScheme === 'light' ? theme.black : theme.white,
+                //     },
+                //   }),
+                // }}
+                withGlobalStyles
+                withNormalizeCSS
+              >
+                <Notifications />
+                <ImageProvider>
+                  <LocationProvider>
+                    <SearchProvider>
+                      <CustomerDataProvider>
+                        <DatesProvider
+                          settings={{
+                            locale: "ar-ly",
+                            firstDayOfWeek: 0,
+                            weekendDays: [0],
+                          }}
+                        >
+                          {children}
+                        </DatesProvider>
+                      </CustomerDataProvider>
+                    </SearchProvider>
+                  </LocationProvider>
+                </ImageProvider>
+              </MantineProvider>
+            </ColorSchemeProvider>
+          </CartProvider>
+        </FixedComponentProvider>
+      </UserProvider>
+    </QueryClientProvider>
   );
 };
 

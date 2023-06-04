@@ -1,4 +1,4 @@
-import { Loader } from "hyfn-client";
+import { Loader } from "@mantine/core";
 import { useUser } from "contexts/userContext/User";
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";

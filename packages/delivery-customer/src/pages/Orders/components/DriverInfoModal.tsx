@@ -1,4 +1,4 @@
-import { Button, Group, Image, Modal, Stack } from "hyfn-client";
+import { Button, Group, Image, Modal, Stack } from "@mantine/core";
 import React, { useState } from "react";
 import { t } from "util/i18nextFix";
 

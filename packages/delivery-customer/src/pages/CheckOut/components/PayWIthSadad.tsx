@@ -1,4 +1,4 @@
-import { Box, Button, Group, NumberInput, TextInput } from "hyfn-client";
+import { Box, Button, Group, NumberInput, TextInput } from "@mantine/core";
 
 import { t } from "util/i18nextFix";
 import React, { useEffect, useState } from "react";

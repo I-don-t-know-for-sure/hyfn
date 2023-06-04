@@ -15,7 +15,7 @@ import {
   TextInput,
   Title,
   useMantineColorScheme,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import { currencies } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";

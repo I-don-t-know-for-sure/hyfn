@@ -1,4 +1,4 @@
-import { Box, Button, Group, Modal, Select, Text } from "hyfn-client";
+import { Box, Button, Group, Modal, Select, Text } from "@mantine/core";
 import { ServiceFeePayment } from "components/PayServiceFee";
 
 import { paymentMethods } from "config/data";

@@ -1,4 +1,4 @@
-import { ActionIcon, Menu } from "hyfn-client";
+import { ActionIcon, Menu } from "@mantine/core";
 
 import { t } from "utils/i18nextFix";
 import React, { useState } from "react";

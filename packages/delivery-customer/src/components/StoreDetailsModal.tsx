@@ -11,7 +11,7 @@ import {
   Text,
   TextInput,
   Tooltip,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import { t } from "util/i18nextFix";
 import React, { useState } from "react";

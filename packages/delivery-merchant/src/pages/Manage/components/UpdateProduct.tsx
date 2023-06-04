@@ -6,7 +6,7 @@ import OptionsCard from "./OptionsCard";
 import PricingCard from "./PricingCard";
 import ShippingCard from "./ShippingCard";
 import { ProductInfo, ProductsCard } from "../types";
-import { Box, Button, Container, Grid, Stack } from "hyfn-client";
+import { Box, Button, Container, Grid, Stack } from "@mantine/core";
 
 import MediaCard from "./MediaCard";
 import MeasurementSystemCard from "./MeasurementSystemCard";

@@ -10,7 +10,7 @@ import {
   Text,
   Title,
   useMantineColorScheme,
-} from "hyfn-client";
+} from "@mantine/core";
 import { usePayWithLocalCard } from "hooks/usePayWithLocalCard";
 import { t } from "utils/i18nextFix";
 

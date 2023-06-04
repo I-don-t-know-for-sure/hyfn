@@ -1,4 +1,4 @@
-import { Accordion, Box, Button, createStyles } from "hyfn-client";
+import { Accordion, Box, Button, createStyles } from "@mantine/core";
 import { Link } from "react-router-dom";
 
 import { LinkProps } from "../config";

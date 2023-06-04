@@ -11,7 +11,7 @@ import {
   Text,
   TextInput,
   Tooltip,
-} from "hyfn-client";
+} from "@mantine/core";
 import { storeTypesArray } from "hyfn-types";
 
 import { t } from "utils/i18nextFix";

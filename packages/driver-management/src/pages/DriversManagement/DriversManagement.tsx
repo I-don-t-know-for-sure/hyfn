@@ -9,7 +9,7 @@ import {
   Paper,
   Text,
   TextInput,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useUser } from "contexts/userContext/User";
 import { t } from "../../utils/i18nextFix";
 import React, { useEffect, useState } from "react";

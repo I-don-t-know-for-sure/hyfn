@@ -1,4 +1,4 @@
-import { Box, Button, Card, Group, TextInput } from "hyfn-client";
+import { Box, Button, Card, Group, TextInput } from "@mantine/core";
 import { t } from "../../../util/i18nextFix";
 import React, { useState } from "react";
 import { convertCoordsArraytoString } from "../../../util/convertCoordsArrayToString";

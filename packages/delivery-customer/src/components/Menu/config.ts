@@ -1,4 +1,4 @@
-import { UnstyledButton } from "hyfn-client";
+import { UnstyledButton } from "@mantine/core";
 import { ReactNode } from "react";
 import { IconType } from "react-icons";
 import { AiFillBulb, AiFillHome } from "react-icons/ai";

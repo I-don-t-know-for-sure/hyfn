@@ -8,7 +8,7 @@ import {
   Select,
   Text,
   TextInput,
-} from "hyfn-client";
+} from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import assert from "assert";
 import { SelectItem } from "components/SelectIotem";

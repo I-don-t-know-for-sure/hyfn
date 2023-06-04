@@ -1,4 +1,4 @@
-import { Badge, Button, Modal, Table } from "hyfn-client";
+import { Badge, Button, Modal, Table } from "@mantine/core";
 import { t } from "util/i18nextFix";
 
 import { useState } from "react";

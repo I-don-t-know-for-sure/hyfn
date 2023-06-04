@@ -7,7 +7,7 @@ import {
   Modal,
   Text,
   Title,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import { t } from "utils/i18nextFix";
 import React, { CSSProperties, useEffect, useState } from "react";

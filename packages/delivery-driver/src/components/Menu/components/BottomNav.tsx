@@ -1,4 +1,4 @@
-import { Box, MantineTheme, Text, UnstyledButton } from "hyfn-client";
+import { Box, MantineTheme, Text, UnstyledButton } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { LinkProps, MENU_HEIGHT } from "../config";

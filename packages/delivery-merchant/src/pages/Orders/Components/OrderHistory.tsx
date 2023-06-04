@@ -11,7 +11,7 @@ import {
   Stack,
   Table,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useWindowScroll } from "@mantine/hooks";
 import { useUser } from "contexts/userContext/User";
 

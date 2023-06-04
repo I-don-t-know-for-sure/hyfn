@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Group, Stack } from "hyfn-client";
+import { Box, Button, Grid, Group, Stack } from "@mantine/core";
 import InfoCard from "components/InfoCard";
 
 import React, { useEffect, useState } from "react";

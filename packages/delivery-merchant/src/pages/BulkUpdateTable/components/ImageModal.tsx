@@ -9,7 +9,7 @@ import {
   Image,
   Modal,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React, { useEffect, useState } from "react";
 import { ActionTypes } from "../BulkUpdateTable";

@@ -1,4 +1,4 @@
-import { Button, Modal, NumberInput, Stack, TextInput } from "hyfn-client";
+import { Button, Modal, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useDeleteProposal } from "Pages/Home/hooks/useDeleteProposal";
 
 import { useState } from "react";

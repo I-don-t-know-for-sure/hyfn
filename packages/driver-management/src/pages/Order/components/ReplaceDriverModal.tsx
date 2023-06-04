@@ -1,4 +1,4 @@
-import { Button, Modal, Select, Stack } from "hyfn-client";
+import { Button, Modal, Select, Stack } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 import { useReplaceDriver } from "../hooks/useReplaceDriver";

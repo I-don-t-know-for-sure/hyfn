@@ -21,7 +21,7 @@ import {
   Text,
   Stack,
   CopyTextButton,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { Link, useLocation as useRouteLocation } from "react-router-dom";

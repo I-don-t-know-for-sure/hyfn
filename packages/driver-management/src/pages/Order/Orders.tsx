@@ -12,7 +12,7 @@ import {
   Stack,
   Text,
   TextInput,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useGetAllDrivers } from "./hooks/useGetAllDrivers";
 import { t } from "utils/i18nextFix";
 import { USER_TYPE_DRIVER } from "hyfn-types";

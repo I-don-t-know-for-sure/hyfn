@@ -1,4 +1,4 @@
-import { Badge, Button, Group, Modal, Text } from "hyfn-client";
+import { Badge, Button, Group, Modal, Text } from "@mantine/core";
 import { t } from "util/i18nextFix";
 import { useState } from "react";
 interface OptionsModalProps {

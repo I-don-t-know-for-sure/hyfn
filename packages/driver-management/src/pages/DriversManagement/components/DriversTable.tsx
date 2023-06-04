@@ -1,4 +1,4 @@
-import { Button, Center, Table, Text } from "hyfn-client";
+import { Button, Center, Table, Text } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React from "react";
 import DriverCard from "./DriverCard";

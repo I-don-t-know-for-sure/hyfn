@@ -1,4 +1,4 @@
-import { ActionIcon, Popover, Text } from "hyfn-client";
+import { ActionIcon, Popover, Text } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 import { BsInfoCircle } from "react-icons/bs";

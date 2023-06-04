@@ -1,4 +1,4 @@
-import { Modal } from "hyfn-client";
+import { Modal } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useUser } from "contexts/userContext/User";
 import { useCreateDriver } from "hooks/useCreateDriver";
@@ -15,7 +15,7 @@ import {
   Stack,
   TextInput,
   Title,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import { t } from "utils/i18nextFix";
 

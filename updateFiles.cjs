@@ -1,3 +1,18 @@
+/* 
+"@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.8.1",
+    "@mantine/core": "^5.10.1",
+    "@mantine/form": "^5.10.1",
+    "@mantine/hooks": "^5.10.1",
+    "@mantine/notifications": "^5.10.1",
+    "@mantine/carousel": "^5.10.4",
+    "@mantine/dates": "^6.0.2",
+    "@mantine/tiptap": "^5.10.0",
+    "@mantine/rte": "^5.2.3",
+    "@mantine/modals": "^5.10.3",
+*/
+
 const fs = require("fs");
 const path = require("path");
 const ts = require("typescript");

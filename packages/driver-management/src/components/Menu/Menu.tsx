@@ -20,9 +20,8 @@ import {
   useMantineColorScheme,
   useMantineTheme,
   LoadingOverlay,
-  CopyTextButton,
-} from "hyfn-client";
-import { CopyButton } from "hyfn-client";
+} from "@mantine/core";
+import { CopyButton, CopyTextButton } from "hyfn-client";
 import { useMediaQuery, useWindowScroll } from "@mantine/hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";

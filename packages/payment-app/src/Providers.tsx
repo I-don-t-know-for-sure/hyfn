@@ -3,9 +3,9 @@ import {
   ColorSchemeProvider,
   MantineProvider,
   useMantineColorScheme,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-
+import { Notifications } from "@mantine/notifications";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -56,6 +56,7 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         withGlobalStyles
         withNormalizeCSS
       >
+        <Notifications />
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>

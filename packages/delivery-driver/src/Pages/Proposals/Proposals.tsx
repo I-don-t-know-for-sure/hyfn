@@ -9,7 +9,7 @@ import {
   Group,
   Loader,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import { CopyButton } from "hyfn-client";
 import ProposalModal from "components/ProposalModal";

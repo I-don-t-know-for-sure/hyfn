@@ -9,7 +9,7 @@ import {
   Stack,
   Table,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { storeServiceFee } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";

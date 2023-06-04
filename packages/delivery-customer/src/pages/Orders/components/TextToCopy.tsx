@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Text } from "hyfn-client";
+import { ActionIcon, Group, Text } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import React from "react";
 import { IoMdCopy } from "react-icons/io";

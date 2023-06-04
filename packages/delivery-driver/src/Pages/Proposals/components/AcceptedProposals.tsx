@@ -2,7 +2,7 @@ import React from "react";
 import { useGetProposals } from "../hooks/useGetProposals";
 import { useUser } from "contexts/userContext/User";
 import { ACCEPTED_PROPOSALS_FLAG, ALL_PROPOSALS_FLAG } from "hyfn-types";
-import { Button, Center, Container, Loader, Text } from "hyfn-client";
+import { Button, Center, Container, Loader, Text } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import AvailableOrder from "components/AvailableOrder";
 

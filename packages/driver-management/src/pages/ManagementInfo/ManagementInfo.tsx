@@ -11,7 +11,7 @@ import {
   Stack,
   Text,
   TextInput,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "../../utils/i18nextFix";
 import { useCreateManagerAccount } from "pages/CreateManagerAccount/hooks/useCreateManagerAccount";

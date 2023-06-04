@@ -1,4 +1,4 @@
-import { Button } from "hyfn-client";
+import { Button } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import { useCSVDownloader } from "react-papaparse";
 import { usePapaParse } from "react-papaparse";

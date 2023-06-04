@@ -1,4 +1,4 @@
-import { Box, Button, Container, UnstyledButton } from "hyfn-client";
+import { Box, Button, Container, UnstyledButton } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
 

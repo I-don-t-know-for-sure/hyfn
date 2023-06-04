@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Text, useMantineTheme } from "hyfn-client";
+import { Box, Container, Paper, Text, useMantineTheme } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";

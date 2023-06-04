@@ -10,7 +10,7 @@ import {
   Space,
   Table,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 

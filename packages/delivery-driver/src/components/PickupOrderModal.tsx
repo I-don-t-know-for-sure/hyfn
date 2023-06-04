@@ -1,4 +1,4 @@
-import { Badge, Button, Group, Modal, Stack } from "hyfn-client";
+import { Badge, Button, Group, Modal, Stack } from "@mantine/core";
 import { useUser } from "contexts/userContext/User";
 import { usePickupOrder } from "hooks/usePickupOrder";
 import { useQRCodeReader } from "hyfn-client";

@@ -6,7 +6,7 @@ import {
   MultiSelect,
   Table,
   TextInput,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useFixedComponent } from "contexts/fixedComponentContext/FixedComponentProvider";
 import { t } from "utils/i18nextFix";

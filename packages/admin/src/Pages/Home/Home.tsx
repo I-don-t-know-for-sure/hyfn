@@ -6,7 +6,7 @@ import {
   Group,
   Paper,
   Text,
-} from "hyfn-client";
+} from "@mantine/core";
 
 import React, { useEffect, useState } from "react";
 import VerifyDriverManagement from "./components/VerifyDriverManagement";

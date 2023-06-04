@@ -1,4 +1,4 @@
-import { Button, Center, Container, Modal } from "hyfn-client";
+import { Button, Center, Container, Modal } from "@mantine/core";
 
 import React, { useState } from "react";
 import QRCode from "react-qr-code";

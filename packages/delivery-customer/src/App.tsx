@@ -35,7 +35,7 @@ import LandingPage from "pages/LandingPage/LandingPage";
 
 // import { useUser } from "contexts/userContext/User";
 import { useUser } from "hyfn-client";
-import { useLocalStorage } from "hyfn-client";
+import { useLocalStorage } from "@mantine/hooks";
 import fetchUtil from "util/fetch";
 
 function App() {

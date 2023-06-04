@@ -3,7 +3,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
   PaperStylesParams,
-} from "hyfn-client";
+} from "@mantine/core";
 import { useColorScheme, useLocalStorage } from "@mantine/hooks";
 
 // import { Helmet, HelmetProvider } from "react-helmet-async";
@@ -14,6 +14,7 @@ import { UserProvider } from "hyfn-client";
 import { ReactProps } from "config/types";
 import { useGetUserDocument } from "hooks/useGetUserDocument";
 import { Auth } from "aws-amplify";
+import { Notifications } from "@mantine/notifications";
 
 const Providers: React.FC<ReactProps> = ({ children }) => {
   const queryClient = new QueryClient();
@@ -82,6 +83,7 @@ const Providers: React.FC<ReactProps> = ({ children }) => {
         //   Container: (theme, cardParams) => ({}),
         // }}
       >
+        <Notifications />
         <QueryClientProvider client={queryClient}>
           <UserProvider
             useGetUserDocument={useGetUserDocument}
