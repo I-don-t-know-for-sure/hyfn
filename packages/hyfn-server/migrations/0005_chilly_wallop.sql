@@ -1,1 +1,0 @@
-ALTER TABLE "orders" DROP CONSTRAINT "orders_store_id_only_store_drivers_can_take_orders_stores_id_only_store_drivers_can_take_orders_fk";

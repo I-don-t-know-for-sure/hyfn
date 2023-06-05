@@ -1,1 +1,0 @@
-ALTER TABLE "stores" ADD COLUMN "transaction_id" uuid;

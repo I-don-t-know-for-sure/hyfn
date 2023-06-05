@@ -17,6 +17,7 @@ import {
 import { createSelectSchema } from "drizzle-zod";
 import { citiesArray, countriesArray, storeTypesArray } from "hyfn-types";
 import * as z from "zod";
+
 // const cities = pgEnum("cities", citiesArray);
 
 export const stores = pgTable(

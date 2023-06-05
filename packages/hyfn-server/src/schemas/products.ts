@@ -1,17 +1,20 @@
-import { InferModel } from "drizzle-orm";
+import { InferModel, sql } from "drizzle-orm";
 
 import {
+  PgCustomColumnBuilder,
   boolean,
+  customType,
   index,
   json,
   jsonb,
   numeric,
   pgTable,
   serial,
+  text,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 
 import { measurementSystemArray } from "hyfn-types";
 import * as z from "zod";
@@ -22,9 +25,8 @@ export const products = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     storeId: uuid("store_id").notNull(),
     price: numeric("price").notNull(),
-
     prevPrice: numeric("prev_price").notNull(),
-    title: varchar("title").notNull(),
+    title: text("title").notNull(),
     description: varchar("description").notNull(),
 
     options: jsonb("options").array().notNull(),

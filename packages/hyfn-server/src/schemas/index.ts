@@ -30,6 +30,7 @@ import { zOrderProducts } from "./orderProducts";
 import { zReports } from "./reports";
 import { sql } from "kysely";
 import { zProductDescriptions } from "./productDescriptions";
+import { customType } from "drizzle-orm/pg-core";
 
 type ZodSchemaObject = Record<string, ZodType<any, any>>;
 
