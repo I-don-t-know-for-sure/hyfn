@@ -25,5 +25,5 @@ envVaraibles.ts
 envVaraibles.js
 output.txt
 .env
-
+migrations
 **/dev-dist/**/*
