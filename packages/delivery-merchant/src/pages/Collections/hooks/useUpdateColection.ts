@@ -6,7 +6,7 @@ import { t } from "utils/i18nextFix";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { CollectionInfo } from "../types";
 
 export const useUpdateCollection = () => {
@@ -23,9 +23,9 @@ export const useUpdateCollection = () => {
       collection: CollectionInfo;
     }) => {
       try {
-        const result = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/updateCollection`,
-          reqData: [collection, userDocument?.storeDoc, collectionId],
+        const result = await fetchApi({
+          url: `updateCollection`,
+          arg: [collection, userDocument?.storeDoc, collectionId],
         });
         return result;
       } catch (e) {

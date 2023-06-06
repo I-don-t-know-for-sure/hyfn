@@ -13,9 +13,9 @@ export const useGetUserDocument = ({ userId }: { userId: string }) => {
           // return false;
           throw new Error(t(storeAppText["user id not found"]));
         }
-        // const userDoc = await fetchUtil({
-        //   reqData: [{ userId: userId }],
-        //   url: `${import.meta.env.VITE_APP_BASE_URL}/getStoreDocument`,
+        // const userDoc = await fetchApi({
+        //   arg: [{ userId: userId }],
+        //   url: `getStoreDocument`,
         // });
 
         const userDoc = await fetchApi({

@@ -5,7 +5,7 @@ import { useUser } from "contexts/userContext/User";
 
 import { useInfiniteQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import ActiveOrder from "../ActiveOrders";
 
 export const useGetActiveOrders = () => {
@@ -19,8 +19,8 @@ export const useGetActiveOrders = () => {
       // if (!user.orderId) {
       //   return "document not found";
       // }
-      return await fetchUtil({
-        reqData: [
+      return await fetchApi({
+        arg: [
           {
             driverId: user?.id,
             orderId: user?.orderId,
@@ -28,14 +28,14 @@ export const useGetActiveOrders = () => {
             lastDoc: pageParam,
           },
         ],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getActiveOrders`,
+        url: `getActiveOrders`,
       });
     },
     {
       enabled: !isLoading,
 
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
     }
   );
 };

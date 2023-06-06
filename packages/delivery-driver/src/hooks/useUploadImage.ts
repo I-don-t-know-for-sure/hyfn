@@ -1,12 +1,17 @@
-import fetchUtil from 'utils/fetch'
+import { fetchApi } from "utils/fetch";
 
 const useUploadImage = () => {
   const uploadImage = async (files: any) => {
-    if (files === '' || files === undefined || (Array.isArray(files) && !(files?.length > 0))) return []
-    const { generatedURLs, generatedNames } = await fetchUtil({
-      url: `${import.meta.env.VITE_APP_BASE_URL}/generateImageUrl`,
-      reqData: [files.length],
-    })
+    if (
+      files === "" ||
+      files === undefined ||
+      (Array.isArray(files) && !(files?.length > 0))
+    )
+      return [];
+    const { generatedURLs, generatedNames } = await fetchApi({
+      url: `generateImageUrl`,
+      arg: [files.length],
+    });
 
     // console.log(
     //   Array.isArray(generatedURLs) && generatedURLs.length > 1
@@ -17,17 +22,17 @@ const useUploadImage = () => {
     // await user.functions.uploadImages([data]);
     for (let i = 0; i < files.length; i++) {
       // await files?.forEach(async (file, index) => {
-      const file = files[i]
-      const generatedIndex = i
-      console.log(generatedNames)
+      const file = files[i];
+      const generatedIndex = i;
+      console.log(generatedNames);
 
       const status = await fetch(generatedURLs[generatedIndex][0], {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'content-Type': 'multipart/form',
+          "content-Type": "multipart/form",
         },
         body: file,
-      })
+      });
 
       // const devices = ["initial", "mobile", "tablet", "laptop"];
       // [
@@ -58,9 +63,9 @@ const useUploadImage = () => {
       // });
     }
 
-    return generatedNames
-  }
-  return uploadImage
-}
+    return generatedNames;
+  };
+  return uploadImage;
+};
 
-export default useUploadImage
+export default useUploadImage;

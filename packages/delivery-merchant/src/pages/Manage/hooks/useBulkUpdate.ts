@@ -9,7 +9,7 @@ import {
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { t } from "utils/i18nextFix";
 import { useUser } from "contexts/userContext/User";
 import { generateProductsUrls } from "utils/generateProductsUrls";
@@ -123,9 +123,9 @@ export const useBulkUpdate = () => {
         console.log(value);
       };
 
-      const result = await fetchUtil({
-        reqData: [{ productsArray: products, storeId: userDocument.id }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/bulkUpdate`,
+      const result = await fetchApi({
+        arg: [{ productsArray: products, storeId: userDocument.id }],
+        url: `bulkUpdate`,
       });
 
       return result;

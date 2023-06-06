@@ -4,7 +4,7 @@ import { useUser } from "contexts/userContext/User";
 import { goToLightbox } from "hyfn-client";
 import { useMutation } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useCreateTransaction = () => {
   const id = randomId();
@@ -12,9 +12,9 @@ export const useCreateTransaction = () => {
   const { colorScheme } = useMantineColorScheme();
   return useMutation(async ({ amount }: { amount: number }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ amount, userId: userDocument.id }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/createTransaction`,
+      const result = await fetchApi({
+        arg: [{ amount, userId: userDocument.id }],
+        url: `createTransaction`,
       });
 
       goToLightbox({

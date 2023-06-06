@@ -6,7 +6,7 @@ import { t } from "utils/i18nextFix";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { CollectionInfo } from "../types";
 
 export const useDeleteCollection = () => {
@@ -16,9 +16,9 @@ export const useDeleteCollection = () => {
   const id = randomId();
   return useMutation("collections", async (collectionId: string) => {
     try {
-      const data = await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/deleteCollection`,
-        reqData: [userDocument?.storeDoc, collectionId],
+      const data = await fetchApi({
+        url: `deleteCollection`,
+        arg: [userDocument?.storeDoc, collectionId],
       });
 
       navigate("/collections", { replace: true });

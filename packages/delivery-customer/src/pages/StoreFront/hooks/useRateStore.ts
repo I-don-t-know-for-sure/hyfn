@@ -7,7 +7,7 @@ import { t } from "util/i18nextFix";
 import { useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useRateStore = () => {
   const { userId, userDocument } = useUser();
@@ -32,9 +32,9 @@ export const useRateStore = () => {
 
         console.log(import.meta.env.VITE_APP_RATESTORE);
 
-        const result = fetchUtil({
+        const result = fetchApi({
           url: import.meta.env.VITE_APP_RATESTORE,
-          reqData: [
+          arg: [
             {
               customerId: userDocument.customerId,
               storeId,

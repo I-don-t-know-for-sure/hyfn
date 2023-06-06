@@ -1,7 +1,7 @@
 import { USER_DOCUMENT } from "hyfn-types";
 import { useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useAddLocalCardAPIKeys = () => {
   const queryClient = useQueryClient();
@@ -11,9 +11,15 @@ export const useAddLocalCardAPIKeys = () => {
       TerminalId: string;
       secretKey: string;
     }) => {
-      return await fetchUtil({
-        reqData: [localCardAPIKey],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/addLocalCardPaymentAPIKey`,
+      return await fetchApi({
+        arg: [
+          {
+            merchantId: localCardAPIKey.MerchantId,
+            terminalId: localCardAPIKey.TerminalId,
+            secretKey: localCardAPIKey.secretKey,
+          },
+        ],
+        url: `addLocalCardPaymentAPIKey`,
       });
     },
     {

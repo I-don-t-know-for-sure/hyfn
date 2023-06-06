@@ -1,4 +1,4 @@
-/* import fetchUtil from 'utils/fetch'
+/* import {fetchApi} from 'utils/fetch'
 
 
 
@@ -14,9 +14,9 @@
 const useUploadImage = () => {
   const uploadImage = async (files: any) => {
     if (files === '' || files === undefined || (Array.isArray(files) && !(files?.length > 0))) return []
-    const { generatedURLs, generatedNames } = await fetchUtil({
-      url: `${import.meta.env.VITE_APP_BASE_URL}/generateImageURL`,
-      reqData: [files.length],
+    const { generatedURLs, generatedNames } = await fetchApi({
+      url: `generateImageURL`,
+      arg: [files.length],
     })
 
     // await user.functions.uploadImages([data]);
@@ -42,7 +42,7 @@ const useUploadImage = () => {
 export default useUploadImage
  */
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 const useUploadImage = () => {
   const uploadImage = async ({
@@ -61,9 +61,9 @@ const useUploadImage = () => {
     )
       return [];
 
-    // const { generatedURLs, generatedNames } = await fetchUtil({
-    //   url: `${import.meta.env.VITE_APP_BASE_URL}/generateImageURL`,
-    //   reqData: [files.length],
+    // const { generatedURLs, generatedNames } = await fetchApi({
+    //   url: `generateImageURL`,
+    //   arg: [files.length],
     // });
 
     // await user.functions.uploadImages([data]);

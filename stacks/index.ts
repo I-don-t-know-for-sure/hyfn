@@ -1,6 +1,7 @@
 import type {
   LambdaHandlers,
-  AddLocalCardPaymentAPIKey,
+  GetOrder,
+  LocalCard,
 } from "../packages/Store-backend/lambdas";
 import type {
   LambdaHandlers as ManagementHandlers,
@@ -29,7 +30,8 @@ export const storeUrl = ({
     | keyof DriverManagementHandlers
     | keyof ReadOnlyTransactions
     | keyof TransactionsHandler
-    | keyof AddLocalCardPaymentAPIKey;
+    | keyof LocalCard
+    | keyof GetOrder;
 }) => {
   return `${method} /${url}`;
 };
@@ -43,7 +45,7 @@ export const managementUrl = ({
     | keyof ManagementHandlers
     | keyof DriverManagementHandlers
     | keyof ReadOnlyTransactions
-    | keyof AddLocalCardPaymentAPIKey;
+    | keyof LocalCard;
 }) => {
   return `${method} /${url}`;
 };
@@ -62,7 +64,7 @@ export const customerUrl = ({
   url,
 }: {
   method: Methods;
-  url: keyof CustomerLambdaHandlers;
+  url: keyof CustomerLambdaHandlers | keyof GetOrder;
 }) => {
   return `${method} /${url}`;
 };
@@ -71,7 +73,7 @@ export const driverUrl = ({
   url,
 }: {
   method: Methods;
-  url: keyof DriverHandlers;
+  url: keyof DriverHandlers | keyof GetOrder;
 }) => {
   return `${method} /${url}`;
 };

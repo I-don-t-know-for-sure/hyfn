@@ -3,7 +3,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useInfiniteQuery, useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetProductsForCollection = ({
   collectionId,
@@ -18,15 +18,15 @@ export const useGetProductsForCollection = ({
     [allProductsForCollection, collectionId],
     async ({ pageParam = 0 }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [
+        const result = await fetchApi({
+          arg: [
             {
               storeId: userDocument.id,
               lastDocNumber: pageParam,
               collectionId,
             },
           ],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getProductsForCollection`,
+          url: `getProductsForCollection`,
         });
         return result;
       } catch (error) {
@@ -39,7 +39,7 @@ export const useGetProductsForCollection = ({
     },
     {
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
       enabled: !!checked,
     }
   );

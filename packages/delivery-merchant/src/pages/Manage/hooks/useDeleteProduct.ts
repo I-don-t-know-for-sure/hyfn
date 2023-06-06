@@ -9,7 +9,7 @@ import {
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { t } from "utils/i18nextFix";
 import { useUser } from "contexts/userContext/User";
 
@@ -27,9 +27,9 @@ export const useDeleteProduct = () => {
     "products",
     async ({ productId, title }: { productId: string; title: string }) => {
       try {
-        const result = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/deleteProduct`,
-          reqData: [userDocument?.storeDoc, productId],
+        const result = await fetchApi({
+          url: `deleteProduct`,
+          arg: [userDocument?.storeDoc, productId],
         });
 
         return result;

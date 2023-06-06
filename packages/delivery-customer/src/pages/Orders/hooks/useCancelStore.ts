@@ -6,7 +6,7 @@ import { t } from "../../../util/i18nextFix";
 
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useCancelStore = () => {
   const [{ country }] = useLocation();
@@ -17,9 +17,9 @@ export const useCancelStore = () => {
     ["cancelOrder"],
     async ({ orderId, storeId }: { orderId: string; storeId: string }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ country, orderId, storeId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/cancelStore`,
+        const result = await fetchApi({
+          arg: [{ country, orderId, storeId }],
+          url: `cancelOrder`,
         });
 
         return result;

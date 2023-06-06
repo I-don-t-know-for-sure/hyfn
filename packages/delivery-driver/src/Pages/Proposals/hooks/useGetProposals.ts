@@ -1,6 +1,6 @@
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useInfiniteQuery } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetProposals = ({
   flag,
@@ -14,9 +14,9 @@ export const useGetProposals = ({
     [flag],
     async ({ pageParam }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ lastDoc: pageParam, country, flag, driverManagementId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getProposals`,
+        const result = await fetchApi({
+          arg: [{ lastDoc: pageParam, country, flag, driverManagementId }],
+          url: `getProposals`,
         });
         return result;
       } catch (error) {
@@ -27,7 +27,7 @@ export const useGetProposals = ({
       }
     },
     {
-      getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
     }
   );
 };

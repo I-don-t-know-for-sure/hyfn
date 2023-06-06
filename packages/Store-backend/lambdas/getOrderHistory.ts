@@ -12,9 +12,24 @@ export const getOrderHistoryHandler = async ({ arg, client, db, userId }: MainFu
     // .where(
     //   sql`${sql.raw(`${tOrders._}.${tOrders.orderStatus[0]._}[-1]`)} = ${'delivered'}::varchar`
     // )
+    .innerJoin('stores', 'orders.storeId', 'stores.id')
     .innerJoin('orderProducts', 'orderId', 'orders.id')
     .selectAll('orders')
-    .select(buildJson(tOrderProducts, '*').as('addedProducts'))
+    .select(buildJson<tOrderProduct>(tOrderProducts, '*').as('addedProducts'))
+    .select(
+      buildJson<tStore>(tStores, [
+        'storeName',
+        'description',
+        'lat',
+        'long',
+        'country',
+        'image',
+        'id',
+        'opened',
+        'storeType',
+        'storePhone',
+      ]).as('stores')
+    )
     .groupBy('orders.id')
     .limit(15)
     .execute();
@@ -31,9 +46,12 @@ import {
   MainFunctionProps,
   buildJson,
   mainWrapper,
+  tOrderProduct,
   tOrderProducts,
   tOrders,
   tProducts,
+  tStore,
+  tStores,
 } from 'hyfn-server';
 import { sql } from 'kysely';
 export const handler = async (event, ctx) => {

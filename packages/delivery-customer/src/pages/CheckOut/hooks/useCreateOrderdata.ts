@@ -5,7 +5,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "util/i18nextFix";
 import { useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 import { useNavigate } from "react-router-dom";
 
 export const useCreateOrderData = () => {
@@ -25,9 +25,9 @@ export const useCreateOrderData = () => {
         //   { customerId: user.customData.id, customerCoords: coords },
         // ]);
 
-        const result = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/createOrderData`,
-          reqData: [
+        const result = await fetchApi({
+          url: `createOrderData`,
+          arg: [
             cart,
             {
               customerId: userDocument.id,

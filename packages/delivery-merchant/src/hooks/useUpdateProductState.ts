@@ -4,7 +4,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useMutation } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 const useUpdateProductState = () => {
   const { userId, userDocument } = useUser();
@@ -12,9 +12,9 @@ const useUpdateProductState = () => {
   const id = randomId();
   return useMutation(async (productId: string) => {
     try {
-      const res = fetchUtil({
-        reqData: [{ isActive: false }, userDocument?.storeDoc, productId],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/updateProductState`,
+      const res = fetchApi({
+        arg: [{ isActive: false }, userDocument?.storeDoc, productId],
+        url: `updateProductState`,
       });
 
       return res;

@@ -5,7 +5,7 @@ import { useUser } from "contexts/userContext/User";
 
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetActiveOrders = () => {
   const { userDocument } = useUser();
@@ -18,9 +18,9 @@ export const useGetActiveOrders = () => {
         pageParam
       );
       try {
-        const data = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getActiveOrders`,
-          reqData: [
+        const data = await fetchApi({
+          url: `getActiveOrders`,
+          arg: [
             {
               ...(userDocument?.storeDoc as any),
               status: "confirmed",
@@ -35,7 +35,7 @@ export const useGetActiveOrders = () => {
     },
     {
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
     }
   );
 };

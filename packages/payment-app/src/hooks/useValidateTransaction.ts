@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import fetchUtil from "../utils/fetch";
+import { fetchApi } from "../utils/fetch";
 
 export const useValidateTransaction = ({
   url,
@@ -10,7 +10,7 @@ export const useValidateTransaction = ({
 }) => {
   return useMutation(async () => {
     try {
-      const result = await fetchUtil({ reqData: [{ transactionId }], url });
+      const result = await fetchApi({ reqData: [{ transactionId }], url });
       return result;
     } catch (error) {
       console.log(

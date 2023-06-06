@@ -1,14 +1,14 @@
 import { useUser } from "contexts/userContext/User";
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useCreateLocalCardTransactionForWallet = () => {
   const { userDocument } = useUser();
   return useMutation(async ({ amount }: { amount: number }) => {
     try {
-      const transactionObject = await fetchUtil({
-        reqData: [{ amount, userId: userDocument.id, management: "stores" }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/createLocalCardTransaction`,
+      const transactionObject = await fetchApi({
+        arg: [{ amount, userId: userDocument.id, management: "stores" }],
+        url: `createTransaction`,
       });
       return transactionObject;
     } catch (error) {

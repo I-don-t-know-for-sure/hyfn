@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import fetchUtil from "../../../utils/fetch";
+import { fetchApi } from "../../../utils/fetch";
 
 export const useGetDriverManagement = ({
   driverManagement,
@@ -10,9 +10,9 @@ export const useGetDriverManagement = ({
     [],
     async () => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ driverManagement }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getDriverManagement`,
+        const result = await fetchApi({
+          arg: [{ driverManagement }],
+          url: `getDriverManagement`,
         });
         return result;
       } catch (error) {

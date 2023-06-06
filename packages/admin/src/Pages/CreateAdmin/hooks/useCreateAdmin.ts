@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import fetchUtil from "../../../utils/fetch";
+import { fetchApi } from "../../../utils/fetch";
 import { useUser } from "../../../contexts/userContext/User";
 
 export const useCreateAdmin = () => {
@@ -7,9 +7,9 @@ export const useCreateAdmin = () => {
 
   return useMutation(async ({ adminInfo }: { adminInfo: any }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ ...adminInfo, userId }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/createAdminDocument`,
+      const result = await fetchApi({
+        arg: [{ ...adminInfo, userId }],
+        url: `createAdminDocument`,
       });
 
       return result;

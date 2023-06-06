@@ -16,7 +16,7 @@ import ManagementInfo from "pages/ManagementInfo/ManagementInfo";
 import Orders from "pages/Order/Orders";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { useEffect } from "react";
 import { useLocalStorage } from "@mantine/hooks";
 import { useUser } from "contexts/userContext/User";
@@ -76,13 +76,11 @@ function App() {
                   if (currentToken) {
                     console.log("Device token:", currentToken);
                     // send the token to your server to associate it with the user
-                    fetchUtil({
-                      reqData: [{ notificationToken: currentToken }],
-                      url: `${
-                        import.meta.env.VITE_APP_BASE_URL
-                      }/updateNotificationTokens`,
+                    fetchApi({
+                      arg: [{ notificationToken: currentToken }],
+                      url: `updateNotificationTokens`,
                     })
-                      .then((res) => {
+                      .then((res: any) => {
                         console.log(
                           "🚀 ~ file: App.tsx:117 ~ .then ~ res:",
                           res

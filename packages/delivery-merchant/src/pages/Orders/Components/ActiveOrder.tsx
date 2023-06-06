@@ -77,7 +77,7 @@ export function ActiveOrder({
           }}
         />
         <Group position="right">
-          {order.storeStatus[order.storeStatus.length - 1] === "paid" ? (
+          {order.storeStatus.includes("paid") ? (
             <Badge color={"green"}>{t("Order paid")}</Badge>
           ) : (
             <Badge color={"red"}>{t("Order not paid")}</Badge>

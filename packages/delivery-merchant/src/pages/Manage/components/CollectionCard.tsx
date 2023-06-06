@@ -21,7 +21,6 @@ import { t } from "utils/i18nextFix";
 import { forwardRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useGetCollections from "../hooks/useGetCollections";
-import { useGetProductsFromBarcode } from "../hooks/useGetProductFromBarcode";
 
 import { ProductsCard } from "../types";
 import Product from "./Product";
@@ -59,16 +58,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
     error: collectionsError,
   } = useGetCollections();
 
-  const { data: barcodeProducts = [], isLoading: areBarCodeProductsLoading } =
-    useGetProductsFromBarcode({
-      searchString: debouncedValue,
-    });
   const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    setProducts(barcodeProducts);
-  }, [areBarCodeProductsLoading]);
-  console.log(barcodeProducts);
 
   return (
     <>

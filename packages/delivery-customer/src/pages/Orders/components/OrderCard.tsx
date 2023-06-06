@@ -11,7 +11,6 @@ import {
   Text,
 } from "@mantine/core";
 
-import { useRateDriver } from "../../../hooks/useRateDriver";
 import { t } from "../../../util/i18nextFix";
 import React, { useState } from "react";
 import OptionsModal from "./OptionsModal";
@@ -21,8 +20,6 @@ interface OrderCardProps {
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
-  const [rating, setRating] = useState<number>(0);
-  const { mutate: rateDriver } = useRateDriver();
   return (
     <Card mt={8}>
       <Text>{order.id}</Text>

@@ -364,6 +364,21 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "updateStoreDriversSettings.handler",
         },
       },
+      [storeUrl({ method: "POST", url: "getOrder" })]: {
+        function: {
+          handler: pathToLambdas + "getOrder.handler",
+        },
+      },
+      [storeUrl({ method: "POST", url: "deleteLocalCardAPIKey" })]: {
+        function: {
+          handler: pathToLambdas + "deleteLocalCardAPIKey.handler",
+        },
+      },
+      [storeUrl({ method: "POST", url: "updateStoreOwnerInfo" })]: {
+        function: {
+          handler: pathToLambdas + "updateStoreOwnerInfo.handler",
+        },
+      },
       ...driversManagement,
       ...localCardKey,
       ...transactions,

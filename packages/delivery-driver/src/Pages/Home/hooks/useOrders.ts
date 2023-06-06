@@ -8,7 +8,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useEffect, useState } from "react";
 import { useInfiniteQuery, useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetOrders = () => {
   // const { user } = useRealmApp()
@@ -27,9 +27,9 @@ export const useGetOrders = () => {
       try {
         console.log(coords);
 
-        const result = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getAvailableOrders`,
-          reqData: [
+        const result = await fetchApi({
+          url: `getAvailableOrders`,
+          arg: [
             // [32.432, 13.432],
             coords,
             {
@@ -48,7 +48,7 @@ export const useGetOrders = () => {
     },
     {
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
     }
   );
 };

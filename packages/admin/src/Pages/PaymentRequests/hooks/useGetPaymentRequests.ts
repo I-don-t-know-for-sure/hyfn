@@ -1,12 +1,12 @@
 import { useInfiniteQuery } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetPaymentRequests = () => {
   return useInfiniteQuery([], async ({ pageParam }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ lastDoc: pageParam }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getPaymentRequests`,
+      const result = await fetchApi({
+        arg: [{ lastDoc: pageParam }],
+        url: `getPaymentRequests`,
       });
       return result;
     } catch (error) {

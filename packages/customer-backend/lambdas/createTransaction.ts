@@ -300,13 +300,18 @@ export const createlocalCardTransaction = async ({
         throw new Error(returnsObj['order type is pick up']);
       }
 
+      console.log(
+        '🚀 ~ file: createTransaction.ts:311 ~ result ~ managementDoc:',
+        orderDoc.driverManagement
+      );
       const managementDoc = await trx
         .selectFrom('driverManagements')
-        .innerJoin('localCardKeys', 'driverManagements.localCardApiKeyId', 'localCardKeys.id')
+        .leftJoin('localCardKeys', 'driverManagements.localCardApiKeyId', 'localCardKeys.id')
         .selectAll('driverManagements')
         .select(['localCardKeys.merchantId', 'localCardKeys.secretKey', 'localCardKeys.terminalId'])
         .where('driverManagements.id', '=', orderDoc.driverManagement)
         .executeTakeFirstOrThrow();
+
       if (!managementDoc.localCardApiKeyId) throw new Error(returnsObj['no payment method']);
       const { terminalId, merchantId, secretKey: encryptedSecretKey } = managementDoc;
 

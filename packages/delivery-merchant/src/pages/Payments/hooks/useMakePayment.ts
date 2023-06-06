@@ -5,7 +5,7 @@ import { t } from "utils/i18nextFix";
 import { Dispatch, SetStateAction } from "react";
 import { useMutation } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useMakePayment = () => {
   const { userDocument } = useUser();
@@ -19,8 +19,8 @@ export const useMakePayment = () => {
       numberOfMonths: number;
     }) => {
       try {
-        const res = await fetchUtil({
-          reqData: [{ storeId: userDocument.id, OTP, numberOfMonths }],
+        const res = await fetchApi({
+          arg: [{ storeId: userDocument.id, OTP, numberOfMonths }],
           url: import.meta.env.VITE_APP_MAKEPAYMENT,
         });
         return res;
@@ -42,8 +42,8 @@ export const useSendOTP = () => {
       OTPSent: Dispatch<SetStateAction<boolean>>;
     }) => {
       try {
-        const res = await fetchUtil({
-          reqData: [{ customerId: userId, ...paymentInfo }],
+        const res = await fetchApi({
+          arg: [{ customerId: userId, ...paymentInfo }],
           url: import.meta.env.VITE_APP_SENDOTP,
         });
         paymentInfo.OTPSent(true);
@@ -61,8 +61,8 @@ export const useResendOTP = () => {
   const id = randomId();
   return useMutation(async () => {
     try {
-      const res = await fetchUtil({
-        reqData: [{ customerId: userId }],
+      const res = await fetchApi({
+        arg: [{ customerId: userId }],
         url: import.meta.env.VITE_APP_RESENDOTP,
       });
 

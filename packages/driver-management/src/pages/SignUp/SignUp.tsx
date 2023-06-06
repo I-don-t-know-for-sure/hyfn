@@ -10,19 +10,17 @@ import {
 import { useForm } from "@mantine/form";
 import { randomId, useLocalStorage } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { Auth } from "aws-amplify";
+
 import { useConfigData } from "components/Menu/config";
 
 import Translation from "components/Translation";
 import { useUser } from "contexts/userContext/User";
-import usePersistState from "hooks/usePersistState";
+
 import { t } from "utils/i18nextFix";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { getCountryInfo } from "utils/countryInfo";
-
-import { useCreateStore } from "./hooks/useCreateStore";
 
 const SignUp: React.FC = () => {
   const { signUp, loggedIn, confirmSignUp } = useUser();

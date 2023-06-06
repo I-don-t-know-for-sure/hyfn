@@ -8,7 +8,7 @@ export const localCardKeyStoreActivity = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
 
     localCardKeyId: uuid("local_card_key_id").notNull(),
-
+    // for store and driverManagement id
     storeId: uuid("store_id").notNull(),
   }
 );

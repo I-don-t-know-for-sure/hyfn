@@ -3,7 +3,7 @@ import { t } from "util/i18nextFix";
 import { Dispatch, SetStateAction } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useSendOTP = () => {
   const queryClient = useQueryClient();
@@ -17,17 +17,17 @@ export const useSendOTP = () => {
       amount: any;
     }) => {
       console.log(JSON.stringify([{ customerId: userId, ...paymentInfo }]));
-      try {
-        const { OTPSent, amount, ...rest } = paymentInfo;
-        const res = await fetchUtil({
-          reqData: [{ customerId: userDocument.id, amount: amount, ...rest }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/sendSadadOTP`,
-        });
-        OTPSent(true);
-        return res;
-      } catch (error) {
-        console.error(error);
-      }
+      // try {
+      //   const { OTPSent, amount, ...rest } = paymentInfo;
+      //   const res = await fetchApi({
+      //     arg: [{ customerId: userDocument.id, amount: amount, ...rest }],
+      //     url: `sendSadadOTP`,
+      //   });
+      //   OTPSent(true);
+      //   return res;
+      // } catch (error) {
+      //   console.error(error);
+      // }
     },
     {
       onSuccess: () => {

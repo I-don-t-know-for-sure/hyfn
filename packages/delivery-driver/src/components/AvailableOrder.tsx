@@ -1,4 +1,4 @@
-import { Button, Card, CopyTextButton, Group, Text } from "@mantine/core";
+import { Button, Card, Group, Text } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 
 import { useTakeOrder } from "Pages/Proposals/hooks/useTakeOrder";
@@ -6,6 +6,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { t } from "utils/i18nextFix";
 import ProposalModal from "./ProposalModal";
+import { CopyTextButton } from "hyfn-client";
 
 interface AvailableOrderProps {
   order: any;

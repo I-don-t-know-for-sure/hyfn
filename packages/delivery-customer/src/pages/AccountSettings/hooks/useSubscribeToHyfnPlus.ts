@@ -1,14 +1,14 @@
 import { goToLightbox } from "hyfn-client";
 import { subscriptionPayment } from "hyfn-types";
 import { useMutation } from "react-query";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useSubscribeToHyfnPlus = () => {
   return useMutation(async ({ numberOfMonths }: { numberOfMonths: number }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ numberOfMonths, type: subscriptionPayment }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/createTransaction`,
+      const result = await fetchApi({
+        arg: [{ numberOfMonths, type: subscriptionPayment }],
+        url: `createTransaction`,
       });
       goToLightbox({
         data: result,

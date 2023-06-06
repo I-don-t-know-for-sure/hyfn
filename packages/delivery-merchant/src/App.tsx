@@ -34,7 +34,7 @@ import CreateStore from "pages/CreateStore/CreateStore";
 import { Amplify } from "aws-amplify";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import Page from "components/Page";
 import { log } from "console";
 import { useUser } from "contexts/userContext/User";
@@ -96,13 +96,11 @@ function App() {
                   if (currentToken) {
                     console.log("Device token:", currentToken);
                     // send the token to your server to associate it with the user
-                    fetchUtil({
-                      reqData: [{ notificationToken: currentToken }],
-                      url: `${
-                        import.meta.env.VITE_APP_BASE_URL
-                      }/updateNotificationTokens`,
+                    fetchApi({
+                      arg: [{ notificationToken: currentToken }],
+                      url: `updateNotificationTokens`,
                     })
-                      .then((res) => {
+                      .then((res: any) => {
                         if (res === "success") setNotificationTokenSent(true);
                       })
                       .catch((err) => {

@@ -58,7 +58,6 @@ import { useGetUserDocument } from "../../hooks/useGetUserDocument";
 import TransactionList from "../TransactionList";
 // import { useUser } from "../../contexts/userContext/User";
 import { useUser } from "hyfn-client";
-import { useRefreshBalance } from "../../hooks/useRefreshBalance";
 
 const StyledNav: React.FC = ({ children, ...rest }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
@@ -170,12 +169,6 @@ const Menu: React.FC = ({ children }) => {
   useUserCheck();
   const { i18n } = useTranslation();
   const { countries, cities } = getCountryInfo();
-  const { refetch } = useRefreshBalance();
-  useEffect(() => {
-    if (loggedIn) {
-      refetch();
-    }
-  }, [location.pathname]);
 
   const [locationPopoverOpened, setLocationPopoverOpen] = useState(false);
   const form = useForm({

@@ -1,12 +1,12 @@
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useStopAcceptingOrders = () => {
   return useMutation(async () => {
     try {
-      const result = await fetchUtil({
-        reqData: [{}],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/stopAcceptingOrders`,
+      const result = await fetchApi({
+        arg: [{}],
+        url: `stopAcceptingOrders`,
       });
       result;
     } catch (error) {

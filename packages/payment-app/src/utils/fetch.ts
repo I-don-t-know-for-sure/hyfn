@@ -4,7 +4,7 @@ import { NavigateFunction } from "react-router";
 
 // import { getAccessToken } from './getAccessToken'
 
-const fetchUtil = async ({
+export const fetchApi = async ({
   method = "POST",
   reqData,
   url,
@@ -22,13 +22,16 @@ const fetchUtil = async ({
     // console.log(JSON.stringify(reqData));
     // const accessTokenObject = await getAccessToken()
 
-    const response = await fetch(url, {
-      method,
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify([...reqData]),
-    }).then(async (data) => {
+    const response = await fetch(
+      `${import.meta.env.VITE_APP_BASE_URL}/${url}`,
+      {
+        method,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify([...reqData]),
+      }
+    ).then(async (data) => {
       if (!data.ok || data.status !== 200) {
         console.log(data.status);
 
@@ -47,5 +50,3 @@ const fetchUtil = async ({
     throw new Error(message);
   }
 };
-
-export default fetchUtil;

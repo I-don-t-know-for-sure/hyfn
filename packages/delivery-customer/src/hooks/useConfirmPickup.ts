@@ -1,6 +1,6 @@
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useMutation } from "react-query";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useConfirmPickup = () => {
   const [{ country }] = useLocation();
@@ -14,9 +14,9 @@ export const useConfirmPickup = () => {
       pickupConfirmation: string;
     }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ country, orderId, pickupConfirmation }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/confirmPickup`,
+        const result = await fetchApi({
+          arg: [{ country, orderId, pickupConfirmation }],
+          url: `confirmPickup`,
         });
         return result;
       } catch (error) {

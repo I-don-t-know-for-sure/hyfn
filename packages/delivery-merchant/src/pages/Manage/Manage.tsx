@@ -29,7 +29,7 @@ import { useSearchProducts } from "./hooks/useSearchProducts";
 import Test from "./components/Text";
 import TestTwo from "./components/TestTwo";
 import { useRemoveProductsBackgrounds } from "./hooks/useRemoveBackground";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 // import { Helmet } from 'react-helmet'
 
 const ManageProducts: React.FC = () => {
@@ -135,11 +135,9 @@ const ManageProducts: React.FC = () => {
                     variant="outline"
                     size="xs"
                     onClick={async () => {
-                      const products = await fetchUtil({
-                        reqData: [{ products: selectedProducts }],
-                        url: `${
-                          import.meta.env.VITE_APP_BASE_URL
-                        }/getProductsForBulkUpdate`,
+                      const products = await fetchApi({
+                        arg: [{ products: selectedProducts }],
+                        url: `getProductsForBulkUpdate`,
                       });
                       navigate("/bulkupdate", {
                         replace: true,

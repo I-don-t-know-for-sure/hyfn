@@ -41,7 +41,7 @@ const PaymentRequests: React.FC<PaymentRequestsProps> = ({}) => {
         "?" +
         new URLSearchParams({
           ...configurationObject,
-          url: `${import.meta.env.VITE_APP_BASE_URL}/completePaymentRequest`,
+          url: `completePaymentRequest`,
           colorScheme,
         }).toString();
       window.open(`${import.meta.env.VITE_APP_PAYMENT_APP_URL}` + queryString);

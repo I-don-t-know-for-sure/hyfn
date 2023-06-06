@@ -1,6 +1,6 @@
 import { useUser } from "contexts/userContext/User";
 import { useQuery } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetAllDrivers = () => {
   const { userDocument } = useUser();
@@ -8,9 +8,9 @@ export const useGetAllDrivers = () => {
     ["getAllDrivers"],
     async () => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ managementId: userDocument.id }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getAllDrivers`,
+        const result = await fetchApi({
+          arg: [{ managementId: userDocument.id }],
+          url: `getAllDrivers`,
         });
         return result;
       } catch (error) {

@@ -5,6 +5,7 @@ import { useGetProposals } from "../hooks/useGetProposals";
 import { ALL_PROPOSALS_FLAG } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import AvailableOrder from "components/AvailableOrder";
+import { getPagesLength } from "hyfn-client";
 
 interface AllProposalsProps {}
 
@@ -58,10 +59,7 @@ const AllProposals: React.FC<AllProposalsProps> = ({}) => {
           }}
           onClick={() =>
             fetchNextPage({
-              pageParam:
-                orders?.pages[orders?.pages?.length - 1][
-                  orders?.pages[orders.pages?.length - 1]?.length - 1
-                ]?.id,
+              pageParam: getPagesLength(orders),
             })
           }
         >

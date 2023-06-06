@@ -4,7 +4,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useMutation } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useStoreStateControl = () => {
   const { userId, userDocument, refetch } = useUser();
@@ -12,9 +12,9 @@ export const useStoreStateControl = () => {
   const id = randomId();
   return useMutation(["storeState", userDocument?.opened], async () => {
     try {
-      const result = await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/openAndCloseStore`,
-        reqData: [userDocument?.id],
+      const result = await fetchApi({
+        url: `openAndCloseStore`,
+        arg: [userDocument?.id],
       });
 
       refetch();

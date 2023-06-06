@@ -71,7 +71,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                         }`}
                       />
                     </Group>
-                    {!transaction.validate && (
+                    {!transaction.status.includes("validated") && (
                       <Button
                         onClick={() =>
                           validateTransaction({ transactionId: transaction.id })

@@ -23,7 +23,7 @@ import { useUser } from "contexts/userContext/User";
 import { useLocalStorage } from "@mantine/hooks";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 function App() {
   Amplify.configure({
     Auth: {
@@ -80,13 +80,11 @@ function App() {
                   if (currentToken) {
                     console.log("Device token:", currentToken);
                     // send the token to your server to associate it with the user
-                    fetchUtil({
-                      reqData: [{ notificationToken: currentToken }],
-                      url: `${
-                        import.meta.env.VITE_APP_BASE_URL
-                      }/updateNotificationTokens`,
+                    fetchApi({
+                      arg: [{ notificationToken: currentToken }],
+                      url: `updateNotificationTokens`,
                     })
-                      .then((res) => {
+                      .then((res: any) => {
                         console.log(
                           "🚀 ~ file: App.tsx:117 ~ .then ~ res:",
                           res

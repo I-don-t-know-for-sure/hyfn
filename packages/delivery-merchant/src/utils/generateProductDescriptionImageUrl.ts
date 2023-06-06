@@ -1,8 +1,8 @@
-import fetchUtil from "./fetch";
+import { fetchApi } from "./fetch";
 
 export async function generateProductDescriptionImageUrl(images: any) {
-  return await fetchUtil({
-    url: `${import.meta.env.VITE_APP_BASE_URL}/generateImageReaderPutUrl`,
-    reqData: [{ numberOfImages: images?.length }],
+  return await fetchApi({
+    url: `generateImageReaderPutUrl`,
+    arg: [{ numberOfImages: images?.length }],
   });
 }

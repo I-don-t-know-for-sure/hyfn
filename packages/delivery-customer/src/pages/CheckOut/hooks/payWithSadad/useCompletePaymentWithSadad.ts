@@ -3,7 +3,7 @@ import { t } from "util/i18nextFix";
 
 import { useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useIncreaseBalanceWithSadad = () => {
   const queryClient = useQueryClient();
@@ -11,17 +11,16 @@ export const useIncreaseBalanceWithSadad = () => {
 
   return useMutation(
     async ({ OTP }: { OTP: string }) => {
-      try {
-        console.log(JSON.stringify([{ customerId: userId, OTP }]));
-
-        const res = await fetchUtil({
-          reqData: [{ customerId: userId, OTP }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/payWithSadad`,
-        });
-        return res;
-      } catch (e) {
-        console.error(e);
-      }
+      // try {
+      //   console.log(JSON.stringify([{ customerId: userId, OTP }]));
+      //   const res = await fetchApi({
+      //     arg: [{ customerId: userId, OTP }],
+      //     url: `payWithSadad`,
+      //   });
+      //   return res;
+      // } catch (e) {
+      //   console.error(e);
+      // }
     },
     {
       onSuccess: () => {

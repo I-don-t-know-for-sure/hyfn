@@ -5,7 +5,7 @@ import { t } from "utils/i18nextFix";
 
 import { useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 const useUpdateStoreOwnerInfo = () => {
   const { userDocument } = useUser();
@@ -13,9 +13,9 @@ const useUpdateStoreOwnerInfo = () => {
 
   return useMutation([], async (storeInfo: any) => {
     try {
-      const result = await fetchUtil({
-        reqData: [userDocument.storeDoc, { ...storeInfo }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/updateStoreOwnerInfo`,
+      const result = await fetchApi({
+        arg: [userDocument.storeDoc, { ...storeInfo }],
+        url: `updateStoreOwnerInfo`,
       });
       // await user?.functions.updateStoreOwnerInfo([
       //   user?.customData.storeDoc,

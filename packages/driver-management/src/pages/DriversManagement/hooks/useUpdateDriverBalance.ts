@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useUpdateDriverBalance = () => {
   return useMutation(
@@ -13,9 +13,9 @@ export const useUpdateDriverBalance = () => {
       driverId: string;
       newCut: number;
     }) => {
-      return await fetchUtil({
-        reqData: [{ newBalance, driverId, newCut }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/updateDriverBalance`,
+      return await fetchApi({
+        arg: [{ newBalance, driverId, newCut }],
+        url: `updateDriverBalance`,
       });
     }
   );

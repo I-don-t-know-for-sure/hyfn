@@ -36,7 +36,7 @@ import LandingPage from "pages/LandingPage/LandingPage";
 // import { useUser } from "contexts/userContext/User";
 import { useUser } from "hyfn-client";
 import { useLocalStorage } from "@mantine/hooks";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 function App() {
   Amplify.configure({
@@ -98,13 +98,11 @@ function App() {
                   if (currentToken) {
                     console.log("Device token:", currentToken);
                     // send the token to your server to associate it with the user
-                    fetchUtil({
-                      reqData: [{ notificationToken: currentToken }],
-                      url: `${
-                        import.meta.env.VITE_APP_BASE_URL
-                      }/updateNotificationTokens`,
+                    fetchApi({
+                      arg: [{ notificationToken: currentToken }],
+                      url: `updateNotificationTokens`,
                     })
-                      .then((res) => {
+                      .then((res: any) => {
                         console.log(
                           "🚀 ~ file: App.tsx:117 ~ .then ~ res:",
                           res

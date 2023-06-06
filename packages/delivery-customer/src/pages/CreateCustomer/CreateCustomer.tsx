@@ -11,11 +11,10 @@ import { updateNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
 import { useUser } from "../../contexts/userContext/User";
-import { useTestNewDb } from "./hooks/useTestNewDb";
 
 const CreateCustomer: React.FC = () => {
   const { mutate } = useCreateCustomer();
-  const { mutate: testNewDb } = useTestNewDb();
+
   const { loggedIn, userDocument } = useUser();
   const form = useForm({
     initialValues: {

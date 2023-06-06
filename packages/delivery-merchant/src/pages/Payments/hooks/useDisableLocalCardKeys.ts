@@ -1,12 +1,18 @@
-import { useMutation } from 'react-query'
-import fetchUtil from 'utils/fetch'
+import { useMutation } from "react-query";
+import { fetchApi } from "utils/fetch";
 
 export const useDisableLocalCardKeys = () => {
   return useMutation(async () => {
     try {
-      const result = await fetchUtil({ reqData: [], url: `${import.meta.env.VITE_APP_BASE_URL}/disableLocalCardAPIKeys` })
+      const result = await fetchApi({
+        arg: [],
+        url: `disableLocalCardAPIKeys`,
+      });
     } catch (error) {
-      console.log('🚀 ~ file: useDisableLocalCardKeys.ts:8 ~ returnuseMutation ~ error', error)
+      console.log(
+        "🚀 ~ file: useDisableLocalCardKeys.ts:8 ~ returnuseMutation ~ error",
+        error
+      );
     }
-  })
-}
+  });
+};

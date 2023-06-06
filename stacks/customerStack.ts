@@ -9,7 +9,7 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { getStage, transactions } from ".";
+import { customerUrl, getStage, transactions } from ".";
 
 import { config } from "../envVaraibles";
 
@@ -17,7 +17,7 @@ import { CfnOutput, Fn } from "aws-cdk-lib";
 import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
 
 const pathToLambdas = "./packages/customer-backend/lambdas/";
-
+const pathToStoreLambdas = "./packages/Store-backend/lambdas/";
 export function customerApiStack({ stack }: StackContext) {
   // const { key } = use(kmsStack);
   const { auth } = use(customerCognitoStack);
@@ -131,12 +131,7 @@ export function customerApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "setOrderAsDelivered.handler",
         },
       },
-      "POST /getOrderDocument": {
-        function: {
-          functionName: "getOrderDocument" + stack.stage,
-          handler: pathToLambdas + "getOrderDocument.handler",
-        },
-      },
+
       "POST /setProductAsNotFound": {
         function: {
           functionName: "setProductAsNotFound" + stack.stage,
@@ -236,6 +231,12 @@ export function customerApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "updateAddresses.handler",
         },
       },
+      [customerUrl({ method: "POST", url: "getOrder" })]: {
+        function: {
+          handler: pathToStoreLambdas + "getOrder.handler",
+        },
+      },
+
       ...transactions,
     },
   });

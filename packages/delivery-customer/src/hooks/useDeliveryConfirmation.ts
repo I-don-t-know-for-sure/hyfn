@@ -3,7 +3,7 @@ import { useUser } from "contexts/userContext/User";
 
 import { useMutation } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useConfirmOrderDelivery = () => {
   const [{ country }] = useLocation();
@@ -21,8 +21,8 @@ export const useConfirmOrderDelivery = () => {
       newRating: number;
     }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [
+        const result = await fetchApi({
+          arg: [
             { country, orderId, customerId: userDocument.id },
             { newRating },
           ],

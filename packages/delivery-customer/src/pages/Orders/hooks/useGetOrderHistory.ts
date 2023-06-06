@@ -5,7 +5,7 @@ import { useUser } from "../../../contexts/userContext/User";
 
 import { useInfiniteQuery, useMutation } from "react-query";
 
-import fetchUtil from "../../../util/fetch";
+import { fetchApi } from "../../../util/fetch";
 
 export const useGetOrderHistory = () => {
   const [location] = useLocation();
@@ -15,9 +15,9 @@ export const useGetOrderHistory = () => {
   return useInfiniteQuery(
     ["orderHistory"],
     async ({ pageParam }) => {
-      const result = await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getOrderHistory`,
-        reqData: [
+      const result = await fetchApi({
+        url: `getOrderHistory`,
+        arg: [
           {
             country: location.country,
             customerId: userDocument.id,

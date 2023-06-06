@@ -26,7 +26,7 @@ const DriverInfoModal: React.FC<DriverInfoModalProps> = ({
       <Modal opened={opened} onClose={() => setOpened(false)}>
         <Stack>
           <Group grow>
-            <Image
+            {/* <Image
               src={`${
                 import.meta.env.VITE_APP_BUCKET_URL
               }/driver-verification/${data?.passportPic}`}
@@ -36,7 +36,7 @@ const DriverInfoModal: React.FC<DriverInfoModalProps> = ({
               src={`${
                 import.meta.env.VITE_APP_BUCKET_URL
               }/driver-verification/${data?.passportAndFacePic}`}
-            />
+            /> */}
           </Group>
           <Group grow>
             <TextInput

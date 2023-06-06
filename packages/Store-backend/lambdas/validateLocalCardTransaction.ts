@@ -12,7 +12,7 @@ import {
 } from 'hyfn-server';
 import { returnsObj } from 'hyfn-types';
 import { sql } from 'kysely';
-const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionProps) => {
+export const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionProps) => {
   const { transactionId } = arg[0];
   // const dataServicesURL = process.env.moalmlatDataService;
 

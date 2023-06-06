@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useReplaceDriver = () => {
   return useMutation(
@@ -13,9 +13,9 @@ export const useReplaceDriver = () => {
       orderId: string;
     }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ driverId, newDriverId, orderId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/replaceOrderDriver`,
+        const result = await fetchApi({
+          arg: [{ driverId, newDriverId, orderId }],
+          url: `replaceOrderDriver`,
         });
         return result;
       } catch (error) {

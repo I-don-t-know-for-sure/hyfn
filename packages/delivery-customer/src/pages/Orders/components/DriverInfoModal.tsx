@@ -13,24 +13,23 @@ const DriverInfoModal: React.FC<DriverInfoModalProps> = ({ driverId }) => {
   const { data, isLoading, isFetched } = useGetDriverInfo({ driverId, opened });
   console.log("🚀 ~ file: DriverInfoModal.tsx:16 ~ data", data);
 
-  const driverCheckedBy8Stores = data?.storeVerifications?.length === 8;
   console.log("🚀 ~ file: DriverInfoModal.tsx:17 ~ data", data);
   return (
     <>
       <Modal opened={opened} onClose={() => setOpened(false)}>
         <Stack>
           <Group grow>
-            <Image
+            {/* <Image
               src={`${
                 import.meta.env.VITE_APP_BUCKET_URL
               }/driver-verification/${data?.passportPic}`}
               alt={t("Passport pic")}
-            />
-            <Image
+            /> */}
+            {/* <Image
               src={`${
                 import.meta.env.VITE_APP_BUCKET_URL
               }/driver-verification/${data?.passportAndFacePic}`}
-            />
+            /> */}
           </Group>
         </Stack>
       </Modal>

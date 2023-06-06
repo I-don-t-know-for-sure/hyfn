@@ -9,7 +9,7 @@ import { updateNotificationTokensHandler } from './updateNotificationTokens';
 import { confirmPickup } from './confirmPickup';
 import { getCustomerData } from './getCustomerData';
 import { setOrderAsDeliveredHandler } from './setOrderAsDelivered';
-import { getOrderDocumentHandler } from './getOrderDocument';
+
 import { setProductAsNotFoundHandler } from './setProductAsNotFound';
 import { setProductAsPickedUpHandler } from './setProductAsPickedUp';
 import { createOrderData } from './createOrderData';
@@ -21,7 +21,7 @@ import { getCollectionProducts } from './getCollectionProducts';
 import { GetDriverInfo } from './getDriverInfo';
 import { cancelOrder } from './cancelOrder';
 import { reportOrderHandler } from './reportOrder';
-import { getTransactionsList } from './getTransactionsList';
+import { getTransactions } from './getTransactions';
 import { updateAddressesHandler } from './updateAddresses';
 export type LambdaHandlers = {
   getStoreFronts: {
@@ -68,10 +68,7 @@ export type LambdaHandlers = {
     arg: Parameters<typeof setProductAsNotFoundHandler>['0']['arg'];
     return: ReturnType<typeof setProductAsNotFoundHandler>;
   };
-  getOrderDocument: {
-    arg: Parameters<typeof getOrderDocumentHandler>['0']['arg'];
-    return: ReturnType<typeof getOrderDocumentHandler>;
-  };
+
   setOrderAsDelivered: {
     arg: Parameters<typeof setOrderAsDeliveredHandler>['0']['arg'];
     return: ReturnType<typeof setOrderAsDeliveredHandler>;
@@ -98,8 +95,8 @@ export type LambdaHandlers = {
     return: ReturnType<typeof validateLocalCardTransaction>;
   };
   getCollectionProducts: {
-    arg: Parameters<typeof createlocalCardTransaction>['0']['arg'];
-    return: ReturnType<typeof createlocalCardTransaction>;
+    arg: Parameters<typeof getCollectionProducts>['0']['arg'];
+    return: ReturnType<typeof getCollectionProducts>;
   };
   createTransaction: {
     arg: Parameters<typeof createlocalCardTransaction>['0']['arg'];
@@ -131,9 +128,9 @@ export type LambdaHandlers = {
   };
 };
 export type TransactionsHandler = {
-  getTransactionsList: {
-    arg: Parameters<typeof getTransactionsList>['0']['arg'];
-    return: ReturnType<typeof getTransactionsList>;
+  getTransactions: {
+    arg: Parameters<typeof getTransactions>['0']['arg'];
+    return: ReturnType<typeof getTransactions>;
   };
   cancelTransaction: {
     arg: Parameters<typeof cancelTransaction>['0']['arg'];

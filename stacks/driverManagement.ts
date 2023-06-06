@@ -9,7 +9,7 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { localCardKey, driversManagement, getStage } from ".";
+import { localCardKey, driversManagement, getStage, driverUrl } from ".";
 import { frConfig } from "../frEnvVaraibles";
 import { config } from "../envVaraibles";
 
@@ -112,6 +112,7 @@ export function managementApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "updateManagementInfo.handler",
         },
       },
+
       ...driversManagement,
       ...localCardKey,
     },

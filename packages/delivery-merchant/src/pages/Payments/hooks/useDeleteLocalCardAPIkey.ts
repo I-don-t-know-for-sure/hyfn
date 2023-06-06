@@ -1,9 +1,12 @@
-import { useMutation } from 'react-query'
+import { useMutation } from "react-query";
 
-import fetchUtil from 'utils/fetch'
+import { fetchApi } from "utils/fetch";
 
 export const useDeleteLocalCardAPIKey = () => {
   return useMutation(async () => {
-    return await fetchUtil({ reqData: [], url: `${import.meta.env.VITE_APP_BASE_URL}/deleteLocalCardAPIKey` })
-  })
-}
+    return await fetchApi({
+      arg: [],
+      url: `deleteLocalCardAPIKey`,
+    });
+  });
+};

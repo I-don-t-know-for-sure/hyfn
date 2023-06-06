@@ -2,16 +2,14 @@ import { Box, Card, Text, UnstyledButton } from "@mantine/core";
 
 import Image from "components/Image";
 
-import { Store } from "config/types";
-import { t } from "util/i18nextFix";
 import React from "react";
-import { AiFillStar } from "react-icons/ai";
+
 import { Link } from "react-router-dom";
 
-interface StoreCardProps extends Store {
+interface StoreCardProps {
   storeName?: string;
 }
-const StoreCard: React.FC<StoreCardProps> = ({
+const StoreCard: React.FC<any> = ({
   id,
   description,
   businessName,

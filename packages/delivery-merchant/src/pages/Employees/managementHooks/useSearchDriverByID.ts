@@ -1,7 +1,7 @@
 import { search } from "hyfn-types";
 import { useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useSearchDriverByID = ({
   isEnabled,
@@ -13,9 +13,9 @@ export const useSearchDriverByID = ({
   return useQuery(
     [search, searchValue],
     async () => {
-      return await fetchUtil({
-        reqData: [{ driverId: searchValue, management: "stores" }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/searchDriverById`,
+      return await fetchApi({
+        arg: [{ driverId: searchValue, management: "stores" }],
+        url: `searchDriverById`,
       });
     },
     {

@@ -1,6 +1,6 @@
 import { useUser } from "contexts/userContext/User";
 import { useMutation, useQueryClient } from "react-query";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useCreateLocalCardTransaction = () => {
   const queryClient = useQueryClient();
@@ -9,12 +9,10 @@ export const useCreateLocalCardTransaction = () => {
   return useMutation(
     async ({ amount }: { amount: number }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ amount, customerId: userDocument.id }],
+        const result = await fetchApi({
+          arg: [{ amount, customerId: userDocument.id }],
 
-          url: `${
-            import.meta.env.VITE_APP_BASE_URL
-          }/createLocalCardTransaction`,
+          url: `createTransaction`,
         });
       } catch (error) {
         console.log(

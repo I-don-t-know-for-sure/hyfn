@@ -12,7 +12,6 @@ import {
 } from "@mantine/core";
 import { useGetTransactions } from "hooks/useGetTransactions";
 
-import { useValidateLocalCardTransaction } from "hooks/useValidateLocalCardTransaction";
 import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 
@@ -27,7 +26,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
     isLoading,
     fetchNextPage,
   } = useGetTransactions({ enabled: opened });
-  const { mutate: validateTransaction } = useValidateLocalCardTransaction();
+
   console.log("🚀 ~ file: TransactionList.tsx ~ line 8 ~ data", transactions);
   return (
     <>
@@ -66,20 +65,11 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                       />
                       <TextWithLabel
                         label="Validated"
-                        value={`${transaction.validated}`}
+                        value={`${
+                          transaction.status[transaction.status.length - 1]
+                        }`}
                       />
                     </Group>
-                    {!transaction.validate && (
-                      <Button
-                        onClick={() =>
-                          validateTransaction({ transactionId: transaction.id })
-                        }
-                        mt={16}
-                        fullWidth
-                      >
-                        {t("Validate")}
-                      </Button>
-                    )}
                   </Box>
                 </Paper>
               );

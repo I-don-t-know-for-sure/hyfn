@@ -2,7 +2,7 @@ import { products } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { useInfiniteQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetProducts = ({ lastDocId, check, filterText }) => {
   const { userId, userDocument } = useUser();
@@ -10,10 +10,10 @@ export const useGetProducts = ({ lastDocId, check, filterText }) => {
   return useInfiniteQuery(
     [products, check],
     async ({ queryKey, pageParam }) => {
-      return await fetchUtil({
+      return await fetchApi({
         url: import.meta.env.VITE_APP_GETPRODUCTS,
 
-        reqData: [userDocument?.storeDoc, pageParam, queryKey[1]],
+        arg: [userDocument?.storeDoc, pageParam, queryKey[1]],
       });
     },
     {

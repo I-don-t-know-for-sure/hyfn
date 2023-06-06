@@ -5,6 +5,7 @@ import { ACCEPTED_PROPOSALS_FLAG, ALL_PROPOSALS_FLAG } from "hyfn-types";
 import { Button, Center, Container, Loader, Text } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import AvailableOrder from "components/AvailableOrder";
+import { getPagesLength } from "hyfn-client";
 
 interface AcceptedProposalsProps {}
 
@@ -56,10 +57,7 @@ const AcceptedProposals: React.FC<AcceptedProposalsProps> = ({}) => {
           }}
           onClick={() =>
             fetchNextPage({
-              pageParam:
-                orders?.pages[orders?.pages?.length - 1][
-                  orders?.pages[orders.pages?.length - 1]?.length - 1
-                ]?.id,
+              pageParam: getPagesLength(orders),
             })
           }
         >

@@ -32,7 +32,6 @@ import { MENU_HEIGHT, SIDEBAR_WIDTH_FULL, useConfigData } from "./config";
 import { useTranslation } from "react-i18next";
 import { BsMoonStars, BsSun } from "react-icons/bs";
 import { t } from "utils/i18nextFix";
-import { useStoreStateControl } from "hooks/useStoreStateControle";
 
 import { useUserCheck } from "hooks/useUserCheck";
 
@@ -40,7 +39,7 @@ import { useUser } from "contexts/userContext/User";
 
 import { ReactProps } from "config/types";
 import TransactionList from "components/TransactionList";
-import BalanceModal from "./components/BalanceModal/BalanceModal";
+
 interface StyledNavProps extends ReactProps {}
 const StyledNav: React.FC<StyledNavProps> = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
@@ -143,7 +142,7 @@ const Menu: React.FC<ReactProps> = ({ children }) => {
   const dark = colorScheme === "dark";
   const { links, lngs, list: avatarList } = useConfigData();
   const storeName = loggedIn ? userDocument?.managementName : "";
-  const { mutate: openAdnCloseStore } = useStoreStateControl();
+
   useEffect(() => {
     scrollTo({ x: 0, y: 0 });
   }, [location]);

@@ -88,42 +88,24 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                         alignItems: "baseline",
                       }}
                     >
-                      {!transaction.validated && (
+                      {!transaction.status.includes("validated") && (
                         <Button
                           onClick={() => {
                             validateTransaction({
                               transactionId: transaction.id,
                             });
-
-                            // if (
-                            //   transaction.type ===
-                            //   TRANSACTION_TYPE_DRIVER_MANAGMENT
-                            // ) {
-                            //   validateManagementLocalCardTransaction({
-                            //     transactionId: transaction.id,
-                            //   });
-                            //   return;
-                            // }
-                            // if (transaction.storeId !== adminName) {
-                            //   validateStoreLocalCardTransaction({
-                            //     transactionId: transaction.id,
-                            //   });
-                            //   return;
-                            // }
-                            // validateTransaction({
-                            //   transactionId: transaction.id,
-                            // });
                           }}
                           mt={16}
                         >
                           {t("Validate")}
                         </Button>
                       )}
-                      {!transaction.status.includes("canceled") && (
-                        <CancelTransactionModal
-                          transactionId={transaction.id}
-                        />
-                      )}
+                      {!transaction.status.includes("canceled") &&
+                        !transaction.status.includes("validated") && (
+                          <CancelTransactionModal
+                            transactionId={transaction.id}
+                          />
+                        )}
                     </Group>
                   </Box>
                 </Paper>

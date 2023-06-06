@@ -2,7 +2,7 @@ import { PRODUCT } from "hyfn-types";
 
 import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useGetProduct = (
   locationInfo: {
@@ -17,9 +17,9 @@ export const useGetProduct = (
     [PRODUCT, locationInfo.productId],
     async () => {
       try {
-        return await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getProduct`,
-          reqData: [locationInfo, withStoreDoc],
+        return await fetchApi({
+          url: `getProduct`,
+          arg: [locationInfo, withStoreDoc],
         });
       } catch (e) {
         console.error(e);

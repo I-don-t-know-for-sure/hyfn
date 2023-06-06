@@ -5,7 +5,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useSetProductAsNotFound = () => {
   const { userDocument: user } = useUser();
@@ -15,14 +15,14 @@ export const useSetProductAsNotFound = () => {
   return useMutation(
     async ({ orderId, productId }: { orderId: string; productId: string }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [
+        const result = await fetchApi({
+          arg: [
             {
               orderId,
               productId,
             },
           ],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/setProductAsNotFound`,
+          url: `setProductAsNotFound`,
         });
         return result;
       } catch (error) {

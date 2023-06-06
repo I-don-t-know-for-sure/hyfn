@@ -1,6 +1,6 @@
 import { useUser } from "contexts/userContext/User";
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useSetOrderAsAccepted = () => {
   const { userDocument } = useUser();
@@ -8,9 +8,9 @@ export const useSetOrderAsAccepted = () => {
   return useMutation(
     async ({ orderId, storeId }: { orderId: string; storeId: string }) => {
       try {
-        const result = fetchUtil({
-          reqData: [{ orderId, storeId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/setOrderAsAccepted`,
+        const result = fetchApi({
+          arg: [{ orderId, storeId }],
+          url: `setOrderAsAccepted`,
         });
         return result;
       } catch (error) {

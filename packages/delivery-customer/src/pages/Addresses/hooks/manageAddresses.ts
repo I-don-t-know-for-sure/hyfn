@@ -1,7 +1,7 @@
 import { useUser } from "../../../contexts/userContext/User";
 import { t } from "../../../util/i18nextFix";
 import { useMutation, useQueryClient } from "react-query";
-import fetchUtil from "../../../util/fetch";
+import { fetchApi } from "../../../util/fetch";
 
 export const useManageAddresses = () => {
   const queryClient = useQueryClient();
@@ -10,9 +10,9 @@ export const useManageAddresses = () => {
   return useMutation(
     async ({ addresses }: { addresses: any[] }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ addresses, customerId: userDocument.id }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/updateAddresses`,
+        const result = await fetchApi({
+          arg: [{ addresses, customerId: userDocument.id }],
+          url: `updateAddresses`,
         });
 
         return result;

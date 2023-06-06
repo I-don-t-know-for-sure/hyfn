@@ -2,7 +2,7 @@ import { transactions } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { useInfiniteQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetTransactions = ({ enabled }: { enabled: boolean }) => {
   const { userDocument: user } = useUser();
@@ -11,15 +11,15 @@ export const useGetTransactions = ({ enabled }: { enabled: boolean }) => {
     async ({ pageParam }) => {
       console.log(pageParam);
 
-      return await fetchUtil({
-        reqData: [{ userId: user.id, lastDoc: pageParam }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getTransactionsList`,
-      });
+      // return await fetchApi({
+      //   arg: [{ userId: user.id, lastDoc: pageParam }],
+      //   url: `getTransactionsList`,
+      // });
     },
     {
       enabled: enabled,
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
     }
   );
 };

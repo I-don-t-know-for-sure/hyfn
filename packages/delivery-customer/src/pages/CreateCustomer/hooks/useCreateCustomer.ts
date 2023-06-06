@@ -1,7 +1,7 @@
 import { useUser } from "../../../contexts/userContext/User";
 import { useMutation } from "react-query";
 
-import fetchUtil from "../../../util/fetch";
+import { fetchApi } from "../../../util/fetch";
 
 export const useCreateCustomer = () => {
   const { userId, refetch } = useUser();
@@ -9,9 +9,9 @@ export const useCreateCustomer = () => {
   return useMutation(
     async (customerInfo: any) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ ...customerInfo, customerId: userId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/createUserDocument`,
+        const result = await fetchApi({
+          arg: [{ ...customerInfo, customerId: userId }],
+          url: `createUserDocument`,
         });
         return result;
       } catch (e) {

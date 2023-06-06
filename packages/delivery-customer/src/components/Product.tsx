@@ -19,8 +19,6 @@ interface ProductType {
   hasOptions: boolean;
 
   images: string[];
-  customerLikesProduct: boolean;
-  likes: number;
 }
 
 interface ProductProps {

@@ -2,7 +2,7 @@ interface FindOrdersProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 ('use strict');
-import { MainFunctionProps, buildJson, mainWrapper, tOrders, tStores } from 'hyfn-server';
+import { MainFunctionProps, buildJson, mainWrapper, tOrders, tStore, tStores } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { ORDER_TYPE_DELIVERY, COLLECTION, USER_TYPE_DRIVER } from 'hyfn-types';
 import { sql } from 'kysely';
@@ -17,7 +17,7 @@ export const getAvailableOrders = async ({ arg, client, event, db }: MainFunctio
     .selectFrom('orders')
     .innerJoin('stores', (join) => join.onRef('stores.id', '=', 'orders.storeId'))
     .selectAll('orders')
-    .select(buildJson(tStores, '*').as('stores'))
+    .select(buildJson<tStore>(tStores, '*').as('stores'))
     .groupBy('orders.id')
     .groupBy('stores.id')
     .where(({ not, cmpr, and }) =>

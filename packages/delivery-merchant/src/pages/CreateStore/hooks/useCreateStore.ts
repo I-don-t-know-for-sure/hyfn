@@ -4,7 +4,7 @@ import { useUser } from "contexts/userContext/User";
 
 import { useMutation } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useCreateStore = () => {
   const { userId, refetch } = useUser();
@@ -12,9 +12,9 @@ export const useCreateStore = () => {
   return useMutation(
     async (storeInfo: any) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ ...storeInfo, userId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/createStoreDocument`,
+        const result = await fetchApi({
+          arg: [{ ...storeInfo, userId }],
+          url: `createStoreDocument`,
         });
         return result;
       } catch (e) {

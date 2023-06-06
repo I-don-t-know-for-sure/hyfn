@@ -6,64 +6,17 @@ import {
   loadingNotification,
   successNotification,
 } from "hyfn-client";
-import { LambdaHandlers } from "store-backend";
+import { LocalCard, GetOrder, LambdaHandlers } from "store-backend";
+import { DriverManagementHandlers } from "driver-management-backend";
 import { t } from "utils/i18nextFix";
-const fetchUtil = async ({
-  method = "POST",
-  reqData,
-  url,
-  notifi = true,
-}: {
-  method?: string;
-  reqData: any;
-  url: string;
-  notifi?: boolean;
-}) => {
-  const notGet = !url.includes("get");
-
-  const accessTokenObject = await getAccessToken();
-  const id = randomId();
-
-  notifi &&
-    notGet &&
-    showNotification({
-      ...loadingNotification,
-      id,
-    });
-  const data = await fetch(url, {
-    method,
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify([...reqData, accessTokenObject]),
-  });
-  if (data.status !== 200) {
-    const message = await data.json();
-    notifi &&
-      notGet &&
-      updateNotification({
-        ...errorNotification,
-        message: t(message),
-        id,
-      });
-    throw new Error(data.statusText);
-  }
-  notifi &&
-    notGet &&
-    updateNotification({
-      ...successNotification,
-      id,
-    });
-  const result = await data.json();
-  return result;
-};
-
-export default fetchUtil;
-
-type Function<T extends keyof LambdaHandlers> = (
-  arg: LambdaHandlers[T]["arg"]
-) => LambdaHandlers[T]["return"];
-export const fetchApi = async <T extends keyof LambdaHandlers>({
+type Handlers = LambdaHandlers &
+  DriverManagementHandlers &
+  LocalCard &
+  GetOrder;
+type Function<T extends keyof Handlers> = (
+  arg: Handlers[T]["arg"]
+) => Handlers[T]["return"];
+export const fetchApi = async <T extends keyof Handlers>({
   arg: reqData,
   url,
   method = "POST",

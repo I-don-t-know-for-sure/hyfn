@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetOrders = ({
   type,
@@ -11,9 +11,9 @@ export const useGetOrders = ({
 }) => {
   return useInfiniteQuery(["getActiveOrders"], async ({ pageParam }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ type, lastDoc: pageParam, active }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getActiveOrders`,
+      const result = await fetchApi({
+        arg: [{ type, lastDoc: pageParam, active }],
+        url: `getActiveOrders`,
       });
       return result;
     } catch (error) {

@@ -22,12 +22,12 @@ const FullTextEditor: React.FC<FullTextEditorProps> = ({ setValue, value }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Underline,
-      Link as any,
-      Superscript,
-      SubScript,
-      Highlight,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      // Underline,
+      Link,
+      // Superscript,
+      // SubScript,
+      // Highlight,
+      // TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
     content: value,
     onBlur: (e) => {
@@ -93,7 +93,7 @@ const FullTextEditor: React.FC<FullTextEditorProps> = ({ setValue, value }) => {
         content: classes.content,
         controlsGroup: classes.controlsGroup,
       }}
-      editor={editor as any}
+      editor={editor}
     >
       <RichTextEditor.Toolbar sticky stickyOffset={60}>
         <RichTextEditor.ControlsGroup>

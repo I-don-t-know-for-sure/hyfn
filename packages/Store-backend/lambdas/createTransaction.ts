@@ -6,7 +6,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { adminName } from 'hyfn-types';
 import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
 import { createLocalCardConfigurationObject, MainFunctionProps, mainWrapper } from 'hyfn-server';
-const createLocalCardTransactionForWallet = async ({
+export const createLocalCardTransactionForWallet = async ({
   arg,
   client,
   db,

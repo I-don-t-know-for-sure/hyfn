@@ -2,7 +2,7 @@ import { trustedDrivers } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { useInfiniteQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetStoreDrivers = () => {
   const { userId, userDocument } = useUser();
@@ -14,8 +14,8 @@ export const useGetStoreDrivers = () => {
   return useInfiniteQuery(
     [trustedDrivers],
     async ({ pageParam }) => {
-      return fetchUtil({
-        reqData: [
+      return fetchApi({
+        arg: [
           {
             storeId: userDocument?.id,
             lastDoc: pageParam,
@@ -23,12 +23,12 @@ export const useGetStoreDrivers = () => {
           },
         ],
 
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getTrustedDrivers`,
+        url: `getTrustedDrivers`,
       });
     },
     {
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage?.nextCursor as any,
+      // getNextPageParam: (lastPage, pages) => lastPage?.nextCursor as any,
     }
   );
 };

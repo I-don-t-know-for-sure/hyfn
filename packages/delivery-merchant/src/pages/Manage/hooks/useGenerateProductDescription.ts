@@ -1,7 +1,7 @@
 import { useUser } from "contexts/userContext/User";
 import useUploadImage from "hooks/useUploadImage";
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { generateProductDescriptionImageUrl } from "utils/generateProductDescriptionImageUrl";
 import { generateProductsUrls } from "utils/generateProductsUrls";
 
@@ -45,11 +45,9 @@ export const useGenerateProductDescription = () => {
         "🚀 ~ file: useGenerateProductDescription.ts:35 ~ returnuseMutation ~ productsToBeGenerated:",
         productsToBeGenerated
       );
-      const result = await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/generateDescriptionClient`,
-        reqData: [
-          { products: productsToBeGenerated, storeId: userDocument?.id },
-        ],
+      const result = await fetchApi({
+        url: `generateDescriptionClient`,
+        arg: [{ products: productsToBeGenerated, storeId: userDocument?.id }],
       });
       return result;
     } catch (error) {

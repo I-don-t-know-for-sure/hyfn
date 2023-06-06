@@ -18,7 +18,7 @@ import TypeCard from "./TypeCard";
 
 import StatusCard from "./CollectionCard";
 import { t } from "utils/i18nextFix";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 import { randomId } from "@mantine/hooks";
 // import { Helmet } from 'react-helmet-async'
@@ -79,9 +79,9 @@ const CreateCollection: React.FC<CreateCollectionProps> = ({ requestType }) => {
 
         console.log(`${import.meta.env.VITE_APP_BASE_URL}/createCollection`);
 
-        const result = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/createCollection`,
-          reqData: [collection.collection, userDocument?.storeDoc],
+        const result = await fetchApi({
+          url: `createCollection`,
+          arg: [collection.collection, userDocument?.storeDoc],
         });
 
         return result;

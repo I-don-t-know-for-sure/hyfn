@@ -1,12 +1,12 @@
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useUpdateSubscription = () => {
   return useMutation(async ({ numberOfMonths }: { numberOfMonths: number }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ numberOfMonths }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/updateSubscibtion`,
+      const result = await fetchApi({
+        arg: [{ numberOfMonths }],
+        url: `updateSubscibtion`,
       });
       return result;
     } catch (error) {

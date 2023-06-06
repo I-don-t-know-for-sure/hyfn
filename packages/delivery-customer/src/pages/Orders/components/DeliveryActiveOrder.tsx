@@ -2,9 +2,7 @@ import {
   ActionIcon,
   Badge,
   Box,
-  Button,
   Card,
-  Container,
   Group,
   Image,
   LoadingOverlay,
@@ -12,24 +10,17 @@ import {
   Text,
 } from "@mantine/core";
 import React from "react";
-import { largerEq } from "mathjs";
-import TransactionModal from "./TransactionModal";
+
 import { t } from "../../../util/i18nextFix";
 import OptionsModal from "./OptionsModal";
 import DeliveryConfirmationModal from "../../../components/DeliverConfirmationModal";
 import OrderActionMenu from "./OrderActionMenu";
 
-import PayServiceFeeModal from "./PayServiceFeeModal";
-import DriverInfoModal from "./DriverInfoModal";
-import {
-  ORDER_TYPE_DELIVERY,
-  STORE_STATUS_PENDING,
-  STORE_TYPE_RESTAURANT,
-} from "hyfn-types";
+import { ORDER_TYPE_DELIVERY, STORE_STATUS_PENDING } from "hyfn-types";
 import { useRefreshOrderDocument } from "../hooks/useRefreshOrderDocument";
-import PayStoreForPickupOrder from "./PayStoreForPickupOrder";
+
 import ProposalsModal from "./ProposalsModal";
-import { ORDER_STATUS_ACCEPTED } from "hyfn-types";
+
 import PayModal from "components/PayModal";
 import DeliveredModal from "components/DeliveredModal";
 import { CopyTextButton } from "hyfn-client";
@@ -38,10 +29,10 @@ interface DeliveryActiveOrderProps {
   index: any;
   order: any;
   driver: any;
-  validateTransaction: any;
+
   cancelOrder: any;
   balance: number;
-  serviceFee: string;
+  serviceFee: number;
   serviceFeePaid: boolean;
 }
 
@@ -50,21 +41,10 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
   driver,
   index,
   order,
-  validateTransaction,
-  balance,
+
   serviceFee,
   serviceFeePaid,
 }) => {
-  console.log(
-    "🚀 ~ file: DeliveryActiveOrder.tsx:37 ~ serviceFee",
-    typeof serviceFee
-  );
-  console.log(
-    "🚀 ~ file: DeliveryActiveOrder.tsx:37 ~ serviceFeePaid",
-    serviceFeePaid
-  );
-  console.log("🚀 ~ file: DeliveryActiveOrder.tsx:34 ~ order", order);
-
   const { refetch, isLoading } = useRefreshOrderDocument({
     orderId: order.id,
   });

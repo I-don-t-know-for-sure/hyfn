@@ -2,7 +2,7 @@ import { useUser } from "contexts/userContext/User";
 
 import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 const useGetStoreInfo = () => {
   const { userId, userDocument } = useUser();
@@ -14,12 +14,10 @@ const useGetStoreInfo = () => {
     [id],
     async () => {
       try {
-        return userId
-          ? await fetchUtil({
-              url: `${import.meta.env.VITE_APP_BASE_URL}/getStoreDocument`,
-              reqData: [{ userId }],
-            })
-          : {};
+        return await fetchApi({
+          url: `getStoreDocument`,
+          arg: [{ userId }],
+        });
       } catch (e) {
         console.error(e);
       }

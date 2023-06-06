@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useAcceptProposal = () => {
   return useMutation(
@@ -13,9 +13,9 @@ export const useAcceptProposal = () => {
       orderId: string;
     }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ country, driverId, orderId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/acceptProposal`,
+        const result = await fetchApi({
+          arg: [{ country, driverId, orderId }],
+          url: `acceptProposal`,
         });
         return result;
       } catch (error) {

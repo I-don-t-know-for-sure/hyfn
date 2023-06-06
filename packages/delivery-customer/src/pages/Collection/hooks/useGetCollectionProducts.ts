@@ -1,7 +1,7 @@
 import { COLLECTION } from "hyfn-types";
 import { useInfiniteQuery, useQuery } from "react-query";
 
-import fetchUtil from "../../../util/fetch";
+import { fetchApi } from "../../../util/fetch";
 
 export const useGetCollectionProducts = ({
   collectionid,
@@ -27,8 +27,8 @@ export const useGetCollectionProducts = ({
       );
       console.log(pageParam);
 
-      const result = await fetchUtil({
-        reqData: [
+      const result = await fetchApi({
+        arg: [
           {
             country,
             storefront,
@@ -37,13 +37,13 @@ export const useGetCollectionProducts = ({
             lastDocNumber: pageParam,
           },
         ],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getCollectionProducts`,
+        url: `getCollectionProducts`,
       });
       return result;
     },
     {
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
       enabled: isOnScreen,
       staleTime: 300000,
     }

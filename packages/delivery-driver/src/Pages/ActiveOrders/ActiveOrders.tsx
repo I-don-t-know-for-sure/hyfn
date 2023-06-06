@@ -203,7 +203,7 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                             margin: "4px auto",
                           }}
                         >
-                          {store.storeName || store.businessName}
+                          {store.storeName}
                         </Text>
 
                         <Space w={10} />
@@ -224,7 +224,10 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                         <PickupOrderModal
                           orderId={order.id}
                           storeId={order.storeId}
-                          pickedUp={store.orderStatus === ORDER_STATUS_PICKED}
+                          pickedUp={
+                            order.storeStatus[order.storeStatus.length - 1] ===
+                            "pickedUp"
+                          }
                         />
                       </Group>
                       <Table>

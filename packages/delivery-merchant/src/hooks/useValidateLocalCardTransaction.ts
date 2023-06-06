@@ -7,17 +7,15 @@ import {
 } from "hyfn-types";
 import { useMutation } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useValidateLocalCardTransaction = () => {
   const id = randomId();
   return useMutation(async ({ transactionId }: { transactionId: string }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ transactionId }],
-        url: `${
-          import.meta.env.VITE_APP_BASE_URL
-        }/validateLocalCardTransaction`,
+      const result = await fetchApi({
+        arg: [{ transactionId }],
+        url: `validateLocalCardTransaction`,
       });
 
       return result;

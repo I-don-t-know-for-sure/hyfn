@@ -9,7 +9,7 @@ import {
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { t } from "utils/i18nextFix";
 import { useUser } from "contexts/userContext/User";
 
@@ -20,9 +20,9 @@ export const useDuplicateProduct = () => {
   return useMutation(
     async ({ productId, times }: { productId: string; times: number }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ productId, times }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/duplicateProduct`,
+        const result = await fetchApi({
+          arg: [{ productId, times }],
+          url: `duplicateProduct`,
         });
 
         return result;

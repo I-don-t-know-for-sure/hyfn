@@ -4,7 +4,7 @@ import { useUser } from "contexts/userContext/User";
 import useUploadImage from "hooks/useUploadImage";
 import { useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { ProductInfo } from "../types";
 import { generateProductsUrls } from "utils/generateProductsUrls";
 
@@ -50,9 +50,9 @@ export const useUpdateProduct = () => {
             deletedImages,
           ]);
         }
-        const res = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/updateProduct`,
-          reqData: [
+        const res = await fetchApi({
+          url: `updateProduct`,
+          arg: [
             {
               product: {
                 ...rest,

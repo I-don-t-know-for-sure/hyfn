@@ -30,10 +30,10 @@ import { t } from "utils/i18nextFix";
 interface StoreInfoProps {}
 
 const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
-  const { data = {}, isLoading, isError, error, isFetched } = useGetStoreInfo();
+  const { data, isLoading, isError, error, isFetched } = useGetStoreInfo();
 
   const { mutate, isLoading: isMutateLoading } = useUpdateStoreInfo();
-  const initialInfo: Store = {
+  const initialInfo = {
     storeType: [],
     storeName: "",
     storePhone: "",
@@ -64,17 +64,18 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
   };
 
   useEffect(() => {
+    if (!data) return;
     if (!(Object.keys(data).length === 0)) {
       const formData: Store = {
-        storeName: data.storeName || data.businessName,
+        storeName: data.storeName,
         country: data.country,
         city: data.city,
         description: data.description,
-        storeType: data.storeType || data.businessType,
-        storePhone: data.storePhone || data.businessPhone,
+        storeType: data.storeType,
+        storePhone: data.storePhone,
         coords: `${data?.lat},${data?.long}`,
         // coords: "",
-        image: data.image,
+        image: data.image[0],
         address: data?.address,
       };
 

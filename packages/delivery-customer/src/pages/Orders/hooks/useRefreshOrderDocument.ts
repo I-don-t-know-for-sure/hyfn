@@ -2,7 +2,7 @@ import { ACTIVE_ORDERS } from "hyfn-types";
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { t } from "util/i18nextFix";
 import { useQuery, useQueryClient } from "react-query";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
   const [{ country }] = useLocation();
@@ -11,9 +11,9 @@ export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
     [orderId],
     async () => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ orderId, country }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getOrderDocument`,
+        const result = await fetchApi({
+          arg: [{ orderId, country }],
+          url: `getOrder`,
         });
 
         const cachedQuery = queryClient.getQueryData([ACTIVE_ORDERS]) as {

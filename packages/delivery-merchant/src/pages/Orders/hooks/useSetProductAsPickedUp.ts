@@ -5,7 +5,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useSetProductAsPickedUp = () => {
   const { userDocument: user } = useUser();
@@ -36,15 +36,15 @@ export const useSetProductAsPickedUp = () => {
           productId,
           QTYFound,
         });
-        const result = await fetchUtil({
-          reqData: [
+        const result = await fetchApi({
+          arg: [
             {
               orderId,
               productId,
               QTYFound,
             },
           ],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/setProductAsPickedUp`,
+          url: `setProductAsPickedUp`,
         });
         return result;
       } catch (error) {

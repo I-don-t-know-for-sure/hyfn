@@ -27,8 +27,6 @@ import { paymentMethods } from "../../config/data";
 
 import { useCreateOrderData } from "./hooks/useCreateOrderdata";
 
-import { useCreateOrder } from "./hooks/useCreateOrder";
-
 import { convertObjectToArray } from "./utils/convertObjectToArray";
 
 import { DatePickerInput, DateTimePicker } from "@mantine/dates";
@@ -39,7 +37,7 @@ import { useGetUserDocument } from "../../hooks/useGetUserDocument";
 
 import TransactionList from "../../components/TransactionList";
 import { useUser } from "../../contexts/userContext/User";
-import { ServiceFeePayment } from "../../components/PayServiceFee";
+
 import {
   ORDER_TYPE_DELIVERY,
   ORDER_TYPE_PICKUP,
@@ -47,7 +45,7 @@ import {
   storeAndCustomerServiceFee,
 } from "hyfn-types";
 import { useNavigate, useLocation as useRouteLocation } from "react-router-dom";
-import { useCreateLocalCardTransaction } from "../../hooks/useCreateLocalCardTransaction";
+
 import { calculateOrderCost } from "util/calculateOrderCost";
 import { add, multiply } from "mathjs";
 import { baseServiceFee } from "hyfn-types";
@@ -114,7 +112,6 @@ const CheckOut: React.FC<CheckOutProps> = () => {
     isLoading: isUserDocumentLoading,
     refetch,
   } = useGetUserDocument({ userId });
-  const createLocalCardTransaction = useCreateLocalCardTransaction();
 
   useEffect(() => {
     if (typeof cart[routeLocation?.state?.storeId] === "object") {
@@ -123,7 +120,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   }, [cart, routeLocation]);
 
   const [, setManualLocation] = useState(false);
-  const balance = userCustomData?.balance;
+  // const balance = userCustomData?.balance;
   const [{ coords: userCoords }, setLocation] = useLocation();
   const [{ distance, duration, deliveryFee }, setDeliveryDetails] =
     useState<any>({
@@ -147,7 +144,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const [error, setError] = useState({ error: false, message: "" });
   const [addressKey, setAddressKey] = useState("");
   const addresses = userCustomData?.addresses as any[];
-  const customerBalanceIsSuffictient = serviceFee < balance;
+  // const customerBalanceIsSuffictient = serviceFee < balance;
   const selectAddresses = addresses?.map((address) => {
     return {
       label: address?.label,
@@ -162,7 +159,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const [orderChanged, setOrderChanged] = useState(false);
   const { mutate, data, isLoading, isIdle, isSuccess } = useCreateOrderData();
 
-  const { mutate: createOrderMutation } = useCreateOrder();
+  // const { mutate: createOrderMutation } = useCreateOrder();
   // const coords = getStoresCoords(cart);
 
   useEffect(() => {
@@ -185,46 +182,46 @@ const CheckOut: React.FC<CheckOutProps> = () => {
       }
     }
   }, [addressKey]);
-  const requestHandler = () => {
-    const doesOrderExist = userCustomData.order;
+  // const requestHandler = () => {
+  //   // const doesOrderExist = userCustomData.order;
 
-    if (doesOrderExist) {
-      const { orders: userOrderCart } = userCustomData.order as {
-        orders: any;
-      };
+  //   if (doesOrderExist) {
+  //     // const { orders: userOrderCart } = userCustomData.order as {
+  //     //   orders: any;
+  //     // };
 
-      const change = Object.keys(cart).some((cartStoreId) => {
-        const cartStore = cart[cartStoreId];
-        const userStore = userOrderCart[cartStore.id];
-        if (!userStore) {
-          return true;
-        }
+  //     const change = Object.keys(cart).some((cartStoreId) => {
+  //       const cartStore = cart[cartStoreId];
+  //       const userStore = userOrderCart[cartStore.id];
+  //       if (!userStore) {
+  //         return true;
+  //       }
 
-        Object.keys(cartStore.addedProducts).some((cartProductId) => {
-          const cartProduct = cartStore.addedProducts[cartProductId];
-          const userProduct = userStore.addedProducts[cartProduct.id];
-          if (!userProduct) {
-            return true;
-          }
+  //       Object.keys(cartStore.addedProducts).some((cartProductId) => {
+  //         const cartProduct = cartStore.addedProducts[cartProductId];
+  //         const userProduct = userStore.addedProducts[cartProduct.id];
+  //         if (!userProduct) {
+  //           return true;
+  //         }
 
-          return false;
-        });
-        return false;
-      });
+  //         return false;
+  //       });
+  //       return false;
+  //     });
 
-      if (change) {
-        mutate({ cart: cartArray, deliveryDate: deliveryDate.getTime() });
-        setOrderChanged(true);
-      } else {
-        // const { deliveryDetails } = userCustomData.order as {
-        //   deliveryDetails: { distance: number; duration: number };
-        // };
-        setDeliveryDetails(userCustomData.order);
-      }
-    } else {
-      mutate({ cart: cartArray, deliveryDate });
-    }
-  };
+  //     if (change) {
+  //       mutate({ cart: cartArray, deliveryDate: deliveryDate.getTime() });
+  //       setOrderChanged(true);
+  //     } else {
+  //       // const { deliveryDetails } = userCustomData.order as {
+  //       //   deliveryDetails: { distance: number; duration: number };
+  //       // };
+  //       setDeliveryDetails(userCustomData.order);
+  //     }
+  //   } else {
+  //     mutate({ cart: cartArray, deliveryDate });
+  //   }
+  // };
 
   useEffect(() => {
     if (!isLoading && orderChanged) {
@@ -232,16 +229,16 @@ const CheckOut: React.FC<CheckOutProps> = () => {
     }
   }, [isLoading, data, orderChanged]);
 
-  useEffect(() => {
-    if (
-      !isLoading &&
-      !isUserDocumentLoading &&
-      typeof userCustomData.order === "object"
-    ) {
-      // const { deliveryDetails } = userCustomData.order as { deliveryDetails: any };
-      setDeliveryDetails(userCustomData.order);
-    }
-  }, [orderChanged, isLoading, data, userCustomData, isUserDocumentLoading]);
+  // useEffect(() => {
+  //   if (
+  //     !isLoading &&
+  //     !isUserDocumentLoading &&
+  //     typeof userCustomData.order === "object"
+  //   ) {
+  //     // const { deliveryDetails } = userCustomData.order as { deliveryDetails: any };
+  //     setDeliveryDetails(userCustomData.order);
+  //   }
+  // }, [orderChanged, isLoading, data, userCustomData, isUserDocumentLoading]);
 
   const err = (e) => {
     alert(e);
@@ -443,7 +440,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                 address: address,
               };
             });
-            requestHandler();
+            mutate({ cart: cartArray, deliveryDate: deliveryDate.getTime() });
           } catch (e) {
             console.error(e);
           }

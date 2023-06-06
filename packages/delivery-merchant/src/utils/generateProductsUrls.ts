@@ -1,9 +1,9 @@
-import fetchUtil from "./fetch";
+import { fetchApi } from "./fetch";
 
 export const generateProductsUrls = async (numberOfUrls: number) => {
-  const { generatedURLs, generatedNames } = await fetchUtil({
-    url: `${import.meta.env.VITE_APP_BASE_URL}/generateImageURL`,
-    reqData: [numberOfUrls],
+  const { generatedURLs, generatedNames } = await fetchApi({
+    url: `generateImageURL`,
+    arg: [numberOfUrls],
   });
 
   return { generatedURLs, generatedNames };

@@ -9,7 +9,7 @@ import {
 
 import * as iam from "aws-cdk-lib/aws-iam";
 
-import { getStage } from ".";
+import { driverUrl, getStage } from ".";
 
 import { config } from "../envVaraibles";
 // import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
@@ -18,7 +18,7 @@ import { Construct } from "constructs";
 import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
 
 const pathToLambdas = "./packages/driver-backend/lambdas/";
-
+const pathToStoreLambdas = "./packages/Store-backend/lambdas/";
 const localhost = "http://localhost:";
 
 export function driverApiStack({ stack }: StackContext) {
@@ -157,6 +157,11 @@ export function driverApiStack({ stack }: StackContext) {
       "POST /generateImageUrl": {
         function: {
           handler: pathToLambdas + "generateImageUrl.handler",
+        },
+      },
+      [driverUrl({ method: "POST", url: "getOrder" })]: {
+        function: {
+          handler: pathToStoreLambdas + "getOrder.handler",
         },
       },
     },

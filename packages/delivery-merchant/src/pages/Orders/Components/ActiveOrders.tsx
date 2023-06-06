@@ -93,7 +93,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
             ) : (
               orders?.pages?.map((page) => {
                 return page
-                  .filter((order) => {
+                  ?.filter((order) => {
                     console.log(
                       "🚀 ~ file: ActiveOrders.tsx:97 ~ .filter ~ order:",
                       order
@@ -151,7 +151,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
             ) : (
               orders?.pages?.map((page) => {
                 return page
-                  .filter((order) => {
+                  ?.filter((order) => {
                     const storeOrder = order.stores.find(
                       (store) => store.id === storeDocId
                     );
@@ -204,7 +204,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
             ) : (
               orders?.pages?.map((page) => {
                 return page
-                  .filter((order) => {
+                  ?.filter((order) => {
                     const storeOrder = order.stores.find(
                       (store) => store.id === storeDocId
                     );
@@ -306,7 +306,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
             ) : (
               orders?.pages?.map((page) => {
                 return page
-                  .filter((order) => {
+                  ?.filter((order) => {
                     const storeOrder = order.stores.find(
                       (store) => store.id === storeDocId
                     );

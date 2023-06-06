@@ -34,7 +34,7 @@ interface ProductProps {
   addProduct: () => void;
   reduceOrRemoveProduct: () => void;
   productUrl: string;
-  product: ProductType;
+  product: any;
   city: string;
   country: string;
   storefront: string;

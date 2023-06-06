@@ -5,7 +5,7 @@ import { t } from "utils/i18nextFix";
 import { Dispatch, SetStateAction } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useUpdatePaymentSettings = () => {
   const { userDocument, userId } = useUser();
@@ -16,9 +16,9 @@ export const useUpdatePaymentSettings = () => {
       const random = randomId();
       try {
         const storeDoc = userDocument?.storeDoc as { id: string };
-        await fetchUtil({
-          reqData: [{ storeId: userDocument.id, userId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/updatePaymentSettings`,
+        await fetchApi({
+          arg: [{ storeId: userDocument.id, userId }],
+          url: `updatePaymentSettings`,
         });
       } catch (error) {
         const { message } = error as { message: string };

@@ -6,7 +6,7 @@ import { useUser } from "../../../contexts/userContext/User";
 
 import { useInfiniteQuery } from "react-query";
 
-import fetchUtil from "../../../util/fetch";
+import { fetchApi } from "../../../util/fetch";
 
 export const useGetActiveOrders = () => {
   const [location] = useLocation();
@@ -15,9 +15,9 @@ export const useGetActiveOrders = () => {
   return useInfiniteQuery(
     [ACTIVE_ORDERS],
     async ({ pageParam }) => {
-      const result = await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getActiveOrders`,
-        reqData: [
+      const result = await fetchApi({
+        url: `getActiveOrders`,
+        arg: [
           {
             country: location.country,
             customerId: userDocument.id,
@@ -31,7 +31,7 @@ export const useGetActiveOrders = () => {
     },
     {
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage?.nextCursor,
       enabled: !isLoading,
     }
   );

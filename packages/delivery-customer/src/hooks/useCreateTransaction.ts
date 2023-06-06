@@ -1,7 +1,7 @@
 import { useMantineColorScheme } from "@mantine/core";
 import { goToLightbox } from "hyfn-client";
 import { useMutation } from "react-query";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useCreateTransaction = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -20,9 +20,9 @@ export const useCreateTransaction = () => {
       country: string;
     }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ numberOfMonths, country, orderId, type, storeId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/createTransaction`,
+        const result = await fetchApi({
+          arg: [{ numberOfMonths, country, orderId, type, storeId }],
+          url: `createTransaction`,
         });
         goToLightbox({
           data: result,

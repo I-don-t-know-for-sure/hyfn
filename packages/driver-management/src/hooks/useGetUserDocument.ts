@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetUserDocument = ({ userId }: { userId: string }) => {
   // const { userId } = useUser()
@@ -12,9 +12,9 @@ export const useGetUserDocument = ({ userId }: { userId: string }) => {
         if (!userId) {
           return false;
         }
-        const userDoc = await fetchUtil({
-          reqData: [{ userId: userId }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getManagement`,
+        const userDoc = await fetchApi({
+          arg: [{ userId: userId }],
+          url: `getManagement`,
         });
 
         return userDoc;

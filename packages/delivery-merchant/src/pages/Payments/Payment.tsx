@@ -25,22 +25,13 @@ import { t } from "utils/i18nextFix";
 import useGetStoreInfo from "hooks/useGetStoreInfo";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 // import { Helmet } from 'react-helmet-async'
-import { useDeleteSadadAPIKey } from "./hooks/useDeleteSadadKey";
-import {
-  useMakePayment,
-  useResendOTP,
-  useSendOTP,
-} from "./hooks/useMakePayment";
 
-import { useUpdatePaymentSettings } from "./hooks/useUpdatePaymentSettings";
 import useUpdateStoreOwnerInfo from "./hooks/useUpdateStoreOwnerInfo";
 
 import LocalCardAPIKey from "./components/LocalCardAPIKey";
 import { useDeleteLocalCardAPIKey } from "./hooks/useDeleteLocalCardAPIkey";
 import { useAddLocalCardAPIKeys } from "./hooks/useAddLocalCardAPIKey";
-import PayWithSadad from "./components/PayWithSadad";
-import { PayWithLocalCard } from "./components/PayWithLocalCard";
-import TransactionList from "components/TransactionList";
+
 import { useForm } from "@mantine/form";
 import { useDisableLocalCardKeys } from "./hooks/useDisableLocalCardKeys";
 import { useUpdateLocalCardSettings } from "./hooks/useUpdateLocalCardSettings";
@@ -54,6 +45,7 @@ interface PaymentsProps {}
 
 const Payments: React.FC<PaymentsProps> = () => {
   const { data, isLoading } = useGetStoreInfo();
+
   console.log("🚀 ~ file: Payment.tsx:54 ~ data", data);
   const [value, setValue] = useState<number>(0);
   const handlers = useRef<NumberInputHandlers>();
@@ -86,13 +78,13 @@ const Payments: React.FC<PaymentsProps> = () => {
         ownerLastName: data.ownerLastName,
         ownerPhoneNumber: data.ownerPhoneNumber,
 
-        sadadFilled: data?.sadadFilled,
-        sadadApiKey: data?.sadadApiKey,
-        MerchantId: data?.localCardAPIKey?.MerchantId,
-        TerminalId: data?.localCardAPIKey?.TerminalId,
-        secretKey: data?.localCardAPIKey?.secretKey,
+        // sadadFilled: data?.sadadFilled,
+        // sadadApiKey: data?.sadadApiKey,
+        // MerchantId: data?.merchantId,
+        // TerminalId: data?.terminalId,
+        // secretKey: data?.secretKey,
         includeLocalCardFeeToPrice: data?.includeLocalCardFeeToPrice,
-        LocalCardPAIKeyFilled: data?.localCardAPIKeyFilled,
+        LocalCardPAIKeyFilled: !!data?.localCardApiKeyId,
       });
     }
   }, [data, isLoading]);
@@ -222,14 +214,14 @@ const Payments: React.FC<PaymentsProps> = () => {
                   <Text>
                     {`${t("Started at")} ${
                       data?.timeOfPayment
-                        ? convertDate(data?.timeOfPayment)
+                        ? convertDate(data?.timeOfPayment as any)
                         : Number.NaN
                     }`}
                   </Text>
                   <Text>
                     {`${t("Ends at")} ${
                       data?.expirationDate
-                        ? convertDate(data?.expirationDate)
+                        ? convertDate(data?.expirationDate as any)
                         : Number.NaN
                     }`}
                   </Text>

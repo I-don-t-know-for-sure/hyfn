@@ -29,7 +29,7 @@ interface UserControl {
 }
 
 const UserProvider: React.FC = ({ children }) => {
-  const [userDocument, setUserDocument] = useLocalStorage({
+  const [userDocument, setUserDocument] = useLocalStorage<any>({
     key: USER_DOCUMENT,
   });
   const [userId, setUserId] = useLocalStorage({

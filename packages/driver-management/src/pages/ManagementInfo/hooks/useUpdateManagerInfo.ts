@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useUpdateManagerInfo = () => {
   return useMutation(
@@ -9,9 +9,9 @@ export const useUpdateManagerInfo = () => {
       managementAddress: string;
     }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [managerInfo],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/updateManagementInfo`,
+        const result = await fetchApi({
+          arg: [managerInfo],
+          url: `updateManagementInfo`,
         });
         return result;
       } catch (error) {}

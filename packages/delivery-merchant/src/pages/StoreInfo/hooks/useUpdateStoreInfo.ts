@@ -6,7 +6,7 @@ import useUploadImage from "hooks/useUploadImage";
 import { t } from "utils/i18nextFix";
 import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { generateProductsUrls } from "utils/generateProductsUrls";
 
 export const useUpdateStoreInfo = () => {
@@ -27,22 +27,19 @@ export const useUpdateStoreInfo = () => {
             })
           : storeInfo.image;
 
-        const result = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/updateStoreInfo`,
+        const result = await fetchApi({
+          url: `updateStoreInfo`,
 
-          reqData: [
-            userDocument.storeDoc,
-            { ...store, image: storeFrontImage },
-          ],
+          arg: [userDocument.storeDoc, { ...store, image: storeFrontImage }],
         });
         return result;
       }
       console.log(`${import.meta.env.VITE_APP_BASE_URL}/updateStoreInfo`);
 
-      const result = await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/updateStoreInfo`,
+      const result = await fetchApi({
+        url: `updateStoreInfo`,
 
-        reqData: [userDocument.storeDoc, { ...store }],
+        arg: [userDocument.storeDoc, { ...store }],
       });
 
       return result;

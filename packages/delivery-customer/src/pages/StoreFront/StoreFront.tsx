@@ -172,7 +172,7 @@ const StoreFront: React.FC<StoreFrontProps> = () => {
 
           <Box>
             <Text weight={700} style={{ fontSize: "34px" }}>
-              {data.businessName || data.storeName}
+              {data.storeName}
             </Text>
             <Box
               sx={{

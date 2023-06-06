@@ -1,12 +1,12 @@
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useAddEmployee = () => {
   return useMutation(async ({ employeeId }: { employeeId: string }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ employeeId }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/addEmployee`,
+      const result = await fetchApi({
+        arg: [{ employeeId }],
+        url: `addEmployee`,
       });
     } catch (error) {
       console.log(

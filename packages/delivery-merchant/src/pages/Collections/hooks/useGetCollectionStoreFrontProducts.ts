@@ -3,7 +3,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useInfiniteQuery, useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetCollectionStoreFrontProducts = ({
   collectionId,
@@ -20,8 +20,8 @@ export const useGetCollectionStoreFrontProducts = ({
       try {
         const { country } = userDocument.storeDoc as { country: string };
 
-        const result = await fetchUtil({
-          reqData: [
+        const result = await fetchApi({
+          arg: [
             {
               country,
               storeId: userDocument.id,

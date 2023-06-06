@@ -1,9 +1,9 @@
-import { useDebouncedValue } from '@mantine/hooks';
-import { useLocation } from 'contexts/locationContext/LocationContext';
+import { useDebouncedValue } from "@mantine/hooks";
+import { useLocation } from "contexts/locationContext/LocationContext";
 
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from "react";
 
-import fetchUtil from 'util/fetch';
+import { fetchApi } from "util/fetch";
 // import { UserContextApi } from "./types";
 // userInfo : {}
 // updaters: () => {}
@@ -21,7 +21,7 @@ interface SearchContextType {
 export const SearchContext = createContext(undefined);
 
 const SearchProvider: React.FC = ({ children }) => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [searchMode, setSearchMode] = useState(false);
   const [debouncedSearch] = useDebouncedValue(search, 400);
   const [hits, setHits] = useState([]);
@@ -29,19 +29,18 @@ const SearchProvider: React.FC = ({ children }) => {
 
   useMemo(async () => {
     if (debouncedSearch) {
-      const hits = await fetchUtil({
-        reqData: [
-          {
-            country: location.country,
-            searchType: 'product',
-            searchValue: debouncedSearch,
-          },
-        ],
-        url: 'https://h6zsuyeaqw7hajmrghmt34zudy0qcxpi.lambda-url.eu-south-1.on.aws/',
-      });
-      console.log(hits);
+      // const hits = await fetchApi({
+      //   arg: [
+      //     {
+      //       country: location.country,
+      //       searchType: "product",
+      //       searchValue: debouncedSearch,
+      //     },
+      //   ],
+      //   url: "",
+      // });
 
-      setHits(hits);
+      setHits([]);
     }
   }, [debouncedSearch, location.city, location.country]);
 
@@ -55,13 +54,15 @@ const SearchProvider: React.FC = ({ children }) => {
     hits,
   };
 
-  return <SearchContext.Provider value={values}>{children}</SearchContext.Provider>;
+  return (
+    <SearchContext.Provider value={values}>{children}</SearchContext.Provider>
+  );
 };
 
 export const useSearch = (): SearchContextType => {
   const search = useContext(SearchContext);
   if (!search) {
-    throw new Error('call inside the component tree');
+    throw new Error("call inside the component tree");
   }
 
   return search;

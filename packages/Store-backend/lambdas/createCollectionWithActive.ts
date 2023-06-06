@@ -1,4 +1,4 @@
-export const handlerHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
+export const createCollection = async ({ arg, client, userId, db }: MainFunctionProps) => {
   const result = await db.transaction().execute(async (trx) => {
     const { title, description, collectionType, isActive, addedProductsArray } = arg[0];
 
@@ -58,7 +58,7 @@ export const handler = async (event, ctx, callback) => {
     ctx,
     callback,
     event,
-    mainFunction: handlerHandler,
+    mainFunction: createCollection,
     sessionPrefrences: transactionOptions,
   });
   return response; // Ensures that the client will close when you finish/error

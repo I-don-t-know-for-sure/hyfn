@@ -21,7 +21,7 @@ import { t } from "../../util/i18nextFix";
 
 import { useLocation } from "../../contexts/locationContext/LocationContext";
 import { z } from "zod";
-import { useSendNotification } from "./hooks/useSendNotification";
+
 import { storeTypesArray } from "hyfn-types";
 
 // yarn add https://github.com/MyOrg/my-lib.git#branch
@@ -36,7 +36,7 @@ const Home: React.FC = () => {
       nearby,
       city,
     });
-  const { mutate } = useSendNotification();
+
   // useEffect(() => {
   //   console.log(
   //     window.innerHeight + window.scrollY >= document.body.offsetHeight
@@ -214,7 +214,7 @@ const Home: React.FC = () => {
               ]}
             >
               {data.pages.map((page) => {
-                return page?.map((store: Store) => {
+                return page?.map((store) => {
                   if (store.id === "collectionInfo") {
                     return;
                   }

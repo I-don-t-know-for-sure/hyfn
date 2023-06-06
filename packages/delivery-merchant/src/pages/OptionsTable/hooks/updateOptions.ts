@@ -3,7 +3,7 @@ import { randomId } from "@mantine/hooks";
 import { t } from "utils/i18nextFix";
 import { useMutation } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { useUser } from "contexts/userContext/User";
 
 export const useUpdateOptions = () => {
@@ -14,9 +14,9 @@ export const useUpdateOptions = () => {
     try {
       const validatedProducts = productsArray;
       const { country } = userDocument.storeDoc as { country: string };
-      const result = await fetchUtil({
-        reqData: [{ country, productsArray: validatedProducts }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/updateOptions`,
+      const result = await fetchApi({
+        arg: [{ country, productsArray: validatedProducts }],
+        url: `updateOptions`,
       });
 
       return result;

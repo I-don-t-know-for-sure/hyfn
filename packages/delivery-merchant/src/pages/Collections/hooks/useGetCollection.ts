@@ -7,16 +7,16 @@ import { t } from "utils/i18nextFix";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { CollectionInfo } from "../types";
 export const useGetCollection = (collectionId: string) => {
   const { userId, userDocument } = useUser();
 
   return useQuery([collection, collectionId], async () => {
     try {
-      const data = await fetchUtil({
-        reqData: [userDocument.storeDoc, collectionId],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getCollection`,
+      const data = await fetchApi({
+        arg: [userDocument.storeDoc, collectionId],
+        url: `getCollection`,
       });
 
       //body: JSON.stringify([user?.customData.storeDoc, collectionId]),

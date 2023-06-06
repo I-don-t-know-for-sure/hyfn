@@ -27,7 +27,7 @@ import { useQuery } from "react-query";
 
 import { t } from "utils/i18nextFix";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 // import { Helmet } from 'react-helmet-async'
 import { collections } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
@@ -67,9 +67,9 @@ const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
     data = [],
     isFetching,
   } = useQuery(collections, async () => {
-    const collections = await fetchUtil({
-      url: `${import.meta.env.VITE_APP_BASE_URL}/getAllCollections`,
-      reqData: [userDocument.storeDoc],
+    const collections = await fetchApi({
+      url: `getAllCollections`,
+      arg: [userDocument.storeDoc],
     });
 
     return collections;
@@ -280,7 +280,7 @@ const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
                             checkedFilter.active === undefined &&
                             filterText
                           ) {
-                            return collection.textInfo.title?.includes(
+                            return collection.title?.includes(
                               filterText.toLowerCase().trim()
                             );
                           }
@@ -289,7 +289,7 @@ const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
                             filterText
                           ) {
                             return (
-                              collection.textInfo.title?.includes(
+                              collection.title?.includes(
                                 filterText.toLowerCase().trim()
                               ) && checkedFilter.active === collection.isActive
                             );
@@ -319,10 +319,10 @@ const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
                                 component={Link}
                                 to={`/collection/${collection.id}`}
                               >
-                                {collection.textInfo.title}
+                                {collection.title}
                               </UnstyledButton>
                             </td>
-                            {collection.conditions ? (
+                            {false ? (
                               <td
                                 style={{
                                   textAlign: "center",

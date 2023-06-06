@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useAddLocalCardKeys = () => {
   return useMutation(
@@ -9,9 +9,9 @@ export const useAddLocalCardKeys = () => {
       secretKey: string;
     }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [keys],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/addLocalCardKeys`,
+        const result = await fetchApi({
+          arg: [{ ...keys, flag: "driverManagements" }],
+          url: `addLocalCardPaymentAPIKey`,
         });
         return result;
       } catch (error) {

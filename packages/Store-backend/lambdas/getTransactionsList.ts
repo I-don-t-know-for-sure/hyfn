@@ -3,7 +3,7 @@ interface GetTransactionsListProps extends Omit<MainFunctionProps, 'arg'> {
 }
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
-const getTransactionsList = async ({ arg, db }: MainFunctionProps) => {
+export const getTransactionsList = async ({ arg, db }: MainFunctionProps) => {
   const { userId: customerId, lastDoc: lastDoc, flag } = arg[0];
 
   const transactions = await db

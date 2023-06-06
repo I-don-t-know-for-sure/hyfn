@@ -10,8 +10,8 @@ import { encryptData, hex_to_ascii, MainFunctionProps, mainWrapper } from 'hyfn-
 import { returnsObj } from 'hyfn-types';
 const dataServicesURL = process.env.moalmlatDataService;
 
-const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFunctionProps) => {
-  const { TerminalId, MerchantId, secretKey, flag = 'store' } = arg[0];
+export const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFunctionProps) => {
+  const { terminalId, merchantId, secretKey, flag = 'store' } = arg[0];
 
   const userDocument = await db
     .selectFrom(flag === 'store' ? 'stores' : 'driverManagements')
@@ -26,7 +26,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
   const now = new Date();
 
   const merchantKey = hex_to_ascii(secretKey);
-  const strHashData = `DateTimeLocalTrxn=${now.getTime()}&MerchantId=${MerchantId}&TerminalId=${TerminalId}`;
+  const strHashData = `DateTimeLocalTrxn=${now.getTime()}&MerchantId=${merchantId}&TerminalId=${terminalId}`;
   const hashed = HmacSHA256(strHashData, merchantKey).toString().toUpperCase();
   const result = await axios.post(dataServicesURL, {
     // method: 'POST',
@@ -35,8 +35,8 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
     // },
     // data: {
     MerchantReference: '',
-    TerminalId: TerminalId,
-    MerchantId: MerchantId,
+    TerminalId: terminalId,
+    MerchantId: merchantId,
     DisplayLength: 1,
     DisplayStart: 0,
     DateTimeLocalTrxn: `${now.getTime()}`,
@@ -51,7 +51,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
     const localCardKey = await trx
       .selectFrom('localCardKeys')
       .selectAll()
-      .where('merchantId', '=', MerchantId)
+      .where('merchantId', '=', merchantId)
       .executeTakeFirst();
 
     // if the store already have localcardkeys then we change the keys and set the old inUse to false
@@ -59,18 +59,24 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
       if (userDocument.localCardApiKeyId === localCardKey.id) {
         throw new Error(returnsObj['this key already linked to your store']);
       }
-      await trx
-        .updateTable('localCardKeys')
-        .set({
-          inUse: false,
-        })
-        .where('id', '=', userDocument.localCardApiKeyId)
-        .execute();
+      // await trx
+      //   .updateTable('localCardKeys')
+      //   .set({
+      //     inUse: false,
+      //   })
+      //   .where('id', '=', userDocument.localCardApiKeyId)
+      //   .execute();
     }
     if (localCardKey) {
-      if (localCardKey.inUse) {
+      const usersUsingTheApiKey = await trx
+        .selectFrom(flag === 'store' ? 'stores' : 'driverManagements')
+        .select(['id'])
+        .where('localCardApiKeyId', '=', localCardKey.id)
+        .executeTakeFirst();
+      if (usersUsingTheApiKey) {
         throw new Error(returnsObj['these keys are already being used by another account']);
       }
+
       // establish relationship between localCardKey and store
       await trx
         .updateTable(flag === 'store' ? 'stores' : 'driverManagements')
@@ -78,7 +84,7 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
           localCardApiKeyId: localCardKey.id,
         })
         .where('userId', '=', userId)
-        .execute();
+        .executeTakeFirst();
       // add to the activity that this store at least had a relationship with this localCardKey
       await trx
         .insertInto('localCardKeyStoreActivity')
@@ -95,10 +101,10 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
     const insertedLocalCardKey = await trx
       .insertInto('localCardKeys')
       .values({
-        merchantId: MerchantId,
-        terminalId: TerminalId,
+        merchantId: merchantId,
+        terminalId: terminalId,
         secretKey: encryptedSecretkey,
-        inUse: true,
+        // inUse: true,
       })
       .returning('id')
       .executeTakeFirst();
@@ -114,10 +120,15 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
         })
         .where('userId', '=', userId)
         .execute();
+    } else {
+      await trx
+        .updateTable('driverManagements')
+        .set({
+          localCardApiKeyId: insertedLocalCardKey.id,
+        })
+        .where('userId', '=', userId)
+        .execute();
     }
-    // establish relationship between localCardKey and store
-
-    // add to the activity that this store at least had a relationship with this localCardKey
 
     await trx
       .insertInto('localCardKeyStoreActivity')
@@ -126,6 +137,9 @@ const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: MainFuncti
         storeId,
       })
       .executeTakeFirst();
+    // establish relationship between localCardKey and store
+
+    // add to the activity that this store at least had a relationship with this localCardKey
 
     return flag === 'store' ? returnsObj['success and added a month free'] : returnsObj['success'];
   });

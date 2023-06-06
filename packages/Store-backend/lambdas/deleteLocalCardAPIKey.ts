@@ -3,7 +3,7 @@ interface DeleteLocalCardAPIKeyProps extends Omit<MainFunctionProps, 'arg'> {
 }
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
-const deleteLocalCardAPIKey = async ({ db, userId }: MainFunctionProps) => {
+export const deleteLocalCardAPIKey = async ({ db, userId }: MainFunctionProps) => {
   const response = await db.transaction().execute(async (trx) => {
     const storeDoc = await trx
       .selectFrom('stores')

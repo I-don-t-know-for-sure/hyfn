@@ -5,7 +5,7 @@ import { t } from "utils/i18nextFix";
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 // export const useUpdateOrderStatus = () => {
 //   const { user } = useRealmApp();
@@ -20,9 +20,9 @@ import fetchUtil from "utils/fetch";
 //         };
 //         //[user?.customData.storeDoc, orderId]
 //         // https://jrjtsu634ccvyllh523gnnyzoa0knerr.lambda-url.eu-south-1.on.aws/
-//         await fetchUtil({
+//         await fetchApi({
 //           url: "https://ublnivodfwu4zztitbpu5qoyp40kkhzl.lambda-url.eu-south-1.on.aws/",
-//           reqData: [{ country, id, status, orderId }],
+//           arg: [{ country, id, status, orderId }],
 //           user,
 //         });
 //       } catch (e) {
@@ -41,9 +41,9 @@ export const useRejectOrder = () => {
       const {
         storeDoc: { country },
       } = userDocument;
-      await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/rejectOrder`,
-        reqData: [{ storeId: userDocument?.id, orderId, country }],
+      await fetchApi({
+        url: `rejectOrder`,
+        arg: [{ storeId: userDocument?.id, orderId, country }],
       });
     } catch (error) {
       console.log(

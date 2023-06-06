@@ -52,7 +52,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
 
   useEffect(() => {
     if (data && !isLoading && isFetched) {
-      setProductInfo(data);
+      setProductInfo(data as any);
     }
   }, [isFetched]);
 

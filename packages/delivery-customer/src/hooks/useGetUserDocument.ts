@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useGetUserDocument = ({
   userId,
@@ -13,11 +13,11 @@ export const useGetUserDocument = ({
       console.log("shshshshjcdjcbdjcbdhcbhdbchbhd");
 
       if (!userId) {
-        return false;
+        throw new Error();
       }
-      const userDoc = await fetchUtil({
-        reqData: [userId],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getCustomerData`,
+      const userDoc = await fetchApi({
+        arg: [userId],
+        url: `getCustomerData`,
       });
       console.log(
         "🚀 ~ file: useGetUserDocument.ts:21 ~ returnuseQuery ~ userDoc",
@@ -28,7 +28,7 @@ export const useGetUserDocument = ({
       }
       return userDoc;
     } catch (error) {
-      return new Error(error as string);
+      throw new Error(error as string);
     }
   });
 };

@@ -6,7 +6,8 @@ export const setOrderAsPickedUpHandler = async ({
   db,
   userId,
 }: MainFunctionProps) => {
-  const { orderId, confirmationCode } = arg[0];
+  const { orderId, pickupConfirmation } = arg[0];
+  console.log('🚀 ~ file: setOrderAsPickedUp.ts:10 ~ confirmationCode:', pickupConfirmation);
 
   const driverDoc = await db
     .selectFrom('drivers')
@@ -34,13 +35,13 @@ export const setOrderAsPickedUpHandler = async ({
   }
 
   if (orderDoc.storeId !== orderDoc.driverManagement) {
-    if (confirmationCode !== orderDoc.storePickupConfirmation)
+    if (pickupConfirmation !== orderDoc.storePickupConfirmation)
       throw new Error(returnsObj['code does not match']);
   }
   await db
     .updateTable('orders')
     .set({
-      storeStatus: sql`store_status || ${'pickedUp'}`,
+      storeStatus: sql`store_status || ${['pickedUp']}`,
     })
     .where('id', '=', orderId)
     .where('driverId', '=', driverDoc.id)

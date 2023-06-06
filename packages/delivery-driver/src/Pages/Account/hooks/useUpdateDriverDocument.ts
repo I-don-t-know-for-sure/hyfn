@@ -6,7 +6,7 @@ import useUploadImage from "hooks/useUploadImage";
 import { t } from "utils/i18nextFix";
 import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useUpdateDriverDocument = () => {
   const { userDocument: user } = useUser();
@@ -28,8 +28,8 @@ export const useUpdateDriverDocument = () => {
         ? driverInfo.passportAndFacePic
         : await uploadImage([driverInfo.passportAndFacePic]);
 
-      const result = await fetchUtil({
-        reqData: [
+      const result = await fetchApi({
+        arg: [
           user?.id,
           {
             ...driverInfo,
@@ -37,7 +37,7 @@ export const useUpdateDriverDocument = () => {
             passportPic: passportPicKey,
           },
         ],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/updateDriverDocument`,
+        url: `updateDriverDocument`,
       });
 
       return result;

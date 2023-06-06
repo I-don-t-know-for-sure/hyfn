@@ -5,7 +5,7 @@ import { useUser } from "../../../contexts/userContext/User";
 
 import { t } from "../../../util/i18nextFix";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import fetchUtil from "../../../util/fetch";
+import { fetchApi } from "../../../util/fetch";
 
 export const useSetProductAsNotFound = () => {
   const { userDocument: user } = useUser();
@@ -23,8 +23,8 @@ export const useSetProductAsNotFound = () => {
       orderId: string;
     }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [
+        const result = await fetchApi({
+          arg: [
             {
               country,
               storeId,
@@ -33,7 +33,7 @@ export const useSetProductAsNotFound = () => {
               orderId,
             },
           ],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/setProductAsNotFound`,
+          url: `setProductAsNotFound`,
         });
 
         return result;

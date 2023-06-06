@@ -1,12 +1,12 @@
 import { useMutation } from "react-query";
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useValidateTransaction = () => {
   return useMutation(async ({ transactionId }: { transactionId: string }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ transactionId }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/validateTransaction`,
+      const result = await fetchApi({
+        arg: [{ transactionId }],
+        url: `validateTransaction`,
       });
       return result;
     } catch (error) {

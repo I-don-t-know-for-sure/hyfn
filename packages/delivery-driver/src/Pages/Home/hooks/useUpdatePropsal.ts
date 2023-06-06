@@ -1,6 +1,6 @@
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useUpdateProposal = () => {
   const [{ country }] = useLocation();
@@ -8,9 +8,9 @@ export const useUpdateProposal = () => {
   return useMutation(
     async ({ orderId, price }: { orderId: string; price: number }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ country, orderId, price }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/updateProposal`,
+        const result = await fetchApi({
+          arg: [{ country, orderId, price }],
+          url: `updateProposal`,
         });
         return result;
       } catch (error) {

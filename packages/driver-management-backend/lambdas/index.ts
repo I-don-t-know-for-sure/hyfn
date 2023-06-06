@@ -14,9 +14,10 @@ import { replaceOrderDriverHandler } from './replaceOrderDriver';
 import { reportOrderHandler } from './reportOrder';
 import { searchDriverByIdHandler } from './searchDriverById';
 import { updateDriverBalanceHandler } from './updateDriverBalance';
+import { updateNotificationTokensHandler } from './updateNotificationTokens';
 
 export type LambdaHandlers = {
-  getManagementDocument: {
+  getManagement: {
     arg: Parameters<typeof getManagementHandler>['0']['arg'];
     return: ReturnType<typeof getManagementHandler>;
   };
@@ -46,6 +47,10 @@ export type LambdaHandlers = {
   updateManagementInfo: {
     arg: Parameters<typeof getManagementHandler>['0']['arg'];
     return: ReturnType<typeof getManagementHandler>;
+  };
+  updateNotificationTokens: {
+    arg: Parameters<typeof updateNotificationTokensHandler>['0']['arg'];
+    return: ReturnType<typeof updateNotificationTokensHandler>;
   };
 };
 export type DriverManagementHandlers = {

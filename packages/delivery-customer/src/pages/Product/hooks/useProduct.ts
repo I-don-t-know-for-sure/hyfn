@@ -5,7 +5,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "util/i18nextFix";
 import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 import Product from "../Product";
 
 export const useLikeProduct = () => {
@@ -23,9 +23,9 @@ export const useLikeProduct = () => {
     }) => {
       try {
         updateLikes(storeInfo.storeId, storeInfo.productId);
-        const result = await fetchUtil({
+        const result = await fetchApi({
           url: import.meta.env.VITE_APP_LIKEPRODUCT,
-          reqData: [{ customerId: userId, ...storeInfo }],
+          arg: [{ customerId: userId, ...storeInfo }],
         });
 
         return result;

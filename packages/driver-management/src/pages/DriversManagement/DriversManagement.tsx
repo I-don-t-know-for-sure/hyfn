@@ -1,29 +1,12 @@
-import {
-  ActionIcon,
-  Button,
-  Card,
-  Center,
-  Container,
-  Group,
-  Loader,
-  Paper,
-  Text,
-  TextInput,
-} from "@mantine/core";
-import { useUser } from "contexts/userContext/User";
-import { t } from "../../utils/i18nextFix";
 import React, { useEffect, useState } from "react";
-import AddToWalletModal from "./components/AddToWalletModal";
-import DriverCard from "./components/DriverCard";
-import DriversTable from "./components/DriversTable";
-import WalletModal from "./components/WalletModal";
+
 import { DriversManagement as Managment } from "hyfn-client";
 import { useAddDriverToManagementDrivers } from "./hooks/useAddDriverToStoreDrivers";
 import { useGetStoreDrivers } from "./hooks/useGetStoreDrivers";
 import { useRemoveDriverFromManagementDrivers } from "./hooks/useRemoveDriverFromStoreDrivers";
 import { useSearchDriverByID } from "./hooks/useSearchDriverByID";
 import { useUpdateDriverBalance } from "./hooks/useUpdateDriverBalance";
-import { AiFillCloseCircle } from "react-icons/ai";
+
 import { z } from "zod";
 
 interface DriversManagementProps {}

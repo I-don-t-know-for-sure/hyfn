@@ -9,7 +9,7 @@ import {
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { t } from "utils/i18nextFix";
 import { productsSearch } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
@@ -26,8 +26,8 @@ export const useSearchProducts = (value: string) => {
           storeFrontId: string;
         };
 
-        const result = await fetchUtil({
-          reqData: [{ value, country, storeId }],
+        const result = await fetchApi({
+          arg: [{ value, country, storeId }],
           url: import.meta.env.VITE_APP_SEARCH_PRODUCTS,
         });
         return result;

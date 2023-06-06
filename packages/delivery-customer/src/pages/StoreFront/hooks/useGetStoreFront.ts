@@ -7,7 +7,7 @@ import { t } from "util/i18nextFix";
 import { useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 export const useGetStoreFront = ({
   storefront,
@@ -21,9 +21,9 @@ export const useGetStoreFront = ({
   const { customerData } = useCustomerData();
   return useQuery([STOREFRONT, storefront], async () => {
     try {
-      const result = await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getStoreFront`,
-        reqData: [{ city, country }, storefront],
+      const result = await fetchApi({
+        url: `getStoreFront`,
+        arg: [{ city, country }, storefront],
       });
 
       return result;

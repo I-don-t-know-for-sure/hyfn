@@ -4,7 +4,7 @@ import { useUser } from "contexts/userContext/User";
 
 import { useInfiniteQuery, useQuery } from "react-query";
 
-import fetchUtil from "util/fetch";
+import { fetchApi } from "util/fetch";
 
 const useGetStores = ({
   filter,
@@ -23,14 +23,14 @@ const useGetStores = ({
   return useInfiniteQuery(
     [STORES, nearby, filter, city],
     async ({ pageParam = 0 }) => {
-      return await fetchUtil({
-        url: `${import.meta.env.VITE_APP_BASE_URL}/getStoreFronts`,
-        reqData: [{ coords, nearby, filter, lastDocNumber: pageParam }],
+      return await fetchApi({
+        url: `getStoreFronts`,
+        arg: [{ coords, nearby, filter, lastDocNumber: pageParam }],
       });
     },
     {
       keepPreviousData: true,
-      getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+      // getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
       enabled: !!userDocument,
     }
   );

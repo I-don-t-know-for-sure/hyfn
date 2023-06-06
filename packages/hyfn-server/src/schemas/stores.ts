@@ -78,11 +78,11 @@ export const stores = pgTable(
   },
   (table) => {
     return {
-      userIdx: uniqueIndex("user_idx").on(table.userId),
-      usersIdsx: index("users_idsx").on(table.usersIds),
-      latx: index("latx").on(table.lat),
-      longx: index("longx").on(table.long),
-      localCardApiKeyIdx: uniqueIndex("local_card_api_key_id").on(
+      userIdx: uniqueIndex("store_user_idx").on(table.userId),
+      usersIdsx: index("store_users_idsx").on(table.usersIds),
+      latx: index("store_latx").on(table.lat),
+      longx: index("store_longx").on(table.long),
+      localCardApiKeyIdx: uniqueIndex("store_local_card_api_key_id").on(
         table.localCardApiKeyId
       ),
     };

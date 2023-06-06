@@ -6,7 +6,7 @@ import { MainFunctionProps } from 'hyfn-server/src';
 interface GetTransactionsProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
-const getTransactions = async ({ arg, client, db }: GetTransactionsProps) => {
+export const getTransactions = async ({ arg, client, db }: GetTransactionsProps) => {
   const { customerId, lastDoc } = arg[0];
 
   const transactions = await db

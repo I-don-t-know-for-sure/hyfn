@@ -65,20 +65,16 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
       ) : (
         orders?.pages?.map((page) => {
           return page?.map((order) => {
-            const store = order.orders.find((store) => {
-              return store.id === storeDocId;
-            });
-            const storeProducts = order.orders.find(
-              (store) => store.id === storeDocId
-            ).addedProducts;
+            const store = order.stores[0];
+            const storeProducts = order.addedProducts;
 
             const orderTotal = storeProducts.reduce((accu, currentProduct) => {
               return (
                 accu +
-                currentProduct.pricing.price *
-                  (store.storeType.includes(STORE_TYPE_RESTAURANT)
-                    ? currentProduct.qty
-                    : currentProduct?.pickup?.QTYFound)
+                currentProduct.price *
+                  (store.storeType.includes("restaurant")
+                    ? (currentProduct.qty as any)
+                    : currentProduct?.qtyFound)
               );
             }, 0);
             const orderSaleFee = parseFloat(
@@ -117,45 +113,43 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {order.orders
-                        .find((store) => store.id === storeDocId)
-                        .addedProducts.map((product, index) => {
-                          return (
-                            <tr>
-                              <td>
-                                <Text>{product.textInfo.title}</Text>
-                              </td>
-                              <td>{product.qty}</td>
-                              <td>
-                                <Image
-                                  radius={4}
-                                  sx={{
-                                    width: "45px",
-                                    height: "45px",
-                                    maxWidth: "45px",
-                                    maxHeight: "45px",
-                                  }}
-                                  src={`${
-                                    import.meta.env.VITE_APP_BUCKET_URL
-                                  }/tablet/${product.images[0]}`}
-                                />
-                              </td>
-                              <td>
-                                {product.options.length > 0 ? (
-                                  <OptionsModal options={product.options} />
-                                ) : (
-                                  <Text weight={700}>{t("No options")}</Text>
-                                )}
-                              </td>
-                              <td>
-                                <SetProductAsInactiveButton
-                                  product={product}
-                                  updateProductState={updateProductState}
-                                />
-                              </td>
-                            </tr>
-                          );
-                        })}
+                      {order.addedProducts.map((product, index) => {
+                        return (
+                          <tr>
+                            <td>
+                              <Text>{product.title}</Text>
+                            </td>
+                            <td>{product.qty}</td>
+                            <td>
+                              <Image
+                                radius={4}
+                                sx={{
+                                  width: "45px",
+                                  height: "45px",
+                                  maxWidth: "45px",
+                                  maxHeight: "45px",
+                                }}
+                                src={`${
+                                  import.meta.env.VITE_APP_BUCKET_URL
+                                }/tablet/${product.images[0]}`}
+                              />
+                            </td>
+                            <td>
+                              {product.options.length > 0 ? (
+                                <OptionsModal options={product.options} />
+                              ) : (
+                                <Text weight={700}>{t("No options")}</Text>
+                              )}
+                            </td>
+                            <td>
+                              <SetProductAsInactiveButton
+                                product={product}
+                                updateProductState={updateProductState}
+                              />
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </Table>
                 </Box>

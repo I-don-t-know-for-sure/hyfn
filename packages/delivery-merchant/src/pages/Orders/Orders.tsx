@@ -1,25 +1,4 @@
-import {
-  Badge,
-  Box,
-  Button,
-  Card,
-  Container,
-  Group,
-  Image,
-  Loader,
-  Space,
-  Table,
-  Text,
-} from "@mantine/core";
-import { useUser } from "contexts/userContext/User";
-import { t } from "utils/i18nextFix";
-
 import React from "react";
-import ActiveOrders from "./Components/ActiveOrders";
-import { useGetActiveOrders } from "./hooks/useGetActiveOrders";
-
-import { useGetPendingOrders } from "./hooks/useGetPendingOrders";
-import { useOrderControlers } from "./hooks/useOrderControlers";
 
 interface OrdersProps {}
 

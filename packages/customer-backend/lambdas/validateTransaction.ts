@@ -61,7 +61,7 @@ export const validateLocalCardTransaction = async ({
       .innerJoin('localCardKeys', 'driverManagements.localCardApiKeyId', 'localCardKeys.id')
       .selectAll('driverManagements')
       .select(['localCardKeys.merchantId', 'localCardKeys.secretKey', 'localCardKeys.terminalId'])
-      .where('id', '=', transaction.storeId)
+      .where('driverManagements.id', '=', transaction.storeId)
       .executeTakeFirstOrThrow();
 
     var {
@@ -136,7 +136,7 @@ export const validateLocalCardTransaction = async ({
         .innerJoin('stores', 'orders.storeId', 'stores.id')
         .selectAll('orders')
         .select(['stores.storeType'])
-        .where('id', '=', transaction.orderId)
+        .where('orders.id', '=', transaction.orderId)
         .executeTakeFirst();
       await db
         .updateTable('orders')

@@ -9,7 +9,7 @@ import {
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { t } from "utils/i18nextFix";
 import { useUser } from "contexts/userContext/User";
 
@@ -33,8 +33,8 @@ export const useDownlaodProducts = () => {
         document.body.appendChild(link);
         link.click();
       });
-      // const result = await fetchUtil({
-      //   reqData: [{ storeId: user.customData.id, country }],
+      // const result = await fetchApi({
+      //   arg: [{ storeId: user.customData.id, country }],
       //   url: import.meta.env.VITE_APP_DOWNLOAD_ALL_PRODUCTS,
       //   user,
       // });

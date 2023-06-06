@@ -1,7 +1,6 @@
 export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFunctionProps) => {
   var result;
   const { orderId, storeId, country } = arg[0];
-  type Store = z.infer<typeof storeSchema>;
 
   const userDocument = await db
     .selectFrom('stores')
@@ -97,12 +96,7 @@ interface RejectOrderProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { ObjectId } from 'mongodb';
-import {
-  ORDER_TYPE_DELIVERY,
-  ORDER_TYPE_PICKUP,
-  STORE_STATUS_PENDING,
-  storeSchema,
-} from 'hyfn-types';
+import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP, STORE_STATUS_PENDING } from 'hyfn-types';
 import deepEqual from 'deep-equal';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 import { z } from 'zod';

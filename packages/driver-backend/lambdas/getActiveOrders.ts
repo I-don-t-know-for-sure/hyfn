@@ -1,5 +1,13 @@
 ('use strict');
-import { MainFunctionProps, buildJson, mainWrapper, tOrderProducts, tStores } from 'hyfn-server';
+import {
+  MainFunctionProps,
+  buildJson,
+  mainWrapper,
+  tOrderProduct,
+  tOrderProducts,
+  tStore,
+  tStores,
+} from 'hyfn-server';
 
 interface GetActiveOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
@@ -17,9 +25,9 @@ export const getActiveOrderHandler = async ({ arg, client, db, userId }: MainFun
     .selectFrom('orders')
     .innerJoin('orderProducts', 'orderProducts.orderId', 'orders.id')
     .innerJoin('stores', 'stores.id', 'orders.storeId')
-    .select(buildJson(tOrderProducts, '*').as('addedProducts'))
     .selectAll('orders')
-    .select(buildJson(tStores, '*').as('stores'))
+    .select(buildJson<tOrderProduct>(tOrderProducts, '*').as('addedProducts'))
+    .select(buildJson<tStore>(tStores, '*').as('stores'))
     .where('orders.driverId', '=', driver.id)
     // .where(sql`${tOrders.orderStatus}[-1] <> all (array[${sql.join(['delivered', 'canceled'])}])`)
 

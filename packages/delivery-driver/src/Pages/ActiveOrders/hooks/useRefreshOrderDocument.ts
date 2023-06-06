@@ -4,7 +4,7 @@ import { useLocation } from "contexts/locationContext/LocationContext";
 // import { useLocation } from 'contexts/locationContext/LocationContext';
 import { t } from "utils/i18nextFix";
 import { useQuery, useQueryClient } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
   const [{ country }] = useLocation();
@@ -14,9 +14,9 @@ export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
     [],
     async () => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ orderId, country }],
-          url: `${import.meta.env.VITE_APP_CUSTOMER_BASE_URL}/getOrderDocument`,
+        const result = await fetchApi({
+          arg: [{ orderId }],
+          url: `getOrder`,
         });
 
         const cachedQuery = queryClient.getQueryData([ACTIVE_ORDERS]) as {

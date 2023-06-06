@@ -20,7 +20,6 @@ import {
   LoadingOverlay,
   Text,
   Stack,
-  CopyTextButton,
 } from "@mantine/core";
 import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import { useEffect, useState } from "react";
@@ -47,12 +46,11 @@ import { t } from "utils/i18nextFix";
 import { useForm } from "@mantine/form";
 import { useTranslation } from "react-i18next";
 import { useUserCheck } from "hooks/useUserCheck";
-import TransactionList from "components/TransactionList";
 
 import { useQueryClient } from "react-query";
 import { useUser } from "contexts/userContext/User";
 import CreateAccountModal from "components/CreateAccountModal";
-import { CopyButton } from "hyfn-client";
+import { CopyButton, CopyTextButton } from "hyfn-client";
 
 const StyledNav: React.FC = ({ children, ...rest }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
@@ -524,7 +522,6 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                 />
                 {t('Logout')}
               </UnstyledButton> */}
-              <TransactionList menu />
 
               <Group
                 position="apart"

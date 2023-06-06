@@ -1,15 +1,15 @@
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useMutation } from "react-query";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useDeleteProposal = () => {
   const [{ country }] = useLocation();
 
   return useMutation(async ({ orderId }: { orderId: string }) => {
     try {
-      const result = await fetchUtil({
-        reqData: [{ country, orderId }],
-        url: `${import.meta.env.VITE_APP_BASE_URL}/deleteProposal`,
+      const result = await fetchApi({
+        arg: [{ country, orderId }],
+        url: `deleteProposal`,
       });
       return result;
     } catch (error) {

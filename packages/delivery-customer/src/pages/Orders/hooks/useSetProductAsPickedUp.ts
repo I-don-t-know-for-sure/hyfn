@@ -5,7 +5,7 @@ import { useUser } from "../../../contexts/userContext/User";
 
 import { t } from "../../../util/i18nextFix";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import fetchUtil from "../../../util/fetch";
+import { fetchApi } from "../../../util/fetch";
 
 export const useSetProductAsPickedUp = () => {
   const { userDocument: user } = useUser();
@@ -45,8 +45,8 @@ export const useSetProductAsPickedUp = () => {
 
           driverId: user?.id,
         });
-        const result = await fetchUtil({
-          reqData: [
+        const result = await fetchApi({
+          arg: [
             {
               country,
               storeId,
@@ -55,7 +55,7 @@ export const useSetProductAsPickedUp = () => {
               orderId,
             },
           ],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/setProductAsPickedUp`,
+          url: `setProductAsPickedUp`,
         });
         return result;
       } catch (error) {

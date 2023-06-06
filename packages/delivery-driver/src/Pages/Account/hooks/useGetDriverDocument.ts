@@ -7,7 +7,7 @@ import useUploadImage from "hooks/useUploadImage";
 import { t } from "utils/i18nextFix";
 import { useMutation, useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetDriverDocument = () => {
   const { userDocument, refetch, isLoading } = useUser();
@@ -16,9 +16,9 @@ export const useGetDriverDocument = () => {
     [driverDoc, userDocument.id],
     async () => {
       try {
-        const result = await fetchUtil({
-          reqData: [{ driverId: userDocument.id }],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getDriverDocument`,
+        const result = await fetchApi({
+          arg: [{ driverId: userDocument.id }],
+          url: `getDriverDocument`,
         });
         return result;
       } catch (error) {

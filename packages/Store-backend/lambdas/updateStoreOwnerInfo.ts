@@ -27,7 +27,6 @@ interface UpdateStoreOwnerInfoProps extends Omit<MainFunctionProps, 'arg'> {
 
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
-import { sql } from 'kysely';
 export const handler = async (event, ctx) => {
   return await mainWrapper({
     event,

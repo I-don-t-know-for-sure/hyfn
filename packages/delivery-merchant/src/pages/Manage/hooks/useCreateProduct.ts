@@ -9,7 +9,7 @@ import {
 
 import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 import { t } from "utils/i18nextFix";
 import { useUser } from "contexts/userContext/User";
 import { generateProductsUrls } from "utils/generateProductsUrls";
@@ -42,10 +42,10 @@ export const useCreateProduct = () => {
           ? productLibraryImages
           : [];
 
-        const data = await fetchUtil({
-          url: `${import.meta.env.VITE_APP_BASE_URL}/createProduct`,
+        const data = await fetchApi({
+          url: `createProduct`,
 
-          reqData: [
+          arg: [
             {
               ...product,
               imagesURLs: [...imagesURLs, ...libraryImages],

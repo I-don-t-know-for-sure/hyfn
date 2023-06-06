@@ -3,7 +3,7 @@ import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useInfiniteQuery, useQuery } from "react-query";
 
-import fetchUtil from "utils/fetch";
+import { fetchApi } from "utils/fetch";
 
 export const useGetCollectionProducts = ({
   collectionId,
@@ -18,15 +18,15 @@ export const useGetCollectionProducts = ({
     [collectionProducts, collectionId],
     async ({ pageParam }) => {
       try {
-        const result = await fetchUtil({
-          reqData: [
+        const result = await fetchApi({
+          arg: [
             {
               storeId: userDocument.id,
               lastDoc: pageParam,
               collectionId,
             },
           ],
-          url: `${import.meta.env.VITE_APP_BASE_URL}/getCollectionProducts`,
+          url: `getCollectionProducts`,
         });
         console.log(result);
 
