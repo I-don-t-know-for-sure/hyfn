@@ -56,6 +56,7 @@
   ],
   "dependencies": {
     "//": "test end",
+    "store-backend": "*",
     "@aws-sdk/client-kms": "^3.271.0",
     "@emotion/react": "^11.11.0",
     "@emotion/server": "^11.4.0",

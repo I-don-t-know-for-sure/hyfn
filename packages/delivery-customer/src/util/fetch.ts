@@ -7,7 +7,7 @@ import {
   successNotification,
 } from "hyfn-client";
 import { LambdaHandlers, TransactionsHandler } from "customer-backend";
-import { GetOrder } from "Store-backend";
+import { GetOrder } from "store-backend";
 
 type Handlers = LambdaHandlers & TransactionsHandler & GetOrder;
 
