@@ -5,6 +5,7 @@
   "main": "lambdas/index.ts",
   "module": "lambdas/index.ts",
   "types": "lambdas/index.ts",
+  "type": "module",
   "dependencies": {},
   "scripts": {
     "envs": "node ./fetch-envs.js",
