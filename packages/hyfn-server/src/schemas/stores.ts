@@ -27,7 +27,7 @@ export const stores = pgTable(
     userId: varchar("user_id").notNull(),
 
     storeType: varchar("store_type", {
-      enum: [...storeTypesArray],
+      enum: storeTypesArray,
     })
       .array()
       .notNull(),
@@ -75,6 +75,7 @@ export const stores = pgTable(
     onlyStoreDriversCanTakeOrders: boolean(
       "only_store_drivers_can_take_orders"
     ).default(false),
+    includeDeliveryFee: boolean("include_delivery_fee").default(false),
   },
   (table) => {
     return {

@@ -1,13 +1,13 @@
-import { ORDER_TYPE_PICKUP, STORE_TYPE_RESTAURANT } from "hyfn-types";
+import { orderTypesObject, storeTypesObject } from "hyfn-types";
 
 export const changeOrderType = (orderType, setCartInfo: any) => {
   setCartInfo((prevInfo) => {
     const storesTypes = Object.keys(prevInfo).map((storeKey) => {
-      return prevInfo[storeKey].storeType.includes(STORE_TYPE_RESTAURANT);
+      return prevInfo[storeKey].storeType.includes(storeTypesObject.restaurant);
     });
 
     const isAllRestuarants = !storesTypes.includes(false);
-    if (orderType === ORDER_TYPE_PICKUP) {
+    if (orderType === orderTypesObject.Pickup) {
     }
     console.log(storesTypes, isAllRestuarants);
 

@@ -9,6 +9,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
+import { transportationMethodsArray } from "hyfn-types";
 import * as z from "zod";
 export const drivers = pgTable(
   "drivers",
@@ -19,7 +20,7 @@ export const drivers = pgTable(
 
     driverPhone: varchar("driver_phone").notNull(),
     tarnsportationMethod: varchar("tarnsportation_method", {
-      enum: ["Car"],
+      enum: transportationMethodsArray,
     }).notNull(),
     userId: varchar("user_id").notNull(),
     verified: boolean("verified").default(false),
@@ -27,7 +28,7 @@ export const drivers = pgTable(
     driverManagement: varchar("driver_management"),
     notificationTokens: varchar("notification_tokens").array().notNull(),
     usedBalance: decimal("used_balance").notNull(),
-    // reported: boolean("reported"),
+
     reportsIds: uuid("reports_ids").array().notNull(),
     removeDriverAfterOrder: boolean("remove_driver_after_order").default(false),
   },

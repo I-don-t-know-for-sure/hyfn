@@ -27,7 +27,7 @@ export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFuncti
   const orderReported = orderDoc.reported;
   if (orderReported) throw new Error('this order is blocked because it`s reported');
 
-  if (deletedStore.orderStatus !== STORE_STATUS_PENDING) {
+  if (deletedStore.orderStatus !== storeStatusObject.pending) {
     throw new Error(returnsObj['can not edit the order after being accepted']);
   }
 
@@ -55,10 +55,10 @@ export const rejectOrderHandler = async ({ arg, client, userId, db }: MainFuncti
     throw new Error(returnsObj['order status did not change']);
   }
 
-  if (orderType === ORDER_TYPE_PICKUP) {
+  if (orderType === orderTypesObject.Pickup) {
     throw new Error(returnsObj['service fee already paid']);
   }
-  if (orderType === ORDER_TYPE_DELIVERY) {
+  if (orderType === orderTypesObject.Delivery) {
     if (orderDoc.serviceFeePaid) {
       throw new Error(returnsObj['service fee already paid']);
     }
@@ -96,11 +96,11 @@ interface RejectOrderProps extends Omit<MainFunctionProps, 'arg'> {
 }
 ('use strict');
 import { ObjectId } from 'mongodb';
-import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP, STORE_STATUS_PENDING } from 'hyfn-types';
+
 import deepEqual from 'deep-equal';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { z } from 'zod';
-import { returnsObj } from 'hyfn-types';
+
+import { orderTypesObject, returnsObj, storeStatusObject } from 'hyfn-types';
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, ctx, mainFunction: rejectOrderHandler });
 };

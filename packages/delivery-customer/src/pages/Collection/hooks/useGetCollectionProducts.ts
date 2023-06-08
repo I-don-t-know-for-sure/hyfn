@@ -1,4 +1,3 @@
-import { COLLECTION } from "hyfn-types";
 import { useInfiniteQuery, useQuery } from "react-query";
 
 import { fetchApi } from "../../../util/fetch";
@@ -19,7 +18,7 @@ export const useGetCollectionProducts = ({
   console.log("query running ffffffffffffffffffffffffffffffffffffffff");
 
   return useInfiniteQuery(
-    [COLLECTION, collectionid],
+    [collectionid],
     async ({ pageParam = 0 }) => {
       console.log(
         // JSON.stringify([{ country, storefront, collectionid }, chunck])

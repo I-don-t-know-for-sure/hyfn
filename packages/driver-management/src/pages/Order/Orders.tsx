@@ -15,7 +15,7 @@ import {
 } from "@mantine/core";
 import { useGetAllDrivers } from "./hooks/useGetAllDrivers";
 import { t } from "utils/i18nextFix";
-import { USER_TYPE_DRIVER } from "hyfn-types";
+
 import ReplaceDriverModal from "./components/ReplaceDriverModal";
 import StoreDetailsModal from "./components/StoreDetailsModal";
 
@@ -57,7 +57,7 @@ const Orders: React.FC<OrdersProps> = ({}) => {
             orders.pages.map((page) => {
               return page.map((order) => {
                 const driverId = order.status.find(
-                  (status) => status.userType === USER_TYPE_DRIVER
+                  (status) => status.userType === "driver"
                 ).id;
                 const driver = data.find((driver) => driver.value === driverId);
 

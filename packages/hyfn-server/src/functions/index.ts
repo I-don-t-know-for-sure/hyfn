@@ -20,3 +20,5 @@ export {
 
 export type { MainFunctionProps, MainWrapperProps } from "./types";
 export { default as firebaseApp } from "./getFirebaseApp";
+export * from "./sendNotification";
+export * from './calculateAddOns'

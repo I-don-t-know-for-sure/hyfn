@@ -16,7 +16,6 @@ import OptionsModal from "./OptionsModal";
 import DeliveryConfirmationModal from "../../../components/DeliverConfirmationModal";
 import OrderActionMenu from "./OrderActionMenu";
 
-import { ORDER_TYPE_DELIVERY, STORE_STATUS_PENDING } from "hyfn-types";
 import { useRefreshOrderDocument } from "../hooks/useRefreshOrderDocument";
 
 import ProposalsModal from "./ProposalsModal";
@@ -24,6 +23,7 @@ import ProposalsModal from "./ProposalsModal";
 import PayModal from "components/PayModal";
 import DeliveredModal from "components/DeliveredModal";
 import { CopyTextButton } from "hyfn-client";
+import { orderTypesObject, storeStatusObject } from "hyfn-types";
 
 interface DeliveryActiveOrderProps {
   index: any;
@@ -62,7 +62,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
           <Badge
             color={
               order?.storeStatus[order?.storeStatus.length - 1] ===
-              STORE_STATUS_PENDING
+              storeStatusObject.pending
                 ? "red"
                 : "green"
             }
@@ -167,12 +167,13 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
           <CopyTextButton justText value={order.id} />
         </Box>
 
-        {order.orderType === ORDER_TYPE_DELIVERY && !order.acceptedProposal && (
-          <ProposalsModal
-            orderId={order.id}
-            proposals={order?.proposals || []}
-          />
-        )}
+        {order.orderType === orderTypesObject.Delivery &&
+          !order.acceptedProposal && (
+            <ProposalsModal
+              orderId={order.id}
+              proposals={order?.proposals || []}
+            />
+          )}
       </Group>
 
       {order.stores.map((store) => {
@@ -313,7 +314,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
         );
       })}
       <Group>
-        {order.orderType === ORDER_TYPE_DELIVERY ? (
+        {order.orderType === orderTypesObject.Delivery ? (
           <DeliveryConfirmationModal
             confirmationCode={order?.confirmationCode}
             orderId={order.id}

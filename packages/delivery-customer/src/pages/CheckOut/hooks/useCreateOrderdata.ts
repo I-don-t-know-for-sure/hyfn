@@ -1,5 +1,3 @@
-import { USER_DOCUMENT } from "hyfn-types";
-
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useUser } from "contexts/userContext/User";
 import { t } from "util/i18nextFix";
@@ -46,7 +44,7 @@ export const useCreateOrderData = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([userId, USER_DOCUMENT]);
+        queryClient.invalidateQueries([userId]);
       },
     }
   );

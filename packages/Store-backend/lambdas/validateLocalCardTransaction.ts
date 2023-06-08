@@ -66,7 +66,7 @@ export const validateLocalCardTransaction = async ({ arg, client, db }: MainFunc
       .where('id', '=', transaction.id)
       .execute();
 
-    if (transaction.type === 'storeWallet') {
+    if (transaction.type === 'store wallet') {
       await trx
         .updateTable('stores')
         .set({

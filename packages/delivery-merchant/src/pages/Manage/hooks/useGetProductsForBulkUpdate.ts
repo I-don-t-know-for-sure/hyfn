@@ -1,4 +1,3 @@
-import { products } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { useInfiniteQuery } from "react-query";
 
@@ -8,7 +7,7 @@ export const useGetProducts = ({ lastDocId, check, filterText }) => {
   const { userId, userDocument } = useUser();
 
   return useInfiniteQuery(
-    [products, check],
+    ["products", check],
     async ({ queryKey, pageParam }) => {
       console.log(
         "🚀 ~ file: useGetProductsForBulkUpdate.ts:13 ~ pageParam:",

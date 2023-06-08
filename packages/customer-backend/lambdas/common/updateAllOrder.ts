@@ -1,6 +1,6 @@
 import { MainFunctionProps } from 'hyfn-server';
 import {
-  ORDER_TYPE_DELIVERY,
+
   baseServiceFee,
   storeAndCustomerServiceFee,
   storeServiceFee,

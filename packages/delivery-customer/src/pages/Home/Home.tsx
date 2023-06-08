@@ -10,8 +10,8 @@ import {
   SimpleGrid,
   Text,
 } from "@mantine/core";
-import { Store } from "config/types";
-import React, { useEffect, useState } from "react";
+
+import React, { useState } from "react";
 import StoreCard from "./components/StoreCard";
 import useGetStores from "./hooks/useGetStores";
 

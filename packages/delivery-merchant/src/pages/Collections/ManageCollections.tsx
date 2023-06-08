@@ -29,7 +29,7 @@ import { t } from "utils/i18nextFix";
 
 import { fetchApi } from "utils/fetch";
 // import { Helmet } from 'react-helmet-async'
-import { collections } from "hyfn-types";
+
 import { useUser } from "contexts/userContext/User";
 
 interface ManageCollectionsProps {}
@@ -66,7 +66,7 @@ const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
     error,
     data = [],
     isFetching,
-  } = useQuery(collections, async () => {
+  } = useQuery("collections", async () => {
     const collections = await fetchApi({
       url: `getAllCollections`,
       arg: [userDocument.storeDoc],

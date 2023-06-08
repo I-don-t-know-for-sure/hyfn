@@ -35,15 +35,9 @@ import { convertCoordsArraytoString } from "../../util/convertCoordsArrayToStrin
 import { convertCoordsStringToArray } from "../../util/convertCoordsString.Array";
 import { useGetUserDocument } from "../../hooks/useGetUserDocument";
 
-import TransactionList from "../../components/TransactionList";
 import { useUser } from "../../contexts/userContext/User";
 
-import {
-  ORDER_TYPE_DELIVERY,
-  ORDER_TYPE_PICKUP,
-  STORE_TYPE_RESTAURANT,
-  storeAndCustomerServiceFee,
-} from "hyfn-types";
+import { orderTypesObject, storeAndCustomerServiceFee } from "hyfn-types";
 import { useNavigate, useLocation as useRouteLocation } from "react-router-dom";
 
 import { calculateOrderCost } from "util/calculateOrderCost";
@@ -104,7 +98,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
       return now;
     })()
   );
-  const [orderType, setOrderType] = useState(ORDER_TYPE_DELIVERY);
+  const [orderType, setOrderType] = useState(orderTypesObject.Delivery);
   const [currency, setCurrency] = useState("LYD");
   const { userId } = useUser();
   const {

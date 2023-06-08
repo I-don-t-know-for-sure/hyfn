@@ -7,12 +7,14 @@ import {
   successNotification,
 } from "hyfn-client";
 import { LocalCard, GetOrder, LambdaHandlers } from "store-backend";
+import { TransactionsHandler } from "customer-backend";
 import { DriverManagementHandlers } from "driver-management-backend";
 import { t } from "utils/i18nextFix";
 type Handlers = LambdaHandlers &
   DriverManagementHandlers &
   LocalCard &
-  GetOrder;
+  GetOrder &
+  TransactionsHandler;
 type Function<T extends keyof Handlers> = (
   arg: Handlers[T]["arg"]
 ) => Handlers[T]["return"];

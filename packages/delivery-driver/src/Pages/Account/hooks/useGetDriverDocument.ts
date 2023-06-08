@@ -1,6 +1,5 @@
 import { randomId } from "@mantine/hooks";
 
-import { driverDoc } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 
 import useUploadImage from "hooks/useUploadImage";
@@ -13,7 +12,7 @@ export const useGetDriverDocument = () => {
   const { userDocument, refetch, isLoading } = useUser();
   refetch();
   return useQuery(
-    [driverDoc, userDocument.id],
+    ["driverDoc", userDocument.id],
     async () => {
       try {
         const result = await fetchApi({

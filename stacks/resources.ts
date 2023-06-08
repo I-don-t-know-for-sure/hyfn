@@ -1,5 +1,6 @@
 import {
   Bucket,
+  Config,
   Function,
   RDS,
   StackContext,
@@ -9,7 +10,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as kms from "aws-cdk-lib/aws-kms";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as s3 from "aws-cdk-lib/aws-s3";
-
+import * as aws from "aws-sdk";
 import { AnyPrincipal, Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput } from "aws-cdk-lib";
 const pathToLambdas = "packages/admin-backend/lambdas/";

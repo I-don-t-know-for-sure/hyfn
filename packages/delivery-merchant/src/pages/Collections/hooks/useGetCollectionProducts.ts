@@ -1,4 +1,3 @@
-import { collectionProducts } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useInfiniteQuery, useQuery } from "react-query";
@@ -15,7 +14,7 @@ export const useGetCollectionProducts = ({
   const { userId, userDocument } = useUser();
 
   return useInfiniteQuery(
-    [collectionProducts, collectionId],
+    ["collectionProducts", collectionId],
     async ({ pageParam }) => {
       try {
         const result = await fetchApi({

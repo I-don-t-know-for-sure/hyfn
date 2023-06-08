@@ -11,14 +11,14 @@ import { ProductInfo } from "../types";
 import { randomId } from "@mantine/hooks";
 import { fetchApi } from "utils/fetch";
 import { t } from "utils/i18nextFix";
-import { productsSearch } from "hyfn-types";
+
 import { useUser } from "contexts/userContext/User";
 
 export const useSearchProducts = (value: string) => {
   const { userId, userDocument } = useUser();
 
   return useQuery(
-    [productsSearch, value],
+    ["productsSearch", value],
     async () => {
       try {
         const { country, storeFrontId: storeId } = userDocument.storeDoc as {

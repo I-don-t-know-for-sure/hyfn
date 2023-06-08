@@ -1,6 +1,5 @@
 import { randomId } from "@mantine/hooks";
 
-import { collection } from "hyfn-types";
 import { log } from "console";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
@@ -12,7 +11,7 @@ import { CollectionInfo } from "../types";
 export const useGetCollection = (collectionId: string) => {
   const { userId, userDocument } = useUser();
 
-  return useQuery([collection, collectionId], async () => {
+  return useQuery(["collection", collectionId], async () => {
     try {
       const data = await fetchApi({
         arg: [userDocument.storeDoc, collectionId],

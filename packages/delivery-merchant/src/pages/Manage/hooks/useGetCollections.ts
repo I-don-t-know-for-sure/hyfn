@@ -1,4 +1,3 @@
-import { collections } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { useQuery } from "react-query";
 
@@ -8,7 +7,7 @@ const useGetCollections = () => {
   const { userId, userDocument } = useUser();
 
   return useQuery(
-    collections,
+    "collections",
     async () => {
       const result = await fetchApi({
         url: `getCollectionsForProduct`,

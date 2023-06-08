@@ -67,6 +67,7 @@ export const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: Mai
       //   .where('id', '=', userDocument.localCardApiKeyId)
       //   .execute();
     }
+    let subscriptionInfo = calculateFreeMonth({ storeDoc: userDocument });
     if (localCardKey) {
       const usersUsingTheApiKey = await trx
         .selectFrom(flag === 'store' ? 'stores' : 'driverManagements')
@@ -97,7 +98,6 @@ export const addLocalCardPaymentAPIKey = async ({ client, arg, userId, db }: Mai
       return returnsObj['success'];
     }
 
-    let subscriptionInfo = calculateFreeMonth({ storeDoc: userDocument });
     const insertedLocalCardKey = await trx
       .insertInto('localCardKeys')
       .values({

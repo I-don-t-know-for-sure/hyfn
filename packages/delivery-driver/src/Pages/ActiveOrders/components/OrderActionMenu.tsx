@@ -7,8 +7,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useReportOrder } from "../hooks/useReportOrder";
 
 import ReportModal from "./ReportModal";
-import { ORDER_TYPE_DELIVERY } from "hyfn-types";
+
 import { useLeaveOrder } from "../hooks/useLeaveOrder";
+import { orderTypesObject } from "hyfn-types";
 
 interface OrderActionMenuProps {
   orderId: string;
@@ -58,7 +59,7 @@ const OrderActionMenu: React.FC<OrderActionMenuProps> = ({
           //   reportOrder({ orderId });
           // }}
         > */}
-        {orderType === ORDER_TYPE_DELIVERY && isOrderTakenByDriver && (
+        {orderType === orderTypesObject.Delivery && isOrderTakenByDriver && (
           <ReportModal orderId={orderId} />
         )}
         {/* </Menu.Item> */}

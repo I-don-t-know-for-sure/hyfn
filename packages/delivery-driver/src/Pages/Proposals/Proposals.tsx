@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGetProposals } from "./hooks/useGetProposals";
-import { ACCEPTED_PROPOSALS_FLAG, ALL_PROPOSALS_FLAG } from "hyfn-types";
+// import { ACCEPTED_PROPOSALS_FLAG, ALL_PROPOSALS_FLAG } from "hyfn-types";
 import {
   Button,
   Card,

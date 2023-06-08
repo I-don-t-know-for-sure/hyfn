@@ -78,7 +78,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                         variant="unstyled"
                       />
                       <TextInput
-                        label={t("Validated") as any}
+                        label={t("Validated")}
                         value={
                           transaction.status[transaction.status.length - 1]
                         }

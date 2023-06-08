@@ -144,19 +144,7 @@ const Payments: React.FC<PaymentsProps> = () => {
                   label={t("phone number")}
                   {...form.getInputProps("ownerPhoneNumber")}
                 />
-                {/* {form.values.sadadFilled ? (
-                  <>
-                    <Group position="apart">
-                      <Text mt={12}>{t('Sadad API key')}</Text>
-                      <Button compact color={'red'} onClick={() => deleteSadadAPIKey()}>
-                        {t('Delete')}
-                      </Button>
-                    </Group>
-                    <Skeleton m={'4px auto'} animate={false} height={35} width={'100%'}></Skeleton>
-                  </>
-                ) : (
-                  <TextInput label={t('Sadad API key')} {...form.getInputProps('sadadApiKey')} />
-                )} */}
+
                 <Container
                   mt={14}
                   sx={{

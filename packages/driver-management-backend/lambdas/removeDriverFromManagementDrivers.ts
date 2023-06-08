@@ -63,7 +63,7 @@ interface RemoveDriverFromManagementDriversProps extends Omit<MainFunctionProps,
   arg: any;
 }
 ('use strict');
-import { USER_STATUS_DELIVERED, USER_TYPE_DRIVER } from 'hyfn-types';
+
 import { MainFunctionProps, mainWrapper, tOrder } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
 import { sql } from 'kysely';

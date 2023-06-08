@@ -1,5 +1,3 @@
-import { PRODUCT } from "hyfn-types";
-
 import { useMutation, useQuery } from "react-query";
 
 import { fetchApi } from "util/fetch";
@@ -14,7 +12,7 @@ export const useGetProduct = (
   withStoreDoc: boolean
 ) => {
   return useQuery(
-    [PRODUCT, locationInfo.productId],
+    ["PRODUCT", locationInfo.productId],
     async () => {
       try {
         return await fetchApi({

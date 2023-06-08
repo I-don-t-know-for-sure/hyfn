@@ -1,4 +1,3 @@
-import { trustedDrivers } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { useInfiniteQuery } from "react-query";
 
@@ -12,7 +11,7 @@ export const useGetStoreDrivers = () => {
   );
 
   return useInfiniteQuery(
-    [trustedDrivers],
+    ["trustedDrivers"],
     async ({ pageParam }) => {
       return fetchApi({
         arg: [{ storeId: userDocument?.id, lastDoc: pageParam }],

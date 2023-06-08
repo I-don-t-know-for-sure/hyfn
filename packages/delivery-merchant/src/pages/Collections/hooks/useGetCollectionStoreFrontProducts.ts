@@ -1,4 +1,3 @@
-import { collectionStoreFrontProducts } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { t } from "utils/i18nextFix";
 import { useInfiniteQuery, useQuery } from "react-query";
@@ -15,7 +14,7 @@ export const useGetCollectionStoreFrontProducts = ({
   const { userId, userDocument } = useUser();
 
   return useQuery(
-    [collectionStoreFrontProducts, collectionId],
+    ["collectionStoreFrontProducts", collectionId],
     async () => {
       try {
         const { country } = userDocument.storeDoc as { country: string };

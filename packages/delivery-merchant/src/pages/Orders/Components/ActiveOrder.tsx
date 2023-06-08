@@ -16,12 +16,7 @@ import { useRefreshOrderDocument } from "../hooks/useRefreshOrderDocument";
 import TransactionModal from "./TransactionModal";
 import DriverInfoModal from "./DriverInfoModal";
 import OptionsModal from "./OptionsModal";
-import {
-  ORDER_TYPE_DELIVERY,
-  STORE_STATUS_READY,
-  STORE_TYPE_RESTAURANT,
-  storeAppText,
-} from "hyfn-types";
+import { orderTypesObject, storeAppText, storeStatusObject } from "hyfn-types";
 import { t } from "utils/i18nextFix";
 import InstructionsModal from "./InstructionsModak";
 
@@ -124,7 +119,7 @@ export function ActiveOrder({
               storeProducts={storeOrder.addedProducts}
             />
           )} */}
-          {order.orderType === ORDER_TYPE_DELIVERY &&
+          {order.orderType === orderTypesObject.Delivery &&
             driver?.id !== "" &&
             driver !== undefined && (
               <DriverInfoModal
@@ -341,7 +336,7 @@ export function ActiveOrder({
             // )
           }
         </Group>
-        {status === STORE_STATUS_READY && (
+        {status === storeStatusObject.ready && (
           <DeliveryConfirmationModal
             confirmationCode={order.storePickupConfirmation}
           />

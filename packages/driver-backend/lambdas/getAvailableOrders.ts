@@ -4,10 +4,10 @@ interface FindOrdersProps extends Omit<MainFunctionProps, 'arg'> {
 ('use strict');
 import { MainFunctionProps, buildJson, mainWrapper, tOrders, tStore, tStores } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { ORDER_TYPE_DELIVERY, COLLECTION, USER_TYPE_DRIVER } from 'hyfn-types';
+
 import { sql } from 'kysely';
 export const getAvailableOrders = async ({ arg, client, event, db }: MainFunctionProps) => {
-  console.log('🚀 ~ file: findOrders.ts:7 ~ COLLECTION:', COLLECTION);
+
   // await findOrderValidations(arg);
   console.log(event);
   const userCoords = arg[0];

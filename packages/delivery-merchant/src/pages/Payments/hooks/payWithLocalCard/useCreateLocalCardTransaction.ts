@@ -3,9 +3,6 @@ import { useUser } from "contexts/userContext/User";
 import { useMutation } from "react-query";
 
 import { fetchApi } from "utils/fetch";
-import { progressNotification } from "utils/notifications/progressNotifaction";
-import { updateToErrorNotification } from "utils/notifications/updateProgressToErrorNotification";
-import { updateToSuccessfulNotification } from "utils/notifications/updateProgressToSuccessfulNotification";
 
 export const useCreateLocalCatdTransaction = () => {
   const id = randomId();

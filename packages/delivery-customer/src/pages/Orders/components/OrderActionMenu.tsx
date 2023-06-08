@@ -7,7 +7,7 @@ import { useCancelOrder } from "../hooks/useCancelOrder";
 
 import { useReportOrder } from "../hooks/useReportOrder";
 import ReportModal from "./ReportModal";
-import { ORDER_TYPE_DELIVERY } from "hyfn-types";
+import { orderTypesObject } from "hyfn-types";
 
 interface OrderActionMenuProps {
   orderId: string;
@@ -57,7 +57,7 @@ const OrderActionMenu: React.FC<OrderActionMenuProps> = ({
           //   reportOrder({ orderId });
           // }}
         > */}
-        {orderType === ORDER_TYPE_DELIVERY && isOrderTakenByDriver && (
+        {orderType === orderTypesObject.Delivery && isOrderTakenByDriver && (
           <ReportModal orderId={orderId} />
         )}
         {/* </Menu.Item> */}

@@ -16,6 +16,7 @@ import { t } from "utils/i18nextFix";
 import { paymentMethods } from "config/data";
 import { useGetTransactions } from "hooks/useGetTransactions";
 import { useValidateLocalCardTransaction } from "hooks/useValidateLocalCardTransaction";
+import { useCancelTransaction } from "hooks/useCancelTransaction";
 
 interface PaymentModalProps {
   balance: number;
@@ -45,9 +46,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ balance }) => {
           }}
         >
           <TransactionList
-            useCancelTransaction={() => {
-              return {};
-            }}
+            useCancelTransaction={useCancelTransaction}
             useGetTransactions={useGetTransactions}
             useValidateTransaction={useValidateLocalCardTransaction}
           />

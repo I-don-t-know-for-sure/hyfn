@@ -1,6 +1,5 @@
 import { randomId } from "@mantine/hooks";
 
-import { ACTIVE_ORDERS } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
@@ -11,7 +10,7 @@ export const useGetActiveOrders = () => {
   const { userDocument } = useUser();
 
   return useInfiniteQuery(
-    [ACTIVE_ORDERS],
+    ["ACTIVE_ORDERS"],
     async ({ pageParam }) => {
       console.log(
         "🚀 ~ file: useGetActiveOrders.ts:18 ~ pageParam:",

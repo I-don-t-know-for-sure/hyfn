@@ -13,13 +13,25 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
-import { citiesArray, measurementSystemArray } from "hyfn-types";
+import {
+  citiesArray,
+  measurementSystemArray,
+  productPickupStatusArray,
+} from "hyfn-types";
 import * as z from "zod";
 // these are created when a customer makes an order to keep things
 // stable and we are able to keep everything even after a store deletes a product
 export const orderProducts = pgTable(
   "order_products",
   {
+    measurementSystem: varchar("measurement_system", {
+      enum: measurementSystemArray,
+    }).notNull(),
+    pickupStatus: varchar("pickup_status", {
+      enum: productPickupStatusArray,
+    })
+      .array()
+      .notNull(),
     id: uuid("id").defaultRandom().primaryKey(),
     storeId: varchar("store_id").notNull(),
     price: numeric("price").notNull(),
@@ -29,16 +41,8 @@ export const orderProducts = pgTable(
     title: varchar("title").notNull(),
 
     options: jsonb("options").notNull(),
-    measurementSystem: varchar("measurement_system", {
-      enum: measurementSystemArray,
-    }),
 
     hasOptions: boolean("has_options").default(false).notNull(),
-    pickupStatus: varchar("pickup_status", {
-      enum: ["initial", "pickedUp", "notFound"],
-    })
-      .array()
-      .notNull(),
     qtyFound: numeric("qty_found").notNull(),
     images: varchar("images").array().notNull(),
 

@@ -11,7 +11,7 @@ import {
   index,
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
-import { countriesArray } from "hyfn-types";
+import { countriesArray, userTypesArray } from "hyfn-types";
 import * as z from "zod";
 
 export const driverManagements = pgTable(
@@ -35,7 +35,7 @@ export const driverManagements = pgTable(
   },
   (table) => {
     return {
-      userIdx: uniqueIndex("user_idx").on(table.userId),
+      userIdx: uniqueIndex("driver_management_user_idx").on(table.userId),
       usersIds: index("users_idsx").on(table.usersIds),
       localCardApiKeyIdx: uniqueIndex("local_card_api_key_idx").on(
         table.localCardApiKeyId
@@ -49,7 +49,7 @@ export const zDriverManagement = z.object({
   users: z.array(
     z.object({
       userId: z.string(),
-      userType: z.enum(["owner", "employee"]),
+      userType: z.enum(userTypesArray),
     })
   ),
   notificationTokens: z.array(z.string()),

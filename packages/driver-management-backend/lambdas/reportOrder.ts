@@ -13,7 +13,7 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
       throw new Error('order is already delivered');
     }
     const orderType = orderDoc.orderType;
-    if (orderType === ORDER_TYPE_DELIVERY) {
+    if (orderType === orderTypesObject.Delivery) {
       if (!orderDoc.serviceFeePaid) {
         throw new Error(
           'service fee not paid, can`t report an order when the service fee is not paid'
@@ -63,8 +63,9 @@ export const reportOrderHandler = async ({ arg, client, db }: MainFunctionProps)
 interface ReportOrderProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
+import { orderTypesObject } from 'hyfn-types';
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ORDER_TYPE_DELIVERY } from 'hyfn-types';
+
 import { sql } from 'kysely';
 import { ObjectId } from 'mongodb';
 export const handler = async (event) => {

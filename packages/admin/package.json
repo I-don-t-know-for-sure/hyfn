@@ -4,14 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "deploy-prod": "sst deploy --stage production",
-    "deploy-staging": "sst deploy --stage staging",
     "deploy-dev": "sst deploy --region eu-west-3 --stage development",
     "sst-dev": "sst dev --region eu-west-3 --stage development",
     "start": "sst bind --region eu-west-3 --stage development  vite",
-    "wrap": "node ../../wrapper.cjs",
-    "preview": "vite preview",
     "build": "tsc && vite build --outDir dist",
+    "b-d": "sst bind --stage development 'tsc && vite build --outDir dist'",
+    "preview": "vite preview --host",
+    "serve": "yarn build && yarn preview",
     "envs": "node ./evn-parameters.js",
     "lint": "eslint . --ext .js,.ts ./src/*"
   },

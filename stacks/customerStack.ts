@@ -88,18 +88,7 @@ export function customerApiStack({ stack }: StackContext) {
           functionName: "validateTransaction" + stack.stage,
         },
       },
-      "POST /cancelTransaction": {
-        function: {
-          functionName: "cancelTransaction" + stack.stage,
-          handler: pathToLambdas + "cancelTransaction.handler",
-        },
-      },
-      "POST /sendNotification": {
-        function: {
-          functionName: "sendNotification" + stack.stage,
-          handler: pathToLambdas + "sendNotification.handler",
-        },
-      },
+
       "POST /updateNotificationTokens": {
         function: {
           functionName: "updateNotificationTokens" + stack.stage,
@@ -213,12 +202,7 @@ export function customerApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "createUserDocument.handler",
         },
       },
-      "POST /getTransactions": {
-        function: {
-          functionName: "getTransactions" + stack.stage,
-          handler: pathToLambdas + "getTransactions.handler",
-        },
-      },
+
       "POST /updateUserDocument": {
         function: {
           functionName: "updateUserDocument" + stack.stage,

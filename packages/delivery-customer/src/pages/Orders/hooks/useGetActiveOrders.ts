@@ -1,6 +1,5 @@
 import { randomId } from "@mantine/hooks";
 
-import { ACTIVE_ORDERS } from "hyfn-types";
 import { useLocation } from "../../../contexts/locationContext/LocationContext";
 import { useUser } from "../../../contexts/userContext/User";
 
@@ -13,7 +12,7 @@ export const useGetActiveOrders = () => {
   const { userDocument, isLoading } = useUser();
 
   return useInfiniteQuery(
-    [ACTIVE_ORDERS],
+    ["ACTIVE_ORDERS"],
     async ({ pageParam }) => {
       const result = await fetchApi({
         url: `getActiveOrders`,

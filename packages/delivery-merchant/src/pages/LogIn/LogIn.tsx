@@ -21,7 +21,6 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { CardTest } from "hyfn-client";
-import { TestCard } from "components/test";
 
 interface LogInProps {}
 
@@ -100,7 +99,6 @@ const LogIn: React.FC<LogInProps> = () => {
         // alignItems: 'center',
       }}
     >
-      <TestCard />
       {exception.exception && (
         <Alert title={t(exception.code)} color={"red"}>
           {t(exception.message)}

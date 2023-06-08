@@ -27,18 +27,18 @@ import React from "react";
 import { calculateDuration } from "utils/calculateDuration";
 
 import CopyButton from "components/CopyButton";
-import { STORE_STATUS_PENDING, STORE_TYPE_RESTAURANT } from "hyfn-types";
 
 import { ShowInMapButton } from "hyfn-client";
 import { Link } from "react-router-dom";
 import PickupOrderModal from "components/PickupOrderModal";
-import { ORDER_STATUS_PICKED } from "hyfn-types";
+
 import { useLeaveOrder } from "./hooks/useLeaveOrder";
 import { useGetActiveOrders } from "./hooks/useGetActiveOrders";
 import OrderActionMenu from "./components/OrderActionMenu";
 import DeliveryFeePaidModal from "./components/DeliveryFeePaidModal";
 import OptionsModal from "./components/OptionsModal";
 import { useSetOrderAsDelivered } from "./hooks/useSetOrderAsDelivered";
+import { storeStatusObject } from "hyfn-types";
 
 interface ActiveOrderProps {}
 
@@ -147,7 +147,7 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                           color={
                             order?.storeStatus[
                               order?.storeStatus.length - 1
-                            ] === STORE_STATUS_PENDING
+                            ] === storeStatusObject.pending
                               ? "red"
                               : "green"
                           }
@@ -226,7 +226,7 @@ const ActiveOrders: React.FC<ActiveOrderProps> = () => {
                           storeId={order.storeId}
                           pickedUp={
                             order.storeStatus[order.storeStatus.length - 1] ===
-                            "pickedUp"
+                            "picked up"
                           }
                         />
                       </Group>

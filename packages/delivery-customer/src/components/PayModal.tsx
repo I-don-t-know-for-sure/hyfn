@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   Group,
@@ -12,7 +13,7 @@ import {
 import { useUser } from "contexts/userContext/User";
 
 import {
-  transactionMethods,
+  transactionMethodsArray,
   storeServiceFee,
   serviceFeePayment,
   managementPayment,
@@ -27,7 +28,7 @@ import { t } from "util/i18nextFix";
 
 import { useCreateTransaction } from "hooks/useCreateTransaction";
 import { useLocation } from "contexts/locationContext/LocationContext";
-
+import { tStore, tOrder } from "hyfn-server";
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   label: string;
 }
@@ -48,8 +49,8 @@ interface PayModalProps {
   storeId: string;
   orderId: string;
   storeProducts: any[];
-  store: any;
-  order?: any;
+  store: tStore;
+  order?: tOrder;
 }
 
 const PayModal: React.FC<PayModalProps> = ({
@@ -63,7 +64,7 @@ const PayModal: React.FC<PayModalProps> = ({
   const [{ country }] = useLocation();
   const [opened, setOpened] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>(
-    transactionMethods[0]
+    transactionMethodsArray[0]
   );
   const { userDocument } = useUser();
   const balance = userDocument.balance;
@@ -74,12 +75,15 @@ const PayModal: React.FC<PayModalProps> = ({
   const orderSaleFee = orderTotal * storeServiceFee;
   const orderTotalAfterFee = orderTotal - orderSaleFee;
 
+  const orderTypeDelivery = order.orderType === "Delivery";
+  const storeIsDriverManagement = order.storeId === order.driverManagement;
+
   return (
     <>
       <Modal opened={opened} onClose={() => setOpened(false)}>
         <Stack spacing={12}>
           <Select
-            data={transactionMethods.map((method) => {
+            data={transactionMethodsArray.map((method) => {
               return { label: t(method), value: method };
             })}
             onChange={(e) => setPaymentMethod(e)}
@@ -133,40 +137,12 @@ const PayModal: React.FC<PayModalProps> = ({
                   orderSaleFee,
                   order.serviceFee
                 )}`}</Text>
-                {!!add(orderSaleFee, order.serviceFee) && (
-                  <Button
-                    onClick={() => {
-                      createTransaction({
-                        type: serviceFeePayment,
-                        country,
-                        orderId,
-                      });
-                    }}
-                  >
-                    {t("Pay")}
-                  </Button>
-                  // <PayWithLocalCardButton
-                  //   createLocalCardTransaction={createLocalCardTransaction}
-                  //   flag={LOCAL_CARD_TRANSACTION_FLAG_SERVICE_FEE}
-                  //   // isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
-                  //   orderId={orderId}
-                  //   storeId={storeId}
-                  // />
-                )}
-              </Stack>
-            </Group>
-            {!!order.deliveryFee && (
-              <Group position="apart">
-                <Text>{t("Delivery fee")}</Text>
-                <Stack spacing={2}>
-                  <Text>{`${currencies[store.country]} ${
-                    order.deliveryFee
-                  }`}</Text>
-                  {true && (
+                {
+                  /* !!add(orderSaleFee, order.serviceFee) */ !order.serviceFeePaid ? (
                     <Button
                       onClick={() => {
                         createTransaction({
-                          type: managementPayment,
+                          type: serviceFeePayment,
                           country,
                           orderId,
                         });
@@ -174,27 +150,60 @@ const PayModal: React.FC<PayModalProps> = ({
                     >
                       {t("Pay")}
                     </Button>
-                    // <PayWithLocalCardButton
-                    //   createLocalCardTransaction={
-                    //     createManagementLocalCardTransaction
-                    //   }
-                    //   flag={LOCAL_CARD_TRANSACTION_FLAG_MANAGEMENT}
-                    //   isBalanceEnough={largerEq(balance, orderSaleFee) as boolean}
-                    //   orderId={orderId}
-                    //   storeId={storeId}
-                    // />
-                  )}
-                </Stack>
-              </Group>
-            )}
+                  ) : (
+                    <Badge color="green">{t("Paid")}</Badge>
+                  )
+                }
+              </Stack>
+            </Group>
+            {orderTypeDelivery &&
+              ((storeIsDriverManagement && !store.includeDeliveryFee) ||
+                !storeIsDriverManagement) && (
+                <Group position="apart">
+                  <Text>{t("Delivery fee")}</Text>
+                  <Stack spacing={2}>
+                    <Text>{`${currencies[store.country]} ${
+                      order.deliveryFee
+                    }`}</Text>
+                    {!order.deliveryFeePaid && !storeIsDriverManagement && (
+                      <Button
+                        onClick={() => {
+                          createTransaction({
+                            type: managementPayment,
+                            country,
+                            orderId,
+                          });
+                        }}
+                      >
+                        {t("Pay")}
+                      </Button>
+                    )}
+                    {order.deliveryFeePaid && (
+                      <Badge color="green">{t("Paid")}</Badge>
+                    )}
+                    {storeIsDriverManagement && !store.includeDeliveryFee && (
+                      <Badge color="orange">{t("cash only")}</Badge>
+                    )}
+                  </Stack>
+                </Group>
+              )}
             <Group position="apart">
-              <Text>{t("Order Total after fee")}</Text>
+              <Text>
+                {t("Order Total") +
+                (order.storeId === order.driverManagement &&
+                  store.includeDeliveryFee)
+                  ? t("and delivery fee")
+                  : ""}
+              </Text>
 
               <Stack spacing={2}>
-                <Text>{`${
-                  currencies[store.country]
-                } ${orderTotalAfterFee}`}</Text>
-                {!!orderTotalAfterFee && (
+                <Text>{`${currencies[store.country]} ${add(
+                  orderTotalAfterFee,
+                  storeIsDriverManagement && store.includeDeliveryFee
+                    ? order.deliveryFee
+                    : 0
+                )}`}</Text>
+                {!order.storeStatus.includes("paid") ? (
                   <Button
                     onClick={() => {
                       createTransaction({
@@ -207,13 +216,8 @@ const PayModal: React.FC<PayModalProps> = ({
                   >
                     {t("Pay")}
                   </Button>
-                  // <PayWithLocalCardButton
-                  //   createLocalCardTransaction={createStoreLocalCardTransaction}
-                  //   flag={LOCAL_CARD_TRANSACTION_FLAG_STORE}
-                  //   //   isBalanceEnough={equal(orderSaleFee, balance) as boolean}
-                  //   orderId={orderId}
-                  //   storeId={storeId}
-                  // />
+                ) : (
+                  <Badge color="green">{t("Paid")}</Badge>
                 )}
               </Stack>
             </Group>

@@ -1,6 +1,6 @@
 interface CancelOrderProps extends Omit<MainFunctionProps, 'arg'> {}
 
-import { ORDER_TYPE_DELIVERY, ORDER_TYPE_PICKUP } from 'hyfn-types';
+
 import { returnsObj } from 'hyfn-types';
 import { mainWrapper, MainFunctionProps } from 'hyfn-server';
 
@@ -49,7 +49,7 @@ export const cancelOrder = async ({ arg, client, userId, db }: CancelOrderProps)
     }
 
     const orderType = orderDoc.orderType;
-    if (orderType === ORDER_TYPE_PICKUP) {
+    if (orderType === 'Pickup') {
       await trx
         .updateTable('orders')
         .set({
@@ -59,7 +59,7 @@ export const cancelOrder = async ({ arg, client, userId, db }: CancelOrderProps)
         .execute();
       return 'success';
     }
-    if (orderType === ORDER_TYPE_DELIVERY) {
+    if (orderType === 'Delivery') {
       await trx
         .updateTable('orders')
         .set({

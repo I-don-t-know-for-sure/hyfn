@@ -23,8 +23,7 @@ import { Link } from "react-router-dom";
 import { add, multiply, subtract } from "mathjs";
 import {
   MINIMUM_AMOUNT_TO_CHECKOUT,
-  ORDER_TYPE_DELIVERY,
-  ORDER_TYPE_PICKUP,
+  orderTypesObject,
   storeServiceFee,
 } from "hyfn-types";
 
@@ -96,10 +95,10 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
               // width: '100%',
             }
           }
-          checked={inCartStore.orderType === ORDER_TYPE_DELIVERY}
+          checked={inCartStore.orderType === orderTypesObject.Delivery}
           onChange={(e) => {
             changeStoreOrderType({
-              orderType: ORDER_TYPE_DELIVERY,
+              orderType: orderTypesObject.Delivery,
               setCartInfo,
               storeId: inCartStore.id,
             });
@@ -114,13 +113,13 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
           ml={2}
           onChange={(e) => {
             changeStoreOrderType({
-              orderType: ORDER_TYPE_PICKUP,
+              orderType: orderTypesObject.Pickup,
               setCartInfo,
               storeId: inCartStore.id,
             });
             // setOrderType('Pickup');
           }}
-          checked={inCartStore.orderType === ORDER_TYPE_PICKUP}
+          checked={inCartStore.orderType === orderTypesObject.Pickup}
         >
           {t("Pickup")}
         </Chip>

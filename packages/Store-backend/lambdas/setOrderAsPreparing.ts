@@ -1,5 +1,5 @@
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ORDER_STATUS_PREPARING } from 'hyfn-types';
+
 import { sql } from 'kysely';
 import { returnsObj } from 'hyfn-types';
 interface SetOrderAsPreparingProps extends Omit<MainFunctionProps, 'arg'> {

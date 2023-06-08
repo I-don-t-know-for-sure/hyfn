@@ -86,10 +86,7 @@ export type LambdaHandlers = {
     arg: Parameters<typeof updateNotificationTokensHandler>['0']['arg'];
     return: ReturnType<typeof updateNotificationTokensHandler>;
   };
-  cancelTransaction: {
-    arg: Parameters<typeof cancelTransaction>['0']['arg'];
-    return: ReturnType<typeof cancelTransaction>;
-  };
+  
   validateTransaction: {
     arg: Parameters<typeof validateLocalCardTransaction>['0']['arg'];
     return: ReturnType<typeof validateLocalCardTransaction>;

@@ -160,10 +160,10 @@ export type LambdaHandlers = {
     arg: Parameters<typeof validateLocalCardTransaction>['0']['arg'];
     return: ReturnType<typeof validateLocalCardTransaction>;
   };
-  getTransactionsList: {
-    arg: Parameters<typeof getTransactionsList>['0']['arg'];
-    return: ReturnType<typeof getTransactionsList>;
-  };
+  // getTransactionsList: {
+  //   arg: Parameters<typeof getTransactionsList>['0']['arg'];
+  //   return: ReturnType<typeof getTransactionsList>;
+  // };
   createProduct: {
     arg: Parameters<typeof createProductHandler>['0']['arg'];
     return: ReturnType<typeof createProductHandler>;

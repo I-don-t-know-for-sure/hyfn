@@ -8,7 +8,7 @@ export default {
   config(_input) {
     return {
       name: "driver-client",
-      region: "eu-south-1",
+      region: _input.stage === "development" ? "eu-west-3" : "eu-south-1",
     };
   },
   stacks(app) {

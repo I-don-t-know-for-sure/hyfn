@@ -1,5 +1,5 @@
 import { add, multiply, subtract } from 'mathjs';
-import { ORDER_TYPE_PICKUP, storeAndCustomerServiceFee, storeServiceFee } from 'hyfn-types';
+import {  storeAndCustomerServiceFee, storeServiceFee } from 'hyfn-types';
 import { calculateProductOptionsValue } from './utils';
 import { returnsObj } from 'hyfn-types';
 export function calculateAmountToPayTheStoreAndAmountToReturnTheCustomer({ storeOrder }) {

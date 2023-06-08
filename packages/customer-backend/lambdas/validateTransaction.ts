@@ -1,5 +1,5 @@
 import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
-import { decryptData, isLocalCardTransactionValidated, mainWrapper } from 'hyfn-server';
+import { calculateAddOns, decryptData, isLocalCardTransactionValidated, mainWrapper } from 'hyfn-server';
 import { MainFunctionProps } from 'hyfn-server';
 import {
   managementPayment,
@@ -9,6 +9,7 @@ import {
 } from 'hyfn-types';
 import { KMS } from 'aws-sdk';
 import { returnsObj } from 'hyfn-types';
+import { add } from 'mathjs';
 interface validateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any[];
 }
@@ -77,13 +78,15 @@ export const validateLocalCardTransaction = async ({
     });
   }
 
+  const transactionAmount  = add(transaction.amount, transaction.plus ? calculateAddOns(transaction.plus) : 0)
+
   const isValidated = await isLocalCardTransactionValidated({
     includeLocalCardTransactionFeeToPrice: true,
     MerchantId,
     secretKey,
     TerminalId,
     transactionId,
-    amount: transaction.amount,
+    amount: transactionAmount,
   });
   if (!isValidated) {
     throw new Error(returnsObj['transaction not validated']);
@@ -182,6 +185,7 @@ export const validateLocalCardTransaction = async ({
         .updateTable('orders')
         .set({
           storeStatus: [...(orderDoc.storeStatus || []), 'paid'],
+        ...(transaction.explaination.includes('delivery fee') ? {deliveryFeePaid: true} : {})
         })
         .where('id', '=', transaction.orderId)
         .executeTakeFirst();

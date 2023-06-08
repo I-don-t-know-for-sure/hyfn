@@ -27,7 +27,7 @@ export const setOrderAsDeliveredHandler = async ({
     throw new Error(returnsObj['store not ready yet']);
   }
 
-  if (storeDoc.storeType.includes(STORE_TYPE_RESTAURANT)) {
+  if (storeDoc.storeType.includes('restaurant')) {
     if (!orderDoc.storeStatus.includes('ready')) {
       throw new Error(returnsObj['Not ready']);
     }
@@ -36,7 +36,7 @@ export const setOrderAsDeliveredHandler = async ({
   await db
     .updateTable('orders')
     .set({
-      storeStatus: [...orderDoc.storeStatus, 'pickedUp'],
+      storeStatus: [...orderDoc.storeStatus, 'picked up'],
     })
     .where('id', '=', orderId)
     .execute();
@@ -45,9 +45,9 @@ export const setOrderAsDeliveredHandler = async ({
 interface SetOrderAsDeliveredProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-const { ObjectId } = require('mongodb');
+
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { STORE_STATUS_READY, ORDER_STATUS_DELIVERED, STORE_TYPE_RESTAURANT } from 'hyfn-types';
+
 import { sql } from 'kysely';
 import { returnsObj } from 'hyfn-types';
 export const handler = async (event) => {

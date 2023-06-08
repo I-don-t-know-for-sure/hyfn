@@ -6,9 +6,16 @@ import {
   integer,
   timestamp,
   index,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
-import { transactionMethods, transactionTypesArray } from "hyfn-types";
+import {
+  transactionExplainationArray,
+  transactionExplainationObject,
+  transactionMethodsArray,
+  transactionStatusArray,
+  transactionTypesArray,
+} from "hyfn-types";
 import * as z from "zod";
 
 export const transactions = pgTable(
@@ -23,10 +30,12 @@ export const transactions = pgTable(
     type: varchar("type", { enum: transactionTypesArray }).notNull(),
     status: varchar("status").array().notNull(),
     transactionMethod: varchar("transaction_method", {
-      enum: transactionMethods,
+      enum: transactionMethodsArray,
     }).notNull(),
     numberOfMonths: integer("number_of_months"),
     orderId: varchar("order_id"),
+    plus: jsonb("plus"),
+    explaination: varchar("explaination", {enum: transactionExplainationArray}).array(),
   },
   (table) => {
     return {
@@ -42,5 +51,9 @@ export const zTransaction = z.object({
   ...schema.shape,
   transactionDate: z.date(),
   amount: z.number(),
-  status: z.array(z.enum(["canceled", "validated", "initial"])),
+  status: z.array(z.enum(transactionStatusArray)),
+  plus: z.object({
+    [transactionExplainationObject["delivery fee"]]: z.number()
+  }),
+  explaination: z.array(z.enum(transactionExplainationArray))
 });

@@ -32,7 +32,7 @@ export const confirmPickup = async ({ arg, client, userId, db }: ConfirmPickupPr
   await db
     .updateTable('orders')
     .set({
-      storeStatus: [...orderDoc.storeStatus, 'pickedUp'],
+      storeStatus: [...orderDoc.storeStatus, 'picked up'],
       orderStatus: [...orderDoc.orderStatus, 'delivered'],
     })
     .where('id', '=', orderId)

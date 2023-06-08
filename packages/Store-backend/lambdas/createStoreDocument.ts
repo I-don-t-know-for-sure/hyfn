@@ -1,6 +1,6 @@
 ('use strict');
 import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { currencies, gibbrish } from 'hyfn-types';
+
 import { re } from 'mathjs';
 import { returnsObj } from 'hyfn-types';
 interface CreateStoreDocumentProps extends Omit<MainFunctionProps, 'arg'> {

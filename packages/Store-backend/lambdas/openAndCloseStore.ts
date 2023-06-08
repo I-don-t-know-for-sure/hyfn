@@ -2,13 +2,13 @@ import { MainFunctionProps, mainWrapper } from 'hyfn-server';
 
 import { sql } from 'kysely';
 import { returnsObj } from 'hyfn-types';
-('use strict');
+
 interface OpenAndCloseStoreProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
 export const openAndCloseStoreHandler = async ({
-  arg,
-  client,
+
+
   db,
   userId,
 }: OpenAndCloseStoreProps) => {
@@ -17,9 +17,9 @@ export const openAndCloseStoreHandler = async ({
       .selectFrom('stores')
 
       .where('usersIds', '@>', sql`array[${sql.join([userId])}]::uuid[]` as any)
-      .innerJoin('localCardKeys', 'localCardKeys.id', 'localCardApiKeyId')
+
       .selectAll('stores')
-      .select(['inUse', 'localCardKeys.id as cardId'])
+
       .executeTakeFirstOrThrow();
 
     const activeOrders = await db
@@ -43,17 +43,19 @@ export const openAndCloseStoreHandler = async ({
         .updateTable('stores')
         .set({
           opened: false,
+          acceptingOrders: false
         })
         .where('id', '=', storeDoc.id)
         .execute();
+        throw new Error(returnsObj['you are not subscribed'])
     }
 
     if (
       storeDoc.storeInfoFilled &&
-      storeDoc.inUse &&
+      storeDoc.localCardApiKeyId &&
       storeDoc.storeOwnerInfoFilled &&
       storeDoc.monthlySubscriptionPaid &&
-      // storeTrustsTwoDrivers &&
+
       !storeDoc.opened
     ) {
       await trx

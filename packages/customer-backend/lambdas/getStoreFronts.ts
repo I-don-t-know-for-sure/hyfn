@@ -31,7 +31,9 @@ export const getStoreFronts = async ({ arg, client, db }: GetStoreFrontsProps) =
           city,
           coords: {
             $near: {
-              $geometry: {
+              $geometry:   
+              
+              {
                 type: 'Point',
                 coordinates: [coords[1], coords[0]],
               },
@@ -45,6 +47,9 @@ export const getStoreFronts = async ({ arg, client, db }: GetStoreFrontsProps) =
   var qb = db
     .selectFrom('stores')
     .select(['storeName', 'description', 'image', 'id', 'storeType'])
+    
+    
+    .where('localCardApiKeyId', '!=', undefined)
     .limit(5);
   if (!!storeType && storeType !== 'all') {
     qb = qb.where('storeType', '@>', sql`array[${sql.join([storeType])}]::varchar[]`);

@@ -1,4 +1,3 @@
-import { transactions } from "hyfn-types";
 import { useUser } from "contexts/userContext/User";
 import { useInfiniteQuery } from "react-query";
 
@@ -7,7 +6,7 @@ import { fetchApi } from "utils/fetch";
 export const useGetTransactions = ({ enabled }: { enabled: boolean }) => {
   const { userDocument: user } = useUser();
   return useInfiniteQuery(
-    [transactions],
+    ["transactions"],
     async ({ pageParam }) => {
       console.log(pageParam);
 

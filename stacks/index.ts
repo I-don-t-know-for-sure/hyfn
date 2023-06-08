@@ -135,9 +135,14 @@ export const driversManagement = {
 };
 // customers & stores
 export const transactions = {
-  "POST /getTransactionsList": {
+  "POST /getTransactions": {
     function: {
-      handler: pathToLambdasCustomer + "getTransactionsList.handler",
+      handler: pathToLambdasCustomer + "getTransactions.handler",
+    },
+  },
+  [customerUrl({ url: "cancelTransaction", method: "POST" })]: {
+    function: {
+      handler: pathToLambdasCustomer + "cancelTransaction.handler",
     },
   },
 };

@@ -1,8 +1,7 @@
-import { ACTIVE_ORDERS } from "hyfn-types";
 import { useLocation } from "contexts/locationContext/LocationContext";
 
 // import { useLocation } from 'contexts/locationContext/LocationContext';
-import { t } from "utils/i18nextFix";
+
 import { useQuery, useQueryClient } from "react-query";
 import { fetchApi } from "utils/fetch";
 
@@ -19,7 +18,7 @@ export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
           url: `getOrder`,
         });
 
-        const cachedQuery = queryClient.getQueryData([ACTIVE_ORDERS]) as {
+        const cachedQuery = queryClient.getQueryData(["ACTIVE_ORDERS"]) as {
           pages: any[];
         };
         const newQuerydata = cachedQuery.pages.map((page) => {
@@ -30,7 +29,7 @@ export const useRefreshOrderDocument = ({ orderId }: { orderId: string }) => {
             return order;
           });
         });
-        queryClient.setQueryData([ACTIVE_ORDERS], () => ({
+        queryClient.setQueryData(["ACTIVE_ORDERS"], () => ({
           ...cachedQuery,
           pages: newQuerydata,
         }));

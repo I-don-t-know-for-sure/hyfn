@@ -1,4 +1,3 @@
-import { USER_DOCUMENT } from "hyfn-types";
 import { useMutation, useQueryClient } from "react-query";
 
 import { fetchApi } from "utils/fetch";
@@ -24,7 +23,7 @@ export const useAddLocalCardAPIKeys = () => {
     },
     {
       async onSuccess(data, variables, context) {
-        await queryClient.invalidateQueries([USER_DOCUMENT]);
+        await queryClient.invalidateQueries(["USER_DOCUMENT"]);
       },
     }
   );

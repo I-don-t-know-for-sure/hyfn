@@ -1,4 +1,5 @@
 export const returnsObj = {
+  "you are not subscribed": "you are not subscribed",
   "store not paid": "store not paid",
   "pickup orders can be paid only on pickup":
     "pickup orders can be paid only on pickup",
@@ -153,6 +154,7 @@ export const returnsObj = {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const returnsObjArabic = {
+  "you are not subscribed": "",
   "store not paid": "",
   "pickup orders can be paid only on pickup": "",
   "this order can be paid only on delivery": "",

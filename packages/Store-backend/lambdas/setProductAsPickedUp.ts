@@ -1,6 +1,6 @@
 import { mainWrapper, MainFunctionProps, tOrderProducts } from 'hyfn-server';
 import { ObjectId } from 'mongodb';
-import { STORE_STATUS_ACCEPTED, STORE_STATUS_PENDING, USER_TYPE_STORE } from 'hyfn-types';
+
 import { sql } from 'kysely';
 import { returnsObj } from 'hyfn-types';
 interface SetProductAsPickedUpProps extends Omit<MainFunctionProps, 'arg'> {

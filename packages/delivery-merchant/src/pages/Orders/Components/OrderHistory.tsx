@@ -21,7 +21,7 @@ import React, { useEffect } from "react";
 // import { Helmet } from 'react-helmet-async'
 
 import { useGetOrderHistory } from "../hooks/useGetOrderHistory";
-import { STORE_TYPE_RESTAURANT, storeServiceFee } from "hyfn-types";
+import { storeServiceFee } from "hyfn-types";
 import OptionsModal from "./OptionsModal";
 import SetProductAsInactiveButton from "./setProductAsInactive";
 

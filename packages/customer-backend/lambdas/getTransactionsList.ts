@@ -1,8 +1,9 @@
 interface GetTransactionsListProps extends Omit<MainFunctionProps, 'arg'> {
   arg: any;
 }
-import { MainFunctionProps } from 'hyfn-server';
+import { MainFunctionProps} from 'hyfn-server';
 import { ObjectId } from 'mongodb';
+
 export const getTransactionsList = async ({ arg, client }) => {
   const { customerId, lastDocId: lastDoc } = arg[0];
   if (lastDoc) {
@@ -27,3 +28,4 @@ export const getTransactionsList = async ({ arg, client }) => {
     .toArray();
   return transactions;
 };
+

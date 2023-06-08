@@ -1,7 +1,7 @@
 import { useLocalStorage } from "@mantine/hooks";
 
 // import { Auth } from "aws-amplify";
-import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "hyfn-types";
+// import { LOGGED_IN, USER_DOCUMENT, USER_ID } from "hyfn-types";
 import React from "react";
 // import { useGetUserDocument } from "hooks/useGetUserDocument";
 // import { useGetUserId } from "hooks/useGetUserId";
@@ -34,14 +34,14 @@ export const UserProvider: React.FC<{
   Auth: any;
 }> = ({ children, useGetUserDocument, queryClient, Auth }) => {
   const [userDocument, setUserDocument] = useLocalStorage({
-    key: USER_DOCUMENT,
+    key: "USER_DOCUMENT",
   });
   const [userId, setUserId] = useLocalStorage({
-    key: USER_ID,
+    key: "USER_ID",
     defaultValue: "",
   });
   const [loggedIn, setLoggedIn] = useLocalStorage({
-    key: LOGGED_IN,
+    key: "LOGGED_IN",
     defaultValue: false,
   });
   // useEffect(() => {

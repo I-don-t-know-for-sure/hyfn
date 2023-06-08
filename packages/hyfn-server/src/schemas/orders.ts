@@ -13,7 +13,14 @@ import {
   index,
   foreignKey,
 } from "drizzle-orm/pg-core";
-import { citiesArray } from "hyfn-types";
+import {
+  citiesArray,
+  customerStatusArray,
+  driverStatusArray,
+  orderStatusArray,
+  orderTypesArray,
+  storeStatusArray,
+} from "hyfn-types";
 
 import { InferModel, sql } from "drizzle-orm";
 
@@ -28,15 +35,19 @@ export const orders = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
 
     storeStatus: varchar("store_status", {
-      enum: ["pending", "accepted", "paid", "preparing", "ready", "pickedUp"],
+      enum: storeStatusArray,
     })
       .array()
       .notNull(),
     storeId: uuid("store_id").notNull(),
     driverId: uuid("driver_id"),
     customerId: uuid("customer_id").notNull(),
-    customerStatus: varchar("customer_status").array().notNull(),
-    driverStatus: varchar("driver_status").array().notNull(),
+    customerStatus: varchar("customer_status", { enum: customerStatusArray })
+      .array()
+      .notNull(),
+    driverStatus: varchar("driver_status", { enum: driverStatusArray })
+      .array()
+      .notNull(),
     storePickupConfirmation: uuid("store_pickup_confirmation").defaultRandom(),
     paymentWindowCloseAt: timestamp("payment_window_close_at"),
 
@@ -53,7 +64,7 @@ export const orders = pgTable(
     serviceFee: numeric("service_fee").notNull(),
     serviceFeePaid: boolean("service_fee_paid").default(false),
     orderType: varchar("order_type", {
-      enum: ["Delivery", "Pickup"],
+      enum: orderTypesArray,
     }).notNull(),
     proposals: jsonb("proposals").array().notNull(),
     totalCost: numeric("total_cost").notNull(),
@@ -63,7 +74,11 @@ export const orders = pgTable(
     acceptedProposal: varchar("accepted_proposal"),
     driverManagement: varchar("driver_management"),
 
-    orderStatus: varchar("order_status").array().notNull(),
+    orderStatus: varchar("order_status", {
+      enum: orderStatusArray,
+    })
+      .array()
+      .notNull(),
 
     reportsIds: uuid("reports_ids").array().notNull(),
     deliveryFeePaid: boolean("delivery_fee_paid").default(false),
@@ -101,12 +116,8 @@ when the driver leaves an order we should sync this field with the store field
 const schema = createSelectSchema(orders);
 export const zOrder = z.object({
   ...schema.shape,
-  storeStatus: z.array(
-    z.enum(["pending", "accepted", "paid", "preparing", "ready", "pickedUp"])
-  ),
-  orderStatus: z.array(
-    z.enum(["active", "canceled", "delivered", "reporeted"])
-  ),
+  storeStatus: z.array(z.enum(storeStatusArray)),
+  orderStatus: z.array(z.enum(orderStatusArray)),
   serviceFee: z.number(),
   storeServiceFee: z.number(),
   orderCost: z.number(),
@@ -114,8 +125,8 @@ export const zOrder = z.object({
   deliveryFee: z.number(),
   customerLat: z.number(),
   customerLong: z.number(),
-  customerStatus: z.array(z.enum(["initial"])),
-  driverStatus: z.array(z.enum(["initial", "set"])),
+  customerStatus: z.array(z.enum(customerStatusArray)),
+  driverStatus: z.array(z.enum(driverStatusArray)),
   storeId: z.string(),
 
   driverId: z.string(),

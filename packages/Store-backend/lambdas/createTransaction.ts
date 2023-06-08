@@ -3,7 +3,7 @@ interface CreateLocalCardTransactionForWalletProps extends Omit<MainFunctionProp
 }
 import { v4 as uuidV4 } from 'uuid';
 
-import { adminName } from 'hyfn-types';
+import { adminName, returnsObj } from 'hyfn-types';
 import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
 import { createLocalCardConfigurationObject, MainFunctionProps, mainWrapper } from 'hyfn-server';
 export const createLocalCardTransactionForWallet = async ({
@@ -15,27 +15,28 @@ export const createLocalCardTransactionForWallet = async ({
   const { amount } = arg[0];
   const storeDoc = await db
     .selectFrom('stores')
-    .select('id')
+    .select(['id', 'transactionId'])
     .where('userId', '=', userId)
     .executeTakeFirstOrThrow();
   if (amount === undefined) {
     throw 'order data not found';
   }
-  const transactionId = uuidV4() as string;
+  if(storeDoc.transactionId) throw new Error(returnsObj['transaction in progress'])
+
   const now = new Date();
 
-  await db
+ const transaction =  await db
     .insertInto('transactions')
     .values({
-      id: transactionId,
+
       customerId: storeDoc.id,
       amount,
       storeId: adminName,
       transactionDate: now,
-      transactionMethod: 'localCard',
-      type: 'storeWallet',
+      transactionMethod: 'local card',
+      type: 'store wallet',
       status: ['initial'],
-    })
+    }).returning('id')
     .executeTakeFirst();
   const { MerchantId, TerminalId, secretKey } = getAdminLocalCardCreds();
 
@@ -46,8 +47,12 @@ export const createLocalCardTransactionForWallet = async ({
     MerchantId,
     TerminalId,
     amount,
-    transactionId,
+    transactionId: transaction.id,
   });
+
+  await db.updateTable('stores').set({
+    transactionId: transaction.id
+  }).where('userId', '=', userId).execute()
   return { configurationObject };
 };
 

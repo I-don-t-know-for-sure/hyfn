@@ -1,7 +1,7 @@
 import { randomId } from "@mantine/hooks";
 
 import { Auth } from "aws-amplify";
-import { orders } from "hyfn-types";
+
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useUser } from "contexts/userContext/User";
 
@@ -22,7 +22,7 @@ export const useGetOrders = () => {
   const [{ city, country, coords }] = useLocation();
 
   return useInfiniteQuery(
-    orders,
+    "orders",
     async ({ pageParam }) => {
       try {
         console.log(coords);

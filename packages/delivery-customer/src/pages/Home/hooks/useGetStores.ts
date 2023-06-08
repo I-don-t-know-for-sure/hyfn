@@ -1,4 +1,3 @@
-import { STORES } from "hyfn-types";
 import { useLocation } from "contexts/locationContext/LocationContext";
 import { useUser } from "contexts/userContext/User";
 
@@ -21,7 +20,7 @@ const useGetStores = ({
   console.log(location);
 
   return useInfiniteQuery(
-    [STORES, nearby, filter, city],
+    [nearby, filter, city],
     async ({ pageParam = 0 }) => {
       return await fetchApi({
         url: `getStoreFronts`,

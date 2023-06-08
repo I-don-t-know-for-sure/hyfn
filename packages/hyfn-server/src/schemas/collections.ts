@@ -8,12 +8,15 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
+import { collectionTypesArray } from "hyfn-types";
 import * as z from "zod";
 export const collections = pgTable(
   "collections",
   {
     id: uuid("id").defaultRandom().primaryKey(),
-    collectionType: varchar("collection_type", { enum: ["manual"] }).notNull(),
+    collectionType: varchar("collection_type", {
+      enum: collectionTypesArray,
+    }).notNull(),
     title: varchar("title").notNull(),
     description: varchar("description").notNull(),
     isActive: boolean("is_active").default(false),
