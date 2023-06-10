@@ -1,4 +1,5 @@
 export const returnsObj = {
+  "amount can not be zero": "amount can not be zero",
   "you are not subscribed": "you are not subscribed",
   "store not paid": "store not paid",
   "pickup orders can be paid only on pickup":
@@ -148,12 +149,13 @@ export const returnsObj = {
     "driver was removed from trusted list",
   "this driver is not in your list": "this driver is not in your list",
   "not enough balance": "not enough balance",
-  "balance was updated": "balance was updated",
+  "balance was updated": "balance was updated"
 } as const;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const returnsObjArabic = {
+  "amount can not be zero": "",
   "you are not subscribed": "",
   "store not paid": "",
   "pickup orders can be paid only on pickup": "",
@@ -341,5 +343,5 @@ export const returnsObjArabic = {
   "driver was removed from trusted list": "تمت إزالة السائق من قائمة الموثوقين",
   "this driver is not in your list": "هذا السائق ليس في قائمتك",
   "not enough balance": "الرصيد غير كافٍ",
-  "balance was updated": "تم تحديث الرصيد",
+  "balance was updated": "تم تحديث الرصيد"
 };

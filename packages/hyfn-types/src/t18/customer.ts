@@ -1,6 +1,9 @@
 import { returnsObj, returnsObjArabic } from "../returnMessages";
 
 export const customerAppText = {
+  Previous: "Previous",
+  "Delivery company": "Delivery company",
+  "search products, stores": "search products, stores",
   "Only store drivers are allowed to take store orders":
     "Only store drivers are allowed to take store orders",
   "This action is not recommended": "This action is not recommended",
@@ -240,10 +243,13 @@ export const customerAppText = {
   "New password": "New password",
   "content-type": "content-type",
   "web-vitals": "web-vitals",
-  ...returnsObj,
+  ...returnsObj
 };
 
 export const customerAppArabicText = {
+  Previous: "",
+  "Delivery company": "Delivery company",
+  "search products, stores": "",
   "Only store drivers are allowed to take store orders": "",
   "Have an account already?": "هل لديك حساب بالفعل؟",
   "Common questions": "اسئلة شائعة",
@@ -492,5 +498,5 @@ export const customerAppArabicText = {
   "New password": "كلمة المرور الجديدة",
   "content-type": "نوع المحتوى",
   "web-vitals": "مؤشرات الويب",
-  ...returnsObjArabic,
+  ...returnsObjArabic
 };

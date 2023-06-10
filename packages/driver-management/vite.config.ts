@@ -15,7 +15,7 @@ export default defineConfig({
       // srcDir: "src",
       // filename: "sw.ts",
       devOptions: {
-        enabled: true, // change to false when deploying
+        enabled: true // change to false when deploying
         // type: "module",
       },
 
@@ -31,43 +31,44 @@ export default defineConfig({
           {
             src: "newLogo.png",
             sizes: "64x64 32x32 24x24 16x16",
-            type: "image/png",
+            type: "image/png"
           },
           {
             src: "newLogo.png",
             type: "image/png",
-            sizes: "192x192",
+            sizes: "192x192"
           },
           {
             src: "newLogo.png",
             type: "image/png",
-            sizes: "512x512",
-          },
+            sizes: "512x512"
+          }
         ],
         start_url: "/",
         display: "standalone",
         theme_color: "#000000",
-        background_color: "#2e8900",
+        background_color: "#2e8900"
       },
-      registerType: "prompt",
-    }),
+      registerType: "prompt"
+    })
   ],
   base: "./",
   server: {
     port: 3009,
+    host: true
   },
   preview: {
     port: 3009,
-    host: true,
+    host: true
   },
   define: {
     // By default, Vite doesn't include shims for NodeJS/
     // necessary for segment analytics lib to work
-    global: {},
+    global: {}
   },
   resolve: {
     alias: {
-      "./runtimeConfig": "./runtimeConfig.browser",
-    },
-  },
+      "./runtimeConfig": "./runtimeConfig.browser"
+    }
+  }
 });

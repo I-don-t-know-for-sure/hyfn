@@ -8,10 +8,10 @@ import {
   jsonb,
   numeric,
   uniqueIndex,
-  index,
+  index
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
-import { countriesArray, userTypesArray } from "hyfn-types";
+import { citiesArray, countriesArray, userTypesArray } from "hyfn-types";
 import * as z from "zod";
 
 export const driverManagements = pgTable(
@@ -23,15 +23,17 @@ export const driverManagements = pgTable(
     managementPhone: varchar("management_phone").notNull(),
     managementAddress: varchar("management_address").notNull(),
     country: varchar("country", {
-      enum: countriesArray,
+      enum: countriesArray
     }).notNull(),
+    deliverFrom: varchar("deliver_from", { enum: citiesArray }).array(),
+    deliverTo: varchar("deliver_to", { enum: citiesArray }).array(),
     userId: uuid("user_id").notNull(),
     usersIds: uuid("users_ids").array().notNull(),
     users: jsonb("users").array().notNull(),
     verified: boolean("verified").default(false),
     profits: numeric("profits"),
 
-    localCardApiKeyId: uuid("local_card_api_key_id"),
+    localCardApiKeyId: uuid("local_card_api_key_id")
   },
   (table) => {
     return {
@@ -39,7 +41,7 @@ export const driverManagements = pgTable(
       usersIds: index("users_idsx").on(table.usersIds),
       localCardApiKeyIdx: uniqueIndex("local_card_api_key_idx").on(
         table.localCardApiKeyId
-      ),
+      )
     };
   }
 );
@@ -49,11 +51,11 @@ export const zDriverManagement = z.object({
   users: z.array(
     z.object({
       userId: z.string(),
-      userType: z.enum(userTypesArray),
+      userType: z.enum(userTypesArray)
     })
   ),
   notificationTokens: z.array(z.string()),
-  profits: z.number(),
+  profits: z.number()
 });
 
 // export type tDriverManagement = InferModel<typeof driverManagements>;

@@ -1,0 +1,231 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("developmentdb_url")
+}
+
+model collections {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  collection_type String   @db.VarChar
+  title           String   @db.VarChar
+  description     String   @db.VarChar
+  is_active       Boolean? @default(false)
+  store_id        String   @db.Uuid
+
+  @@index([store_id], map: "store_idx")
+}
+
+model collections_products {
+  id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id    String @db.Uuid
+  collection_id String @db.Uuid
+
+  @@index([collection_id], map: "collection_idx")
+  @@index([product_id], map: "product_idx")
+}
+
+model customers {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                 String    @db.VarChar
+  name                    String    @db.VarChar
+  notification_tokens     String[]  @db.VarChar
+  transaction_id          String?   @db.Uuid
+  addresses               Json[]
+  reports_ids             String[]  @db.Uuid
+  subscribed_to_hyfn_plus Boolean?  @default(false)
+  expiration_date         DateTime? @db.Timestamp(6)
+}
+
+model driver_managements {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  management_name       String   @db.VarChar
+  management_phone      String   @db.VarChar
+  management_address    String   @db.VarChar
+  country               String   @db.VarChar
+  user_id               String   @unique(map: "driver_management_user_idx") @db.Uuid
+  users_ids             String[] @db.Uuid
+  users                 Json[]
+  verified              Boolean? @default(false)
+  profits               Decimal? @db.Decimal
+  local_card_api_key_id String?  @unique(map: "local_card_api_key_idx") @db.Uuid
+}
+
+model drivers {
+  id                        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  driver_name               String   @db.VarChar
+  driver_phone              String   @db.VarChar
+  tarnsportation_method     String   @db.VarChar
+  user_id                   String   @db.VarChar
+  verified                  Boolean? @default(false)
+  balance                   Decimal  @db.Decimal
+  driver_management         String?  @db.VarChar
+  notification_tokens       String[] @db.VarChar
+  used_balance              Decimal  @db.Decimal
+  reports_ids               String[] @db.Uuid
+  remove_driver_after_order Boolean? @default(false)
+
+  @@index([driver_management], map: "driver_managementx")
+}
+
+model local_card_key_store_activity {
+  id                String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  local_card_key_id String @db.Uuid
+  store_id          String @db.Uuid
+}
+
+model local_card_keys {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  terminal_id String   @db.VarChar
+  merchant_id String   @db.VarChar
+  secret_key  String   @db.VarChar
+  in_use      Boolean? @default(true)
+
+  @@index([merchant_id], map: "merchant_idx")
+}
+
+model order_products {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  store_id           String   @db.VarChar
+  price              Decimal  @db.Decimal
+  order_id           String   @db.Uuid
+  prev_price         Decimal  @db.Decimal
+  title              String   @db.VarChar
+  options            Json
+  measurement_system String?  @db.VarChar
+  has_options        Boolean  @default(false)
+  pickup_status      String[] @db.VarChar
+  qty_found          Decimal  @db.Decimal
+  images             String[] @db.VarChar
+  qty                Decimal  @db.Decimal
+  instructions       String?  @db.VarChar
+}
+
+model orders {
+  id                                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  store_status                       String[]  @db.VarChar
+  store_id                           String    @db.Uuid
+  driver_id                          String?   @db.Uuid
+  customer_id                        String    @db.Uuid
+  customer_status                    String[]  @db.VarChar
+  driver_status                      String[]  @db.VarChar
+  store_pickup_confirmation          String?   @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  payment_window_close_at            DateTime? @db.Timestamp(6)
+  customer_lat                       Decimal   @db.Decimal
+  customer_long                      Decimal   @db.Decimal
+  customer_address                   String?   @db.VarChar
+  city                               String?   @db.VarChar
+  order_cost                         Decimal   @db.Decimal
+  store_service_fee                  Decimal   @db.Decimal
+  delivery_fee                       Decimal   @db.Decimal
+  order_date                         DateTime? @default(now()) @db.Timestamp(6)
+  delivery_date                      DateTime? @default(now()) @db.Timestamp(6)
+  service_fee                        Decimal   @db.Decimal
+  service_fee_paid                   Boolean?  @default(false)
+  order_type                         String    @db.VarChar
+  proposals                          Json[]
+  total_cost                         Decimal   @db.Decimal
+  confirmation_code                  String?   @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  proposals_ids                      String[]  @db.VarChar
+  accepted_proposal                  String?   @db.VarChar
+  driver_management                  String?   @db.VarChar
+  order_status                       String[]  @db.VarChar
+  reports_ids                        String[]  @db.Uuid
+  delivery_fee_paid                  Boolean?  @default(false)
+  only_store_drivers_can_take_orders Boolean   @default(false)
+
+  @@index([accepted_proposal], map: "accepted_proposalx")
+  @@index([customer_id], map: "customer_idx")
+  @@index([customer_status], map: "customer_statusx")
+  @@index([driver_id], map: "driver_idx")
+  @@index([driver_status], map: "driver_statusx")
+  @@index([only_store_drivers_can_take_orders], map: "only_store_drivers_can_take_orders")
+  @@index([store_status], map: "store_statusx")
+}
+
+model product_descriptions {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id  String @db.Uuid
+  description String @db.VarChar
+}
+
+model products {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  store_id                String   @db.Uuid
+  price                   Decimal  @db.Decimal
+  prev_price              Decimal  @db.Decimal
+  title                   String
+  description             String   @db.VarChar
+  options                 Json[]
+  measurement_system      String   @db.VarChar
+  white_background_images String[] @db.VarChar
+  is_active               Boolean? @default(false)
+  has_options             Boolean? @default(false)
+  images                  String[] @db.VarChar
+
+  @@index([description(ops: raw("gin_trgm_ops"))], map: "description_index", type: Gin)
+  @@index([description(ops: raw("gin_trgm_ops"))], map: "product_description_index", type: Gin)
+  @@index([title(ops: raw("gin_trgm_ops"))], map: "product_title_index", type: Gin)
+  @@index([title(ops: raw("gin_trgm_ops"))], map: "title_index", type: Gin)
+}
+
+model reports {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  report_date DateTime? @default(now()) @db.Timestamp(6)
+  order_id    String    @db.Uuid
+  driver_id   String    @db.Uuid
+}
+
+model stores {
+  id                                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                            String    @unique(map: "store_user_idx") @db.VarChar
+  store_type                         String[]  @db.VarChar
+  store_name                         String    @db.VarChar
+  store_phone                        String    @db.VarChar
+  country                            String    @db.VarChar
+  city                               String    @db.VarChar
+  description                        String    @db.VarChar
+  address                            String    @db.VarChar
+  store_info_filled                  Boolean?  @default(false)
+  users_ids                          String[]  @db.Uuid
+  users                              Json[]
+  time_of_payment                    DateTime? @db.Timestamp(6)
+  expiration_date                    DateTime? @db.Timestamp(6)
+  number_of_months                   Decimal?  @db.Decimal(3, 0)
+  lat                                Decimal   @db.Decimal
+  long                               Decimal   @db.Decimal
+  opened                             Boolean?  @default(false)
+  balance                            Decimal   @db.Decimal
+  image                              String[]  @db.VarChar
+  notification_tokens                String[]  @db.VarChar
+  store_owner_info_filled            Boolean?  @default(false)
+  owner_last_name                    String?   @db.VarChar
+  owner_first_name                   String?   @db.VarChar
+  owner_phone_number                 String?   @db.VarChar
+  sadad_filled                       Boolean?  @default(false)
+  monthly_subscription_paid          Boolean?  @default(false)
+  local_card_api_key_id              String?   @unique(map: "store_local_card_api_key_id") @db.Uuid
+  transaction_id                     String?   @db.Uuid
+  accepting_orders                   Boolean?  @default(false)
+  include_local_card_fee_to_price    Boolean?  @default(true)
+  only_store_drivers_can_take_orders Boolean?  @default(false)
+
+  @@index([description(ops: raw("gin_trgm_ops"))], map: "store_description_index", type: Gin)
+  @@index([lat], map: "store_latx")
+  @@index([long], map: "store_longx")
+  @@index([store_name(ops: raw("gin_trgm_ops"))], map: "store_name_index", type: Gin)
+  @@index([users_ids], map: "store_users_idsx")
+}
+
+model transactions {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customer_id        String    @db.VarChar
+  amount             Decimal?  @db.Decimal
+  store_id           String    @db.VarChar
+  transaction_date   DateTime? @default(now()) @db.Timestamp(6)
+  type               String    @db.VarChar
+  status             String[]  @db.VarChar
+  transaction_method String    @db.VarChar
+  number_of_months   Int?
+  order_id           String?   @db.VarChar
+
+  @@index([order_id], map: "order_idx")
+}

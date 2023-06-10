@@ -2,11 +2,12 @@ import {
   Button,
   Container,
   Group,
+  MultiSelect,
   Paper,
   Select,
   Stack,
   Text,
-  TextInput,
+  TextInput
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React from "react";
@@ -25,10 +26,12 @@ const CreateManagerAccount: React.FC<CreateManagerAccountProps> = ({}) => {
       managementPhone: "",
       managementAddress: "",
       country: "",
-    },
+      deliverFrom: [],
+      deliveryTo: []
+    }
   });
   const { mutate } = useCreateManagerAccount();
-  const { countries } = getCountryInfo();
+  const { countries, cities } = getCountryInfo();
   const { userId } = useUser();
   return (
     <Container mt={12}>
@@ -43,31 +46,42 @@ const CreateManagerAccount: React.FC<CreateManagerAccountProps> = ({}) => {
           <form
             onSubmit={form.onSubmit(async (values) => {
               mutate(values);
-            })}
-          >
+            })}>
             <Stack>
               <TextInput
                 type="text"
                 label={t("Management name")}
                 {...form.getInputProps("managementName")}
               />
+              <Select
+                label={t("Country")}
+                data={countries}
+                {...form.getInputProps("country")}
+              />
               <Group grow>
-                <Select
-                  label={t("Country")}
-                  data={countries}
-                  {...form.getInputProps("country")}
+                <MultiSelect
+                  label={t("Deliver from")}
+                  data={cities.Libya}
+                  {...form.getInputProps("deliverFrom")}
                 />
+                <MultiSelect
+                  label={t("Deliver to")}
+                  data={cities.Libya}
+                  {...form.getInputProps("deliverTo")}
+                />
+              </Group>
+              <Group grow>
                 <TextInput
                   type="number"
                   label={t("Phone number")}
                   {...form.getInputProps("managementPhone")}
                 />
+                <TextInput
+                  type="text"
+                  label={t("Management address")}
+                  {...form.getInputProps("managementAddress")}
+                />
               </Group>
-              <TextInput
-                type="text"
-                label={t("Management address")}
-                {...form.getInputProps("managementAddress")}
-              />
               <Button type={"submit"}>{t("Create management")}</Button>
             </Stack>
           </form>

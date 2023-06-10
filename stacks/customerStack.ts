@@ -4,7 +4,7 @@ import {
   use,
   Function,
   StaticSite,
-  Cognito,
+  Cognito
 } from "sst/constructs";
 
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -25,7 +25,7 @@ export function customerApiStack({ stack }: StackContext) {
   const stage = getStage(stack.stage);
 
   const defaultFunction = new Function(stack, "customerdefaultFunction", {
-    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
+    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler"
   });
   const { s3Bucket } = use(imagesBucketStack);
   const { key } = use(kmsStack);
@@ -62,182 +62,187 @@ export function customerApiStack({ stack }: StackContext) {
           sadadApiKey: config[stage].sadadApiKey,
 
           secretAccessKey: config[stage].secretAccessKey,
-          db_url: config[stage].db_url,
+          db_url: config[stage].db_url
         },
-        permissions: [],
-      },
+        permissions: []
+      }
     },
     routes: {
       "POST /getStoreFronts": {
         function: {
           functionName: "getStoreFronts" + stack.stage,
-          handler: pathToLambdas + "getStoreFronts.handler",
-        },
+          handler: pathToLambdas + "getStoreFronts.handler"
+        }
       },
 
       "POST /createTransaction": {
         function: {
           handler: pathToLambdas + "createTransaction.handler",
-          functionName: "createTransaction" + stack.stage,
-        },
+          functionName: "createTransaction" + stack.stage
+        }
       },
 
       "POST /validateTransaction": {
         function: {
           handler: pathToLambdas + "validateTransaction.handler",
-          functionName: "validateTransaction" + stack.stage,
-        },
+          functionName: "validateTransaction" + stack.stage
+        }
       },
 
       "POST /updateNotificationTokens": {
         function: {
           functionName: "updateNotificationTokens" + stack.stage,
-          handler: pathToLambdas + "updateNotificationTokens.handler",
-        },
+          handler: pathToLambdas + "updateNotificationTokens.handler"
+        }
       },
       "POST /confirmPickup": {
         function: {
           functionName: "confirmPickup" + stack.stage,
-          handler: pathToLambdas + "confirmPickup.handler",
-        },
+          handler: pathToLambdas + "confirmPickup.handler"
+        }
       },
       "POST /acceptProposal": {
         function: {
           functionName: "acceptProposal" + stack.stage,
-          handler: pathToLambdas + "acceptProposal.handler",
-        },
+          handler: pathToLambdas + "acceptProposal.handler"
+        }
       },
       "POST /getCustomerData": {
         function: {
           functionName: "getCustomerData" + stack.stage,
-          handler: pathToLambdas + "getCustomerData.handler",
-        },
+          handler: pathToLambdas + "getCustomerData.handler"
+        }
       },
 
       "POST /setOrderAsDelivered": {
         function: {
           functionName: "setOrderAsDelivered" + stack.stage,
-          handler: pathToLambdas + "setOrderAsDelivered.handler",
-        },
+          handler: pathToLambdas + "setOrderAsDelivered.handler"
+        }
       },
 
       "POST /setProductAsNotFound": {
         function: {
           functionName: "setProductAsNotFound" + stack.stage,
-          handler: pathToLambdas + "setProductAsNotFound.handler",
-        },
+          handler: pathToLambdas + "setProductAsNotFound.handler"
+        }
       },
       "POST /setProductAsPickedUp": {
         function: {
           functionName: "setProductAsPickedUp" + stack.stage,
-          handler: pathToLambdas + "setProductAsPickedUp.handler",
-        },
+          handler: pathToLambdas + "setProductAsPickedUp.handler"
+        }
       },
       "POST /createOrderData": {
         function: {
           functionName: "createOrderData" + stack.stage,
-          handler: pathToLambdas + "createOrderData.handler",
-        },
+          handler: pathToLambdas + "createOrderData.handler"
+        }
       },
       "POST /getProduct": {
         function: {
           functionName: "getProduct" + stack.stage,
-          handler: pathToLambdas + "getProduct.handler",
-        },
+          handler: pathToLambdas + "getProduct.handler"
+        }
       },
 
       "POST /getStoreFront": {
         function: {
           functionName: "getStoreFront" + stack.stage,
-          handler: pathToLambdas + "getStoreFront.handler",
-        },
+          handler: pathToLambdas + "getStoreFront.handler"
+        }
       },
       "POST /getActiveOrders": {
         function: {
           functionName: "getActiveOrders" + stack.stage,
-          handler: pathToLambdas + "getActiveOrders.handler",
-        },
+          handler: pathToLambdas + "getActiveOrders.handler"
+        }
       },
       "POST /getOrderHistory": {
         function: {
           functionName: "getOrderHistory" + stack.stage,
-          handler: pathToLambdas + "getOrderHistory.handler",
-        },
+          handler: pathToLambdas + "getOrderHistory.handler"
+        }
       },
       "POST /getCollectionProducts": {
         function: {
           functionName: "getCollectionProducts" + stack.stage,
-          handler: pathToLambdas + "getCollectionProducts.handler",
-        },
+          handler: pathToLambdas + "getCollectionProducts.handler"
+        }
       },
       "POST /getBalance": {
         function: {
           functionName: "getBalance" + stack.stage,
-          handler: pathToLambdas + "getBalance.handler",
-        },
+          handler: pathToLambdas + "getBalance.handler"
+        }
       },
       "POST /getDriverInfo": {
         function: {
           functionName: "getDriverInfo" + stack.stage,
-          handler: pathToLambdas + "getDriverInfo.handler",
-        },
+          handler: pathToLambdas + "getDriverInfo.handler"
+        }
       },
 
       "POST /cancelOrder": {
         function: {
           functionName: "cancelOrder" + stack.stage,
-          handler: pathToLambdas + "cancelOrder.handler",
-        },
+          handler: pathToLambdas + "cancelOrder.handler"
+        }
       },
       "POST /reportOrder": {
         function: {
           functionName: "reportOrder" + stack.stage,
-          handler: pathToLambdas + "reportOrder.handler",
-        },
+          handler: pathToLambdas + "reportOrder.handler"
+        }
       },
 
       "POST /createUserDocument": {
         function: {
           functionName: "createUserDocument" + stack.stage,
-          handler: pathToLambdas + "createUserDocument.handler",
-        },
+          handler: pathToLambdas + "createUserDocument.handler"
+        }
       },
 
       "POST /updateUserDocument": {
         function: {
           functionName: "updateUserDocument" + stack.stage,
-          handler: pathToLambdas + "updateUserDocument.handler",
-        },
+          handler: pathToLambdas + "updateUserDocument.handler"
+        }
       },
       "POST /updateAddresses": {
         function: {
           functionName: "updateAddresses" + stack.stage,
-          handler: pathToLambdas + "updateAddresses.handler",
-        },
+          handler: pathToLambdas + "updateAddresses.handler"
+        }
       },
       [customerUrl({ method: "POST", url: "getOrder" })]: {
         function: {
-          handler: pathToStoreLambdas + "getOrder.handler",
-        },
+          handler: pathToStoreLambdas + "getOrder.handler"
+        }
+      },
+      [customerUrl({ method: "POST", url: "getSearchHits" })]: {
+        function: {
+          handler: pathToLambdas + "getSearchHits.handler"
+        }
       },
 
-      ...transactions,
-    },
+      ...transactions
+    }
   });
   const permissions = new iam.PolicyStatement({
     actions: ["*"],
     effect: iam.Effect.ALLOW,
-    resources: [`*`],
+    resources: [`*`]
   });
 
   api.attachPermissions([permissions]);
   api.setCors({
     allowMethods: ["POST"],
-    allowHeaders: ["Accept", "Content-Type", "Authorization"],
+    allowHeaders: ["Accept", "Content-Type", "Authorization"]
   });
   new CfnOutput(stack, "customerApiUrl-" + stack.stage, {
     value: api.url || "",
-    exportName: "customerApiUrl-" + stack.stage, // export name
+    exportName: "customerApiUrl-" + stack.stage // export name
   });
   /////////////////////////////////////////////////////////////////////
 
@@ -245,7 +250,7 @@ export function customerApiStack({ stack }: StackContext) {
     ApiEndpoint: api.url,
     apiArn: api.httpApiArn,
     apiFunctionsRoleArn:
-      api.getFunction("POST /updateAddresses")?.role?.roleArn || "",
+      api.getFunction("POST /updateAddresses")?.role?.roleArn || ""
   });
   return { api };
 }
@@ -257,14 +262,14 @@ export function customerCognitoStack({ stack }: StackContext) {
     cdk: {
       userPool: {
         passwordPolicy: {
-          minLength: 8,
+          minLength: 8
           // requireLowercase: false,
           // requireUppercase: false,
           // requireDigits: false,
           // requireSymbols: false,
-        },
-      },
-    },
+        }
+      }
+    }
   });
   const { authBucket } = use(authBucketStack);
   const authBucketArn = authBucket.bucketArn;
@@ -277,29 +282,29 @@ export function customerCognitoStack({ stack }: StackContext) {
       actions: ["s3:*"],
       effect: iam.Effect.ALLOW,
       resources: [
-        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
-      ],
-    }),
+        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*"
+      ]
+    })
   ]);
 
   new CfnOutput(stack, "customerCognitoIdentityPoolId-" + stack.stage, {
     value: auth.cognitoIdentityPoolId || "test",
-    exportName: "customerCognitoIdentityPoolId-" + stack.stage, // export name
+    exportName: "customerCognitoIdentityPoolId-" + stack.stage // export name
   });
   new CfnOutput(stack, "customerCognitoRegion-" + stack.stage, {
     value: stack.region || "",
-    exportName: "customerCognitoRegion-" + stack.stage, // export name
+    exportName: "customerCognitoRegion-" + stack.stage // export name
   });
   new CfnOutput(stack, "customerUserPoolId-" + stack.stage, {
     value: auth.userPoolId || "",
-    exportName: "customerUserPoolId-" + stack.stage, // export name
+    exportName: "customerUserPoolId-" + stack.stage // export name
   });
   new CfnOutput(stack, "customerUserPoolClientId-" + stack.stage, {
     value: auth.userPoolClientId || "",
-    exportName: "customerUserPoolClientId-" + stack.stage, // export name
+    exportName: "customerUserPoolClientId-" + stack.stage // export name
   });
   stack.addOutputs({});
   return {
-    auth,
+    auth
   };
 }

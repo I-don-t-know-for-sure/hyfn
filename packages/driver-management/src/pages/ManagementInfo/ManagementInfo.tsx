@@ -1,30 +1,24 @@
 import {
-  ActionIcon,
   Button,
-  Center,
   Container,
   Group,
-  NumberInput,
-  NumberInputHandlers,
+  MultiSelect,
   Paper,
   Select,
   Stack,
-  Text,
-  TextInput,
+  TextInput
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "../../utils/i18nextFix";
-import { useCreateManagerAccount } from "pages/CreateManagerAccount/hooks/useCreateManagerAccount";
-import React, { useEffect, useRef, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { useUpdateManagerInfo } from "./hooks/useUpdateManagerInfo";
 import { getCountryInfo } from "utils/countryInfo";
 import { useUser } from "contexts/userContext/User";
-import { MAXIMUM_MANAGEMENT_CUT } from "hyfn-types";
+
 import { useAddLocalCardKeys } from "./hooks/useAddLocalCardKeys";
 import { useDisableLocalCardKeys } from "./hooks/useDisableLocalCardKeys";
 import { useAddEmployee } from "./hooks/useAddEmployee";
-import { Transactions } from "hyfn-client";
-import { useGetTransactions } from "hooks/useGetTransactions";
 
 interface ManagementInfoProps {}
 
@@ -36,16 +30,19 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
       managementAddress: "",
       country: "",
       managementCut: 0,
-    },
+      deliverFrom: [],
+      deliverTo: []
+    }
   });
 
   const localCardKeysForm = useForm({
     initialValues: {
       merchantId: "",
       terminalId: "",
-      secretKey: "",
-    },
+      secretKey: ""
+    }
   });
+
   const [employeeId, setEmployeeId] = useState<string>("");
   const [editing, setEditing] = useState(false);
   const { userDocument, isLoading } = useUser();
@@ -57,16 +54,18 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
         managementName: userDocument.managementName,
         managementPhone: userDocument.managementPhone,
         managementCut: userDocument.managementCut,
+        deliverFrom: userDocument.deliverFrom,
+        deliverTo: userDocument.deliverTo
       });
       localCardKeysForm.setValues({
         merchantId: userDocument?.localCardKeys?.MerchantId,
         terminalId: userDocument?.localCardKeys?.TerminalId,
-        secretKey: userDocument?.localCardKeys?.secretKey,
+        secretKey: userDocument?.localCardKeys?.secretKey
       });
     }
   }, [userDocument, isLoading]);
 
-  const { countries } = getCountryInfo();
+  const { countries, cities } = getCountryInfo();
 
   const { mutate } = useUpdateManagerInfo();
   const { mutate: addLocalCardKeys } = useAddLocalCardKeys();
@@ -80,32 +79,42 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
           <form
             onSubmit={form.onSubmit(async (values) => {
               mutate(values);
-            })}
-          >
+            })}>
             <Stack>
               <TextInput
                 type="text"
                 label={t("Management name")}
-                {...form.getInputProps("managementPhone")}
+                {...form.getInputProps("managementName")}
+              />
+              <Select
+                label={t("Country")}
+                data={countries}
+                {...form.getInputProps("country")}
               />
               <Group grow>
-                <Select
-                  label={t("Country")}
-                  data={countries}
-                  {...form.getInputProps("country")}
+                <MultiSelect
+                  label={t("Deliver from")}
+                  data={cities.Libya}
+                  {...form.getInputProps("deliverFrom")}
                 />
+                <MultiSelect
+                  label={t("Deliver to")}
+                  data={cities.Libya}
+                  {...form.getInputProps("deliverTo")}
+                />
+              </Group>
+              <Group grow>
                 <TextInput
                   type="number"
                   label={t("Phone number")}
                   {...form.getInputProps("managementPhone")}
                 />
+                <TextInput
+                  type="text"
+                  label={t("Management address")}
+                  {...form.getInputProps("managementAddress")}
+                />
               </Group>
-              <TextInput
-                type="text"
-                label={t("Management address")}
-                {...form.getInputProps("managementAddress")}
-              />
-
               <Button type={"submit"}>{t("Update management")}</Button>
             </Stack>
           </form>
@@ -139,15 +148,13 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
                 <Button
                   onClick={() => {
                     addLocalCardKeys(localCardKeysForm.values);
-                  }}
-                >
+                  }}>
                   {t("Update")}
                 </Button>
                 <Button
                   onClick={() => {
                     disableLocalCardKeys();
-                  }}
-                >
+                  }}>
                   {t("Disable")}
                 </Button>
               </>
@@ -157,8 +164,7 @@ const ManagementInfo: React.FC<ManagementInfoProps> = ({}) => {
               <Button
                 onClick={() => {
                   addLocalCardKeys(localCardKeysForm.values);
-                }}
-              >
+                }}>
                 {t("Add keys")}
               </Button>
             )}

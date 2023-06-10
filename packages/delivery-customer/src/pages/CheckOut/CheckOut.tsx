@@ -9,7 +9,7 @@ import {
   Select,
   Skeleton,
   Text,
-  TextInput,
+  TextInput
 } from "@mantine/core";
 
 import "dayjs/locale/ru";
@@ -104,7 +104,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const {
     data: userCustomData,
     isLoading: isUserDocumentLoading,
-    refetch,
+    refetch
   } = useGetUserDocument({ userId });
 
   useEffect(() => {
@@ -119,20 +119,20 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const [{ distance, duration, deliveryFee }, setDeliveryDetails] =
     useState<any>({
       distance: 0,
-      duration: 0,
+      duration: 0
     });
 
   const initialValues = {
     location: `${userCoords[0]},${userCoords[1]}`,
     address: "",
-    phoneNumber: "",
+    phoneNumber: ""
   } as {
     location: string | number[];
     address: string;
     phoneNumber: string;
   };
   const form = useForm({
-    initialValues,
+    initialValues
   });
   const navigate = useNavigate();
   const [error, setError] = useState({ error: false, message: "" });
@@ -142,7 +142,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const selectAddresses = addresses?.map((address) => {
     return {
       label: address?.label,
-      value: address?.key,
+      value: address?.key
     };
   });
 
@@ -171,7 +171,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
         form.setValues({
           address: address.locationDescription,
           location: convertCoordsArraytoString(address.coords),
-          phoneNumber: form.values.phoneNumber,
+          phoneNumber: form.values.phoneNumber
         });
       }
     }
@@ -247,7 +247,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
         city: prev.city,
         country: prev.country,
         coords: [res.coords.latitude, res.coords.longitude],
-        address: prev.address,
+        address: prev.address
       };
     });
     //alert(`lat: ${res.coords.latitude}, long: ${res.coords.longitude}`);
@@ -266,39 +266,35 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                 display: "flex",
                 alignItems: "center",
                 flexFlow: "wrap",
-                width: "100%",
-              }}
-            >
+                width: "100%"
+              }}>
               <form
                 style={{
-                  width: "100%",
-                }}
-              >
+                  width: "100%"
+                }}>
                 <Button
                   type="button"
                   variant="outline"
                   style={{
-                    width: "100%",
+                    width: "100%"
                   }}
                   onClick={() => {
                     navigator.geolocation.getCurrentPosition(success, err);
-                  }}
-                >
+                  }}>
                   {t("set your current location")}
                 </Button>
                 <Group
                   sx={{
-                    width: "100%",
-                  }}
-                >
+                    width: "100%"
+                  }}>
                   <TextInput
                     sx={{
-                      width: "62%",
+                      width: "62%"
                     }}
                     label={t("Location")}
                     style={{
                       marginTop: "12px",
-                      flexGrow: 0.9,
+                      flexGrow: 0.9
                     }}
                     onBlur={(e) => {
                       const coords = convertCoordsStringToArray(e.target.value);
@@ -326,7 +322,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                     label={t("Addresses")}
                     sx={{
                       marginTop: "12px",
-                      maxWidth: "33%",
+                      maxWidth: "33%"
                     }}
                     data={selectAddresses || []}
                     value={addressKey}
@@ -337,7 +333,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                 </Group>
                 <TextInput
                   sx={{
-                    width: "100%",
+                    width: "100%"
                   }}
                   label={t("Location details")}
                   {...form.getInputProps("address")}
@@ -367,7 +363,22 @@ const CheckOut: React.FC<CheckOutProps> = () => {
             </Box>
 
             <Group position="right" mt="xl">
-              <Button type="button" onClick={() => setState("payment")}>
+              <Button
+                type="button"
+                onClick={() => setState("delivery company")}>
+                {t("Next step")}
+              </Button>
+            </Group>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="delivery company">
+          <Accordion.Control>{t("Delivery company")}</Accordion.Control>
+          <Accordion.Panel>
+            <Group position="apart" mt="xl">
+              <Button type="button" onClick={() => setState("location")}>
+                {t("Previous")}
+              </Button>
+              <Button type="button" onClick={() => setState("")}>
                 {t("Next step")}
               </Button>
             </Group>
@@ -379,9 +390,8 @@ const CheckOut: React.FC<CheckOutProps> = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
+            justifyContent: "space-between"
+          }}>
           <Text>{t("Subtotal")}</Text>
           <Text>{`${currency || "LYD"} ${orderCost}`}</Text>
         </Box>
@@ -389,9 +399,8 @@ const CheckOut: React.FC<CheckOutProps> = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
+            justifyContent: "space-between"
+          }}>
           <Text>{t("Service fee")}</Text>
           <Text>{`${currency || "LYD"} ${serviceFee}`}</Text>
         </Box>
@@ -399,9 +408,8 @@ const CheckOut: React.FC<CheckOutProps> = () => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            marginTop: 6,
-          }}
-        >
+            marginTop: 6
+          }}>
           <Text weight={600}>{t("Total")}</Text>
           <Text>{`${currency || "LYD"} ${totalCost}`}</Text>
         </Box>
@@ -411,7 +419,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
         // disabled={}
         style={{
           width: "100%",
-          marginTop: "16px",
+          marginTop: "16px"
         }}
         onClick={() => {
           try {
@@ -422,7 +430,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                   city: prev.city,
                   country: prev.country,
                   coords: coordinates,
-                  address: prev.address,
+                  address: prev.address
                 };
               }
               const proccessed = coordinates.split(",");
@@ -431,15 +439,14 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                 city: prev.city,
                 country: prev.country,
                 coords: [parseFloat(proccessed[0]), parseFloat(proccessed[1])],
-                address: address,
+                address: address
               };
             });
             mutate({ cart: cartArray, deliveryDate: deliveryDate.getTime() });
           } catch (e) {
             console.error(e);
           }
-        }}
-      >
+        }}>
         {t("Place Order")}
       </Button>
     </Container>

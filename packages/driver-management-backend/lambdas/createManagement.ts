@@ -1,30 +1,32 @@
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { returnsObj } from 'hyfn-types';
-interface CreateManagementProps extends Omit<MainFunctionProps, 'arg'> {
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
+import { returnsObj } from "hyfn-types";
+interface CreateManagementProps extends Omit<MainFunctionProps, "arg"> {
   arg: any;
 }
 export const createManagementHandler = async ({
   arg,
   client,
   userId,
-  db,
+  db
 }: CreateManagementProps) => {
   const { balance, ...managerInfo } = arg[0];
 
   await db
-    .insertInto('driverManagements')
+    .insertInto("driverManagements")
     .values({
       country: managerInfo.country,
       userId,
       usersIds: [userId],
-      users: [{ userId, userType: 'owner' }],
+      users: [{ userId, userType: "owner" }],
       managementAddress: managerInfo.managementAddress,
       managementName: managerInfo.managementName,
       managementPhone: managerInfo.managementPhone,
-      verified: false,
+      verified: true,
+      deliverFrom: managerInfo.deliverFrom,
+      deliverTo: managerInfo.deliverTo
     })
     .execute();
-  return returnsObj['sucess'];
+  return returnsObj["sucess"];
 };
 export const handler = async (event) => {
   return await mainWrapper({ event, mainFunction: createManagementHandler });

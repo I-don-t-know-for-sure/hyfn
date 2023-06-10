@@ -1,7 +1,3 @@
-interface CreateLocalCardTransactionProps
-  extends Omit<MainFunctionProps, "arg"> {
-  arg: any;
-}
 import { ObjectId } from "mongodb";
 import {
   adminName,
@@ -20,8 +16,10 @@ import { add } from "mathjs";
 import { calculateAmountToPayTheStoreAndAmountToReturnTheCustomer } from "./common/calculateAmountToPayTheStoreAndAmountToReturnTheCustomer";
 import { KMS } from "aws-sdk";
 import { returnsObj } from "hyfn-types";
-interface createLocalCardTransaction extends Omit<MainFunctionProps, "arg"> {
-  arg: any[];
+
+interface CreateLocalCardTransactionProps
+  extends Omit<MainFunctionProps, "arg"> {
+  arg: any;
 }
 /**
  
@@ -38,7 +36,7 @@ export const createlocalCardTransaction = async ({
   client,
   userId,
   db
-}: createLocalCardTransaction) => {
+}: CreateLocalCardTransactionProps) => {
   const { type, storeId, orderId, numberOfMonths, country } = arg[0];
   const customerDoc = await db
     .selectFrom("customers")
@@ -366,6 +364,7 @@ export const createlocalCardTransaction = async ({
 
       if (!managementDoc.localCardApiKeyId)
         throw new Error(returnsObj["no payment method"]);
+
       const {
         terminalId,
         merchantId,

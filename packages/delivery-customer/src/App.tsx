@@ -45,7 +45,7 @@ function App() {
       region: import.meta.env.VITE_APP_COGNITO_REGION,
       userPoolId: import.meta.env.VITE_APP_USER_POOL_ID,
       identityPoolId: import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID,
-      userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID,
+      userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID
     },
     // oauth: {
 
@@ -53,14 +53,14 @@ function App() {
     Storage: {
       region: import.meta.env.VITE_APP_COGNITO_REGION,
       bucket: import.meta.env.VITE_APP_BUCKET,
-      identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
-    },
+      identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID
+    }
   });
 
   const { loggedIn } = useUser();
   const [notificationTokenSent, setNotificationTokenSent] = useLocalStorage({
     key: "notificationTokenSent",
-    defaultValue: false,
+    defaultValue: false
   });
   useEffect(() => {
     console.log("update");
@@ -83,7 +83,7 @@ function App() {
                 storageBucket: import.meta.env.VITE_APP_FIREBASE_STORAGE_BUCKET,
                 messagingSenderId: import.meta.env
                   .VITE_APP_FIREBASE_MESSAGING_SENDER_ID,
-                appId: import.meta.env.VITE_APP_FIREBASE_APP_ID,
+                appId: import.meta.env.VITE_APP_FIREBASE_APP_ID
               };
 
               // Initialize Firebase
@@ -92,7 +92,7 @@ function App() {
               const messaging = getMessaging(app);
               console.log("dbcjbdhcbdhcbdbhcbd");
               getToken(messaging, {
-                vapidKey: import.meta.env.VITE_APP_VAPID_KEY,
+                vapidKey: import.meta.env.VITE_APP_VAPID_KEY
               })
                 .then((currentToken) => {
                   if (currentToken) {
@@ -100,7 +100,7 @@ function App() {
                     // send the token to your server to associate it with the user
                     fetchApi({
                       arg: [{ notificationToken: currentToken }],
-                      url: `updateNotificationTokens`,
+                      url: `updateNotificationTokens`
                     })
                       .then((res: any) => {
                         console.log(
