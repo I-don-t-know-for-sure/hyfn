@@ -1,16 +1,9 @@
-import {
-  Bucket,
-  Config,
-  Function,
-  RDS,
-  StackContext,
-  toCdkDuration,
-} from "sst/constructs";
-import * as lambda from "aws-cdk-lib/aws-lambda";
+import { Bucket, Function, StackContext, toCdkDuration } from "sst/constructs";
+
 import * as kms from "aws-cdk-lib/aws-kms";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as s3 from "aws-cdk-lib/aws-s3";
-import * as aws from "aws-sdk";
+
 import { AnyPrincipal, Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnOutput } from "aws-cdk-lib";
 const pathToLambdas = "packages/admin-backend/lambdas/";
@@ -21,8 +14,8 @@ export function imagesBucketStack({ stack }: StackContext) {
       {
         allowedMethods: ["GET", "HEAD", "PUT", "POST"],
         allowedOrigins: ["*"],
-        allowedHeaders: ["*"],
-      },
+        allowedHeaders: ["*"]
+      }
     ],
     cdk: {
       bucket: {
@@ -32,42 +25,42 @@ export function imagesBucketStack({ stack }: StackContext) {
           {
             id: "MyLifecycle",
             prefix: "image-reader/",
-            expiration: toCdkDuration(`1 day`),
-          },
-        ],
-      },
-    },
+            expiration: toCdkDuration(`1 day`)
+          }
+        ]
+      }
+    }
   });
 
   const bucketPolicy = new PolicyStatement({
     actions: ["s3:GetObject", "s3:PutObject"],
     resources: [`${s3Bucket.bucketArn}/*`],
     principals: [new AnyPrincipal()],
-    effect: Effect.ALLOW,
+    effect: Effect.ALLOW
   });
   s3Bucket.cdk.bucket.addToResourcePolicy(bucketPolicy as any);
 
   const resizeFunction = new Function(stack, "resizeFunction", {
-    handler: "./packages/Store-backend/lambdas/imageResizeTrigger.handler",
+    handler: "./packages/Store-backend/lambdas/imageResizeTrigger.handler"
   });
 
   s3Bucket.addNotifications(stack, {
     test: {
       function: resizeFunction,
       events: ["object_created_put"],
-      filters: [{ prefix: "initial/" }],
-    },
+      filters: [{ prefix: "initial/" }]
+    }
   });
 
   new CfnOutput(stack, "imagesBucket-" + stack.stage, {
     value: s3Bucket.bucketName,
-    exportName: "imagesBucket-" + stack.stage, // export name
+    exportName: "imagesBucket-" + stack.stage // export name
   });
   stack.addOutputs({
-    bucketUrl: s3Bucket.bucketName,
+    bucketUrl: s3Bucket.bucketName
   });
   return {
-    s3Bucket,
+    s3Bucket
   };
 }
 
@@ -75,20 +68,20 @@ export function authBucketStack({ stack }: StackContext) {
   const authBucket = new Bucket(stack, "authBucket", {});
   new CfnOutput(stack, "authBucketName-" + stack.stage, {
     value: authBucket.bucketName || "",
-    exportName: "authBucketName-" + stack.stage, // export name
+    exportName: "authBucketName-" + stack.stage // export name
   });
   new CfnOutput(stack, "authBucketArn-" + stack.stage, {
     value: authBucket.bucketArn || "",
-    exportName: "authBucketArn-" + stack.stage, // export name
+    exportName: "authBucketArn-" + stack.stage // export name
   });
   return {
-    authBucket,
+    authBucket
   };
 }
 export function kmsStack({ stack }: StackContext) {
   const key = new kms.Key(stack, "secretsKeyHyfn", {
     // alias: "secretesKeyhyfn",
-    enableKeyRotation: true,
+    enableKeyRotation: true
   });
 
   const policyStatement = new iam.PolicyStatement({
@@ -98,18 +91,18 @@ export function kmsStack({ stack }: StackContext) {
       "kms:Decrypt",
       "kms:ReEncrypt*",
       "kms:GenerateDataKey*",
-      "kms:Describe*",
+      "kms:Describe*"
     ],
     principals: [new AnyPrincipal()],
-    resources: ["*"],
+    resources: ["*"]
   });
 
   key.addToResourcePolicy(policyStatement);
   new CfnOutput(stack, "secretesKmsKey-" + stack.stage, {
     value: key.keyArn,
-    exportName: "secretesKmsKey-" + stack.stage, // export name
+    exportName: "secretesKmsKey-" + stack.stage // export name
   });
   return {
-    key,
+    key
   };
 }

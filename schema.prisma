@@ -25,7 +25,7 @@ model collections_products {
 
 model customers {
   id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id                 String    @db.VarChar
+  user_id                 String    @unique(map: "user_idx") @db.VarChar
   name                    String    @db.VarChar
   notification_tokens     String[]  @db.VarChar
   transaction_id          String?   @db.Uuid
@@ -41,12 +41,17 @@ model driver_managements {
   management_phone      String   @db.VarChar
   management_address    String   @db.VarChar
   country               String   @db.VarChar
+  deliver_from          String[] @db.VarChar
+  deliver_to            String[] @db.VarChar
+  have_api              Boolean? @default(false)
   user_id               String   @unique(map: "driver_management_user_idx") @db.Uuid
   users_ids             String[] @db.Uuid
   users                 Json[]
   verified              Boolean? @default(false)
   profits               Decimal? @db.Decimal
   local_card_api_key_id String?  @unique(map: "local_card_api_key_idx") @db.Uuid
+
+  @@index([users_ids], map: "users_idsx")
 }
 
 model drivers {
@@ -60,6 +65,7 @@ model drivers {
   driver_management         String?  @db.VarChar
   notification_tokens       String[] @db.VarChar
   used_balance              Decimal  @db.Decimal
+  managed_by                String?  @db.VarChar
   reports_ids               String[] @db.Uuid
   remove_driver_after_order Boolean? @default(false)
 
@@ -83,6 +89,8 @@ model local_card_keys {
 }
 
 model order_products {
+  measurement_system String   @db.VarChar
+  pickup_status      String[] @db.VarChar
   id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   store_id           String   @db.VarChar
   price              Decimal  @db.Decimal
@@ -90,9 +98,7 @@ model order_products {
   prev_price         Decimal  @db.Decimal
   title              String   @db.VarChar
   options            Json
-  measurement_system String?  @db.VarChar
   has_options        Boolean  @default(false)
-  pickup_status      String[] @db.VarChar
   qty_found          Decimal  @db.Decimal
   images             String[] @db.VarChar
   qty                Decimal  @db.Decimal
@@ -127,7 +133,10 @@ model orders {
   proposals_ids                      String[]  @db.VarChar
   accepted_proposal                  String?   @db.VarChar
   driver_management                  String?   @db.VarChar
+  allowed_driver_managements         String[]  @db.Uuid
   order_status                       String[]  @db.VarChar
+  to_city                            String    @db.VarChar
+  from_city                          String    @db.VarChar
   reports_ids                        String[]  @db.Uuid
   delivery_fee_paid                  Boolean?  @default(false)
   only_store_drivers_can_take_orders Boolean   @default(false)
@@ -160,11 +169,6 @@ model products {
   is_active               Boolean? @default(false)
   has_options             Boolean? @default(false)
   images                  String[] @db.VarChar
-
-  @@index([description(ops: raw("gin_trgm_ops"))], map: "description_index", type: Gin)
-  @@index([description(ops: raw("gin_trgm_ops"))], map: "product_description_index", type: Gin)
-  @@index([title(ops: raw("gin_trgm_ops"))], map: "product_title_index", type: Gin)
-  @@index([title(ops: raw("gin_trgm_ops"))], map: "title_index", type: Gin)
 }
 
 model reports {
@@ -207,11 +211,12 @@ model stores {
   accepting_orders                   Boolean?  @default(false)
   include_local_card_fee_to_price    Boolean?  @default(true)
   only_store_drivers_can_take_orders Boolean?  @default(false)
+  include_delivery_fee               Boolean?  @default(false)
+  deliver_to                         String[]  @db.VarChar
+  deliver_with_store_drivers         Boolean?  @default(false)
 
-  @@index([description(ops: raw("gin_trgm_ops"))], map: "store_description_index", type: Gin)
   @@index([lat], map: "store_latx")
   @@index([long], map: "store_longx")
-  @@index([store_name(ops: raw("gin_trgm_ops"))], map: "store_name_index", type: Gin)
   @@index([users_ids], map: "store_users_idsx")
 }
 
@@ -226,6 +231,8 @@ model transactions {
   transaction_method String    @db.VarChar
   number_of_months   Int?
   order_id           String?   @db.VarChar
+  plus               Json?
+  explaination       String[]  @db.VarChar
 
   @@index([order_id], map: "order_idx")
 }

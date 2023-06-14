@@ -24,6 +24,7 @@ import { reportOrderHandler } from "./reportOrder";
 import { getTransactions } from "./getTransactions";
 import { updateAddressesHandler } from "./updateAddresses";
 import { getSearchHits } from "./getSearchHits";
+import { getDriverManagements } from "./getDriverManagements";
 export type LambdaHandlers = {
   getStoreFronts: {
     arg: Parameters<typeof getStoreFronts>["0"]["arg"];
@@ -127,6 +128,10 @@ export type LambdaHandlers = {
   getSearchHits: {
     arg: Parameters<typeof getSearchHits>["0"]["arg"];
     return: ReturnType<typeof getSearchHits>;
+  };
+  getDriverManagements: {
+    arg: Parameters<typeof getDriverManagements>["0"]["arg"];
+    return: ReturnType<typeof getDriverManagements>;
   };
 };
 export type TransactionsHandler = {

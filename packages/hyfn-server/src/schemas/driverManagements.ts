@@ -27,6 +27,7 @@ export const driverManagements = pgTable(
     }).notNull(),
     deliverFrom: varchar("deliver_from", { enum: citiesArray }).array(),
     deliverTo: varchar("deliver_to", { enum: citiesArray }).array(),
+    haveAPI: boolean("have_api").default(false),
     userId: uuid("user_id").notNull(),
     usersIds: uuid("users_ids").array().notNull(),
     users: jsonb("users").array().notNull(),

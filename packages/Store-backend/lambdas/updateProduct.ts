@@ -1,13 +1,22 @@
-('use strict');
-import { MainFunctionProps, mainWrapper, tCollections_products } from 'hyfn-server';
+("use strict");
+import {
+  MainFunctionProps,
+  mainWrapper,
+  tCollections_products
+} from "hyfn-server";
 
-import { deleteImages } from './common/utils/deleteImages';
-import { sql } from 'kysely';
+import { deleteImages } from "./common/utils/deleteImages";
+import { sql } from "kysely";
 
-interface UpdateProductProps extends Omit<MainFunctionProps, 'arg'> {
+interface UpdateProductProps extends Omit<MainFunctionProps, "arg"> {
   arg: any;
 }
-export const updateProductHandler = async ({ arg, client, db, userId }: UpdateProductProps) => {
+export const updateProductHandler = async ({
+  arg,
+  client,
+  db,
+  userId
+}: UpdateProductProps) => {
   const response = await db.transaction().execute(async (trx) => {
     const { product, productId, deletedImages } = arg[0];
 
@@ -25,62 +34,68 @@ export const updateProductHandler = async ({ arg, client, db, userId }: UpdatePr
       isActive,
       imagesURLs: urls,
 
-      collections,
+      collections
     } = product;
 
     const { id, country, city } = arg[1];
 
-    var returnValue = 'initial';
+    var returnValue = "initial";
     const mongo = client;
 
     const oldProductDoc = await trx
-      .selectFrom('products')
+      .selectFrom("products")
       .selectAll()
-      .where('id', '=', productId)
+      .where("id", "=", productId)
       .executeTakeFirstOrThrow();
-    const oldCollections = await db
-      .selectFrom('collectionsProducts')
-      .selectAll()
-      .where('productId', '=', productId)
-      .execute();
+    // const oldCollections = await db
+    //   .selectFrom("collectionsProducts")
+    //   .selectAll()
+    //   .where("productId", "=", productId)
+    //   .execute();
+    const collectionsIds =
+      collections?.map((collection) => collection.value) || [];
+    // const addedCollections = collections.filter((collection) => {
+    //   const oldCollectionExist = oldCollections.find((oldCollection) => {
+    //     return oldCollection.collectionId === collection.value;
+    //   });
 
-    const addedCollections = collections.filter((collection) => {
-      const oldCollectionExist = oldCollections.find((oldCollection) => {
-        return oldCollection.collectionId === collection.value;
-      });
+    //   if (oldCollectionExist) {
+    //     return false;
+    //   }
+    //   return true;
+    // });
 
-      if (oldCollectionExist) {
-        return false;
-      }
-      return true;
-    });
+    // const removedCollections = oldCollections.filter((newCollection) => {
+    //   const oldCollectionExist = collections.find(
+    //     (oldCollection) => oldCollection.value === newCollection.collectionId
+    //   );
 
-    const removedCollections = oldCollections.filter((newCollection) => {
-      const oldCollectionExist = collections.find(
-        (oldCollection) => oldCollection.value === newCollection.collectionId
-      );
+    //   if (oldCollectionExist) {
+    //     return false;
+    //   }
+    //   return true;
+    // });
 
-      if (oldCollectionExist) {
-        return false;
-      }
-      return true;
-    });
+    // if (addedCollections.length > 0) {
+    //   const newCollections = addedCollections.map((collection) => ({
+    //     collectionId: collection.value,
+    //     productId
+    //   }));
+    //   await trx
+    //     .insertInto("collectionsProducts")
+    //     .values(newCollections)
+    //     .execute();
+    // }
+    // if (removedCollections.length > 0) {
+    //   const removedRelationsRowsIds = removedCollections.map(
+    //     (relation) => relation.id
+    //   );
 
-    if (addedCollections.length > 0) {
-      const newCollections = addedCollections.map((collection) => ({
-        collectionId: collection.value,
-        productId,
-      }));
-      await trx.insertInto('collectionsProducts').values(newCollections).execute();
-    }
-    if (removedCollections.length > 0) {
-      const removedRelationsRowsIds = removedCollections.map((relation) => relation.id);
-
-      await trx
-        .deleteFrom('collectionsProducts')
-        .where(sql`id in (${sql.join(removedRelationsRowsIds)})`)
-        .execute();
-    }
+    //   await trx
+    //     .deleteFrom("collectionsProducts")
+    //     .where(sql`id in (${sql.join(removedRelationsRowsIds)})`)
+    //     .execute();
+    // }
 
     const updatedImages = oldProductDoc?.images?.filter(
       (image) => !deletedImages?.some((deletedImage) => deletedImage === image)
@@ -107,7 +122,7 @@ export const updateProductHandler = async ({ arg, client, db, userId }: UpdatePr
     const imagesURLs = images;
 
     await trx
-      .updateTable('products')
+      .updateTable("products")
       .set({
         title: title,
         description: description,
@@ -119,11 +134,12 @@ export const updateProductHandler = async ({ arg, client, db, userId }: UpdatePr
         images: imagesURLs,
         whiteBackgroundImages,
         measurementSystem,
+        collectionsIds
       })
-      .where('id', '=', productId)
+      .where("id", "=", productId)
       .execute();
 
-    returnValue = 'success';
+    returnValue = "success";
 
     return { message: returnValue };
   });
@@ -135,6 +151,6 @@ export const handler = async (event, ctx) => {
   return await mainWrapper({
     event,
     ctx,
-    mainFunction: updateProductHandler,
+    mainFunction: updateProductHandler
   });
 };

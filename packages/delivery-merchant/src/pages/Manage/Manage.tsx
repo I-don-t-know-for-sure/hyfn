@@ -6,11 +6,12 @@ import {
   Container,
   Group,
   Loader,
+  Stack,
   Table,
   Tabs,
   Text,
   TextInput,
-  UnstyledButton,
+  UnstyledButton
 } from "@mantine/core";
 import { useWindowScroll } from "@mantine/hooks";
 
@@ -30,25 +31,26 @@ import Test from "./components/Text";
 import TestTwo from "./components/TestTwo";
 import { useRemoveProductsBackgrounds } from "./hooks/useRemoveBackground";
 import { fetchApi } from "utils/fetch";
+import { productTabsObject } from "hyfn-types";
 // import { Helmet } from 'react-helmet'
 
 const ManageProducts: React.FC = () => {
   const [lastDocId] = useState();
   const [filterText, setFilterText] = useState("");
   const [checkedFilter, setCheckedFilter] = useState<any>("all");
+  const navigate = useNavigate();
   const { mutate: removeBackgounds } = useRemoveProductsBackgrounds();
 
   const { data, isLoading, isError, fetchNextPage, error } = useGetProducts({
     lastDocId,
-    check: checkedFilter,
-    filterText,
+    check: checkedFilter
+    // filterText
   });
 
   const { data: searchResults, isLoading: areResultsLoading } =
-    useSearchProducts(filterText);
+    useSearchProducts({ searchValue: filterText, filter: checkedFilter });
   const [results, setResults] = useState<any[]>([]);
   const { mutate } = useDeleteProduct();
-  const [scroll] = useWindowScroll();
 
   useEffect(() => {
     setSelectedProducts([]);
@@ -63,29 +65,22 @@ const ManageProducts: React.FC = () => {
       setResults(flatData);
     }
     if (filterText && searchResults?.pages[searchResults?.pages?.length - 1]) {
-      setResults(searchResults);
+      const searchResultsArray = searchResults.pages.flatMap((page) => page);
+      setResults(searchResultsArray);
     }
   }, [filterText, data, searchResults, isLoading, areResultsLoading]);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
-  const navigate = useNavigate();
   const length = data?.pages?.reduce((accu, crr) => {
     return accu + crr?.length;
   }, 0);
   return (
-    <>
-      {/* <Helmet>
+    <Container>
+      <Stack>
+        {/* <Helmet>
         <title>{t('Products')}</title>
       </Helmet> */}
-      <Center>
-        <Container
-          sx={{
-            marginTop: "16px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
+
+        <Group position="apart">
           <Text>{t("Products")}</Text>
           <Group position="center">
             <BulkImportModal />
@@ -94,18 +89,19 @@ const ManageProducts: React.FC = () => {
               {t("Create Product")}
             </Button>
           </Group>
-        </Container>
-      </Center>
-      <Container>
+        </Group>
+
         <Card shadow="xl">
           <Tabs defaultValue={"all"} onTabChange={setCheckedFilter}>
             <Tabs.List>
-              <Tabs.Tab onChange={(e) => {}} value={"all"}>
-                {t("All")}
-              </Tabs.Tab>
+              <Tabs.Tab value={productTabsObject.all}>{t("All")}</Tabs.Tab>
 
-              <Tabs.Tab value={"active"}>{t("Active")}</Tabs.Tab>
-              <Tabs.Tab value={"inactive"}>{t("Inactive")}</Tabs.Tab>
+              <Tabs.Tab value={productTabsObject.active}>
+                {t("Active")}
+              </Tabs.Tab>
+              <Tabs.Tab value={productTabsObject.inactive}>
+                {t("Inactive")}
+              </Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value={"active"}>
               <TestTwo />
@@ -114,7 +110,7 @@ const ManageProducts: React.FC = () => {
               <Test />
             </Tabs.Panel>
           </Tabs>
-          <Group>
+          <Group grow>
             <TextInput
               m={"8px auto"}
               placeholder={t("Search for products")}
@@ -137,32 +133,22 @@ const ManageProducts: React.FC = () => {
                     onClick={async () => {
                       const products = await fetchApi({
                         arg: [{ products: selectedProducts }],
-                        url: `getProductsForBulkUpdate`,
+                        url: `getProductsForBulkUpdate`
                       });
                       navigate("/bulkupdate", {
                         replace: true,
-                        state: { products },
+                        state: { products }
                       });
-                    }}
-                  >
+                    }}>
                     {t("Bulk Update")}
                   </Button>
-                  {/*  <Button
-                    variant="outline"
-                    size="xs"
-                    component={Link}
-                    to="/bulkupdate"
-                    state={{ products: selectedProducts }}
-                  >
-                    {t("Bulk Update")}
-                  </Button> */}
+
                   <Button
                     variant="outline"
                     size="xs"
                     component={Link}
                     to="/optionstable"
-                    state={{ products: selectedProducts }}
-                  >
+                    state={{ products: selectedProducts }}>
                     {t("Options")}
                   </Button>
                   <Button
@@ -170,8 +156,7 @@ const ManageProducts: React.FC = () => {
                     size="xs"
                     onClick={() => {
                       removeBackgounds({ productIds: selectedProducts });
-                    }}
-                  >
+                    }}>
                     {t("Remove image backgrounds")}
                   </Button>
                   {selectedProducts.length === 1 && (
@@ -200,7 +185,7 @@ const ManageProducts: React.FC = () => {
                             setSelectedProducts([
                               ...data?.pages?.flatMap((page) =>
                                 page.map((product) => product.id)
-                              ),
+                              )
                             ]);
                           }}
                         />
@@ -208,16 +193,14 @@ const ManageProducts: React.FC = () => {
                     </th>
                     <th
                       style={{
-                        textAlign: "center",
-                      }}
-                    >
+                        textAlign: "center"
+                      }}>
                       {t("Title")}
                     </th>
                     <th
                       style={{
-                        textAlign: "center",
-                      }}
-                    >
+                        textAlign: "center"
+                      }}>
                       {t("Actions")}
                     </th>
                   </tr>
@@ -232,9 +215,8 @@ const ManageProducts: React.FC = () => {
                         alignItems: "center",
                         display: "flex",
                         flexDirection: "column",
-                        height: "150px",
-                      }}
-                    >
+                        height: "150px"
+                      }}>
                       <Text mt={16}>{t("you have no products yet")}</Text>
                       <Button component={Link} to={"/product"}>
                         {t("Create Product")}
@@ -242,12 +224,7 @@ const ManageProducts: React.FC = () => {
                     </Container>
                   ) : (
                     results?.map((product) => (
-                      <tr
-                        onClick={() => {
-                          //navigate(`/${product.id}`, { replace: true })
-                          //
-                        }}
-                      >
+                      <tr onClick={() => {}}>
                         <td>
                           <Checkbox
                             checked={
@@ -267,37 +244,33 @@ const ManageProducts: React.FC = () => {
                               }
                               setSelectedProducts([
                                 ...selectedProducts,
-                                product.id,
+                                product.id
                               ]);
                             }}
                           />
                         </td>
                         <td
                           style={{
-                            textAlign: "center",
-                          }}
-                        >
+                            textAlign: "center"
+                          }}>
                           <UnstyledButton
                             component={Link}
-                            to={`/products/${product.id}`}
-                          >
+                            to={`/products/${product.id}`}>
                             {product.title}
                           </UnstyledButton>
                         </td>
                         <td
                           style={{
-                            textAlign: "center",
-                          }}
-                        >
+                            textAlign: "center"
+                          }}>
                           <Button
                             variant="outline"
                             onClick={() => {
                               mutate({
                                 productId: product.id,
-                                title: product.title,
+                                title: product.title
                               });
-                            }}
-                          >
+                            }}>
                             {t("Delete")}
                           </Button>
                         </td>
@@ -312,24 +285,16 @@ const ManageProducts: React.FC = () => {
         </Card>
         <Center m={"12px auto"}>
           <Button
-            // sx={{
-            //   width: '100%',
-            //   maxWidth: '450px',
-            // }}
             onClick={() =>
               fetchNextPage({
-                pageParam: length,
-                // data?.pages[data?.pages?.length - 1][
-                //   data?.pages[data.pages?.length - 1]?.length - 1
-                // ]?.id,
+                pageParam: length
               })
-            }
-          >
+            }>
             {t("Load more")}
           </Button>
         </Center>
-      </Container>
-    </>
+      </Stack>
+    </Container>
   );
 };
 

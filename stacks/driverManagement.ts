@@ -4,7 +4,7 @@ import {
   use,
   Function,
   StaticSite,
-  Cognito,
+  Cognito
 } from "sst/constructs";
 
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -28,7 +28,7 @@ export function managementApiStack({ stack }: StackContext) {
   const { auth } = use(managementCognitoStack);
   const stage = getStage(stack.stage);
   const defaultFunction = new Function(stack, "managementdefaultFunction", {
-    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
+    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler"
   });
   const api = new Api(stack, "managmentApi", {
     defaults: {
@@ -41,96 +41,93 @@ export function managementApiStack({ stack }: StackContext) {
           clientEmail: config[""]["firebaseAdminSDK-client_email"],
           projectId: config[""]["firebaseAdminSDK-project_id"],
           privateKey: config[""]["firebaseAdminSDK-private_key"],
-          MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
-          groupId: config[stage].groupId,
+
           moalmlatDataService: config[stage].moalmlatDataService,
           userPoolId: auth.userPoolId,
           userPoolClientId: auth.userPoolClientId,
-          mongoPrivetKey: config[stage].mongoPrivetKey,
-          mongoPublicKey: config[stage].mongoPublicKey,
+
           region: stack.region,
           sadadURL: config[stage].sadadURL,
           secretKey: config[stage].secretKey,
           MerchantId: config[stage].MerchantId,
           TerminalId: config[stage].TerminalId,
-          mongdbURLKey: config[stage].mongdbURLKey,
 
           sadadApiKey: config[stage].sadadApiKey,
 
           secretAccessKey: config[stage].secretAccessKey,
-          db_url: config[stage].db_url,
-        },
-        permissions: [],
-      },
+          db_url: config[stage].db_url
+        }
+      }
     },
 
     routes: {
       "POST /addEmployee": {
         function: {
-          handler: pathToLambdas + "addEmployee.handler",
-        },
+          handler: pathToLambdas + "addEmployee.handler"
+        }
       },
       "POST /getTransactions": {
         function: {
-          handler: pathToLambdas + "getTransactions.handler",
-        },
+          handler: pathToLambdas + "getTransactions.handler"
+        }
       },
 
       "POST /reportOrder": {
         function: {
-          handler: pathToLambdas + "reportOrder.handler",
-        },
+          handler: pathToLambdas + "reportOrder.handler"
+        }
       },
 
       "POST /getManagement": {
         function: {
-          handler: pathToLambdas + "getManagement.handler",
-        },
+          handler: pathToLambdas + "getManagement.handler"
+        }
       },
 
       "POST /createManagement": {
         function: {
-          handler: pathToLambdas + "createManagement.handler",
-        },
+          handler: pathToLambdas + "createManagement.handler"
+        }
       },
       "POST /getActiveOrders": {
         function: {
-          handler: pathToLambdas + "getActiveOrders.handler",
-        },
+          handler: pathToLambdas + "getActiveOrders.handler"
+        }
       },
 
       "POST /getOrderHistory": {
         function: {
-          handler: pathToLambdas + "getOrderHistory.handler",
-        },
+          handler: pathToLambdas + "getOrderHistory.handler"
+        }
       },
 
       "POST /updateManagementInfo": {
         function: {
-          handler: pathToLambdas + "updateManagementInfo.handler",
-        },
+          handler: pathToLambdas + "updateManagementInfo.handler"
+        }
       },
 
       ...driversManagement,
-      ...localCardKey,
-    },
+      ...localCardKey
+    }
   });
   const permissions = new iam.PolicyStatement({
     actions: ["*"],
     effect: iam.Effect.ALLOW,
-    resources: [`*`],
+    resources: [`*`]
   });
 
   api.attachPermissions([permissions]);
   api.setCors({
     allowMethods: ["POST"],
-    allowHeaders: ["Accept", "Content-Type", "Authorization"],
+    allowHeaders: ["Accept", "Content-Type", "Authorization"]
   });
   new CfnOutput(stack, "managementApiUrl-" + stack.stage, {
     value: api.url || "",
-    exportName: "managementApiUrl-" + stack.stage, // export name
+    exportName: "managementApiUrl-" + stack.stage // export name
   });
   /////////////////////////////////////////////////////////////////////
 
@@ -138,10 +135,10 @@ export function managementApiStack({ stack }: StackContext) {
     ApiEndpoint: api.url,
     apiArn: api.httpApiArn,
     apiFunctionsRoleArn:
-      api.getFunction("POST /removeFromManagementDrivers")?.role?.roleArn || "",
+      api.getFunction("POST /removeFromManagementDrivers")?.role?.roleArn || ""
   });
   return {
-    api,
+    api
   };
 }
 
@@ -156,14 +153,14 @@ export function managementCognitoStack({ stack }: StackContext) {
     cdk: {
       userPool: {
         passwordPolicy: {
-          minLength: 8,
+          minLength: 8
           // requireLowercase: false,
           // requireUppercase: false,
           // requireDigits: false,
           // requireSymbols: false,
-        },
-      },
-    },
+        }
+      }
+    }
   });
   auth.attachPermissionsForAuthUsers(stack, [
     // Allow access to the API
@@ -173,26 +170,26 @@ export function managementCognitoStack({ stack }: StackContext) {
       actions: ["s3:*"],
       effect: iam.Effect.ALLOW,
       resources: [
-        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
-      ],
-    }),
+        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*"
+      ]
+    })
   ]);
 
   new CfnOutput(stack, "managementCognitoIdentityPoolId-" + stack.stage, {
     value: auth.cognitoIdentityPoolId || "",
-    exportName: "managementCognitoIdentityPoolId-" + stack.stage, // export name
+    exportName: "managementCognitoIdentityPoolId-" + stack.stage // export name
   });
   new CfnOutput(stack, "managementCognitoRegion-" + stack.stage, {
     value: stack.region || "",
-    exportName: "managementCognitoRegion-" + stack.stage, // export name
+    exportName: "managementCognitoRegion-" + stack.stage // export name
   });
   new CfnOutput(stack, "managementUserPoolId-" + stack.stage, {
     value: auth.userPoolId || "",
-    exportName: "managementUserPoolId-" + stack.stage, // export name
+    exportName: "managementUserPoolId-" + stack.stage // export name
   });
   new CfnOutput(stack, "managementUserPoolClientId-" + stack.stage, {
     value: auth.userPoolClientId || "",
-    exportName: "managementUserPoolClientId-" + stack.stage, // export name
+    exportName: "managementUserPoolClientId-" + stack.stage // export name
   });
 
   stack.addOutputs({

@@ -43,21 +43,19 @@ export function customerApiStack({ stack }: StackContext) {
           clientEmail: config[""]["firebaseAdminSDK-client_email"],
           projectId: config[""]["firebaseAdminSDK-project_id"],
           privateKey: config[""]["firebaseAdminSDK-private_key"],
-          MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
-          groupId: config[stage].groupId,
+
           moalmlatDataService: config[stage].moalmlatDataService,
           userPoolId: auth.userPoolId,
           userPoolClientId: auth.userPoolClientId,
-          mongoPrivetKey: config[stage].mongoPrivetKey,
-          mongoPublicKey: config[stage].mongoPublicKey,
+
           region: stack.region,
           sadadURL: config[stage].sadadURL,
           secretKey: config[stage].secretKey,
           MerchantId: config[stage].MerchantId,
           TerminalId: config[stage].TerminalId,
-          mongdbURLKey: config[stage].mongdbURLKey,
 
           sadadApiKey: config[stage].sadadApiKey,
 
@@ -223,6 +221,11 @@ export function customerApiStack({ stack }: StackContext) {
       [customerUrl({ method: "POST", url: "getSearchHits" })]: {
         function: {
           handler: pathToLambdas + "getSearchHits.handler"
+        }
+      },
+      [customerUrl({ method: "POST", url: "getDriverManagements" })]: {
+        function: {
+          handler: pathToLambdas + "getDriverManagements.handler"
         }
       },
 

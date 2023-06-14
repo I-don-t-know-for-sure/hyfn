@@ -15,7 +15,7 @@ import {
   Paper,
   Stack,
   Text,
-  Title,
+  Title
 } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 
@@ -91,7 +91,7 @@ const ValueComponent: FileInputProps["valueComponent"] = ({ value }) => {
 const MediaCard: React.FC<MediaCardProps> = ({
   onChangeHandler,
   productInfo,
-  currentImages,
+  currentImages
 }) => {
   const { files } = productInfo;
 
@@ -110,14 +110,12 @@ const MediaCard: React.FC<MediaCardProps> = ({
                       files.filter((oldFiles, index) => number !== index),
                       "files"
                     );
-                  }}
-                >
+                  }}>
                   X
                 </Button>
               }
               key={file.name}
-              size={"md"}
-            >
+              size={"md"}>
               <Text>{file?.name}</Text>
             </Badge>
           );
@@ -138,9 +136,8 @@ const MediaCard: React.FC<MediaCardProps> = ({
         <Box
           sx={{
             display: "flex",
-            flexWrap: "wrap",
-          }}
-        >
+            flexWrap: "wrap"
+          }}>
           {currentImages?.map((imageName, number) => {
             return (
               <Box
@@ -149,9 +146,8 @@ const MediaCard: React.FC<MediaCardProps> = ({
                   flexDirection: "column",
                   justifyContent: "space-around",
                   alignItems: "center",
-                  margin: "4px",
-                }}
-              >
+                  margin: "4px"
+                }}>
                 <Image
                   mb={4}
                   radius={6}
@@ -159,7 +155,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
                   height={70}
                   src={`${
                     import.meta.env.VITE_APP_BUCKET_URL
-                  }/tablet/${imageName}`}
+                  }/preview/${imageName}`}
                   alt={t("product image")}
                 />
                 <Group>
@@ -171,15 +167,14 @@ const MediaCard: React.FC<MediaCardProps> = ({
                       if (productInfo?.deletedImages?.length > 0) {
                         const updatedDeletedImages = [
                           ...productInfo?.deletedImages,
-                          imageName,
+                          imageName
                         ];
                         onChangeHandler(updatedDeletedImages, "deletedImages");
                       } else {
                         onChangeHandler([imageName], "deletedImages");
                       }
                       onChangeHandler(newImages, "images");
-                    }}
-                  >
+                    }}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="icon icon-tabler icon-tabler-x"
@@ -190,8 +185,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
                       stroke="#2c3e50"
                       fill="none"
                       stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
+                      stroke-linejoin="round">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                       <line x1="18" y1="6" x2="6" y2="18" />
                       <line x1="6" y1="6" x2="18" y2="18" />
@@ -243,14 +237,13 @@ const MediaCard: React.FC<MediaCardProps> = ({
                   flexDirection: "column",
                   justifyContent: "space-around",
                   alignItems: "center",
-                  margin: "4px",
-                }}
-              >
+                  margin: "4px"
+                }}>
                 <Image
                   mb={4}
                   sx={{
                     border: "1px solid red",
-                    borderRadius: "6px",
+                    borderRadius: "6px"
                   }}
                   radius={6}
                   width={70}
@@ -272,8 +265,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
                       onChangeHandler(newImages, "deletedImages");
 
                       onChangeHandler([...currentImages, imageName], "images");
-                    }}
-                  >
+                    }}>
                     {t("Undo")}
                   </Button>
 

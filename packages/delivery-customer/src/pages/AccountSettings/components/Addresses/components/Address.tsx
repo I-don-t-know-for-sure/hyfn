@@ -1,7 +1,8 @@
-import { Box, Button, Card, Group, TextInput } from "@mantine/core";
-import { t } from "../../../util/i18nextFix";
+import { Box, Button, Card, Group, Select, TextInput } from "@mantine/core";
+import { t } from "../../../../../util/i18nextFix";
 import React, { useState } from "react";
-import { convertCoordsArraytoString } from "../../../util/convertCoordsArrayToString";
+import { convertCoordsArraytoString } from "../../../../../util/convertCoordsArrayToString";
+import { allCitiesForSelect } from "hyfn-types";
 
 interface AddressProps {
   address: any;
@@ -29,7 +30,7 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
         if (oldAddress.key === address.key) {
           return {
             ...address,
-            coords: [res.coords.latitude, res.coords.longitude],
+            coords: [res.coords.latitude, res.coords.longitude]
           };
         }
         return oldAddress;
@@ -44,9 +45,8 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
     <Card
       sx={{
         maxWidth: "500px",
-        margin: "24px auto",
-      }}
-    >
+        margin: "24px auto"
+      }}>
       <TextInput
         label={t("Label")}
         m={"6px auto"}
@@ -66,10 +66,29 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
           })
         }
       />
+      <Select
+        data={allCitiesForSelect["Libya"]}
+        label={t("City")}
+        onChange={(e) => {
+          setAddresses((addresses) => {
+            console.log(addresses);
+
+            return addresses.map((oldAddress) => {
+              if (oldAddress.key === address.key) {
+                console.log(oldAddress);
+
+                return { ...oldAddress, city: e };
+              }
+              return oldAddress;
+            });
+          });
+        }}
+        value={address.city}
+      />
       <Group mb={8}>
         <TextInput
           sx={{
-            width: "65%",
+            width: "65%"
           }}
           label={t("Coordinates")}
           m={"6px auto"}
@@ -105,13 +124,12 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
 
         <Button
           sx={{
-            width: "30%",
+            width: "30%"
           }}
           mt={29}
           onClick={() => {
             navigator.geolocation.getCurrentPosition(success, err);
-          }}
-        >
+          }}>
           {t("Current Coords")}
         </Button>
       </Group>
@@ -153,7 +171,7 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
         </Button> */}
         <Button
           sx={{
-            width: "30%",
+            width: "30%"
           }}
           variant="outline"
           onClick={() => {
@@ -162,8 +180,7 @@ const Address: React.FC<AddressProps> = ({ address, setAddresses }) => {
                 return oldAddress.key !== address.key;
               });
             });
-          }}
-        >
+          }}>
           {t("Delete")}
         </Button>
       </Group>

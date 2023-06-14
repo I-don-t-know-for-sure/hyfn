@@ -19,7 +19,7 @@ import {
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
-  LoadingOverlay,
+  LoadingOverlay
 } from "@mantine/core";
 import { useMediaQuery, useWindowScroll } from "@mantine/hooks";
 import { useEffect, useState } from "react";
@@ -38,8 +38,11 @@ import { useFixedComponent } from "contexts/fixedComponentContext/FixedComponent
 import { useUserCheck } from "hooks/useUserCheck";
 import useGetStoreInfo from "hooks/useGetStoreInfo";
 import { useUser } from "contexts/userContext/User";
-import TransactionList from "components/TransactionList";
+import { TransactionList } from "hyfn-client";
 import { useStopAcceptingOrders } from "hooks/useStopAcceptingOrders";
+import { useCancelTransaction } from "hooks/useCancelTransaction";
+import { useGetTransactions } from "hooks/useGetTransactions";
+import { useValidateLocalCardTransaction } from "hooks/useValidateLocalCardTransaction";
 
 const StyledNav: React.FC = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
@@ -50,7 +53,7 @@ const StyledNav: React.FC = ({ children }) => {
       transition: "top 0.2s",
       display: "flex",
       [theme.fn.largerThan(900)]: {
-        flexDirection: "row-reverse",
+        flexDirection: "row-reverse"
       },
       justifyContent: "space-between",
       alignItems: "center",
@@ -61,8 +64,8 @@ const StyledNav: React.FC = ({ children }) => {
 
       borderBottom: "solid 2px rgba(133, 133, 133, 0.1)",
       zIndex: 20,
-      transform: "translate3d(0, 0, 0)",
-    },
+      transform: "translate3d(0, 0, 0)"
+    }
   }));
 
   const { classes } = useStyles();
@@ -74,8 +77,8 @@ const Wrapper: React.FC = ({ children }) => {
     wrapper: {
       position: "relative",
 
-      width: "100%",
-    },
+      width: "100%"
+    }
   }));
   const { classes } = useStyles();
   return <Box className={classes.wrapper}>{children as any}</Box>;
@@ -86,8 +89,8 @@ const BodyWrapper: React.FC = ({ children }) => {
     bodyWrapper: {
       position: "relative",
 
-      display: "flex",
-    },
+      display: "flex"
+    }
   }));
   const { classes } = useStyles();
   return <Box className={classes.bodyWrapper}>{children as any}</Box>;
@@ -108,12 +111,12 @@ const Inner: React.FC<{
 
         maxWidth: "100%",
 
-        marginLeft: `${!isMobile && loggedIn ? SIDEBAR_WIDTH_FULL : 0}px`,
+        marginLeft: `${!isMobile && loggedIn ? SIDEBAR_WIDTH_FULL : 0}px`
 
         // maxWidth: `${`calc(100% - ${
         //   isMobile ? SIDEBAR_WIDTH_FULL : SIDEBAR_WIDTH_REDUCED
         // }px)`}`,
-      },
+      }
     })
   );
   const { classes } = useStyles({ showMenu });
@@ -162,9 +165,8 @@ const Menu: React.FC = ({ children }) => {
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
-            }}
-          >
+              alignItems: "center"
+            }}>
             <Badge color={userDocument?.opened ? "green" : "red"}>
               {userDocument?.opened ? t("Open") : t("Closed")}
             </Badge>
@@ -184,9 +186,8 @@ const Menu: React.FC = ({ children }) => {
                       justifyContent: "center",
                       alignItems: "center",
                       cursor: "pointer",
-                      maxWidth: isMobile ? "120px" : "",
-                    }}
-                  >
+                      maxWidth: isMobile ? "120px" : ""
+                    }}>
                     <Avatar
                       // sx={{
                       //   width: 'fit-content',
@@ -198,9 +199,8 @@ const Menu: React.FC = ({ children }) => {
                       weight={500}
                       sx={{
                         padding: "1px 4px",
-                        overflow: "hidden",
-                      }}
-                    >
+                        overflow: "hidden"
+                      }}>
                       {storeName}
                     </Text>
                   </Box>
@@ -210,16 +210,14 @@ const Menu: React.FC = ({ children }) => {
                   <AvatarMenu.Item
                     onClick={() => {
                       openAdnCloseStore();
-                    }}
-                  >
+                    }}>
                     {userDocument?.opened ? t("Close store") : t("Open store")}
                   </AvatarMenu.Item>
 
                   <AvatarMenu.Item
                     onClick={async () => {
                       stopAcceptingOrders();
-                    }}
-                  >
+                    }}>
                     {t("Stop accepting orders")}
                   </AvatarMenu.Item>
                   <AvatarMenu.Item
@@ -228,8 +226,7 @@ const Menu: React.FC = ({ children }) => {
                       await signOut();
                       setVisible(false);
                     }}
-                    icon={<MdLogout />}
-                  >
+                    icon={<MdLogout />}>
                     {t("Log out")}
                   </AvatarMenu.Item>
                 </AvatarMenu.Dropdown>
@@ -246,9 +243,8 @@ const Menu: React.FC = ({ children }) => {
           bottom: "0px",
           width: "100%",
           marginLeft: !isMobile ? `${SIDEBAR_WIDTH_FULL}px` : "",
-          zIndex: 3,
-        }}
-      >
+          zIndex: 3
+        }}>
         {fixedComponent.length > 0 &&
           (location.pathname.includes("bulkupdate") ||
             location.pathname.includes("optionstable")) && <FixedComponenet />}
@@ -256,7 +252,7 @@ const Menu: React.FC = ({ children }) => {
       <BodyWrapper>
         <LoadingOverlay
           sx={{
-            height: "100vh",
+            height: "100vh"
           }}
           visible={visible}
         />
@@ -277,8 +273,7 @@ const Menu: React.FC = ({ children }) => {
             opened={opened}
             onClose={() => {
               setOpened(false);
-            }}
-          >
+            }}>
             <Box
               sx={{
                 display: "flex",
@@ -286,15 +281,13 @@ const Menu: React.FC = ({ children }) => {
                 justifyContent: "space-between",
                 height: "90%",
 
-                overflow: "auto",
+                overflow: "auto"
               }}
-              mt={MENU_HEIGHT}
-            >
+              mt={MENU_HEIGHT}>
               <Box
                 sx={{
-                  height: "fit-content",
-                }}
-              >
+                  height: "fit-content"
+                }}>
                 {links.map((section) => {
                   const Icon = section.icon;
                   if (section.link) {
@@ -318,13 +311,12 @@ const Menu: React.FC = ({ children }) => {
                             backgroundColor:
                               theme.colorScheme === "dark"
                                 ? theme.colors.dark[5]
-                                : theme.colors.gray[0],
-                          },
-                        })}
-                      >
+                                : theme.colors.gray[0]
+                          }
+                        })}>
                         <Icon
                           style={{
-                            marginRight: theme.spacing.md,
+                            marginRight: theme.spacing.md
                           }}
                         />{" "}
                         {section.label}
@@ -340,14 +332,12 @@ const Menu: React.FC = ({ children }) => {
 
                       //   width: '100%',
                       // }}
-                      chevron={<></>}
-                    >
+                      chevron={<></>}>
                       <Accordion.Item
                         sx={{
-                          border: "0px",
+                          border: "0px"
                         }}
-                        value={section.label}
-                      >
+                        value={section.label}>
                         <Accordion.Control icon={<Icon />}>
                           {section.label}
                         </Accordion.Control>
@@ -355,9 +345,8 @@ const Menu: React.FC = ({ children }) => {
                           sx={{
                             display: "flex",
                             flexDirection: "column",
-                            justifyContent: "space-between",
-                          }}
-                        >
+                            justifyContent: "space-between"
+                          }}>
                           {section.items.map((item) => (
                             <UnstyledButton
                               component={Link}
@@ -379,10 +368,9 @@ const Menu: React.FC = ({ children }) => {
                                   backgroundColor:
                                     theme.colorScheme === "dark"
                                       ? theme.colors.dark[5]
-                                      : theme.colors.gray[0],
-                                },
-                              })}
-                            >
+                                      : theme.colors.gray[0]
+                                }
+                              })}>
                               {item.label}
                             </UnstyledButton>
                           ))}
@@ -391,15 +379,19 @@ const Menu: React.FC = ({ children }) => {
                     </Accordion>
                   );
                 })}
-                <TransactionList menu />
+                <TransactionList
+                  menu
+                  useCancelTransaction={useCancelTransaction}
+                  useGetTransactions={useGetTransactions}
+                  useValidateTransaction={useValidateLocalCardTransaction}
+                />
               </Box>
 
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "end",
-                }}
-              >
+                  justifyContent: "end"
+                }}>
                 <AvatarMenu>
                   <AvatarMenu.Target>
                     <ActionIcon>
@@ -411,8 +403,7 @@ const Menu: React.FC = ({ children }) => {
                       <AvatarMenu.Item
                         onClick={() => {
                           i18n.changeLanguage(lang);
-                        }}
-                      >
+                        }}>
                         {lngs[lang].nativeName}
                       </AvatarMenu.Item>
                     ))}
@@ -420,15 +411,14 @@ const Menu: React.FC = ({ children }) => {
                 </AvatarMenu>
                 <Space
                   sx={{
-                    width: "12px",
+                    width: "12px"
                   }}
                 />
                 <ActionIcon
                   variant="outline"
                   color={dark ? "yellow" : "blue"}
                   onClick={() => toggleColorScheme()}
-                  title="Toggle color scheme"
-                >
+                  title="Toggle color scheme">
                   {dark ? <BsSun size={18} /> : <BsMoonStars size={18} />}
                 </ActionIcon>
               </Box>

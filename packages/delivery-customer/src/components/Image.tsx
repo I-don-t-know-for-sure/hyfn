@@ -13,17 +13,14 @@ const Image: React.FC<ImageProp> = ({ imageName, ...rest }) => {
   const laptop = useMediaQuery("(min-width: 920px)");
   const tablet = useMediaQuery("(max-width: 920px)");
   const mobile = useMediaQuery("(max-width: 430px)");
-  // console.log(`${url}${screenSizes[1]}/${imageName}`);
-  // console.log(`${url}${screenSizes[2]}/${imageName}`);
-  // console.log(`${url}${screenSizes[0]}/${imageName}`);
   if (mobile) {
-    return <BaseImage src={`${url}${screenSizes[0]}/${imageName}`} {...rest} />;
+    return <BaseImage src={`${url}${"preview"}/${imageName}`} {...rest} />;
   }
   if (tablet) {
-    return <BaseImage src={`${url}${screenSizes[1]}/${imageName}`} {...rest} />;
+    return <BaseImage src={`${url}${"preview"}/${imageName}`} {...rest} />;
   }
   if (laptop) {
-    return <BaseImage src={`${url}${screenSizes[1]}/${imageName}`} {...rest} />;
+    return <BaseImage src={`${url}${"preview"}/${imageName}`} {...rest} />;
   }
 };
 

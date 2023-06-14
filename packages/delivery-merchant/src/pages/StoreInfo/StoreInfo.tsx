@@ -12,7 +12,7 @@ import {
   Select,
   Stack,
   Text,
-  TextInput,
+  TextInput
 } from "@mantine/core";
 
 import { Store } from "config/types";
@@ -43,11 +43,11 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
     description: "",
     coords: "",
     address: "",
-    image: undefined,
+    image: undefined
   };
 
   const form = useForm({
-    initialValues: initialInfo,
+    initialValues: initialInfo
   });
   console.log("🚀 ~ file: StoreInfo.tsx:53 ~ form:", form);
 
@@ -76,7 +76,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
         coords: `${data?.lat},${data?.long}`,
         // coords: "",
         image: data.image[0],
-        address: data?.address,
+        address: data?.address
       };
 
       form.setValues(formData);
@@ -88,9 +88,8 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
       sx={{
         justifyContent: "center",
         width: "100%",
-        alignItems: "center",
-      }}
-    >
+        alignItems: "center"
+      }}>
       {/* <Helmet>
         <title>{t(isLoading ? 'Loading' : 'Store Info')}</title>
       </Helmet> */}
@@ -104,8 +103,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
             <form
               onSubmit={form.onSubmit(async (values) => {
                 mutate({ ...values, storeInfoFilled: true });
-              })}
-            >
+              })}>
               <Paper
               // sx={{
               //   margin: ' 12px auto ',
@@ -146,15 +144,14 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
                         width: "100%",
                         display: "flex",
                         flexDirection: "row",
-                        justifyContent: "center",
-                      }}
-                    >
+                        justifyContent: "center"
+                      }}>
                       <Image
                         width={100}
                         height={100}
                         radius={6}
                         // mt={6}
-                        src={`${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${
+                        src={`${import.meta.env.VITE_APP_BUCKET_URL}/preview/${
                           data.image
                         }`}
                       />
@@ -206,7 +203,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
                 <Group>
                   <TextInput
                     style={{
-                      width: "75%",
+                      width: "75%"
                     }}
                     label={t("coords")}
                     {...form.getInputProps("coords")}
@@ -217,8 +214,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
                     variant="outline"
                     onClick={() => {
                       navigator.geolocation.getCurrentPosition(success, err);
-                    }}
-                  >
+                    }}>
                     {t("current coords")}
                   </Button>
                 </Group>
@@ -247,9 +243,8 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
                 sx={{
                   display: "flex",
                   flexDirection: "row-reverse",
-                  height: "150px",
-                }}
-              >
+                  height: "150px"
+                }}>
                 <Button
                   disabled={isMutateLoading}
                   fullWidth
@@ -257,8 +252,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({}) => {
                   //   maxWidth: '450px',
                   // }}
                   // m={'0px auto'}
-                  type="submit"
-                >
+                  type="submit">
                   {t("Update Store Info")}
                 </Button>
               </Group>

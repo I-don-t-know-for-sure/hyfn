@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     "no-unused-vars": 1,
     "no-undef": 2
+
     // "padding-line-between-statements": [
     //   "error",
     //   { blankLine: "always", prev: "*", next: "*" }

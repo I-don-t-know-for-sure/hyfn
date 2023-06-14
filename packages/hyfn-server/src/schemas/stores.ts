@@ -12,7 +12,7 @@ import {
   timestamp,
   uniqueIndex,
   uuid,
-  varchar,
+  varchar
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import { citiesArray, countriesArray, storeTypesArray } from "hyfn-types";
@@ -27,14 +27,14 @@ export const stores = pgTable(
     userId: varchar("user_id").notNull(),
 
     storeType: varchar("store_type", {
-      enum: storeTypesArray,
+      enum: storeTypesArray
     })
       .array()
       .notNull(),
     storeName: varchar("store_name").notNull(),
     storePhone: varchar("store_phone").notNull(),
     country: varchar("country", {
-      enum: countriesArray,
+      enum: countriesArray
     }).notNull(),
     city: varchar("city", { enum: citiesArray }).notNull(),
 
@@ -76,6 +76,10 @@ export const stores = pgTable(
       "only_store_drivers_can_take_orders"
     ).default(false),
     includeDeliveryFee: boolean("include_delivery_fee").default(false),
+    deliverTo: varchar("deliver_to", { enum: citiesArray }).array(),
+    deliverWithStoreDrivers: boolean("deliver_with_store_drivers").default(
+      false
+    )
   },
   (table) => {
     return {
@@ -85,7 +89,7 @@ export const stores = pgTable(
       longx: index("store_longx").on(table.long),
       localCardApiKeyIdx: uniqueIndex("store_local_card_api_key_id").on(
         table.localCardApiKeyId
-      ),
+      )
     };
   }
 );
@@ -104,10 +108,10 @@ export const zStore = z.object({
   users: z.array(
     z.object({
       userId: z.string(),
-      userType: z.string(),
+      userType: z.string()
     })
   ),
-  notificationTokens: z.nullable(z.array(z.string())),
+  notificationTokens: z.nullable(z.array(z.string()))
 });
 
 // export type Store = z.infer<typeof zStore>;

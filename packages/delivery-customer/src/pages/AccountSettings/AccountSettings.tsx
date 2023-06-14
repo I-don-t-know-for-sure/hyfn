@@ -12,7 +12,7 @@ import {
   Text,
   TextInput,
   Title,
-  rem,
+  rem
 } from "@mantine/core";
 
 import { t } from "../../util/i18nextFix";
@@ -23,14 +23,15 @@ import { useForm } from "@mantine/form";
 import { useSubscribeToHyfnPlus } from "./hooks/useSubscribeToHyfnPlus";
 import { useUser } from "contexts/userContext/User";
 import { convertDateToText } from "hyfn-client";
+import ManageAddresses from "./components/Addresses/Addresses";
 
 interface AccountSettingsProps {}
 
 const AccountSettings: React.FC<AccountSettingsProps> = ({}) => {
   const form = useForm({
     initialValues: {
-      name: "",
-    },
+      name: ""
+    }
   });
   const [value, setValue] = useState<number>(0);
   const handlers = useRef<NumberInputHandlers>();
@@ -50,8 +51,7 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({}) => {
               } catch (e) {
                 console.error(e);
               }
-            })}
-          >
+            })}>
             <Group spacing={"sm"} position={"center"} grow={true}>
               <TextInput
                 type="text"
@@ -98,8 +98,7 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({}) => {
               <ActionIcon
                 size={42}
                 variant="default"
-                onClick={() => handlers.current.decrement()}
-              >
+                onClick={() => handlers.current.decrement()}>
                 –
               </ActionIcon>
 
@@ -116,20 +115,19 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({}) => {
               <ActionIcon
                 size={42}
                 variant="default"
-                onClick={() => handlers.current.increment()}
-              >
+                onClick={() => handlers.current.increment()}>
                 +
               </ActionIcon>
             </Group>
             <Button
               onClick={() => {
                 subscribeToHyfnPlus({ numberOfMonths: value });
-              }}
-            >
+              }}>
               {t("Subscribe to hyfn+")}
             </Button>
           </Stack>
         </Card>
+        <ManageAddresses />
       </Stack>
     </Container>
   );

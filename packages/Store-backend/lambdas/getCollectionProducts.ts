@@ -1,12 +1,20 @@
-export const getCollectionProductsHandler = async ({ arg, client, db }: MainFunctionProps) => {
+export const getCollectionProductsHandler = async ({
+  arg,
+  client,
+  db
+}: MainFunctionProps) => {
   var result;
 
   const { lastDoc, collectionId } = arg[0];
 
   const products = await db
-    .selectFrom('collectionsProducts')
-    .where('collectionId', '=', collectionId)
-    .innerJoin('products', 'collectionsProducts.productId', 'products.id')
+    .selectFrom("products")
+    .where(
+      "collectionsIds",
+      "@>",
+      sql`array[${sql.join([collectionId])}]::uuid[]`
+    )
+    // .innerJoin('products', 'collectionsProducts.productId', 'products.id')
     // .innerJoinLateral(
     //   (eb) =>
     //     eb
@@ -17,7 +25,7 @@ export const getCollectionProductsHandler = async ({ arg, client, db }: MainFunc
     //       .as('products'),
     //   (join) => join.onTrue()
     // )
-    .select(['products.id', 'products.title'])
+    .select(["products.id", "products.title"])
     .offset(lastDoc > 0 ? lastDoc : 0)
     .limit(5)
     .execute();
@@ -25,17 +33,22 @@ export const getCollectionProductsHandler = async ({ arg, client, db }: MainFunc
   result = products.map((product) => {
     return {
       value: product.id,
-      label: product?.title,
+      label: product?.title
     };
   });
   return result;
 };
-interface GetCollectionProductsProps extends Omit<MainFunctionProps, 'arg'> {
+interface GetCollectionProductsProps extends Omit<MainFunctionProps, "arg"> {
   arg: any;
 }
-('use strict');
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { ObjectId } from 'mongodb';
+("use strict");
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
+import { sql } from "kysely";
+import { ObjectId } from "mongodb";
 export const handler = async (event, ctx) => {
-  return await mainWrapper({ event, ctx, mainFunction: getCollectionProductsHandler });
+  return await mainWrapper({
+    event,
+    ctx,
+    mainFunction: getCollectionProductsHandler
+  });
 };

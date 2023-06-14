@@ -18,10 +18,12 @@
     "baseUrl": "./src",
 
     "paths": {
-
       "i18Fix": ["./src/util/i18nectFix"]
     }
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }, {"path": "../hyfn-types"}]
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "../hyfn-types" }
+  ]
 }

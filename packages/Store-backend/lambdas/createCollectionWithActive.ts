@@ -1,18 +1,24 @@
-export const createCollection = async ({ arg, client, userId, db }: MainFunctionProps) => {
+export const createCollection = async ({
+  arg,
+  client,
+  userId,
+  db
+}: MainFunctionProps) => {
   const result = await db.transaction().execute(async (trx) => {
-    const { title, description, collectionType, isActive, addedProductsArray } = arg[0];
+    const { title, description, collectionType, isActive, addedProductsArray } =
+      arg[0];
 
     const storeDoc = await db
-      .selectFrom('stores')
+      .selectFrom("stores")
       .selectAll()
-      .where('usersIds', '@>', sql`ARRAY[${sql.join([userId])}]::uuid[]`)
+      .where("usersIds", "@>", sql`ARRAY[${sql.join([userId])}]::uuid[]`)
       .executeTakeFirstOrThrow();
 
-    if (!storeDoc) throw new Error(returnsObj['store not found']);
+    if (!storeDoc) throw new Error(returnsObj["store not found"]);
     const id = storeDoc.id;
 
     const collectionId = await trx
-      .insertInto('collections')
+      .insertInto("collections")
       .values({
         title: title,
 
@@ -20,20 +26,32 @@ export const createCollection = async ({ arg, client, userId, db }: MainFunction
         isActive,
         description: description,
 
-        storeId: id,
+        storeId: id
       })
-      .returning(['id'])
+      .returning(["id"])
       .executeTakeFirst();
 
     if (addedProductsArray?.length > 0) {
-      const updateQuery = addedProductsArray?.map((product) => {
-        return {
-          collectionId: collectionId.id,
-          productId: product.value,
-        };
-      });
+      const productsIds = addedProductsArray.map((product) => product.value);
 
-      await trx.insertInto('collectionsProducts').values(updateQuery).execute();
+      await trx
+        .updateTable("products")
+        .set({
+          collectionsIds: sql`${sql.raw(
+            tProducts.collectionsIds[0]._
+          )} || array[${collectionId.id}]::uuid[]`
+        })
+        .where("id", "in", sql`(${sql.join(productsIds)})`)
+        .execute();
+
+      // const updateQuery = addedProductsArray?.map((product) => {
+      //   return {
+      //     collectionId: collectionId.id,
+      //     productId: product.value,
+      //   };
+      // });
+
+      // await trx.insertInto('collectionsProducts').values(updateQuery).execute();
     }
 
     return collectionId.id;
@@ -41,25 +59,25 @@ export const createCollection = async ({ arg, client, userId, db }: MainFunction
 
   return result;
 };
-interface HandlerProps extends Omit<MainFunctionProps, 'arg'> {
+interface HandlerProps extends Omit<MainFunctionProps, "arg"> {
   arg: any;
 }
-('use strict');
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { sql } from 'kysely';
-import { returnsObj } from 'hyfn-types';
+("use strict");
+import { MainFunctionProps, mainWrapper, tProducts } from "hyfn-server";
+import { sql } from "kysely";
+import { returnsObj } from "hyfn-types";
 export const handler = async (event, ctx, callback) => {
   const transactionOptions = {
-    readPreference: 'primary',
-    readConcern: { level: 'local' },
-    writeConcern: { w: 'majority' },
+    readPreference: "primary",
+    readConcern: { level: "local" },
+    writeConcern: { w: "majority" }
   };
   const response = await mainWrapper({
     ctx,
     callback,
     event,
     mainFunction: createCollection,
-    sessionPrefrences: transactionOptions,
+    sessionPrefrences: transactionOptions
   });
   return response; // Ensures that the client will close when you finish/error
 };

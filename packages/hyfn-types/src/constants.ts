@@ -43,7 +43,7 @@ export const transactionTypesArray = [
   serviceFeePayment,
   managementPayment,
   storePayment,
-  TRANSACTION_TYPE_WALLET,
+  TRANSACTION_TYPE_WALLET
 ] as const;
 export const transactionTypesObject = toObject(transactionTypesArray);
 
@@ -66,7 +66,7 @@ export const storeTypesArray = [
   "games",
   "bakery",
   "sweets",
-  "meat store",
+  "meat store"
 ] as const;
 export const storeTypesObject = toObject(storeTypesArray);
 export const collectionTypesArray = ["manual"] as const;
@@ -77,7 +77,7 @@ export const storeStatusArray = [
   "paid",
   "preparing",
   "ready",
-  "picked up",
+  "picked up"
 ] as const;
 export const storeStatusObject = toObject(storeStatusArray);
 export const transportationMethodsArray = ["car"] as const;
@@ -85,7 +85,7 @@ export const transportationMethodsObject = toObject(transportationMethodsArray);
 export const productPickupStatusArray = [
   "initial",
   "picked up",
-  "not found",
+  "not found"
 ] as const;
 export const productPickupStatusObject = toObject(productPickupStatusArray);
 export const orderTypesArray = ["Delivery", "Pickup"] as const;
@@ -94,13 +94,13 @@ export const orderStatusArray = [
   "active",
   "canceled",
   "delivered",
-  "reporeted",
+  "reporeted"
 ] as const;
 export const orderStatusObject = toObject(orderStatusArray);
 export const transactionStatusArray = [
   "canceled",
   "validated",
-  "initial",
+  "initial"
 ] as const;
 export const transactionStatusObject = toObject(transactionStatusArray);
 export const userTypesArray = ["owner", "employee"] as const;
@@ -112,8 +112,17 @@ export const driverStatusArray = ["initial", "set"] as const;
 export const driverStatusObject = toObject(driverStatusArray);
 export const adminName = "Hyfn";
 export const transactionApproved = "Approved";
-export const transactionExplainationArray = ['delivery fee'] as const 
-export const transactionExplainationObject = toObject(transactionExplainationArray)
+export const transactionExplainationArray = ["delivery fee"] as const;
+export const transactionExplainationObject = toObject(
+  transactionExplainationArray
+);
+export const imageQualityArray = [
+  { folder: "preview", quality: 80 },
+  { folder: "view", quality: 100 }
+];
+
+export const productTabs = ["active", "inactive", "all"] as const;
+export const productTabsObject = toObject(productTabs);
 
 //////
 

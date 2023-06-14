@@ -7,27 +7,29 @@ import { _200, _402 } from "./api_Respones";
 import { MainWrapperProps } from "./types";
 
 import { getDb } from "./getDb";
+import { log } from "console";
 
 // import { mainValidateFunction } from './authentication';
 export const mainWrapper = async ({
   event,
   mainFunction,
 
-  validateUser = true,
+  validateUser = true
 }: MainWrapperProps) => {
   try {
     var result;
     const arg = JSON.parse(event.body);
 
     const { accessToken, userId } = arg[arg.length - 1];
-
-    if (validateUser) {
-      await cognitoAuthentication({
-        accessToken,
-        userId,
-      });
+    console.log(process.env, "sjcjdcjdncjndjcnndjn");
+    if (process.env.IS_LOCAL !== "true") {
+      if (validateUser) {
+        await cognitoAuthentication({
+          accessToken,
+          userId
+        });
+      }
     }
-
     const db = await getDb();
 
     result = await mainFunction({
@@ -35,7 +37,7 @@ export const mainWrapper = async ({
       event,
       userId,
       accessToken,
-      db,
+      db
     });
     result = _200(result);
   } catch (error: any) {

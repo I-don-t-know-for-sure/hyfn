@@ -27,8 +27,7 @@ import Collection from "./pages/Collection/Collection";
 import OrderHistory from "./pages/Orders/components/OrderHistory";
 import Page from "./components/Page";
 
-import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import ManageAddresses from "./pages/Addresses/Addresses";
+import ManageAddresses from "./pages/AccountSettings/components/Addresses/Addresses";
 import CreateCustomer from "./pages/CreateCustomer/CreateCustomer";
 import { Amplify } from "aws-amplify";
 import LandingPage from "pages/LandingPage/LandingPage";
@@ -200,14 +199,6 @@ function App() {
               }
             />
 
-            <Route
-              path="resetPassword"
-              element={
-                <Page>
-                  <ResetPassword />
-                </Page>
-              }
-            />
             <Route
               path="accountsettings"
               element={

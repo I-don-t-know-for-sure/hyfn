@@ -12,7 +12,7 @@ import {
   serial,
   text,
   uuid,
-  varchar,
+  varchar
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
@@ -28,20 +28,20 @@ export const products = pgTable(
     prevPrice: numeric("prev_price").notNull(),
     title: text("title").notNull(),
     description: varchar("description").notNull(),
-
+    collectionsIds: uuid("collections_ids").array(),
     options: jsonb("options").array().notNull(),
     measurementSystem: varchar("measurement_system", {
-      enum: measurementSystemArray,
+      enum: measurementSystemArray
     }).notNull(),
     whiteBackgroundImages: varchar("white_background_images").array().notNull(),
     isActive: boolean("is_active").default(false),
     hasOptions: boolean("has_options").default(false),
 
-    images: varchar("images").array().notNull(),
+    images: varchar("images").array().notNull()
   },
   (table) => {
     return {
-      storeIdx: index("store_idx").on(table.storeId),
+      storeIdx: index("store_idx").on(table.storeId)
     };
   }
 );
@@ -54,7 +54,7 @@ export const zProduct = z.object({
   description: z.string(),
 
   price: z.number(),
-
+  collectionsIds: z.array(z.string()),
   prevPrice: z.number(),
 
   options: z.array(
@@ -64,9 +64,9 @@ export const zProduct = z.object({
       key: z.string(),
       isRequired: z.boolean(),
       optionName: z.string(),
-      optionValues: z.array(z.any()),
+      optionValues: z.array(z.any())
     })
-  ),
+  )
 });
 
 // export type Product = InferModel<typeof products>;

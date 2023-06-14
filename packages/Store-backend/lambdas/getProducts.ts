@@ -1,46 +1,43 @@
-export const getProducts = async ({ arg, client, userId, db }: MainFunctionProps) => {
-  const id = arg[0];
-  const lastDocNumber = arg[1];
-  console.log('🚀 ~ file: getProducts.ts:4 ~ getProducts ~ lastDocNumber:', lastDocNumber);
-  const filter = arg[2];
-  const ALL_PPRODUCTS = 'all';
+export const getProducts = async ({
+  arg,
+  client,
+  userId,
+  db
+}: MainFunctionProps) => {
+  const { storeId, lastDoc, filter } = arg[0];
+
+  const ALL_PPRODUCTS = "all";
   const filters = { active: true, inActive: false };
   const isFiltered = filter !== ALL_PPRODUCTS;
-  // const queryDoc =
-  //   lastDocId && isFiltered
-  //     ? {
-  //         storeId: id,
-  //         id: { $gt: new ObjectId(lastDocId) },
-  //         isActive: filters[filter],
-  //       }
-  //     : lastDocId && !isFiltered
-  //     ? {
-  //         storeId: id,
-  //         id: { $gt: new ObjectId(lastDocId) },
-  //       }
-  //     : !lastDocId && !isFiltered
-  //     ? {
-  //         storeId: id,
-  //       }
-  //     : {
-  //         isActive: filters[filter],
-  //         storeId: id,
-  //       };
 
-  const products = await db
-    .selectFrom('products')
-    .select(['id', 'title', 'isActive'])
-    .where('storeId', '=', id)
-    .offset(lastDocNumber || 0)
+  var qb = db
+    .selectFrom("products")
+    .select(["id", "title", "isActive"])
+    .where("storeId", "=", storeId);
+
+  if (
+    filter === productTabsObject.active ||
+    filter === productTabsObject.inactive
+  ) {
+    qb = qb.where(
+      "isActive",
+      "=",
+      filter === productTabsObject.active ? true : false
+    );
+  }
+  const products = await qb
+    .offset(lastDoc || 0)
     .limit(10)
     .execute();
+
   return products;
 };
-interface GetProductsForBulkUpdateProps extends Omit<MainFunctionProps, 'arg'> {
+interface GetProductsForBulkUpdateProps extends Omit<MainFunctionProps, "arg"> {
   arg: any;
 }
-('use strict');
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
+("use strict");
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
+import { productTabsObject } from "hyfn-types";
 
 export const handler = async (event, ctx) => {
   return await mainWrapper({ event, mainFunction: getProducts });

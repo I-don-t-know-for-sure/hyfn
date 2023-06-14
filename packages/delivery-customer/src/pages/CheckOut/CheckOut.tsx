@@ -37,12 +37,17 @@ import { useGetUserDocument } from "../../hooks/useGetUserDocument";
 
 import { useUser } from "../../contexts/userContext/User";
 
-import { orderTypesObject, storeAndCustomerServiceFee } from "hyfn-types";
+import {
+  allCitiesForSelect,
+  orderTypesObject,
+  storeAndCustomerServiceFee
+} from "hyfn-types";
 import { useNavigate, useLocation as useRouteLocation } from "react-router-dom";
 
 import { calculateOrderCost } from "util/calculateOrderCost";
 import { add, multiply } from "mathjs";
 import { baseServiceFee } from "hyfn-types";
+import { useGetDriverManagements } from "./hooks/useGetGetDriverManagements";
 
 interface CheckOutProps {}
 
@@ -66,8 +71,8 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 const CheckOut: React.FC<CheckOutProps> = () => {
   const routeLocation = useRouteLocation();
   const [state, setState] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
-  const { cart, changeOrderType, clearCart, setCartInfo } = useCart();
+
+  const { cart } = useCart();
 
   const [cartArray, setCartArray] = useState([]);
   useEffect(() => {
@@ -115,7 +120,7 @@ const CheckOut: React.FC<CheckOutProps> = () => {
 
   const [, setManualLocation] = useState(false);
   // const balance = userCustomData?.balance;
-  const [{ coords: userCoords }, setLocation] = useLocation();
+  const [{ coords: userCoords, country, city }, setLocation] = useLocation();
   const [{ distance, duration, deliveryFee }, setDeliveryDetails] =
     useState<any>({
       distance: 0,
@@ -125,11 +130,15 @@ const CheckOut: React.FC<CheckOutProps> = () => {
   const initialValues = {
     location: `${userCoords[0]},${userCoords[1]}`,
     address: "",
-    phoneNumber: ""
+    phoneNumber: "",
+    country,
+    city
   } as {
     location: string | number[];
     address: string;
     phoneNumber: string;
+    country: string;
+    city: string;
   };
   const form = useForm({
     initialValues
@@ -171,11 +180,14 @@ const CheckOut: React.FC<CheckOutProps> = () => {
         form.setValues({
           address: address.locationDescription,
           location: convertCoordsArraytoString(address.coords),
-          phoneNumber: form.values.phoneNumber
+          phoneNumber: form.values.phoneNumber,
+          city: address.city,
+          country: address.country
         });
       }
     }
   }, [addressKey]);
+  // const { refetch: refetchGetDriverManagements } = useGetDriverManagements({});
   // const requestHandler = () => {
   //   // const doesOrderExist = userCustomData.order;
 
@@ -338,7 +350,11 @@ const CheckOut: React.FC<CheckOutProps> = () => {
                   label={t("Location details")}
                   {...form.getInputProps("address")}
                 />
-
+                <Select
+                  title={t("City")}
+                  data={allCitiesForSelect["Libya"]}
+                  {...form.getInputProps("city")}
+                />
                 <TextInput
                   type="tel"
                   required

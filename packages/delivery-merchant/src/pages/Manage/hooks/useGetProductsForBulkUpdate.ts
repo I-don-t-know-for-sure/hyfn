@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "react-query";
 
 import { fetchApi } from "utils/fetch";
 
-export const useGetProducts = ({ lastDocId, check, filterText }) => {
+export const useGetProducts = ({ lastDocId, check }) => {
   const { userId, userDocument } = useUser();
 
   return useInfiniteQuery(
@@ -16,11 +16,11 @@ export const useGetProducts = ({ lastDocId, check, filterText }) => {
       return await fetchApi({
         url: `getProducts`,
 
-        arg: [userDocument?.id, pageParam, queryKey[1]],
+        arg: [{ storeId: userDocument?.id, lastDoc: pageParam, filter: check }]
       });
     },
     {
-      keepPreviousData: true,
+      keepPreviousData: true
       // getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
       // enabled: !filterText,
     }

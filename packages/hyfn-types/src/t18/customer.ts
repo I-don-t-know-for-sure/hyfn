@@ -1,6 +1,7 @@
 import { returnsObj, returnsObjArabic } from "../returnMessages";
 
 export const customerAppText = {
+  Addresses: "Addresses",
   Previous: "Previous",
   "Delivery company": "Delivery company",
   "search products, stores": "search products, stores",
@@ -146,7 +147,7 @@ export const customerAppText = {
   "Delivery Location": "Delivery Location",
   "set your current location": "set your current location",
   Location: "Location",
-  Addresses: "Addresses",
+
   "Location details": "Location details",
   "Pick Date": "Pick Date",
   request: "request",

@@ -1,58 +1,70 @@
-interface GetStoreFrontsProps extends Omit<MainFunctionProps, 'arg'> {}
+interface GetStoreFrontsProps extends Omit<MainFunctionProps, "arg"> {}
 
-import { MainFunctionProps, mainWrapper } from 'hyfn-server';
-import { sql } from 'kysely';
+import { MainFunctionProps, mainWrapper } from "hyfn-server";
+import { sql } from "kysely";
 
-interface GetStoreFrontsProps extends Omit<MainFunctionProps, 'arg'> {
+interface GetStoreFrontsProps extends Omit<MainFunctionProps, "arg"> {
   arg: any;
 }
-export const getStoreFronts = async ({ arg, client, db }: GetStoreFrontsProps) => {
-  const { country, city, coords, nearby, filter: storeType, lastDocNumber } = arg[0];
+export const getStoreFronts = async ({
+  arg,
+  client,
+  db
+}: GetStoreFrontsProps) => {
+  const {
+    country,
+    city,
+    coords,
+    nearby,
+    filter: storeType,
+    lastDocNumber
+  } = arg[0];
 
   const query =
-    nearby && storeType !== 'all'
+    nearby && storeType !== "all"
       ? {
           storeType: storeType,
           city,
           coords: {
             $near: {
               $geometry: {
-                type: 'Point',
-                coordinates: [coords[1], coords[0]],
+                type: "Point",
+                coordinates: [coords[1], coords[0]]
               },
-              $maxDistance: 10000,
-            },
-          },
+              $maxDistance: 10000
+            }
+          }
         }
-      : !nearby && storeType !== 'all'
+      : !nearby && storeType !== "all"
       ? { storeType, city }
-      : nearby && storeType === 'all'
+      : nearby && storeType === "all"
       ? {
           city,
           coords: {
             $near: {
-              $geometry:   
-              
-              {
-                type: 'Point',
-                coordinates: [coords[1], coords[0]],
+              $geometry: {
+                type: "Point",
+                coordinates: [coords[1], coords[0]]
               },
-              $maxDistance: 10000,
-            },
-          },
+              $maxDistance: 10000
+            }
+          }
         }
       : {
-          city,
+          city
         };
   var qb = db
-    .selectFrom('stores')
-    .select(['storeName', 'description', 'image', 'id', 'storeType'])
-    
-    
-    .where('localCardApiKeyId', '!=', undefined)
+    .selectFrom("stores")
+    .select(["storeName", "description", "image", "id", "storeType"])
+
+    .where("expirationDate", ">", new Date())
     .limit(5);
-  if (!!storeType && storeType !== 'all') {
-    qb = qb.where('storeType', '@>', sql`array[${sql.join([storeType])}]::varchar[]`);
+  if (storeType && storeType !== "all") {
+    qb = qb.where(
+      "storeType",
+      "@>",
+      sql`array[${sql.join([storeType])}]::varchar[]`
+    );
   }
   // if(nearby){
   //   qb.where(sql``)

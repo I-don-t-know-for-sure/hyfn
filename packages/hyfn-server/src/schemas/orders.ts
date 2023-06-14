@@ -11,7 +11,7 @@ import {
   numeric,
   timestamp,
   index,
-  foreignKey,
+  foreignKey
 } from "drizzle-orm/pg-core";
 import {
   citiesArray,
@@ -19,7 +19,7 @@ import {
   driverStatusArray,
   orderStatusArray,
   orderTypesArray,
-  storeStatusArray,
+  storeStatusArray
 } from "hyfn-types";
 
 import { InferModel, sql } from "drizzle-orm";
@@ -35,7 +35,7 @@ export const orders = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
 
     storeStatus: varchar("store_status", {
-      enum: storeStatusArray,
+      enum: storeStatusArray
     })
       .array()
       .notNull(),
@@ -64,7 +64,7 @@ export const orders = pgTable(
     serviceFee: numeric("service_fee").notNull(),
     serviceFeePaid: boolean("service_fee_paid").default(false),
     orderType: varchar("order_type", {
-      enum: orderTypesArray,
+      enum: orderTypesArray
     }).notNull(),
     proposals: jsonb("proposals").array().notNull(),
     totalCost: numeric("total_cost").notNull(),
@@ -73,13 +73,16 @@ export const orders = pgTable(
     // the acceptedProposal is the id of the driver that made the proposal
     acceptedProposal: varchar("accepted_proposal"),
     driverManagement: varchar("driver_management"),
-
+    allowedDriverManagements: uuid("allowed_driver_managements")
+      .array()
+      .notNull(),
     orderStatus: varchar("order_status", {
-      enum: orderStatusArray,
+      enum: orderStatusArray
     })
       .array()
       .notNull(),
-
+    toCity: varchar("to_city").notNull(),
+    fromCity: varchar("from_city").notNull(),
     reportsIds: uuid("reports_ids").array().notNull(),
     deliveryFeePaid: boolean("delivery_fee_paid").default(false),
     /* 
@@ -89,7 +92,7 @@ when the driver leaves an order we should sync this field with the store field
      */
     onlyStoreDriversCanTakeOrders: boolean("only_store_drivers_can_take_orders")
       .notNull()
-      .default(false),
+      .default(false)
   },
   (table) => {
     return {
@@ -104,7 +107,7 @@ when the driver leaves an order we should sync this field with the store field
       driverManagementx: index("driver_managementx").on(table.driverManagement),
       onlyStoreDriversCanTakeOrders: index(
         "only_store_drivers_can_take_orders"
-      ).on(table.onlyStoreDriversCanTakeOrders),
+      ).on(table.onlyStoreDriversCanTakeOrders)
       // storeSettings: foreignKey({
       //   columns: [table.storeId, table.onlyStoreDriversCanTakeOrders],
       //   foreignColumns: [stores.id, stores.onlyStoreDriversCanTakeOrders],
@@ -137,9 +140,9 @@ export const zOrder = z.object({
     z.object({
       price: z.number(),
       driverId: z.string(),
-      managementId: z.string(),
+      managementId: z.string()
     })
-  ),
+  )
 });
 
 // export type Order = InferModel<typeof orders>;

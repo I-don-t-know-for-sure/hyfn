@@ -4,7 +4,7 @@ import {
   use,
   Function,
   StaticSite,
-  Cognito,
+  Cognito
 } from "sst/constructs";
 
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -29,7 +29,7 @@ export function adminApiStack({ stack }: StackContext) {
   const stage = getStage(stack.stage);
 
   const defaultFunction = new Function(stack, "admindefaultFunction", {
-    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
+    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler"
   });
   const api = new Api(stack, "adminApi", {
     defaults: {
@@ -39,100 +39,97 @@ export function adminApiStack({ stack }: StackContext) {
         environment: {
           kmsKeyARN: keyArn,
 
-          MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
-          groupId: config[stage].groupId,
+
           moalmlatDataService: config[stage].moalmlatDataService,
           userPoolId: auth.userPoolId,
           userPoolClientId: auth.userPoolClientId,
-          mongoPrivetKey: config[stage].mongoPrivetKey,
-          mongoPublicKey: config[stage].mongoPublicKey,
+
           region: stack.region,
           sadadURL: config[stage].sadadURL,
           secretKey: config[stage].secretKey,
           MerchantId: config[stage].MerchantId,
           TerminalId: config[stage].TerminalId,
-          mongdbURLKey: config[stage].mongdbURLKey,
 
           sadadApiKey: config[stage].sadadApiKey,
 
           secretAccessKey: config[stage].secretAccessKey,
-          db_url: config[stage].db_url,
+          db_url: config[stage].db_url
         },
-        permissions: [],
-      },
+        permissions: []
+      }
     },
     routes: {
       "POST /createAdminDocument": {
         function: {
-          handler: pathToLambdas + "createAdminDocument.handler",
-        },
+          handler: pathToLambdas + "createAdminDocument.handler"
+        }
       },
       "POST /getPaymentRequests": {
         function: {
-          handler: pathToLambdas + "getPaymentRequests.handler",
-        },
+          handler: pathToLambdas + "getPaymentRequests.handler"
+        }
       },
       "POST /completePaymentRequest": {
         function: {
-          handler: pathToLambdas + "completePaymentRequest.handler",
-        },
+          handler: pathToLambdas + "completePaymentRequest.handler"
+        }
       },
       "POST /createPaymentRequestObject": {
         function: {
-          handler: pathToLambdas + "createPaymentRequestObject.handler",
-        },
+          handler: pathToLambdas + "createPaymentRequestObject.handler"
+        }
       },
       "POST /removeDriverManagementVerification": {
         function: {
-          handler: pathToLambdas + "removeDriverManagementVerification.handler",
-        },
+          handler: pathToLambdas + "removeDriverManagementVerification.handler"
+        }
       },
       "POST /verifyDriverManagement": {
         function: {
-          handler: pathToLambdas + "verifyDriverManagement.handler",
-        },
+          handler: pathToLambdas + "verifyDriverManagement.handler"
+        }
       },
       "POST /getDriverManagement": {
         function: {
-          handler: pathToLambdas + "getDriverManagement.handler",
-        },
+          handler: pathToLambdas + "getDriverManagement.handler"
+        }
       },
       "POST /getUnverifiedDrivers": {
         function: {
-          handler: pathToLambdas + "getUnverifiedDrivers.handler",
-        },
+          handler: pathToLambdas + "getUnverifiedDrivers.handler"
+        }
       },
       "POST /getReports": {
-        function: { handler: pathToLambdas + "getReports.handler" },
+        function: { handler: pathToLambdas + "getReports.handler" }
       },
       "POST /getAdminDocument": {
         function: {
-          handler: pathToLambdas + "getAdminDocument.handler",
-        },
+          handler: pathToLambdas + "getAdminDocument.handler"
+        }
       },
       "POST /setDriverAsVerified": {
         function: {
-          handler: pathToLambdas + "setDriverAsVerified.handler",
-        },
-      },
-    },
+          handler: pathToLambdas + "setDriverAsVerified.handler"
+        }
+      }
+    }
   });
   const permissions = new iam.PolicyStatement({
     actions: ["*"],
     effect: iam.Effect.ALLOW,
-    resources: [`*`],
+    resources: [`*`]
   });
 
   api.attachPermissions([permissions]);
   api.setCors({
     allowMethods: ["POST"],
-    allowHeaders: ["Accept", "Content-Type", "Authorization"],
+    allowHeaders: ["Accept", "Content-Type", "Authorization"]
   });
   new CfnOutput(stack, "adminApiUrl-" + stack.stage, {
     value: api.url || "",
-    exportName: "adminApiUrl-" + stack.stage, // export name
+    exportName: "adminApiUrl-" + stack.stage // export name
   });
   /////////////////////////////////////////////////////////////////////
 
@@ -140,10 +137,10 @@ export function adminApiStack({ stack }: StackContext) {
     ApiEndpoint: api.url,
     apiArn: api.httpApiArn,
     apiFunctionsRoleArn:
-      api.getFunction("POST /getAdminDocument")?.role?.roleArn || "",
+      api.getFunction("POST /getAdminDocument")?.role?.roleArn || ""
   });
   return {
-    api,
+    api
   };
 }
 
@@ -158,44 +155,44 @@ export function adminCognitoStack({ stack }: StackContext) {
     cdk: {
       userPool: {
         passwordPolicy: {
-          minLength: 8,
+          minLength: 8
           // requireLowercase: false,
           // requireUppercase: false,
           // requireDigits: false,
           // requireSymbols: false,
-        },
-      },
-    },
+        }
+      }
+    }
   });
   auth.attachPermissionsForAuthUsers(stack, [
     new iam.PolicyStatement({
       actions: ["s3:*"],
       effect: iam.Effect.ALLOW,
       resources: [
-        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
-      ],
-    }),
+        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*"
+      ]
+    })
   ]);
 
   new CfnOutput(stack, "adminCognitoIdentityPoolId-" + stack.stage, {
     value: auth.cognitoIdentityPoolId || "",
-    exportName: "adminCognitoIdentityPoolId-" + stack.stage, // export name
+    exportName: "adminCognitoIdentityPoolId-" + stack.stage // export name
   });
   new CfnOutput(stack, "adminCognitoRegion-" + stack.stage, {
     value: stack.region || "",
-    exportName: "adminCognitoRegion-" + stack.stage, // export name
+    exportName: "adminCognitoRegion-" + stack.stage // export name
   });
   new CfnOutput(stack, "adminUserPoolId-" + stack.stage, {
     value: auth.userPoolId || "",
-    exportName: "adminUserPoolId-" + stack.stage, // export name
+    exportName: "adminUserPoolId-" + stack.stage // export name
   });
   new CfnOutput(stack, "adminUserPoolClientId-" + stack.stage, {
     value: auth.userPoolClientId || "",
-    exportName: "adminUserPoolClientId-" + stack.stage, // export name
+    exportName: "adminUserPoolClientId-" + stack.stage // export name
   });
 
   stack.addOutputs({});
   return {
-    auth,
+    auth
   };
 }

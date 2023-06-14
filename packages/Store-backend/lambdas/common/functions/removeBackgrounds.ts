@@ -1,9 +1,8 @@
-import AWS from 'aws-sdk';
-import axios from 'axios';
+import axios from "axios";
 
 export function sendRemoveBackgroundsEventBus({
   productIds,
-  storeId,
+  storeId
 }: {
   productIds: any[];
   storeId: string;
@@ -12,15 +11,16 @@ export function sendRemoveBackgroundsEventBus({
     .post(process.env.removeBackgroundsURL, {
       productIds,
       storeId,
-      url: process.env.removeBackgroundsURL,
+      url: process.env.removeBackgroundsURL
     })
     .catch((err) => {
+      console.log("🚀 ~ file: removeBackgrounds.ts:17 ~ err:", err);
       console.error(err);
     });
 }
 export const removeBackgrounds = async ({
   productIds,
-  storeId,
+  storeId
 }: {
   productIds: string[];
   storeId: string;

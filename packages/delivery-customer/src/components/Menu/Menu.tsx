@@ -21,7 +21,7 @@ import {
   Loader,
   Stack,
   Image,
-  Flex,
+  Flex
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -29,7 +29,7 @@ import { useEffect, useState } from "react";
 import {
   Link,
   Location,
-  useLocation as useRouteLocation,
+  useLocation as useRouteLocation
 } from "react-router-dom";
 
 import { MdLanguage, MdShoppingCart } from "react-icons/md";
@@ -38,7 +38,7 @@ import {
   getCountryInfo,
   lngs,
   MENU_HEIGHT,
-  useConfigurationData,
+  useConfigurationData
 } from "./config";
 import { useCart } from "../../contexts/cartContext/Provider";
 import { BsMoonStars, BsSun } from "react-icons/bs";
@@ -48,7 +48,7 @@ import { useLocation } from "../../contexts/locationContext/LocationContext";
 import {
   AiOutlineArrowDown,
   AiOutlineMinus,
-  AiOutlinePlus,
+  AiOutlinePlus
 } from "react-icons/ai";
 import { useFixedComponent } from "../../contexts/fixedComponentContext/FixedComponentProvider";
 import { t } from "../../util/i18nextFix";
@@ -76,8 +76,8 @@ const StyledNav: React.FC = ({ children, ...rest }) => {
 
       borderBottom: "solid 2px rgba(133, 133, 133, 0.1)",
       zIndex: 60,
-      transform: "translate3d(0, 0, 0)",
-    },
+      transform: "translate3d(0, 0, 0)"
+    }
   }));
 
   const { classes } = useStyles();
@@ -92,8 +92,8 @@ const Wrapper: React.FC = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     wrapper: {
       position: "relative",
-      width: "100%",
-    },
+      width: "100%"
+    }
   }));
   const { classes } = useStyles();
   return <Box className={classes.wrapper}>{children as any}</Box>;
@@ -103,8 +103,8 @@ const BodyWrapper: React.FC = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     bodyWrapper: {
       position: "relative",
-      display: "flex",
-    },
+      display: "flex"
+    }
   }));
   const { classes } = useStyles();
   return <Box className={classes.bodyWrapper}>{children as any}</Box>;
@@ -133,19 +133,19 @@ const Inner: React.FC<{
         marginBottom: `${MENU_HEIGHT}px`,
         transition: "margin-top 0.2s",
         transform: "translate3d(0, 0, 0)",
-        maxWidth: "100%",
+        maxWidth: "100%"
 
         // maxWidth: `${`calc(100% - ${
         //   isMobile ? SIDEBAR_WIDTH_FULL : SIDEBAR_WIDTH_REDUCED
         // }px)`}`,
-      },
+      }
     })
   );
   const { classes } = useStyles({ showMenu, location });
   return <Box className={classes.inner}>{children as any}</Box>;
 };
 
-const Menu: React.FC = ({ children }) => {
+const Menu: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [opened, setOpened] = useState(false);
   const { cart } = useCart();
   const theme = useMantineTheme();
@@ -156,7 +156,7 @@ const Menu: React.FC = ({ children }) => {
   const { userId, loggedIn, setUserDocument } = useUser();
   const { data: userData, isLoading } = useGetUserDocument({
     userId,
-    setUserDocument,
+    setUserDocument
   });
   console.log("🚀 ~ file: Menu.tsx:134 ~ userData", userData);
   const [links, bottomNavLinks] = useConfigurationData();
@@ -175,14 +175,14 @@ const Menu: React.FC = ({ children }) => {
     initialValues: {
       city,
       country,
-      coords: `${coords[0]},${coords[1]}`,
-    },
+      coords: `${coords[0]},${coords[1]}`
+    }
   });
   useEffect(() => {
     form.setValues({
       city,
       country,
-      coords: `${coords[0]},${coords[1]}`,
+      coords: `${coords[0]},${coords[1]}`
     });
   }, [city, country, coords]);
 
@@ -231,16 +231,15 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
+              width: "100%"
+            }}>
             <Burger
               opened={opened}
               onClick={() => setOpened((prevState) => !prevState)}
             />
             <Space
               sx={{
-                width: "48px",
+                width: "48px"
               }}
             />
 
@@ -249,9 +248,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
               sx={{
                 width: "100%",
 
-                margin: "auto ",
-              }}
-            >
+                margin: "auto "
+              }}>
               {location.pathname !== "/explore" && (
                 <Popover
                   opened={locationPopoverOpened}
@@ -259,21 +257,18 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   trapFocus={false}
                   position={"bottom"}
                   withArrow={false}
-                  closeOnClickOutside={false}
-                >
+                  closeOnClickOutside={false}>
                   <Popover.Target>
                     <Box
                       sx={(theme) => ({
                         display: "flex",
                         justifyContent: "center",
-                        alignItems: "center",
-                      })}
-                    >
+                        alignItems: "center"
+                      })}>
                       <Button
                         onClick={() => setLocationPopoverOpen((prev) => !prev)}
                         variant="subtle"
-                        rightIcon={<AiOutlineArrowDown />}
-                      >
+                        rightIcon={<AiOutlineArrowDown />}>
                         {" "}
                         {t(`In ${city}`)}
                       </Button>
@@ -281,9 +276,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   </Popover.Target>
                   <Popover.Dropdown
                     sx={{
-                      zIndex: 1000,
-                    }}
-                  >
+                      zIndex: 1000
+                    }}>
                     <form
                       onSubmit={form.onSubmit((values) => {
                         console.log(values.coords);
@@ -293,18 +287,16 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                           ...values,
                           coords: [
                             parseFloat(newCoords[0]),
-                            parseFloat(newCoords[1]),
-                          ],
+                            parseFloat(newCoords[1])
+                          ]
                         });
-                      })}
-                    >
+                      })}>
                       <Card
                         sx={{
                           width: "100%",
                           display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
+                          flexDirection: "column"
+                        }}>
                         <Card.Section>
                           <Group spacing={"sm"} position={"center"} grow={true}>
                             <Select
@@ -336,8 +328,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                                 success,
                                 err
                               );
-                            }}
-                          >
+                            }}>
                             {t("Get current coords")}
                           </Button>
                         </Card.Section>
@@ -345,9 +336,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                           sx={{
                             marginTop: "12px",
                             display: "flex",
-                            flexDirection: "row-reverse",
-                          }}
-                        >
+                            flexDirection: "row-reverse"
+                          }}>
                           <Button fullWidth type="submit">
                             {t("set Location")}
                           </Button>
@@ -422,9 +412,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
               component={Link}
               to={"/cart"}
               style={{
-                textDecoration: "none",
-              }}
-            >
+                textDecoration: "none"
+              }}>
               <Box
                 sx={{
                   width: "56px",
@@ -437,9 +426,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+                  alignItems: "center"
+                }}>
                 <MdShoppingCart
                   style={{ padding: " 0px 6px" }}
                   size={32}
@@ -458,16 +446,14 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
+              width: "100%"
+            }}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "row",
-                width: "6vw",
-              }}
-            >
+                width: "6vw"
+              }}>
               <Text
                 component={Link}
                 to={"/"}
@@ -477,10 +463,9 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   fontFamily: "sans-serif",
 
                   [theme.fn.largerThan("md")]: {
-                    fontSize: "34px",
-                  },
-                })}
-              >
+                    fontSize: "34px"
+                  }
+                })}>
                 hyfn
               </Text>
             </Box>
@@ -490,19 +475,17 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                 component={Link}
                 to={"/login"}
                 sx={{
-                  borderRadius: "18px",
+                  borderRadius: "18px"
                 }}
-                variant="light"
-              >
+                variant="light">
                 {t("Login")}
               </Button>
               <Button
                 component={Link}
                 to={"/signup"}
                 sx={{
-                  borderRadius: "18px",
-                }}
-              >
+                  borderRadius: "18px"
+                }}>
                 {t("Signup")}
               </Button>
             </Group>
@@ -515,9 +498,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
             zIndex: 3,
             width: "100%",
             position: "fixed",
-            top: `${MENU_HEIGHT}px`,
-          }}
-        >
+            top: `${MENU_HEIGHT}px`
+          }}>
           <Container
             sx={{
               width: "100%",
@@ -525,27 +507,24 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
               height: 60,
               justifyContent: "space-around",
               alignItems: "center",
-              display: "flex",
-            }}
-          >
+              display: "flex"
+            }}>
             <Button
               variant="outline"
               sx={{
-                width: "45%",
+                width: "45%"
               }}
               component={Link}
-              to={"/orders/activeorders"}
-            >
+              to={"/orders/activeorders"}>
               {t("Active Orders")}
             </Button>
             <Button
               variant="outline"
               sx={{
-                width: "45%",
+                width: "45%"
               }}
               component={Link}
-              to={"/store/orders/orderhistory"}
-            >
+              to={"/store/orders/orderhistory"}>
               {t("History")}
             </Button>
           </Container>
@@ -557,9 +536,8 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
             position: "fixed",
             bottom: "0px",
             width: "100%",
-            zIndex: 20,
-          }}
-        >
+            zIndex: 20
+          }}>
           {fixedComponent.length > 0 &&
             (location.pathname.includes("product") ||
               (location.pathname.includes("product") &&
@@ -577,7 +555,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
       <BodyWrapper>
         <LoadingOverlay
           sx={{
-            height: "100vh",
+            height: "100vh"
           }}
           visible={visible}
         />
@@ -590,15 +568,13 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
             onClose={() => {
               setOpened(false);
             }}
-            closeOnClickOutside
-          >
+            closeOnClickOutside>
             <Stack
               sx={{
                 marginTop: "56px",
                 display: "flex",
-                flexDirection: "column",
-              }}
-            >
+                flexDirection: "column"
+              }}>
               {links.map((section) => {
                 const SVG = section.svg;
 
@@ -609,7 +585,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                           component: "a",
                           target: "_blank",
                           rel: "noreferrer",
-                          href: section.link,
+                          href: section.link
                         }
                       : { component: Link, to: section.link };
                   return (
@@ -648,16 +624,15 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                           backgroundColor:
                             theme.colorScheme === "light"
                               ? theme.colors.gray[2]
-                              : theme.colors.gray[9],
+                              : theme.colors.gray[9]
                         },
-                        borderRadius: "8px",
-                      }}
-                    >
+                        borderRadius: "8px"
+                      }}>
                       {SVG ? (
                         <SVG
                           size={19}
                           style={{
-                            marginRight: "8px",
+                            marginRight: "8px"
                           }}
                         />
                       ) : (
@@ -689,16 +664,15 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                         backgroundColor:
                           theme.colorScheme === "light"
                             ? theme.colors.gray[2]
-                            : theme.colors.gray[9],
+                            : theme.colors.gray[9]
                       },
-                      borderRadius: "8px",
-                    }}
-                  >
+                      borderRadius: "8px"
+                    }}>
                     {SVG ? (
                       <SVG
                         size={19}
                         style={{
-                          marginRight: "8px",
+                          marginRight: "8px"
                         }}
                       />
                     ) : (
@@ -717,15 +691,13 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   bottom: 24 + MENU_HEIGHT,
                   width: "100%",
                   display: "flex",
-                  justifyContent: "end",
-                }}
-              >
+                  justifyContent: "end"
+                }}>
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "end",
-                  }}
-                >
+                    justifyContent: "end"
+                  }}>
                   <AvatarMenu>
                     <AvatarMenu.Target>
                       <ActionIcon>
@@ -737,8 +709,7 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                         <AvatarMenu.Item
                           onClick={() => {
                             i18n.changeLanguage(lang);
-                          }}
-                        >
+                          }}>
                           {lngs[lang].nativeName}
                         </AvatarMenu.Item>
                       ))}
@@ -746,15 +717,14 @@ http://localhost:3000/62949a365aae3db6bef03a1b/Libya/Tripoli/629a36b012684cfd57a
                   </AvatarMenu>
                   <Space
                     sx={{
-                      width: "12px",
+                      width: "12px"
                     }}
                   />
                   <ActionIcon
                     variant="outline"
                     color={dark ? "yellow" : "blue"}
                     onClick={() => toggleColorScheme()}
-                    title="Toggle color scheme"
-                  >
+                    title="Toggle color scheme">
                     {dark ? <BsSun size={18} /> : <BsMoonStars size={18} />}
                   </ActionIcon>
                 </Box>

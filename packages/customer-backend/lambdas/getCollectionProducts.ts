@@ -1,14 +1,30 @@
-interface GetCollectionProductsProps extends Omit<MainFunctionProps, 'arg'> {}
-('use strict');
-import { ObjectId } from 'mongodb';
-import { buildJson, getJson, mainWrapper, tProduct, tProducts } from 'hyfn-server';
-import { MainFunctionProps } from 'hyfn-server';
-import { sql } from 'kysely';
-interface GetCollectionProductsProps extends Omit<MainFunctionProps, 'arg'> {
+interface GetCollectionProductsProps extends Omit<MainFunctionProps, "arg"> {}
+("use strict");
+import { ObjectId } from "mongodb";
+import {
+  buildJson,
+  getJson,
+  mainWrapper,
+  tProduct,
+  tProducts
+} from "hyfn-server";
+import { MainFunctionProps } from "hyfn-server";
+import { sql } from "kysely";
+interface GetCollectionProductsProps extends Omit<MainFunctionProps, "arg"> {
   arg: any[];
 }
-export const getCollectionProducts = async ({ arg, client, db }: GetCollectionProductsProps) => {
-  const { country, storefront, collectionid, documents = 25, lastDocNumber } = arg[0];
+export const getCollectionProducts = async ({
+  arg,
+  client,
+  db
+}: GetCollectionProductsProps) => {
+  const {
+    country,
+    storefront,
+    collectionid,
+    documents = 25,
+    lastDocNumber
+  } = arg[0];
 
   /* const collectionProductRelations = await db
     .selectFrom('collectionsProducts')
@@ -40,20 +56,32 @@ export const getCollectionProducts = async ({ arg, client, db }: GetCollectionPr
     .offset(lastDocNumber > 0 ? lastDocNumber : 0)
     .limit(5)
     .execute(); */
-  const collectionsProducts = await db
-    .selectFrom('collectionsProducts')
-    .select(['collectionsProducts.productId'])
-    .where('collectionId', '=', collectionid)
-    .limit(5)
-    .offset(lastDocNumber > 0 ? lastDocNumber : 0)
-    .execute();
-  const productsIds = collectionsProducts.map((product) => product.productId);
-  if (productsIds.length === 0) return [];
+  // const collectionsProducts = await db
+  //   .selectFrom('collectionsProducts')
+  //   .select(['collectionsProducts.productId'])
+  //   .where('collectionId', '=', collectionid)
+  //   .limit(5)
+  //   .offset(lastDocNumber > 0 ? lastDocNumber : 0)
+  //   .execute();
+  // const productsIds = collectionsProducts.map((product) => product.productId);
+  // if (productsIds.length === 0) return [];
 
   const products = await db
-    .selectFrom('products')
-    .where('id', 'in', productsIds)
-    .select(['id', 'images', 'description', 'prevPrice', 'price', 'title', 'hasOptions'])
+    .selectFrom("products")
+    .where(
+      "collectionsIds",
+      "<@",
+      sql`array[${sql.join([collectionid])}]::uuid[]`
+    )
+    .select([
+      "id",
+      "images",
+      "description",
+      "prevPrice",
+      "price",
+      "title",
+      "hasOptions"
+    ])
     .execute();
 
   // const products = collectionProductRelations.flatMap((collection) => {

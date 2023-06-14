@@ -12,7 +12,7 @@ export const useManageAddresses = () => {
       try {
         const result = await fetchApi({
           arg: [{ addresses, customerId: userDocument.id }],
-          url: `updateAddresses`,
+          url: `updateAddresses`
         });
 
         return result;
@@ -23,7 +23,7 @@ export const useManageAddresses = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries([userId]);
-      },
+      }
     }
   );
 };

@@ -6,7 +6,7 @@ import {
   serial,
   uniqueIndex,
   uuid,
-  varchar,
+  varchar
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import { transportationMethodsArray } from "hyfn-types";
@@ -20,7 +20,7 @@ export const drivers = pgTable(
 
     driverPhone: varchar("driver_phone").notNull(),
     tarnsportationMethod: varchar("tarnsportation_method", {
-      enum: transportationMethodsArray,
+      enum: transportationMethodsArray
     }).notNull(),
     userId: varchar("user_id").notNull(),
     verified: boolean("verified").default(false),
@@ -28,14 +28,14 @@ export const drivers = pgTable(
     driverManagement: varchar("driver_management"),
     notificationTokens: varchar("notification_tokens").array().notNull(),
     usedBalance: decimal("used_balance").notNull(),
-
+    managedBy: varchar("managed_by", { enum: ["store", "driver manegement"] }),
     reportsIds: uuid("reports_ids").array().notNull(),
-    removeDriverAfterOrder: boolean("remove_driver_after_order").default(false),
+    removeDriverAfterOrder: boolean("remove_driver_after_order").default(false)
   },
   (table) => {
     return {
       userIdx: uniqueIndex("user_idx").on(table.userId),
-      driverManagementx: index("driver_managementx").on(table.driverManagement),
+      driverManagementx: index("driver_managementx").on(table.driverManagement)
     };
   }
 );
@@ -45,7 +45,7 @@ export const zDriver = z.object({
   ...schema.shape,
   notificationTokens: z.array(z.string()),
   balance: z.number(),
-  usedBalance: z.number(),
+  usedBalance: z.number()
 });
 
 // export type Driver = z.infer<typeof zDriver>;

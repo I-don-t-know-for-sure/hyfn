@@ -9,11 +9,12 @@ import {
   Grid,
   Group,
   Loader,
+  Stack,
   Table,
   Tabs,
   Text,
   TextInput,
-  UnstyledButton,
+  UnstyledButton
 } from "@mantine/core";
 import usePersistState from "hooks/usePersistState";
 import InfoCard from "components/InfoCard";
@@ -31,372 +32,176 @@ import { fetchApi } from "utils/fetch";
 // import { Helmet } from 'react-helmet-async'
 
 import { useUser } from "contexts/userContext/User";
+import { useGetCollections } from "./hooks/useGetCollections";
+import { productTabsObject } from "hyfn-types";
+import { Helmet } from "react-helmet";
+import { useGetCollectionSearchHits } from "./hooks/useGetCollectionSearchHits";
 
 interface ManageCollectionsProps {}
 
 const ManageCollections: React.FC<ManageCollectionsProps> = ({}) => {
   const [filterText, setFilterText] = useState("");
-  const { userId, userDocument } = useUser();
 
-  const [checkedFilter, setCheckedFilter] = useState<any>(undefined);
-  const [taps, setTaps] = useState("all");
-
-  // useEffect(() => {
-  //   fetch(
-  //     "https://eu-west-1.aws.data.mongodb-api.com/app/application-0-suydu/endpoint/getcollections",
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // 'Content-Type': 'application/x-www-form-urlencoded',
-  //       },
-  //       body: JSON.stringify(info),
-  //     }
-  //   )
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //
-  //     });
-  // });
-
-  const {
-    isLoading,
-    error,
-    data = [],
-    isFetching,
-  } = useQuery("collections", async () => {
-    const collections = await fetchApi({
-      url: `getAllCollections`,
-      arg: [userDocument.storeDoc],
-    });
-
-    return collections;
+  const [tabs, setTabs] = useState("all");
+  const { isLoading, error, data, isFetching } = useGetCollections({
+    filter: tabs,
+    searchValue: filterText
   });
+  const { isLoading: searchHitsLoading, data: searchHitsResults } =
+    useGetCollectionSearchHits({
+      filter: tabs,
+      searchValue: filterText
+    });
+  const [collections, setCollections] = useState<
+    (typeof searchHitsResults)["pages"]["0"] | (typeof data)["pages"]["0"]
+  >([]);
 
   useEffect(() => {
-    if (taps === "all") {
-      setCheckedFilter(undefined);
+    if (!filterText) {
+      const flatCollectionsResults =
+        data?.pages && Array.isArray(data?.pages)
+          ? data?.pages?.flatMap((page) => page)
+          : [];
+      setCollections(flatCollectionsResults);
     }
-    if (taps === "active") {
-      setCheckedFilter({ active: true });
+    if (filterText) {
+      const flatSearchHits =
+        searchHitsResults?.pages && Array.isArray(searchHitsResults?.pages)
+          ? searchHitsResults?.pages?.flatMap((page) => page)
+          : [];
+      setCollections(flatSearchHits);
     }
-    if (taps === "inactive") {
-      setCheckedFilter({ active: false });
-    }
-    console.log("🚀 ~ file: ManageCollections.tsx:90 ~ taps", taps);
-  }, [taps]);
+  }, [isLoading, searchHitsLoading, searchHitsResults, data]);
 
   return (
     <Container>
-      {/* <Helmet>
-        <title>{t('Collections')}</title>
-      </Helmet> */}
-      <Center>
-        <Container
-          sx={{
-            marginTop: "16px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
+      <Helmet>
+        <title>{t("Collections")}</title>
+      </Helmet>
+      <Stack>
+        <Group position="apart">
           <Text>{t("Collections")}</Text>
 
           <Button component={Link} to={"/createcollection"}>
             {t("Create a collection")}
           </Button>
-        </Container>
-      </Center>
-      <Card
-        // sx={{ margin: '16px auto' }}
-        shadow="sm"
-      >
-        <Tabs
-          // initialTab={0}
-          defaultValue={"all"}
-          onTabChange={setTaps}
-        >
-          <Tabs.List>
-            <Tabs.Tab value={"all"}>{t("All")}</Tabs.Tab>
-
-            <Tabs.Tab value={"active"}>{t("Active")}</Tabs.Tab>
-            <Tabs.Tab value={"inactive"}>{t("Inactive")}</Tabs.Tab>
-          </Tabs.List>
-          {/* <Tabs.Panel value={'all'} >
-
-          </Tabs.Panel>
-          <Tabs.Panel value={'active'} >
-
-          </Tabs.Panel>
-          <Tabs.Panel value={'inactive'} >
-
-          </Tabs.Panel> */}
-        </Tabs>
-        <Group grow>
-          <TextInput
-            sx={{
-              minWidth: "148px",
-            }}
-            placeholder={t("Search for collections")}
-            value={filterText}
-            onChange={(e) => {
-              setFilterText(e.currentTarget.value);
-            }}
-          />
-          {/* <Group grow mb={6}>
-            <Checkbox
-              styles={{
-                root: {
-                  display: "flex",
-                  flexDirection: "column-reverse",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginBottom: "6px",
-                },
-                label: {
-                  margin: "0px 3px 3px 0px",
-                },
-
-                input: {
-                  margin: "2px 0px 3px 0px",
-                },
-              }}
-              label={t("active")}
-              checked={checkedFilter?.active || false}
-              onChange={() => {
-                setCheckedFilter({ active: true });
-              }}
-            />
-
-            <Checkbox
-              styles={{
-                root: {
-                  display: "flex",
-                  flexDirection: "column-reverse",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginBottom: "6px",
-                },
-                label: {
-                  margin: "0px 3px 3px 0px",
-                },
-
-                input: {
-                  margin: "2px 0px 3px 0px",
-                },
-              }}
-              label={t("inactive")}
-              checked={
-                checkedFilter?.active !== undefined &&
-                checkedFilter?.active === false
-              }
-              onChange={() => {
-                setCheckedFilter({ active: false });
-              }}
-            />
-            <Checkbox
-              label={t("all")}
-              styles={{
-                root: {
-                  display: "flex",
-                  flexDirection: "column-reverse",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginBottom: "6px",
-                },
-                label: {
-                  margin: "0px 3px 3px 0px",
-                },
-
-                input: {
-                  margin: "2px 0px 3px 0px",
-                },
-              }}
-              checked={checkedFilter?.active === undefined}
-              onChange={() => {
-                setCheckedFilter({});
-              }}
-            />
-          </Group> */}
         </Group>
 
-        <CardSection sx={{ borderBottom: "1px solid gray" }}>
-          <Container
-            sx={{
-              display: "flex",
-              flexDirection: "row-reverse",
-              justifyContent: "space-between",
-            }}
-          >
+        <Card
+          // sx={{ margin: '16px auto' }}
+          shadow="sm">
+          <Tabs
+            // initialTab={0}
+            defaultValue={"all"}
+            onTabChange={setTabs}>
+            <Tabs.List>
+              <Tabs.Tab value={productTabsObject.all}>{t("All")}</Tabs.Tab>
+
+              <Tabs.Tab value={productTabsObject.active}>
+                {t("Active")}
+              </Tabs.Tab>
+              <Tabs.Tab value={productTabsObject.inactive}>
+                {t("Inactive")}
+              </Tabs.Tab>
+            </Tabs.List>
+          </Tabs>
+          <Container>
+            <Group grow mt={8}>
+              <TextInput
+                sx={{
+                  minWidth: "148px"
+                }}
+                placeholder={t("Search for collections")}
+                value={filterText}
+                onChange={(e) => {
+                  setFilterText(e.currentTarget.value);
+                }}
+              />
+            </Group>
+          </Container>
+
+          <CardSection sx={{ borderBottom: "1px solid gray" }}>
             <Container
               sx={{
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignSelf: "center",
-                width: "100%",
-                margin: "8px 0px",
-              }}
-            >
-              <Table striped highlightOnHover>
-                <thead>
-                  <tr>
-                    <th
-                      style={{
-                        textAlign: "center",
-                      }}
-                    >
-                      {t("Title")}
-                    </th>
-                    <th
-                      style={{
-                        textAlign: "center",
-                      }}
-                    >
-                      {" "}
-                      {t("conditions")}
-                    </th>
-                  </tr>
-                </thead>
-                {(isLoading || !data) && !error ? (
-                  <Loader />
-                ) : (
-                  <tbody>
-                    {!(data?.length > 0) ? (
-                      <Box>{t("No collections yet")}</Box>
-                    ) : checkedFilter !== undefined || filterText ? (
-                      data
-                        .filter((collection) => {
-                          if (
-                            checkedFilter.active !== undefined &&
-                            !filterText
-                          ) {
-                            return checkedFilter.active === collection.isActive;
-                          }
-                          if (
-                            checkedFilter.active === undefined &&
-                            filterText
-                          ) {
-                            return collection.title?.includes(
-                              filterText.toLowerCase().trim()
-                            );
-                          }
-                          if (
-                            checkedFilter.active !== undefined &&
-                            filterText
-                          ) {
-                            return (
-                              collection.title?.includes(
-                                filterText.toLowerCase().trim()
-                              ) && checkedFilter.active === collection.isActive
-                            );
-                          }
-                        })
-
-                        .map((collection) => (
-                          <tr
-                            onClick={() => {
-                              //navigate(`/${product.id}`, { replace: true })
-                            }}
-                            // style={{
-                            //   width: "100%",
-                            //   display: "flex",
-                            //   flexDirection: "row",
-                            //   justifyContent: "space-around",
-                            //   padding: "8px 0px",
-                            // }}
-                          >
+                flexDirection: "row-reverse",
+                justifyContent: "space-between"
+              }}>
+              <Container
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignSelf: "center",
+                  width: "100%",
+                  margin: "8px 0px"
+                }}>
+                <Table striped highlightOnHover>
+                  <thead>
+                    <tr>
+                      <th
+                        style={{
+                          textAlign: "center"
+                        }}>
+                        {t("Title")}
+                      </th>
+                      <th
+                        style={{
+                          textAlign: "center"
+                        }}>
+                        {" "}
+                        {t("conditions")}
+                      </th>
+                    </tr>
+                  </thead>
+                  {(isLoading || searchHitsLoading) && !error ? (
+                    <Loader />
+                  ) : (
+                    <tbody>
+                      {!(data?.pages?.length > 0) ? (
+                        <Box>{t("No collections yet")}</Box>
+                      ) : (
+                        collections?.map((collection) => (
+                          <tr onClick={() => {}}>
                             <td
                               style={{
-                                textAlign: "center",
-                              }}
-                            >
+                                textAlign: "center"
+                              }}>
                               <UnstyledButton
                                 m={"auto"}
                                 component={Link}
-                                to={`/collection/${collection.id}`}
-                              >
+                                to={`/collection/${collection.id}`}>
                                 {collection.title}
                               </UnstyledButton>
                             </td>
                             {false ? (
                               <td
                                 style={{
-                                  textAlign: "center",
-                                }}
-                              >
+                                  textAlign: "center"
+                                }}>
                                 {" "}
                                 {t("with conditions")}
                               </td>
                             ) : (
                               <td
                                 style={{
-                                  textAlign: "center",
-                                }}
-                              >
+                                  textAlign: "center"
+                                }}>
                                 {" "}
                                 {t("no conditions")}
                               </td>
                             )}
-                            {/* <Button variant="outline">Delete</Button> */}
                           </tr>
                         ))
-                    ) : (
-                      data?.map((collection: CollectionInfo) => (
-                        <tr
-                        // style={{
-                        //   width: "100%",
-                        //   display: "flex",
-                        //   flexDirection: "row",
-                        //   justifyContent: "space-around",
-                        //   padding: "8px 0px",
-                        // }}
-                        >
-                          <td
-                            style={{
-                              textAlign: "center",
-                            }}
-                          >
-                            <UnstyledButton
-                              m={"auto"}
-                              component={Link}
-                              to={`/collection/${collection.id}`}
-                            >
-                              {collection?.title}
-                            </UnstyledButton>
-                          </td>
-                          {collection.conditions ? (
-                            <td
-                              style={{
-                                textAlign: "center",
-                              }}
-                            >
-                              {" "}
-                              {t("with conditions")}
-                            </td>
-                          ) : (
-                            <td
-                              style={{
-                                textAlign: "center",
-                              }}
-                            >
-                              {t("no conditions")}
-                            </td>
-                          )}
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                )}
-              </Table>
+                      )}
+                    </tbody>
+                  )}
+                </Table>
+              </Container>
             </Container>
-          </Container>
-        </CardSection>
-        <CardSection></CardSection>
-      </Card>
+          </CardSection>
+        </Card>
+      </Stack>
     </Container>
   );
 };

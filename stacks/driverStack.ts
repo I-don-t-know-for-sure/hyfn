@@ -4,7 +4,7 @@ import {
   use,
   Function,
   StaticSite,
-  Cognito,
+  Cognito
 } from "sst/constructs";
 
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -25,7 +25,7 @@ export function driverApiStack({ stack }: StackContext) {
   const { auth } = use(driverCognitoStack);
   const stage = getStage(stack.stage);
   const defaultFunction = new Function(stack, "driverdefaultFunction", {
-    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler",
+    handler: "./packages/Store-backend/lambdas/createStoreDocument.handler"
   });
   const { s3Bucket } = use(imagesBucketStack);
   const { key } = use(kmsStack);
@@ -43,143 +43,141 @@ export function driverApiStack({ stack }: StackContext) {
           clientEmail: config[""]["firebaseAdminSDK-client_email"],
           projectId: config[""]["firebaseAdminSDK-project_id"],
           privateKey: config[""]["firebaseAdminSDK-private_key"],
-          MONGODB_CLUSTER_NAME: config[stage].MONGODB_CLUSTER_NAME,
+
           accessKeyId: config[stage].accessKeyId,
           bucketName: imagesBucketName,
-          groupId: config[stage].groupId,
+
           moalmlatDataService: config[stage].moalmlatDataService,
           userPoolId: auth.userPoolId,
           userPoolClientId: auth.userPoolClientId,
-          mongoPrivetKey: config[stage].mongoPrivetKey,
-          mongoPublicKey: config[stage].mongoPublicKey,
+
           region: stack.region,
           sadadURL: config[stage].sadadURL,
           secretKey: config[stage].secretKey,
           MerchantId: config[stage].MerchantId,
           TerminalId: config[stage].TerminalId,
-          mongdbURLKey: config[stage].mongdbURLKey,
 
           sadadApiKey: config[stage].sadadApiKey,
 
           secretAccessKey: config[stage].secretAccessKey,
-          db_url: config[stage].db_url,
+          db_url: config[stage].db_url
         },
-        permissions: [],
-      },
+        permissions: []
+      }
     },
     routes: {
       "POST /getAvailableOrders": {
-        function: { handler: pathToLambdas + "getAvailableOrders.handler" },
+        function: { handler: pathToLambdas + "getAvailableOrders.handler" }
       },
       "POST /getProposals": {
         function: {
-          handler: pathToLambdas + "getProposals.handler",
-        },
+          handler: pathToLambdas + "getProposals.handler"
+        }
       },
       "POST /updateNotificationTokens": {
         function: {
-          handler: pathToLambdas + "updateNotificationTokens.handler",
-        },
+          handler: pathToLambdas + "updateNotificationTokens.handler"
+        }
       },
       "POST /createProposal": {
         function: {
-          handler: pathToLambdas + "createProposal.handler",
-        },
+          handler: pathToLambdas + "createProposal.handler"
+        }
       },
       "POST /updateProposal": {
         function: {
-          handler: pathToLambdas + "updateProposal.handler",
-        },
+          handler: pathToLambdas + "updateProposal.handler"
+        }
       },
       "POST /deleteProposal": {
         function: {
-          handler: pathToLambdas + "deleteProposal.handler",
-        },
+          handler: pathToLambdas + "deleteProposal.handler"
+        }
       },
       "POST /setOrderAsDelivered": {
         function: {
-          handler: pathToLambdas + "setOrderAsDelivered.handler",
-        },
+          handler: pathToLambdas + "setOrderAsDelivered.handler"
+        }
       },
       "POST /reportOrder": {
         function: {
-          handler: pathToLambdas + "reportOrder.handler",
-        },
+          handler: pathToLambdas + "reportOrder.handler"
+        }
       },
       "POST /leaveOrder": {
-        function: { handler: pathToLambdas + "leaveOrder.handler" },
+        function: { handler: pathToLambdas + "leaveOrder.handler" }
       },
       "POST /takeOrder": {
-        function: { handler: pathToLambdas + "takeOrder.handler" },
+        function: { handler: pathToLambdas + "takeOrder.handler" }
       },
       "POST /getActiveOrders": {
         function: {
-          handler: pathToLambdas + "getActiveOrders.handler",
-        },
+          handler: pathToLambdas + "getActiveOrders.handler"
+        }
       },
       "POST /setOrderAsPickedUp": {
         function: {
-          handler: pathToLambdas + "setOrderAsPickedUp.handler",
-        },
+          handler: pathToLambdas + "setOrderAsPickedUp.handler"
+        }
       },
 
       "POST /setDeliveryFeePaid": {
         function: {
-          handler: pathToLambdas + "setDeliveryFeePaid.handler",
-        },
+          handler: pathToLambdas + "setDeliveryFeePaid.handler"
+        }
       },
       "POST /confirmPickup": {
         function: {
-          handler: pathToLambdas + "setOrderAsPickedUp.handler",
-        },
+          handler: pathToLambdas + "setOrderAsPickedUp.handler"
+        }
       },
       "POST /createDriverDocument": {
         function: {
-          handler: pathToLambdas + "createDriverDocument.handler",
-        },
+          handler: pathToLambdas + "createDriverDocument.handler"
+        }
       },
       "POST /updateDriverDocument": {
         function: {
-          handler: pathToLambdas + "updateDriverDocument.handler",
-        },
+          handler: pathToLambdas + "updateDriverDocument.handler"
+        }
       },
       "POST /getDriverDocument": {
         function: {
-          handler: pathToLambdas + "getDriverDocument.handler",
-        },
+          handler: pathToLambdas + "getDriverDocument.handler"
+        }
       },
 
       "POST /getOrderHistory": {
         function: {
-          handler: pathToLambdas + "getOrderHistory.handler",
-        },
+          handler: pathToLambdas + "getOrderHistory.handler"
+        }
       },
       "POST /generateImageUrl": {
         function: {
-          handler: pathToLambdas + "generateImageUrl.handler",
-        },
+          handler: pathToLambdas + "generateImageUrl.handler"
+        }
       },
       [driverUrl({ method: "POST", url: "getOrder" })]: {
         function: {
-          handler: pathToStoreLambdas + "getOrder.handler",
-        },
-      },
-    },
+          handler: pathToStoreLambdas + "getOrder.handler"
+        }
+      }
+    }
   });
   const permissions = new iam.PolicyStatement({
     actions: ["*"],
     effect: iam.Effect.ALLOW,
-    resources: [`*`],
+    resources: [`*`]
   });
 
   api.attachPermissions([permissions]);
   api.setCors({
     allowMethods: ["POST"],
-    allowHeaders: ["Accept", "Content-Type", "Authorization"],
+    allowHeaders: ["Accept", "Content-Type", "Authorization"]
   });
   new CfnOutput(stack, "driverApiUrl-" + stack.stage, {
     value: api.url || "",
-    exportName: "driverApiUrl-" + stack.stage, // export name
+    exportName: "driverApiUrl-" + stack.stage // export name
   });
   /////////////////////////////////////////////////////////////////////
 
@@ -187,10 +185,10 @@ export function driverApiStack({ stack }: StackContext) {
     ApiEndpoint: api.url,
     apiArn: api.httpApiArn,
     apiFunctionsRoleArn:
-      api.getFunction("POST /getDriverDocument")?.role?.roleArn || "",
+      api.getFunction("POST /getDriverDocument")?.role?.roleArn || ""
   });
   return {
-    api,
+    api
   };
 }
 
@@ -205,14 +203,14 @@ export function driverCognitoStack({ stack }: StackContext) {
     cdk: {
       userPool: {
         passwordPolicy: {
-          minLength: 8,
+          minLength: 8
           // requireLowercase: false,
           // requireUppercase: false,
           // requireDigits: false,
           // requireSymbols: false,
-        },
-      },
-    },
+        }
+      }
+    }
   });
   auth.attachPermissionsForAuthUsers(stack, [
     // Allow access to the API
@@ -222,26 +220,26 @@ export function driverCognitoStack({ stack }: StackContext) {
       actions: ["s3:*"],
       effect: iam.Effect.ALLOW,
       resources: [
-        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
-      ],
-    }),
+        authBucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*"
+      ]
+    })
   ]);
 
   new CfnOutput(stack as any, "driverCognitoIdentityPoolId-" + stack.stage, {
     value: auth.cognitoIdentityPoolId || "",
-    exportName: "driverCognitoIdentityPoolId-" + stack.stage, // export name
+    exportName: "driverCognitoIdentityPoolId-" + stack.stage // export name
   });
   new CfnOutput(stack as any, "driverCognitoRegion-" + stack.stage, {
     value: stack.region || "",
-    exportName: "driverCognitoRegion-" + stack.stage, // export name
+    exportName: "driverCognitoRegion-" + stack.stage // export name
   });
   new CfnOutput(stack, "driverUserPoolId-" + stack.stage, {
     value: auth.userPoolId || "",
-    exportName: "driverUserPoolId-" + stack.stage, // export name
+    exportName: "driverUserPoolId-" + stack.stage // export name
   });
   new CfnOutput(stack, "driverUserPoolClientId-" + stack.stage, {
     value: auth.userPoolClientId || "",
-    exportName: "driverUserPoolClientId-" + stack.stage, // export name
+    exportName: "driverUserPoolClientId-" + stack.stage // export name
   });
 
   stack.addOutputs({
