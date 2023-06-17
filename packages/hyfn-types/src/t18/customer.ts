@@ -218,7 +218,7 @@ export const customerAppText = {
   Proposals: "Proposals",
   "in your cart": "in your cart",
   and: "and",
-  "set in Cart": "set in Cart",
+  "Set In Cart": "Set In Cart",
   "User Already Exists": "User Already Exists",
   "An account with this information already exists":
     "An account with this information already exists",
@@ -475,7 +475,7 @@ export const customerAppArabicText = {
   Proposals: "العروض",
   "in your cart": "في سلة التسوق الخاصة بك",
   and: "و",
-  "set in Cart": "تمت الإضافة إلى سلة التسوق",
+  "Set In Cart": "إضافة إلى السلة",
   "User Already Exists": "المستخدم موجود مسبقاً",
   "An account with this information already exists":
     "هناك حساب مسجل مسبقاً باستخدام هذه المعلومات",

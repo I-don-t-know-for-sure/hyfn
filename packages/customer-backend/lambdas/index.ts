@@ -1,4 +1,3 @@
-import { acceptProposal } from "./acceptProposal";
 import { createUserDocument } from "./createUserDocument";
 import { getStoreFronts } from "./getStoreFronts";
 import { createlocalCardTransaction } from "./createTransaction";
@@ -18,22 +17,19 @@ import { getStoreFront } from "./getStoreFront";
 import { getActiveOrders } from "./getActiveOrders";
 import { getOrderHistory } from "./getOrderHistory";
 import { getCollectionProducts } from "./getCollectionProducts";
-import { GetDriverInfo } from "./getDriverInfo";
+
 import { cancelOrder } from "./cancelOrder";
 import { reportOrderHandler } from "./reportOrder";
 import { getTransactions } from "./getTransactions";
 import { updateAddressesHandler } from "./updateAddresses";
 import { getSearchHits } from "./getSearchHits";
-import { getDriverManagements } from "./getDriverManagements";
+
 export type LambdaHandlers = {
   getStoreFronts: {
     arg: Parameters<typeof getStoreFronts>["0"]["arg"];
     return: ReturnType<typeof getStoreFronts>;
   };
-  acceptProposal: {
-    arg: Parameters<typeof acceptProposal>["0"]["arg"];
-    return: ReturnType<typeof acceptProposal>;
-  };
+
   createCustomer: {
     arg: Parameters<typeof createUserDocument>["0"]["arg"];
     return: ReturnType<typeof createUserDocument>;
@@ -121,17 +117,10 @@ export type LambdaHandlers = {
     arg: Parameters<typeof cancelOrder>["0"]["arg"];
     return: ReturnType<typeof cancelOrder>;
   };
-  getDriverInfo: {
-    arg: Parameters<typeof GetDriverInfo>["0"]["arg"];
-    return: ReturnType<typeof GetDriverInfo>;
-  };
+
   getSearchHits: {
     arg: Parameters<typeof getSearchHits>["0"]["arg"];
     return: ReturnType<typeof getSearchHits>;
-  };
-  getDriverManagements: {
-    arg: Parameters<typeof getDriverManagements>["0"]["arg"];
-    return: ReturnType<typeof getDriverManagements>;
   };
 };
 export type TransactionsHandler = {

@@ -47,7 +47,6 @@ import { useNavigate, useLocation as useRouteLocation } from "react-router-dom";
 import { calculateOrderCost } from "util/calculateOrderCost";
 import { add, multiply } from "mathjs";
 import { baseServiceFee } from "hyfn-types";
-import { useGetDriverManagements } from "./hooks/useGetGetDriverManagements";
 
 interface CheckOutProps {}
 

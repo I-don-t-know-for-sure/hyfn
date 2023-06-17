@@ -1,30 +1,13 @@
-import {
-  StackContext,
-  Api,
-  use,
-  Function,
-  StaticSite,
-  Cognito,
-  EventBus,
-  Queue
-} from "sst/constructs";
+import { StackContext, Api, use, Function, Cognito } from "sst/constructs";
 
 import * as iam from "aws-cdk-lib/aws-iam";
 import { config } from "../envVaraibles";
 
-import {
-  localCardKey,
-  driversManagement,
-  getStage,
-  storeUrl,
-  transactions
-} from ".";
+import { localCardKey, getStage, storeUrl, transactions } from ".";
 import { CfnOutput } from "aws-cdk-lib";
 import { authBucketStack, imagesBucketStack, kmsStack } from "./resources";
 
 const pathToLambdas = "./packages/Store-backend/lambdas/";
-const pathToDriverManagementLambdas =
-  "./packages/driver-management-backend/lambdas/";
 
 const localhost = "http://localhost:";
 
@@ -352,11 +335,7 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getCollectionStoreFrontProducts.handler"
         }
       },
-      [storeUrl({ method: "POST", url: "updateStoreDriversSettings" })]: {
-        function: {
-          handler: pathToLambdas + "updateStoreDriversSettings.handler"
-        }
-      },
+
       [storeUrl({ method: "POST", url: "getOrder" })]: {
         function: {
           handler: pathToLambdas + "getOrder.handler"
@@ -382,7 +361,17 @@ export function storeApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getCollectionSearchHits.handler"
         }
       },
-      ...driversManagement,
+      [storeUrl({ method: "POST", url: "setDeliveryFee" })]: {
+        function: {
+          handler: pathToLambdas + "setDeliveryFee.handler"
+        }
+      },
+      [storeUrl({ method: "POST", url: "updateOrderSettings" })]: {
+        function: {
+          handler: pathToLambdas + "updateOrderSettings.handler"
+        }
+      },
+
       ...localCardKey,
       ...transactions
     }

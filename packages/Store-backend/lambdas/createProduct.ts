@@ -39,10 +39,6 @@ export const createProductHandler = async ({
     const id = storeDoc.id;
     const city = storeDoc.city;
 
-    const modifiedOptions = options?.options?.map((option) => {
-      option?.optionValues;
-      return option;
-    });
     const collectionsIds =
       collections?.map((collection) => collection.value) || [];
     const product = await trx
@@ -52,7 +48,7 @@ export const createProductHandler = async ({
         description: description,
         storeId: id,
         collectionsIds,
-        options: modifiedOptions || [],
+        options: options || [],
         isActive,
         hasOptions: hasOptions,
         images: images,

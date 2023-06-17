@@ -4,7 +4,7 @@ import {
   Checkbox,
   Container,
   Loader,
-  Paper,
+  Paper
 } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { t } from "utils/i18nextFix";
@@ -20,7 +20,7 @@ const OptionsCard: React.FC<OptionsCardProps> = ({
   onChangeHandler,
   productInfo,
   setProductInfo,
-  isLoading,
+  isLoading
 }) => {
   return (
     <Paper shadow={"sm"} p={"md"}>
@@ -55,11 +55,11 @@ const OptionsCard: React.FC<OptionsCardProps> = ({
                         isRequired: false,
                         optionName: "",
                         optionValues: [
-                          { value: "", key: randomId(), price: 0 },
+                          { value: "", key: randomId(), price: 0 }
                         ],
-                        key: randomId(),
-                      },
-                    ],
+                        key: randomId()
+                      }
+                    ]
                   };
                 });
               }
@@ -69,12 +69,12 @@ const OptionsCard: React.FC<OptionsCardProps> = ({
                     ...prevState,
                     hasOptions: checked,
 
-                    options: undefined,
+                    options: undefined
                   };
                 });
               }
 
-              onChangeHandler(checked, "options", "hasOptions");
+              // onChangeHandler(checked, "options", "hasOptions");
             }}
           />
         </>

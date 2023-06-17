@@ -8,7 +8,7 @@ import {
   Select,
   Stack,
   Table,
-  Text,
+  Text
 } from "@mantine/core";
 import { useUser } from "contexts/userContext/User";
 
@@ -18,7 +18,7 @@ import {
   serviceFeePayment,
   managementPayment,
   storePayment,
-  currencies,
+  currencies
 } from "hyfn-types";
 import { add } from "mathjs";
 import TransactionList from "components/TransactionList";
@@ -58,7 +58,7 @@ const PayModal: React.FC<PayModalProps> = ({
   store,
   storeId,
   storeProducts,
-  order,
+  order
 }) => {
   const { mutate: createTransaction } = useCreateTransaction();
   const [{ country }] = useLocation();
@@ -76,7 +76,7 @@ const PayModal: React.FC<PayModalProps> = ({
   const orderTotalAfterFee = orderTotal - orderSaleFee;
 
   const orderTypeDelivery = order.orderType === "Delivery";
-  const storeIsDriverManagement = order.storeId === order.driverManagement;
+  // const storeIsDriverManagement = order.storeId === order.driverManagement;
 
   return (
     <>
@@ -112,7 +112,7 @@ const PayModal: React.FC<PayModalProps> = ({
                         radius={4}
                         sx={{
                           maxWidth: "45px",
-                          maxHeight: "45px",
+                          maxHeight: "45px"
                         }}
                         src={`${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${
                           product.images[0]
@@ -144,10 +144,9 @@ const PayModal: React.FC<PayModalProps> = ({
                         createTransaction({
                           type: serviceFeePayment,
                           country,
-                          orderId,
+                          orderId
                         });
-                      }}
-                    >
+                      }}>
                       {t("Pay")}
                     </Button>
                   ) : (
@@ -156,16 +155,14 @@ const PayModal: React.FC<PayModalProps> = ({
                 }
               </Stack>
             </Group>
-            {orderTypeDelivery &&
-              ((storeIsDriverManagement && !store.includeDeliveryFee) ||
-                !storeIsDriverManagement) && (
-                <Group position="apart">
-                  <Text>{t("Delivery fee")}</Text>
-                  <Stack spacing={2}>
-                    <Text>{`${currencies[store.country]} ${
-                      order.deliveryFee
-                    }`}</Text>
-                    {!order.deliveryFeePaid && !storeIsDriverManagement && (
+            {orderTypeDelivery && (
+              <Group position="apart">
+                <Text>{t("Delivery fee")}</Text>
+                <Stack spacing={2}>
+                  <Text>{`${currencies[store.country]} ${
+                    order.deliveryFee
+                  }`}</Text>
+                  {/* {!order.deliveryFeePaid && !storeIsDriverManagement && (
                       <Button
                         onClick={() => {
                           createTransaction({
@@ -177,31 +174,17 @@ const PayModal: React.FC<PayModalProps> = ({
                       >
                         {t("Pay")}
                       </Button>
-                    )}
-                    {order.deliveryFeePaid && (
-                      <Badge color="green">{t("Paid")}</Badge>
-                    )}
-                    {storeIsDriverManagement && !store.includeDeliveryFee && (
-                      <Badge color="orange">{t("cash only")}</Badge>
-                    )}
-                  </Stack>
-                </Group>
-              )}
+                    )} */}
+                </Stack>
+              </Group>
+            )}
             <Group position="apart">
-              <Text>
-                {t("Order Total") +
-                (order.storeId === order.driverManagement &&
-                  store.includeDeliveryFee)
-                  ? t("and delivery fee")
-                  : ""}
-              </Text>
+              <Text>{t("Order Total")}</Text>
 
               <Stack spacing={2}>
                 <Text>{`${currencies[store.country]} ${add(
                   orderTotalAfterFee,
-                  storeIsDriverManagement && store.includeDeliveryFee
-                    ? order.deliveryFee
-                    : 0
+                  0
                 )}`}</Text>
                 {!order.storeStatus.includes("paid") ? (
                   <Button
@@ -210,10 +193,9 @@ const PayModal: React.FC<PayModalProps> = ({
                         type: storePayment,
                         country,
                         orderId,
-                        storeId,
+                        storeId
                       });
-                    }}
-                  >
+                    }}>
                     {t("Pay")}
                   </Button>
                 ) : (

@@ -135,22 +135,13 @@ export const createlocalCardTransaction = async ({
         .selectAll()
         .where("id", "=", orderId)
         .executeTakeFirstOrThrow();
-      if (
-        orderDoc.driverManagement === storeDoc.id &&
-        orderDoc.storeStatus[orderDoc.storeStatus.length - 1] !== "picked up"
-      )
-        throw new Error(returnsObj["this order can be paid only on delivery"]);
+
       if (
         orderDoc.storeStatus[orderDoc.storeStatus.length - 1] === "accepted"
       ) {
         if (orderDoc.orderType === "Pickup")
           throw new Error(
             returnsObj["pickup orders can be paid only on pickup"]
-          );
-
-        if (orderDoc.storeId === orderDoc.driverManagement)
-          throw new Error(
-            returnsObj["this order can be paid only on delivery"]
           );
       }
 
@@ -221,11 +212,7 @@ export const createlocalCardTransaction = async ({
         kmsKeyARN,
         kmsClient
       });
-      if (
-        orderDoc.driverManagement ===
-        storeDoc.id /* && storeDoc.includeDeliveryFee */
-      ) {
-      }
+
       const newTransaction = await trx
         .insertInto("transactions")
         .values({
@@ -238,23 +225,18 @@ export const createlocalCardTransaction = async ({
           amount: amountToPay,
           transactionDate: now,
           status: ["initial"],
-          type,
-          ...(orderDoc.driverManagement === storeDoc.id &&
-          storeDoc.includeDeliveryFee
-            ? {
-                plus: { "delivery fee": orderDoc.deliveryFee },
-                explaination: ["delivery fee"]
-              }
-            : {})
+          type
+          // ...(orderDoc.driverManagement === storeDoc.id &&
+          // storeDoc.includeDeliveryFee
+          //   ? {
+          //       plus: { "delivery fee": orderDoc.deliveryFee },
+          //       explaination: ["delivery fee"]
+          //     }
+          //   : {})
         })
         .returning("id")
         .executeTakeFirst();
-      const totalTransactionAmount = add(
-        amountToPay,
-        orderDoc.driverManagement === storeDoc.id && storeDoc.includeDeliveryFee
-          ? orderDoc.deliveryFee
-          : 0
-      ) as number;
+      const totalTransactionAmount = amountToPay;
 
       await trx
         .updateTable("customers")
@@ -316,7 +298,7 @@ export const createlocalCardTransaction = async ({
       return { configurationObject };
     }
 
-    if (type === managementPayment) {
+    /* if (type === managementPayment) {
       const userDoc = await trx
         .selectFrom("customers")
         .selectAll()
@@ -407,7 +389,7 @@ export const createlocalCardTransaction = async ({
         transactionId: newTransaction.id
       });
       return { configurationObject: transactionObject };
-    }
+    } */
   });
   return result;
 };

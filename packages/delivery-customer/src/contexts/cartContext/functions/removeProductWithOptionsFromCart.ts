@@ -8,7 +8,7 @@ export const removeProductWithOptionsFromCart = (
 
     if (targetedStore) {
       const products = targetedStore.addedProducts[product.id];
-      const newProducts = products.filter(
+      const newProducts = products?.filter(
         (oldProduct) => oldProduct?.key !== product.key
       );
 

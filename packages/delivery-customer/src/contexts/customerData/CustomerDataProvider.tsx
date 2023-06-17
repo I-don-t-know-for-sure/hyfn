@@ -20,7 +20,9 @@ interface CustomerData {
   cancelRating: (storeId: string) => void;
 }
 
-const CustomerDataProvider: React.FC = ({ children }) => {
+const CustomerDataProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   // make this type safe
   // const updateUserInfo = useCallback(
   //   (newInfo: any) => {
@@ -36,7 +38,7 @@ const CustomerDataProvider: React.FC = ({ children }) => {
     storeRatings: { id: string; rating: number }[];
   }>({
     key: "customerdata",
-    defaultValue: { likedProducts: [], storeRatings: [] },
+    defaultValue: { likedProducts: [], storeRatings: [] }
   });
 
   const { userId, userDocument: data, isLoading, refetch } = useUser();
@@ -61,10 +63,7 @@ const CustomerDataProvider: React.FC = ({ children }) => {
 
     setCustomerData({
       ...customerData,
-      likedProducts: [
-        ...customerData.likedProducts,
-        { storeId, id: productId },
-      ],
+      likedProducts: [...customerData.likedProducts, { storeId, id: productId }]
     });
   };
 
@@ -86,7 +85,7 @@ const CustomerDataProvider: React.FC = ({ children }) => {
 
     setCustomerData({
       ...customerData,
-      storeRatings: [...customerData.storeRatings, { id: storeId, rating }],
+      storeRatings: [...customerData.storeRatings, { id: storeId, rating }]
     });
   };
 
@@ -95,7 +94,7 @@ const CustomerDataProvider: React.FC = ({ children }) => {
       ...customerData,
       storeRatings: customerData.storeRatings.filter(
         (store) => store.id !== storeId
-      ),
+      )
     });
   };
   const context: CustomerData = {
@@ -103,7 +102,7 @@ const CustomerDataProvider: React.FC = ({ children }) => {
     updateLikes,
     updateRatings,
     cancelRating,
-    refetch,
+    refetch
   };
 
   return (

@@ -6,7 +6,9 @@ import { createContext } from "react";
 
 export const UserContext = createContext(undefined);
 
-const UserProvider: React.FC = ({ children }) => {
+const UserProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   // make this type safe
   // const updateUserInfo = useCallback(
   //   (newInfo: any) => {

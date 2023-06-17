@@ -4,15 +4,10 @@ import { RemovalPolicy } from "aws-cdk-lib";
 import {
   authBucketStack,
   imagesBucketStack,
-  kmsStack,
+  kmsStack
 } from "./stacks/resources";
 import { customerApiStack, customerCognitoStack } from "./stacks/customerStack";
 import { adminApiStack, adminCognitoStack } from "./stacks/adminStack";
-import {
-  managementApiStack,
-  managementCognitoStack,
-} from "./stacks/driverManagement";
-import { driverApiStack, driverCognitoStack } from "./stacks/driverStack";
 
 import { storeApiStack, storeCognitoStack } from "./stacks/storeBackend";
 
@@ -20,7 +15,7 @@ export default {
   config(_input) {
     return {
       name: "hyfn-backend",
-      region: _input.stage === "development" ? "eu-west-3" : "eu-south-1",
+      region: _input.stage === "development" ? "eu-west-3" : "eu-south-1"
     };
   },
   stacks(app) {
@@ -38,10 +33,6 @@ export default {
       .stack(customerCognitoStack)
       .stack(customerApiStack)
       .stack(adminCognitoStack)
-      .stack(adminApiStack)
-      .stack(managementCognitoStack)
-      .stack(managementApiStack)
-      .stack(driverCognitoStack)
-      .stack(driverApiStack);
-  },
+      .stack(adminApiStack);
+  }
 } satisfies SSTConfig;

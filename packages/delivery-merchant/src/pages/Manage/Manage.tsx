@@ -28,7 +28,7 @@ import { useDeleteProduct } from "./hooks/useDeleteProduct";
 import { useGetProducts } from "./hooks/useGetProductsForBulkUpdate";
 import { useSearchProducts } from "./hooks/useSearchProducts";
 import Test from "./components/Text";
-import TestTwo from "./components/TestTwo";
+
 import { useRemoveProductsBackgrounds } from "./hooks/useRemoveBackground";
 import { fetchApi } from "utils/fetch";
 import { productTabsObject } from "hyfn-types";
@@ -103,12 +103,6 @@ const ManageProducts: React.FC = () => {
                 {t("Inactive")}
               </Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel value={"active"}>
-              <TestTwo />
-            </Tabs.Panel>
-            <Tabs.Panel value={"all"}>
-              <Test />
-            </Tabs.Panel>
           </Tabs>
           <Group grow>
             <TextInput

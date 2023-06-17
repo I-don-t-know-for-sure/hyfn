@@ -1,6 +1,7 @@
 import { returnsObj, returnsObjArabic } from "../returnMessages";
 
 export const storeAppText = {
+  "Order Settings": "Order Settings",
   "user id not found": "no user id",
   Confirm: "Confirm",
   "Rate and Confirm": "Rate and Confirm",
@@ -338,10 +339,11 @@ export const storeAppText = {
   "content-type": "content-type",
   Furniture: "Furniture",
   "Watches, jewlery, and accessories": "Watches, jewlery, and accessories",
-  ...returnsObj,
+  ...returnsObj
 };
 
 export const storeAppArabicText = {
+  "Order Settings": "",
   "user id not found": "",
   Confirm: "تأكيد",
   "Rate and Confirm": "تقييم وتأكيد",
@@ -681,5 +683,5 @@ export const storeAppArabicText = {
   "content-type": "نوع المحتوى",
   Furniture: "أثاث",
   "Watches, jewlery, and accessories": "الساعات والمجوهرات والإكسسوارات",
-  ...returnsObjArabic,
+  ...returnsObjArabic
 };

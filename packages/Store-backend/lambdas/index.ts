@@ -15,12 +15,12 @@ import { getAllCollectionsHandler } from "./getAllCollections";
 import { getCollectionHandler } from "./getCollection";
 import { getCollectionStoreFrontProductsHandler } from "./getCollectionStoreFrontProducts";
 import { getCollectionsForProductHandler } from "./getCollectionsForProduct";
-import { getDriverInfoHandler } from "./getDriverInfo";
+
 import { getProductHandler } from "./getProduct";
 import { getProducts } from "./getProducts";
 import { getProductsForBulkUpdateHandler } from "./getProductsForBulkUpdate";
 import { getStoreDocumentHandler } from "./getStoreDocument";
-import { getTransactionsList } from "./getTransactionsList";
+
 import { removeAllProductsBackgroundsHandler } from "./removeAllProductsBackgrounds";
 import { setOrderAsAcceptedHandler } from "./setOrderAsAccepted";
 import { setOrderAsDeliveredHandler } from "./setOrderAsPickedUp";
@@ -35,7 +35,7 @@ import { updateNotificationTokensHandler } from "./updateNotificationTokens";
 import { updateOptionsHandler } from "./updateOptions";
 import { updateProductHandler } from "./updateProduct";
 import { updateProductStateHandler } from "./updateProductState";
-import { updateStoreDriverSettings } from "./updateStoreDriversSettings";
+
 import { updateStoreInfoHandler } from "./updateStoreInfo";
 import { updateSubscibtionHandler } from "./updateSubscibtion";
 import { getProductsForCollectionHandler } from "./getProductsForCollection";
@@ -56,6 +56,8 @@ import { deleteLocalCardAPIKey } from "./deleteLocalCardAPIKey";
 import { updateStoreOwnerInfoHandler } from "./updateStoreOwnerInfo";
 import { getSearchHits } from "./getSearchHits";
 import { getCollectionSearchHits } from "./getCollectionSearchHits";
+import { setDeliveryFee } from "./setDeliveryFee";
+import { updateOrderSettings } from "./updateOrderSettings";
 
 export type LambdaHandlers = {
   getStoreDocument: {
@@ -102,10 +104,7 @@ export type LambdaHandlers = {
     arg: Parameters<typeof stopAcceptingOrders>["0"]["arg"];
     return: ReturnType<typeof stopAcceptingOrders>;
   };
-  // generateDescriptionClien: {
-  //   arg: Parameters<typeof generateDescriptionClientHandler>['0']['arg'];
-  //   return: ReturnType<typeof generateDescriptionClientHandler>;
-  // };
+
   generateDescriptionClient: {
     arg: Parameters<typeof generateDescriptionClientHandler>["0"]["arg"];
     return: ReturnType<typeof generateDescriptionClientHandler>;
@@ -188,10 +187,6 @@ export type LambdaHandlers = {
     return: ReturnType<typeof setOrderAsReadyHandler>;
   };
 
-  getDriverInfo: {
-    arg: Parameters<typeof getDriverInfoHandler>["0"]["arg"];
-    return: ReturnType<typeof getDriverInfoHandler>;
-  };
   setOrderAsDelivered: {
     arg: Parameters<typeof setOrderAsDeliveredHandler>["0"]["arg"];
     return: ReturnType<typeof setOrderAsDeliveredHandler>;
@@ -260,10 +255,6 @@ export type LambdaHandlers = {
     arg: Parameters<typeof openAndCloseStoreHandler>["0"]["arg"];
     return: ReturnType<typeof openAndCloseStoreHandler>;
   };
-  updateStoreDriversSettings: {
-    arg: Parameters<typeof updateStoreDriverSettings>["0"]["arg"];
-    return: ReturnType<typeof updateStoreDriverSettings>;
-  };
 
   updateStoreOwnerInfo: {
     arg: Parameters<typeof updateStoreOwnerInfoHandler>["0"]["arg"];
@@ -272,6 +263,14 @@ export type LambdaHandlers = {
   getCollectionSearchHits: {
     arg: Parameters<typeof getCollectionSearchHits>["0"]["arg"];
     return: ReturnType<typeof getCollectionSearchHits>;
+  };
+  setDeliveryFee: {
+    arg: Parameters<typeof setDeliveryFee>["0"]["arg"];
+    return: ReturnType<typeof setDeliveryFee>;
+  };
+  updateOrderSettings: {
+    arg: Parameters<typeof updateOrderSettings>["0"]["arg"];
+    return: ReturnType<typeof updateOrderSettings>;
   };
 };
 

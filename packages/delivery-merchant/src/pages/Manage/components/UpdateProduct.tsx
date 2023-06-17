@@ -4,12 +4,12 @@ import InfoCard from "./InfoCard";
 
 import OptionsCard from "./OptionsCard";
 import PricingCard from "./PricingCard";
-import ShippingCard from "./ShippingCard";
+
 import { ProductInfo, ProductsCard } from "../types";
 import { Box, Button, Container, Grid, Stack } from "@mantine/core";
 
 import MediaCard from "./MediaCard";
-import MeasurementSystemCard from "./MeasurementSystemCard";
+
 import { useParams } from "react-router";
 
 import { t } from "utils/i18nextFix";
@@ -41,7 +41,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
     tags: [],
     collections: [],
     images: [],
-    files: [],
+    files: []
   });
 
   const { productId } = useParams<{ productId: string }>();
@@ -65,7 +65,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
       if (changedKey === undefined) {
         return {
           ...prevState,
-          [`${firstChangedKey}`]: value,
+          [`${firstChangedKey}`]: value
         };
       }
 
@@ -73,8 +73,8 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
         ...prevState,
         [`${firstChangedKey}`]: {
           ...prevState[`${firstChangedKey}`],
-          [`${changedKey}`]: value,
-        },
+          [`${changedKey}`]: value
+        }
       };
     });
   };
@@ -89,8 +89,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
 
         mutate({ productId: productId, product: productInfo });
         // localStorage.removeItem("productInfo");
-      }}
-    >
+      }}>
       {/* <Helmet>
         <title>{t(isLoading ? 'Loading' : productInfo?.textInfo?.title)}</title>
       </Helmet> */}
@@ -100,9 +99,8 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
             grow
             sx={{
               width: "100%",
-              margin: "auto",
-            }}
-          >
+              margin: "auto"
+            }}>
             <Grid.Col xs={9} sm={7} md={8} lg={8}>
               <Stack>
                 <InfoCard
@@ -155,17 +153,15 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
             sx={{
               display: "flex",
 
-              margin: "40px 24px",
-            }}
-          >
+              margin: "40px 24px"
+            }}>
             <Button
               m={"0px auto"}
               fullWidth
               sx={{
-                maxWidth: "450px",
+                maxWidth: "450px"
               }}
-              type="submit"
-            >
+              type="submit">
               {t("Update")}
             </Button>
           </Container>

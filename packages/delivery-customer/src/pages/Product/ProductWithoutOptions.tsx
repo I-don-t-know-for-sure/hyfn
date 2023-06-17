@@ -10,7 +10,7 @@ import {
   NumberInput,
   NumberInputHandlers,
   Space,
-  Text,
+  Text
 } from "@mantine/core";
 import { useCart } from "../../contexts/cartContext/Provider";
 import React, { useEffect, useRef, useState } from "react";
@@ -53,7 +53,7 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
     isLoading,
     isFetched,
     isError,
-    error,
+    error
   } = useGetProduct({ storefront, city, country, productId }, true);
   const [, setFixedComponent] = useFixedComponent();
   const handlers = useRef<NumberInputHandlers>();
@@ -106,44 +106,22 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
             height: "46px",
             border: `1px solid ${theme.primaryColor}`,
             backgroundColor:
-              theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-          })}
-        >
-          {/* <Box
-            sx={{
-              display: 'flex',
-              width: '200px',
-              margin: '0px auto',
-              justifyContent: 'space-between',
-            }}
-          >
-            <ActionIcon variant="outline" sx={{}}>
-              <AiOutlineMinus onClick={decreaseQTY} />
-            </ActionIcon>
-            <Text>{qty}</Text>
-            <ActionIcon variant="outline">
-              <AiOutlinePlus onClick={increaseQTY} />
-            </ActionIcon>
-          </Box> */}
-          {/* <NumberInput
-            value={qty}
-            onChange={(e) => {
-              setQty(e);
-            }}
-          /> */}
+              theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white
+          })}>
           <Group spacing={5}>
             <ActionIcon
               size={"md"}
               variant="default"
-              onClick={() => handlers.current.decrement()}
-            >
+              onClick={() => handlers.current.decrement()}>
               –
             </ActionIcon>
 
             <NumberInput
               size={"xs"}
               sx={{
-                maxWidth: "150px",
+                maxWidth: "70px",
+
+                width: "auto"
               }}
               hideControls
               precision={calculatePrecision(product?.measurementSystem)}
@@ -162,19 +140,18 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
                     )
                   : `${t(product?.measurementSystem)} `
               }
-              // icon={<Text m={"md"}>{t(product?.measurementSystem)}</Text>}
             />
 
             <ActionIcon
               size={"md"}
               variant="default"
-              onClick={() => handlers.current.increment()}
-            >
+              onClick={() => handlers.current.increment()}>
               +
             </ActionIcon>
           </Group>
           <Box>
             <Button
+              compact
               onClick={() => {
                 addProductWithNoOptionsToCart(
                   storeDoc,
@@ -184,13 +161,12 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
                   country,
                   orderType
                 );
-              }}
-            >
-              {t("set in Cart")}
+              }}>
+              {t("Set In Cart")}
             </Button>
           </Box>
         </Container>
-      ),
+      )
     ];
     if (data && !isLoading && isFetched) {
       setFixedComponent(fixedComponentConstructor);
@@ -206,7 +182,7 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
     storeDoc,
     product,
     city,
-    country,
+    country
   ]);
 
   if (isError) {
@@ -219,9 +195,8 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
     product && (
       <Container
         sx={{
-          marginBottom: "56px",
-        }}
-      >
+          marginBottom: "56px"
+        }}>
         <Box>
           <Carousel>
             {product.images.map((image) => {
@@ -234,8 +209,8 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
                       maxHeight: 500,
                       [theme.fn.largerThan("sm")]: {
                         maxWidth: 300,
-                        maxHeight: 300,
-                      },
+                        maxHeight: 300
+                      }
                     })}
                     ImageComponent={
                       <AspectRatio
@@ -246,17 +221,16 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
                           maxHeight: 500,
                           [theme.fn.largerThan("sm")]: {
                             maxWidth: 300,
-                            maxHeight: 300,
-                          },
+                            maxHeight: 300
+                          }
                         })}
-                        mx="auto"
-                      >
+                        mx="auto">
                         <Image
                           radius={6}
                           sx={{
                             width: "100%",
 
-                            height: "100px",
+                            height: "100px"
                           }}
                           imageName={
                             product?.images?.length > 0
@@ -272,100 +246,27 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
               );
             })}
           </Carousel>
-          {/* <ImageModal
-            sx={(theme) => ({
-              maxWidth: 500,
-              borderRadius: "6px",
-              maxHeight: 500,
-              [theme.fn.largerThan("sm")]: {
-                maxWidth: 300,
-                maxHeight: 300,
-              },
-            })}
-            ImageComponent={
-              <Carousel>
-                {product.images.map((image) => {
-                  return (
-                    <Carousel.Slide>
-                      <AspectRatio
-                        ratio={500 / 500}
-                        sx={(theme) => ({
-                          maxWidth: 500,
-                          borderRadius: "6px",
-                          maxHeight: 500,
-                          [theme.fn.largerThan("sm")]: {
-                            maxWidth: 300,
-                            maxHeight: 300,
-                          },
-                        })}
-                        mx="auto"
-                      >
-                        <Image
-                          radius={6}
-                          sx={{
-                            width: "100%",
 
-                            height: "100px",
-                          }}
-                          imageName={
-                            product?.images?.length > 0
-                              ? image
-                              : "c72e349a9bc184cbdcfb1386060d4b5b"
-                          }
-                        />
-                      </AspectRatio>
-                    </Carousel.Slide>
-                  );
-                })}
-              </Carousel>
-            }
-            src={`${url}preview/${product.images[0]}`}
-          /> */}
-          {/* <AspectRatio
-            ratio={500 / 500}
-            sx={(theme) => ({
-              maxWidth: 500,
-              borderRadius: '6px',
-              maxHeight: 500,
-              [theme.fn.largerThan('sm')]: {
-                maxWidth: 300,
-                maxHeight: 300,
-              },
-            })}
-            mx="auto"
-          >
-            <Image
-              radius={6}
-              sx={{
-                width: '100%',
-
-                height: '100px',
-              }}
-              imageName={product?.images?.length > 0 ? product.images[0] : 'c72e349a9bc184cbdcfb1386060d4b5b'}
-            />
-          </AspectRatio> */}
-          <Container>
+          {/* <Container> */}
+          <Text
+            sx={{
+              fontSize: "28px"
+            }}>
+            {product.title}
+          </Text>
+          <Group spacing={3}>
+            <Text>{storeDoc?.currency || "LYD"}</Text>
             <Text
-              sx={{
-                fontSize: "28px",
-              }}
-            >
-              {product.title}
+              sx={(theme) => ({
+                fontSize: "24px",
+                fontWeight: "bold"
+              })}>
+              {` ${product.price - product.price * storeServiceFee} `}
             </Text>
-            <Group spacing={3}>
-              <Text>{storeDoc?.currency || "LYD"}</Text>
-              <Text
-                sx={(theme) => ({
-                  fontSize: "24px",
-                  color: theme.primaryColor,
-                })}
-              >
-                {` ${product.price - product.price * storeServiceFee} `}
-              </Text>
-              <Text>{t("Per")}</Text>
-              <Text color="red">{t(product?.measurementSystem)}</Text>
-            </Group>
-          </Container>
+            <Text>{t("Per")}</Text>
+            <Text>{t(product?.measurementSystem)}</Text>
+          </Group>
+          {/* </Container> */}
           <Space h={12} />
         </Box>
 
@@ -384,9 +285,8 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
             // overflowX: "auto",
             display: "flex",
             flexWrap: "wrap",
-            whiteSpace: "normal",
-          }}
-        >
+            whiteSpace: "normal"
+          }}>
           <HtmlRenderer htmlString={product.description} />
           {/* <Text>{product.description}</Text> */}
         </Box>

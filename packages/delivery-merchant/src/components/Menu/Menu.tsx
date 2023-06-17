@@ -44,7 +44,7 @@ import { useCancelTransaction } from "hooks/useCancelTransaction";
 import { useGetTransactions } from "hooks/useGetTransactions";
 import { useValidateLocalCardTransaction } from "hooks/useValidateLocalCardTransaction";
 
-const StyledNav: React.FC = ({ children }) => {
+const StyledNav: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     styledNav: {
       position: "fixed",
@@ -72,7 +72,7 @@ const StyledNav: React.FC = ({ children }) => {
   return <nav className={classes.styledNav}>{children}</nav>;
 };
 
-const Wrapper: React.FC = ({ children }) => {
+const Wrapper: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     wrapper: {
       position: "relative",
@@ -84,7 +84,9 @@ const Wrapper: React.FC = ({ children }) => {
   return <Box className={classes.wrapper}>{children as any}</Box>;
 };
 
-const BodyWrapper: React.FC = ({ children }) => {
+const BodyWrapper: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     bodyWrapper: {
       position: "relative",
@@ -100,6 +102,7 @@ const Inner: React.FC<{
   showMenu: boolean;
   isMobile: boolean;
   loggedIn: boolean;
+  children?: React.ReactNode;
 }> = ({ children, showMenu, isMobile, loggedIn }) => {
   const useStyles = createStyles(
     (theme, { showMenu }: { showMenu: boolean }, getRef) => ({
@@ -120,10 +123,10 @@ const Inner: React.FC<{
     })
   );
   const { classes } = useStyles({ showMenu });
-  return <Box className={classes.inner}>{children as any}</Box>;
+  return <Box className={classes.inner}>{children}</Box>;
 };
 
-const Menu: React.FC = ({ children }) => {
+const Menu: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   useUserCheck();
   const isXl = useMediaQuery("(min-width: 900px)");
   const isMobile = isXl === false;

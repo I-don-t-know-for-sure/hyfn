@@ -20,7 +20,9 @@ import { changeStoreOrderType } from "./functions/changeStoreOrderType";
 
 export const CartContext = createContext(undefined);
 
-const CartProvider: React.FC = ({ children }) => {
+const CartProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   // make this type safe
   // const updateUserInfo = useCallback(
   //   (newInfo: any) => {
@@ -33,7 +35,7 @@ const CartProvider: React.FC = ({ children }) => {
   // );
   const [cart, setCartInfo] = useLocalStorage({
     key: "cart",
-    defaultValue: {},
+    defaultValue: {}
   });
   // const updateInstructions = (
   //   store: any,
@@ -79,9 +81,8 @@ const CartProvider: React.FC = ({ children }) => {
         changeOrderType,
         changeStoreOrderType,
         setCartInfo,
-        cart,
-      }}
-    >
+        cart
+      }}>
       {children}
     </CartContext.Provider>
   );

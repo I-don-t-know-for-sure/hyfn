@@ -59,7 +59,10 @@ import TransactionList from "../TransactionList";
 // import { useUser } from "../../contexts/userContext/User";
 import { useUser } from "hyfn-client";
 
-const StyledNav: React.FC = ({ children, ...rest }) => {
+const StyledNav: React.FC<{ children?: React.ReactNode }> = ({
+  children,
+  ...rest
+}) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     styledNav: {
       position: "fixed",
@@ -88,7 +91,7 @@ const StyledNav: React.FC = ({ children, ...rest }) => {
   );
 };
 
-const Wrapper: React.FC = ({ children }) => {
+const Wrapper: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     wrapper: {
       position: "relative",
@@ -99,7 +102,9 @@ const Wrapper: React.FC = ({ children }) => {
   return <Box className={classes.wrapper}>{children as any}</Box>;
 };
 
-const BodyWrapper: React.FC = ({ children }) => {
+const BodyWrapper: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     bodyWrapper: {
       position: "relative",
@@ -114,6 +119,7 @@ const Inner: React.FC<{
   showMenu: boolean;
   isMobile: boolean;
   location: Location;
+  children?: React.ReactNode;
 }> = ({ children, showMenu, isMobile, location }) => {
   const useStyles = createStyles(
     (

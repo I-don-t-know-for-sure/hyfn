@@ -99,8 +99,6 @@
     "dayjs": "^1.11.8",
     "deep-equal": "^2.0.5",
     "digest-fetch": "^1.2.1",
-    "driver-backend": "*",
-    "driver-management-backend": "*",
     "drizzle-orm": "^0.25.4",
     "drizzle-zod": "^0.4.1",
     "embla-carousel-react": "^8.0.0-rc06",

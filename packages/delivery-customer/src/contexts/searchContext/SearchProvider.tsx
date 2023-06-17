@@ -20,7 +20,9 @@ interface SearchContextType {
 
 export const SearchContext = createContext(undefined);
 
-const SearchProvider: React.FC = ({ children }) => {
+const SearchProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   const [search, setSearch] = useState("");
   const [searchMode, setSearchMode] = useState(false);
   const [debouncedSearch] = useDebouncedValue(search, 400);
@@ -51,7 +53,7 @@ const SearchProvider: React.FC = ({ children }) => {
     setSearchMode,
     debouncedSearch,
 
-    hits,
+    hits
   };
 
   return (

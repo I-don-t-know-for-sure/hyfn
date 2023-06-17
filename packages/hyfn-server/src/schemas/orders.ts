@@ -1,33 +1,23 @@
 import {
   boolean,
-  decimal,
-  json,
   pgTable,
-  serial,
   varchar,
-  date,
   uuid,
-  jsonb,
   numeric,
   timestamp,
-  index,
-  foreignKey
+  index
 } from "drizzle-orm/pg-core";
 import {
   citiesArray,
   customerStatusArray,
-  driverStatusArray,
   orderStatusArray,
   orderTypesArray,
   storeStatusArray
 } from "hyfn-types";
 
-import { InferModel, sql } from "drizzle-orm";
-
 import { createSelectSchema } from "drizzle-zod";
 
 import * as z from "zod";
-import { stores } from "./stores";
 
 export const orders = pgTable(
   "orders",
@@ -40,14 +30,12 @@ export const orders = pgTable(
       .array()
       .notNull(),
     storeId: uuid("store_id").notNull(),
-    driverId: uuid("driver_id"),
+
     customerId: uuid("customer_id").notNull(),
     customerStatus: varchar("customer_status", { enum: customerStatusArray })
       .array()
       .notNull(),
-    driverStatus: varchar("driver_status", { enum: driverStatusArray })
-      .array()
-      .notNull(),
+
     storePickupConfirmation: uuid("store_pickup_confirmation").defaultRandom(),
     paymentWindowCloseAt: timestamp("payment_window_close_at"),
 
@@ -66,16 +54,10 @@ export const orders = pgTable(
     orderType: varchar("order_type", {
       enum: orderTypesArray
     }).notNull(),
-    proposals: jsonb("proposals").array().notNull(),
+
     totalCost: numeric("total_cost").notNull(),
     confirmationCode: uuid("confirmation_code").defaultRandom(),
-    proposalsIds: varchar("proposals_ids").array().notNull(),
-    // the acceptedProposal is the id of the driver that made the proposal
-    acceptedProposal: varchar("accepted_proposal"),
-    driverManagement: varchar("driver_management"),
-    allowedDriverManagements: uuid("allowed_driver_managements")
-      .array()
-      .notNull(),
+
     orderStatus: varchar("order_status", {
       enum: orderStatusArray
     })
@@ -83,35 +65,15 @@ export const orders = pgTable(
       .notNull(),
     toCity: varchar("to_city").notNull(),
     fromCity: varchar("from_city").notNull(),
-    reportsIds: uuid("reports_ids").array().notNull(),
-    deliveryFeePaid: boolean("delivery_fee_paid").default(false),
-    /* 
-when the store update their value we should update all active orders that have no driver yet.
-when the driver leaves an order we should sync this field with the store field
-
-     */
-    onlyStoreDriversCanTakeOrders: boolean("only_store_drivers_can_take_orders")
-      .notNull()
-      .default(false)
+    reportsIds: uuid("reports_ids").array().notNull()
   },
   (table) => {
     return {
       storeIdx: index("store_idx").on(table.storeId),
       storeStatusx: index("store_statusx").on(table.storeStatus),
 
-      driverIdx: index("driver_idx").on(table.driverId),
-      driverStatusx: index("driver_statusx").on(table.driverStatus),
       customerIdx: index("customer_idx").on(table.customerId),
-      customerStatusx: index("customer_statusx").on(table.customerStatus),
-      acceptedProposalx: index("accepted_proposalx").on(table.acceptedProposal),
-      driverManagementx: index("driver_managementx").on(table.driverManagement),
-      onlyStoreDriversCanTakeOrders: index(
-        "only_store_drivers_can_take_orders"
-      ).on(table.onlyStoreDriversCanTakeOrders)
-      // storeSettings: foreignKey({
-      //   columns: [table.storeId, table.onlyStoreDriversCanTakeOrders],
-      //   foreignColumns: [stores.id, stores.onlyStoreDriversCanTakeOrders],
-      // }),
+      customerStatusx: index("customer_statusx").on(table.customerStatus)
     };
   }
 );
@@ -129,20 +91,10 @@ export const zOrder = z.object({
   customerLat: z.number(),
   customerLong: z.number(),
   customerStatus: z.array(z.enum(customerStatusArray)),
-  driverStatus: z.array(z.enum(driverStatusArray)),
+
   storeId: z.string(),
 
-  driverId: z.string(),
-
-  customerId: z.string(),
-
-  proposals: z.array(
-    z.object({
-      price: z.number(),
-      driverId: z.string(),
-      managementId: z.string()
-    })
-  )
+  customerId: z.string()
 });
 
 // export type Order = InferModel<typeof orders>;

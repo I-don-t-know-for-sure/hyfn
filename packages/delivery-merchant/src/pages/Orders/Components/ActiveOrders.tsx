@@ -6,7 +6,7 @@ import {
   Loader,
   Stack,
   Tabs,
-  Text,
+  Text
 } from "@mantine/core";
 import { MENU_HEIGHT } from "components/Menu/config";
 import React, { useState } from "react";
@@ -33,7 +33,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
     isLoading,
     isError,
     error,
-    fetchNextPage,
+    fetchNextPage
   } = useGetActiveOrders();
 
   const { mutate: validateTransaction } =
@@ -63,9 +63,8 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
   return (
     <Stack
       sx={{
-        position: "relative",
-      }}
-    >
+        position: "relative"
+      }}>
       {/* <Helmet>
         <title>{t(isLoading ? "Loading" : "Active Orders")}</title>
       </Helmet> */}
@@ -105,10 +104,10 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
                     );
                   })
                   .map((order) => {
-                    const driver = {
-                      status: order.driverStatus,
-                      id: order.driverId,
-                    };
+                    // const driver = {
+                    //   status: order.driverStatus,
+                    //   id: order.driverId
+                    // };
 
                     const storeOrder = order.stores.find(
                       (store) => store.id === storeDocId
@@ -121,7 +120,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
                         order={order}
                         validateTransaction={validateTransaction}
                         storeOrder={storeOrder}
-                        driver={driver}
+                        // driver={driver}
                         userDocument={userDocument}
                         updateProductState={updateProductState}
                         rejectOrder={rejectOrder}
@@ -158,10 +157,10 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
                     );
                   })
                   .map((order) => {
-                    const driver = {
-                      status: order.driverStatus,
-                      id: order.driverId,
-                    };
+                    // const driver = {
+                    //   status: order.driverStatus,
+                    //   id: order.driverId,
+                    // };
 
                     const storeOrder = order.stores.find(
                       (store) => store.id === storeDocId
@@ -174,7 +173,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
                         order={order}
                         validateTransaction={validateTransaction}
                         storeOrder={storeOrder}
-                        driver={driver}
+                        // driver={driver}
                         userDocument={userDocument}
                         updateProductState={updateProductState}
                         rejectOrder={rejectOrder}
@@ -212,10 +211,10 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
                     );
                   })
                   ?.map((order) => {
-                    const driver = {
-                      status: order.driverStatus,
-                      id: order.driverId,
-                    };
+                    // const driver = {
+                    //   status: order.driverStatus,
+                    //   id: order.driverId,
+                    // };
 
                     const storeOrder = order.stores.find(
                       (store) => store.id === storeDocId
@@ -228,7 +227,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
                         order={order}
                         validateTransaction={validateTransaction}
                         storeOrder={storeOrder}
-                        driver={driver}
+                        // driver={driver}
                         userDocument={userDocument}
                         updateProductState={updateProductState}
                         rejectOrder={rejectOrder}
@@ -314,10 +313,10 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
                     );
                   })
                   ?.map((order) => {
-                    const driver = {
-                      status: order.driverStatus,
-                      id: order.driverId,
-                    };
+                    // const driver = {
+                    //   status: order.driverStatus,
+                    //   id: order.driverId,
+                    // };
 
                     const storeOrder = order.stores.find(
                       (store) => store.id === storeDocId
@@ -330,7 +329,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
                         order={order}
                         validateTransaction={validateTransaction}
                         storeOrder={storeOrder}
-                        driver={driver}
+                        // driver={driver}
                         userDocument={userDocument}
                         updateProductState={updateProductState}
                         rejectOrder={rejectOrder}
@@ -435,17 +434,16 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = ({}) => {
           m={"md"}
           fullWidth
           sx={{
-            maxWidth: "450px",
+            maxWidth: "450px"
           }}
           onClick={() => {
             fetchNextPage({
               pageParam:
                 orders?.pages[orders?.pages?.length - 1][
                   orders?.pages[orders?.pages?.length - 1]?.length - 1
-                ]?.id,
+                ]?.id
             });
-          }}
-        >
+          }}>
           {t("Load more")}
         </Button>
       </Center>

@@ -7,6 +7,7 @@ const Panel: React.FC<{
   links: LinkProps[];
   lngs: Lngs;
   activeLink: string;
+  children?: React.ReactNode;
 }> = ({ children, showMenu, links, activeLink, lngs }) => {
   const useStyles = createStyles((theme, _Params, getRef) => ({
     panel: {
@@ -23,8 +24,8 @@ const Panel: React.FC<{
       height: "100vh",
       borderRight: "2px solid rgba(133, 133, 133, 0.1)",
       zIndex: 16,
-      overflow: `${"initial"}`,
-    },
+      overflow: `${"initial"}`
+    }
   }));
   const { classes } = useStyles();
   return (

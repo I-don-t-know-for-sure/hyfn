@@ -4,7 +4,7 @@ import InfoCard from "./InfoCard";
 
 import OptionsCard from "./OptionsCard";
 import PricingCard from "./PricingCard";
-import ShippingCard from "./ShippingCard";
+
 import { ProductInfo, ProductsCard } from "../types";
 import {
   Box,
@@ -13,11 +13,11 @@ import {
   Container,
   Divider,
   Grid,
-  Stack,
+  Stack
 } from "@mantine/core";
 
 import MediaCard from "./MediaCard";
-import MeasurementSystemCard from "./MeasurementSystemCard";
+
 import { useNavigate } from "react-router";
 import { t } from "utils/i18nextFix";
 // import { Helmet } from 'react-helmet-async'
@@ -57,8 +57,9 @@ const Product: React.FC<ProductProps> = () => {
     images: [],
     files: [],
     deletedImages: [],
-    removeBackgroundImages: [],
+    removeBackgroundImages: []
   });
+  console.log("🚀 ~ file: Product.tsx:62 ~ productInfo:", productInfo);
 
   const { mutate, data } = useCreateProduct();
 
@@ -78,7 +79,7 @@ const Product: React.FC<ProductProps> = () => {
       if (changedKey === undefined) {
         return {
           ...prevState,
-          [`${firstChangedKey}`]: value,
+          [`${firstChangedKey}`]: value
         };
       }
 
@@ -86,8 +87,8 @@ const Product: React.FC<ProductProps> = () => {
         ...prevState,
         [`${firstChangedKey}`]: {
           ...prevState[`${firstChangedKey}`],
-          [`${changedKey}`]: value,
-        },
+          [`${changedKey}`]: value
+        }
       };
     });
   };
@@ -107,8 +108,7 @@ const Product: React.FC<ProductProps> = () => {
             xl: 1200,
  */
         // localStorage.removeItem("productInfo");
-      }}
-    >
+      }}>
       {/* <Helmet>
         <title>{t('New Product')}</title>
       </Helmet> */}
@@ -118,9 +118,8 @@ const Product: React.FC<ProductProps> = () => {
             grow
             sx={{
               width: "100%",
-              margin: "auto",
-            }}
-          >
+              margin: "auto"
+            }}>
             <Grid.Col xs={9} sm={7} md={8} lg={8}>
               <Stack>
                 <InfoCard
@@ -164,17 +163,15 @@ const Product: React.FC<ProductProps> = () => {
             sx={{
               display: "flex",
 
-              margin: "40px 24px",
-            }}
-          >
+              margin: "40px 24px"
+            }}>
             <Button
               fullWidth
               sx={{
-                maxWidth: "450px",
+                maxWidth: "450px"
               }}
               m={"0px auto"}
-              type="submit"
-            >
+              type="submit">
               {t("Create")}
             </Button>
           </Container>

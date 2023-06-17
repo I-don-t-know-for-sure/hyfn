@@ -13,13 +13,13 @@ import { useGetUserDocument } from "hooks/useGetUserDocument";
 import { Auth } from "aws-amplify";
 import { Notifications } from "@mantine/notifications";
 
-const Providers: React.FC = ({ children }) => {
+const Providers: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const queryClient = new QueryClient();
 
   const preferredColorScheme = useColorScheme();
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
-    defaultValue: preferredColorScheme,
+    defaultValue: preferredColorScheme
   });
 
   const toggleColorScheme = (value?: ColorScheme) =>
@@ -41,8 +41,7 @@ const Providers: React.FC = ({ children }) => {
 
     <ColorSchemeProvider
       colorScheme={colorScheme}
-      toggleColorScheme={toggleColorScheme}
-    >
+      toggleColorScheme={toggleColorScheme}>
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
@@ -53,7 +52,7 @@ const Providers: React.FC = ({ children }) => {
             sm: "576px",
             md: "870px",
             lg: "990px",
-            xl: "1200px",
+            xl: "1200px"
           },
           components: {
             Paper: {
@@ -63,13 +62,13 @@ const Providers: React.FC = ({ children }) => {
                     theme.colorScheme === "dark"
                       ? theme.colors.dark[6]
                       : theme.white,
-                  padding: "8px",
-                },
-              }),
-            },
+                  padding: "8px"
+                }
+              })
+            }
           },
 
-          primaryColor: "green",
+          primaryColor: "green"
         }}
         // styles={{
         //   Button: (theme, ButtonParams) => ({
@@ -87,8 +86,7 @@ const Providers: React.FC = ({ children }) => {
             <UserProvider
               useGetUserDocument={useGetUserDocument}
               queryClient={queryClient}
-              Auth={Auth}
-            >
+              Auth={Auth}>
               <FixedComponentProvider>{children}</FixedComponentProvider>
             </UserProvider>
           </QueryClientProvider>

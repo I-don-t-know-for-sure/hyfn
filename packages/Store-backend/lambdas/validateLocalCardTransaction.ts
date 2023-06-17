@@ -1,25 +1,30 @@
-interface ValidateLocalCardTransactionProps extends Omit<MainFunctionProps, 'arg'> {
+interface ValidateLocalCardTransactionProps
+  extends Omit<MainFunctionProps, "arg"> {
   arg: any;
 }
-import { ObjectId } from 'mongodb';
-import { adminName, TRANSACTION_TYPE_WALLET } from 'hyfn-types';
-import { getAdminLocalCardCreds } from './common/getAdminLocalCardCreds';
+import { ObjectId } from "mongodb";
+import { adminName, TRANSACTION_TYPE_WALLET } from "hyfn-types";
+import { getAdminLocalCardCreds } from "./common/getAdminLocalCardCreds";
 import {
   isLocalCardTransactionValidated,
   MainFunctionProps,
   mainWrapper,
-  tStores,
-} from 'hyfn-server';
-import { returnsObj } from 'hyfn-types';
-import { sql } from 'kysely';
-export const validateLocalCardTransaction = async ({ arg, client, db }: MainFunctionProps) => {
+  tStores
+} from "hyfn-server";
+import { returnsObj } from "hyfn-types";
+import { sql } from "kysely";
+export const validateLocalCardTransaction = async ({
+  arg,
+  client,
+  db
+}: MainFunctionProps) => {
   const { transactionId } = arg[0];
   // const dataServicesURL = process.env.moalmlatDataService;
 
   const transaction = await db
-    .selectFrom('transactions')
+    .selectFrom("transactions")
     .selectAll()
-    .where('id', '=', transactionId)
+    .where("id", "=", transactionId)
     .executeTakeFirstOrThrow();
   // const storeDoc = await db
   // .selectFrom('stores')
@@ -27,8 +32,8 @@ export const validateLocalCardTransaction = async ({ arg, client, db }: MainFunc
   // .where('userId', '=', userId)
   // .executeTakeFirstOrThrow();
 
-  if (transaction.status[transaction.status.length - 1] === 'validated') {
-    return returnsObj['transaction already approved'];
+  if (transaction.status[transaction.status.length - 1] === "validated") {
+    return returnsObj["transaction already approved"];
   }
 
   if (transaction.storeId === adminName) {
@@ -41,43 +46,46 @@ export const validateLocalCardTransaction = async ({ arg, client, db }: MainFunc
     TerminalId,
     transactionId,
     includeLocalCardTransactionFeeToPrice: true,
-    amount: transaction.amount,
+    amount: transaction.amount
   });
 
   if (!isValidated) {
-    return returnsObj['transaction not approved yet or not found'];
+    return returnsObj["transaction not approved yet or not found"];
   }
   const response = await db.transaction().execute(async (trx) => {
     const transaction = await trx
-      .selectFrom('transactions')
+      .selectFrom("transactions")
       .selectAll()
-      .where('id', '=', transactionId)
+      .where("id", "=", transactionId)
       .executeTakeFirstOrThrow();
 
-    if (transaction.status[transaction.status.length - 1] === 'validated') {
-      return returnsObj['transaction already approved'];
+    if (transaction.status[transaction.status.length - 1] === "validated") {
+      return returnsObj["transaction already approved"];
     }
 
     await trx
-      .updateTable('transactions')
+      .updateTable("transactions")
       .set({
-        status: [...transaction.status, 'validated'],
+        status: [...transaction.status, "validated"]
       })
-      .where('id', '=', transaction.id)
+      .where("id", "=", transaction.id)
       .execute();
 
-    if (transaction.type === 'store wallet') {
+    if (transaction.type === "store wallet") {
       await trx
-        .updateTable('stores')
+        .updateTable("stores")
         .set({
-          balance: sql`${sql.raw(tStores.balance)}::numeric + ${transaction.amount}::numeric`,
+          balance: sql`${sql.raw(tStores.balance)}::numeric + ${
+            transaction.amount
+          }::numeric`,
+          transactionId: null
         })
-        .where('id', '=', transaction.customerId)
+        .where("id", "=", transaction.customerId)
         .execute();
-      return returnsObj['transaction approved'];
+      return returnsObj["transaction approved"];
     }
 
-    return returnsObj['transaction approved'];
+    return returnsObj["transaction approved"];
   });
 
   return response;
@@ -86,6 +94,6 @@ export const handler = async (event) => {
   return await mainWrapper({
     event,
     mainFunction: validateLocalCardTransaction,
-    validateUser: false,
+    validateUser: false
   });
 };

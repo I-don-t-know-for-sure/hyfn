@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   Chip,
   Container,
   Group,
@@ -16,7 +17,7 @@ import {
   Stack,
   Text,
   TextInput,
-  Title,
+  Title
 } from "@mantine/core";
 
 import { paymentMethods } from "config/data";
@@ -37,6 +38,7 @@ import { useDisableLocalCardKeys } from "./hooks/useDisableLocalCardKeys";
 import { useUpdateLocalCardSettings } from "./hooks/useUpdateLocalCardSettings";
 import PaymentModal from "./components/PaymentModal";
 import { useUpdateSubscription } from "./hooks/useUpdateSubscription";
+import { useUpdateOrderSettings } from "./hooks/useUpdateOrderSetting";
 
 interface PaymentsProps {}
 
@@ -55,7 +57,7 @@ const Payments: React.FC<PaymentsProps> = () => {
   const { mutate: addLocalCardAPIkey } = useAddLocalCardAPIKeys();
   const { mutate: updateLocalCardSetting } = useUpdateLocalCardSettings();
   const { mutate: updateSubscription } = useUpdateSubscription();
-
+  const {mutate: updateOrderSettings} = useUpdateOrderSettings()
   const form = useForm({
     initialValues: {
       ownerFirstName: "",
@@ -68,8 +70,8 @@ const Payments: React.FC<PaymentsProps> = () => {
       TerminalId: "",
       secretKey: "",
       LocalCardPAIKeyFilled: false,
-      includeLocalCardFeeToPrice: false,
-    },
+      includeLocalCardFeeToPrice: false
+    }
   });
   useEffect(() => {
     if (data?.ownerFirstName) {
@@ -84,7 +86,7 @@ const Payments: React.FC<PaymentsProps> = () => {
         // TerminalId: data?.terminalId,
         // secretKey: data?.secretKey,
         includeLocalCardFeeToPrice: data?.includeLocalCardFeeToPrice,
-        LocalCardPAIKeyFilled: !!data?.localCardApiKeyId,
+        LocalCardPAIKeyFilled: !!data?.localCardApiKeyId
       });
     }
   }, [data, isLoading]);
@@ -95,10 +97,15 @@ const Payments: React.FC<PaymentsProps> = () => {
       numberOfMonths: 0,
       OTP: "",
       customerPhone: "",
-      birthYear: "",
-    },
+      birthYear: ""
+    }
   });
-
+  const orderSettingsForm = useForm({
+    initialValues: {
+      acceptDeliveryOrders: true,
+      acceptPickupOrders: false
+    }
+  });
   // create a function that converts a string date to normal date
   const convertDate = (date: string) => {
     const newDate = new Date(date);
@@ -125,8 +132,7 @@ const Payments: React.FC<PaymentsProps> = () => {
               <form
                 onSubmit={form.onSubmit((values) => {
                   mutate({ ...values, storeOwnerInfoFilled: true });
-                })}
-              >
+                })}>
                 <Group grow>
                   <TextInput
                     required
@@ -149,17 +155,15 @@ const Payments: React.FC<PaymentsProps> = () => {
                   mt={14}
                   sx={{
                     display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
+                    justifyContent: "flex-end"
+                  }}>
                   <Button
                     // m={'0px auto'}
                     fullWidth
                     // sx={{
                     //   maxWidth: '450px',
                     // }}
-                    type="submit"
-                  >
+                    type="submit">
                     {t("update")}
                   </Button>
                 </Container>
@@ -183,14 +187,12 @@ const Payments: React.FC<PaymentsProps> = () => {
             <Card
               // m={'12px auto'}
               title={t("Account Payments")}
-              shadow={"md"}
-            >
+              shadow={"md"}>
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
+                  justifyContent: "space-between"
+                }}>
                 <Title order={3} mb={8}>
                   {t("Account Payments")}
                 </Title>
@@ -218,8 +220,7 @@ const Payments: React.FC<PaymentsProps> = () => {
                   <ActionIcon
                     size={42}
                     variant="default"
-                    onClick={() => handlers.current.decrement()}
-                  >
+                    onClick={() => handlers.current.decrement()}>
                     –
                   </ActionIcon>
 
@@ -237,19 +238,39 @@ const Payments: React.FC<PaymentsProps> = () => {
                   <ActionIcon
                     size={42}
                     variant="default"
-                    onClick={() => handlers.current.increment()}
-                  >
+                    onClick={() => handlers.current.increment()}>
                     +
                   </ActionIcon>
                 </Group>
                 <Button
                   onClick={() => {
                     updateSubscription({ numberOfMonths: value });
-                  }}
-                >
+                  }}>
                   {t("Update subscription")}
                 </Button>
               </Stack>
+            </Card>
+            <Card>
+              <Title order={3}>{t("Order Settings")}</Title>
+              <form
+
+                onSubmit={orderSettingsForm.onSubmit((values) => {
+                    updateOrderSettings({acceptDeliveryOrders: values.acceptDeliveryOrders, acceptPickupOrders: values.acceptPickupOrders})
+                })}>
+                <Group mt={8}>
+                  <Checkbox
+                    label={t("Accept Delivery Orders")}
+                    {...orderSettingsForm.getInputProps("acceptDeliveryOrders")}
+                  />
+                  <Checkbox
+                    label={t("Accept Pickup Orders")}
+                    {...orderSettingsForm.getInputProps("acceptPickupOrders")}
+                  />
+                </Group>
+                <Button mt={12} type="submit" fullWidth>
+                  {t("Update")}
+                </Button>
+              </form>
             </Card>
           </Stack>
         )

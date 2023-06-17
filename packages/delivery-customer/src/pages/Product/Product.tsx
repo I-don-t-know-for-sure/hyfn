@@ -8,6 +8,7 @@ import {
   Chip,
   Container,
   Divider,
+  Flex,
   Group,
   Loader,
   MultiSelect,
@@ -15,7 +16,7 @@ import {
   NumberInputHandlers,
   Paper,
   Space,
-  Text,
+  Text
 } from "@mantine/core";
 import { ImageModal } from "hyfn-client";
 import { useCart } from "../../contexts/cartContext/Provider";
@@ -57,7 +58,7 @@ const Product: React.FC<ProductProps> = ({}) => {
     }[];
   }>({
     instructions: "",
-    options: [],
+    options: []
   });
   console.log("🚀 ~ file: Product.tsx:44 ~ productOrder:", productOrder);
 
@@ -74,7 +75,7 @@ const Product: React.FC<ProductProps> = ({}) => {
     addProductWithOptionsToCart,
     updateProductWithOptions,
     removeProductWithOptionsFromCart,
-    cart,
+    cart
   } = useCart();
 
   const orderType = cart[storefront]?.orderType
@@ -94,11 +95,12 @@ const Product: React.FC<ProductProps> = ({}) => {
   const resetOrder = () => {
     setProductOrder({
       instructions: "",
-      options: [],
+      options: []
     });
     setCheckboxError([]);
     setQty(1);
     setEditing(false);
+    setEditingProduct(undefined);
   };
   useEffect(() => {
     if (data && !isLoading && !editing) {
@@ -134,10 +136,6 @@ const Product: React.FC<ProductProps> = ({}) => {
         }
       );
 
-      console.log(
-        "🚀 ~ file: Product.tsx:113 ~ didNotMeetRules ~ productOrderOptions:",
-        productOrderOptions
-      );
       if (!productOrderOptions && !option.isRequired) {
         console.log("ndjcndjcnj", option);
         return false;
@@ -171,15 +169,6 @@ const Product: React.FC<ProductProps> = ({}) => {
       return true;
     });
     return !didNotMeetRules;
-    // if (productOrder.options.length === 0) {
-    //   return false;
-    // }
-    // const check = productOrder.options.some((option) => {
-    //   if (option.optionValues.length > 0) {
-    //     return true;
-    //   }
-    // });
-    // return check;
   };
 
   const updateProduct = () => {
@@ -193,7 +182,7 @@ const Product: React.FC<ProductProps> = ({}) => {
           ...editingProduct,
           ...productOrder,
           // ...rest,
-          qty,
+          qty
         },
         setCartInfo
         // productId,
@@ -227,111 +216,75 @@ const Product: React.FC<ProductProps> = ({}) => {
   useEffect(() => {
     const fixedComponentConstructor = [
       () => (
-        <Container
+        <Flex
+          align={"center"}
+          justify={"center"}
           sx={(theme) => ({
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
+            // display: "flex",
+            // justifyContent: "",
+            // alignItems: "center",
             margin: " 4px auto ",
             borderRadius: "6px",
             height: "46px",
             border: `1px solid ${theme.primaryColor}`,
             backgroundColor:
-              theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-          })}
-        >
-          {/*  <Box
-            sx={{
-              display: "flex",
-              width: editing ? "25%" : "200px",
-              justifyContent: "space-between",
-            }}
-          >
-            <ActionIcon size={24} variant="outline" sx={{}}>
-              <AiOutlineMinus onClick={decreaseQTY} />
-            </ActionIcon>
-            <Text>{qty}</Text>
-            <ActionIcon size={24} variant="outline">
-              <AiOutlinePlus onClick={increaseQTY} />
-            </ActionIcon>
-          </Box> */}
-          <Group spacing={5}>
-            <ActionIcon
-              size={"md"}
-              variant="default"
-              onClick={() => handlers.current.decrement()}
-            >
-              –
-            </ActionIcon>
+              theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white
+          })}>
+          <Group position="apart">
+            <Group spacing={5}>
+              <ActionIcon
+                size={"md"}
+                variant="default"
+                onClick={() => handlers.current.decrement()}>
+                –
+              </ActionIcon>
 
-            <NumberInput
-              size={"xs"}
-              sx={{
-                maxWidth: "150px",
-              }}
-              hideControls
-              precision={calculatePrecision(product?.measurementSystem)}
-              value={qty}
-              onChange={(val) => setQty(val !== undefined ? val : (0 as any))}
-              handlersRef={handlers}
-              min={0}
-              step={calculateStep(product?.measurementSystem)}
-              styles={{ input: { textAlign: "center" } }}
-              parser={(value) => value.replace(/[$,\s]/g, "")}
-              formatter={(value) =>
-                !Number.isNaN(parseFloat(value))
-                  ? `${t(product?.measurementSystem)} ${value}`.replace(
-                      /(\d)(?=(\d{3})+(?!\d))/g,
-                      "$1,"
-                    )
-                  : `${t(product?.measurementSystem)} `
-              }
-              // icon={<Text m={"md"}>{t(product?.measurementSystem)}</Text>}
-            />
+              <NumberInput
+                // size={"xs"}
+                sx={{
+                  maxWidth: "70px",
 
-            <ActionIcon
-              size={"md"}
-              variant="default"
-              onClick={() => handlers.current.increment()}
-            >
-              +
-            </ActionIcon>
+                  width: "auto"
+                }}
+                hideControls
+                precision={calculatePrecision(product?.measurementSystem)}
+                value={qty}
+                onChange={(val) => setQty(val !== undefined ? val : (0 as any))}
+                handlersRef={handlers}
+                min={0}
+                step={calculateStep(product?.measurementSystem)}
+                styles={{ input: { textAlign: "center" } }}
+                parser={(value) => value.replace(/[$,\s]/g, "")}
+                formatter={(value) =>
+                  !Number.isNaN(parseFloat(value))
+                    ? `${t(product?.measurementSystem)} ${value}`.replace(
+                        /(\d)(?=(\d{3})+(?!\d))/g,
+                        "$1,"
+                      )
+                    : `${t(product?.measurementSystem)} `
+                }
+                // icon={<Text m={"md"}>{t(product?.measurementSystem)}</Text>}
+              />
+
+              <ActionIcon
+                size={"md"}
+                variant="default"
+                onClick={() => handlers.current.increment()}>
+                +
+              </ActionIcon>
+            </Group>
+
+            <Group position="center" spacing={2}>
+              <Button
+                compact
+                m={"auto 4px"}
+                onClick={editing ? updateProduct : addProduct}>
+                {editing ? "Save" : "Add To Cart"}
+              </Button>
+            </Group>
           </Group>
-          <Box
-            sx={{
-              width: editing ? "70%" : "initail",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Button
-              compact
-              m={"auto 4px"}
-              onClick={editing ? updateProduct : addProduct}
-            >
-              {editing ? "Save" : "Add To Cart"}
-            </Button>
-            {editing && (
-              <>
-                {" "}
-                <Button compact m={"auto 4px"} onClick={resetOrder}>
-                  {t("Cancel")}
-                </Button>
-                <Button
-                  compact
-                  m={"auto 4px"}
-                  onClick={() => {
-                    removeProduct();
-                    resetOrder();
-                  }}
-                >
-                  {t("Remove")}
-                </Button>
-              </>
-            )}
-          </Box>
-        </Container>
-      ),
+        </Flex>
+      )
     ];
 
     setFixedComponent(fixedComponentConstructor);
@@ -343,7 +296,7 @@ const Product: React.FC<ProductProps> = ({}) => {
     data,
     isLoading,
     product,
-    checkboxError,
+    checkboxError
   ]);
 
   if (isError) {
@@ -356,11 +309,9 @@ const Product: React.FC<ProductProps> = ({}) => {
     product && (
       <Container
         sx={{
-          marginBottom: "56px",
-        }}
-      >
+          marginBottom: "56px"
+        }}>
         <Box>
-          {/* <ImageModal src={`${url}${screenSizes[0]}/${product.images[0]}`} /> */}
           <ImageModal
             sx={(theme) => ({
               maxWidth: 500,
@@ -368,8 +319,8 @@ const Product: React.FC<ProductProps> = ({}) => {
               maxHeight: 500,
               [theme.fn.largerThan("sm")]: {
                 maxWidth: 300,
-                maxHeight: 300,
-              },
+                maxHeight: 300
+              }
             })}
             ImageComponent={
               <Carousel>
@@ -384,17 +335,16 @@ const Product: React.FC<ProductProps> = ({}) => {
                           maxHeight: 500,
                           [theme.fn.largerThan("sm")]: {
                             maxWidth: 300,
-                            maxHeight: 300,
-                          },
+                            maxHeight: 300
+                          }
                         })}
-                        mx="auto"
-                      >
+                        mx="auto">
                         <Image
                           radius={6}
                           sx={{
                             width: "100%",
 
-                            height: "100px",
+                            height: "100px"
                           }}
                           imageName={
                             product?.images?.length > 0
@@ -410,35 +360,12 @@ const Product: React.FC<ProductProps> = ({}) => {
             }
             src={`${url}preview/${product.images[0]}`}
           />
-          {/* <AspectRatio
-            ratio={500 / 500}
-            sx={(theme) => ({
-              maxWidth: 500,
-              borderRadius: '6px',
-              maxHeight: 500,
-              [theme.fn.largerThan('sm')]: {
-                maxWidth: 300,
-                maxHeight: 300,
-              },
-            })}
-            mx="auto"
-          >
-            <Image
-              radius={6}
-              sx={{
-                width: '100%',
 
-                height: '100px',
-              }}
-              imageName={product?.images?.length > 0 ? product.images[0] : 'c72e349a9bc184cbdcfb1386060d4b5b'}
-            />
-          </AspectRatio> */}
           <Container>
             <Text
               sx={{
-                fontSize: "28px",
-              }}
-            >
+                fontSize: "28px"
+              }}>
               {product.title}
             </Text>
             <Group spacing={3}>
@@ -446,23 +373,13 @@ const Product: React.FC<ProductProps> = ({}) => {
               <Text
                 sx={(theme) => ({
                   fontSize: "24px",
-                  color: theme.primaryColor,
-                })}
-              >
+                  fontWeight: "bold"
+                })}>
                 {` ${product.price - product.price * storeServiceFee} `}
               </Text>
               <Text>{t("Per")}</Text>
-              <Text color="red">{t(product?.measurementSystem)}</Text>
+              <Text>{t(product?.measurementSystem)}</Text>
             </Group>
-            {/* <Text
-              sx={{
-                fontSize: "14px",
-              }}
-            >
-              {`${storeDoc?.currency || "LYD"} ${
-                product.price - product.price * storeServiceFee
-              } ${t("Per")} `}
-            </Text> */}
           </Container>
           <Space h={12} />
           <Box>
@@ -473,26 +390,43 @@ const Product: React.FC<ProductProps> = ({}) => {
                     sx={{
                       display: "flex",
                       justifyContent: "space-between",
-                      marginBottom: "4px",
-                    }}
-                  >
+                      marginBottom: "4px"
+                    }}>
                     <Box>
                       {order.qty}X {t("in your cart")}
                     </Box>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setProductOrder({
-                          instructions: order.instructions,
-                          options: order.options,
-                        });
-                        setEditingProduct(order);
-                        setQty(order.qty);
-                        setEditing(true);
-                      }}
-                    >
-                      {t("Edit")}
-                    </Button>
+                    <>
+                      {order?.id === editingProduct?.id ? (
+                        <Group spacing={1}>
+                          <Button compact m={"auto 4px"} onClick={resetOrder}>
+                            {t("Cancel")}
+                          </Button>
+                          <Button
+                            compact
+                            m={"auto 4px"}
+                            onClick={() => {
+                              removeProduct();
+                              resetOrder();
+                            }}>
+                            {t("Remove")}
+                          </Button>
+                        </Group>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setProductOrder({
+                              instructions: order.instructions,
+                              options: order.options
+                            });
+                            setEditingProduct(order);
+                            setQty(order.qty);
+                            setEditing(true);
+                          }}>
+                          {t("Edit")}
+                        </Button>
+                      )}
+                    </>
                   </Container>
                 );
               })}
@@ -503,9 +437,8 @@ const Product: React.FC<ProductProps> = ({}) => {
             <Paper
               key={index}
               sx={{
-                margin: "12px auto",
-              }}
-            >
+                margin: "12px auto"
+              }}>
               <Divider
                 labelPosition="center"
                 label={
@@ -516,29 +449,26 @@ const Product: React.FC<ProductProps> = ({}) => {
               />
               <Box
                 sx={{
-                  margin: "12px auto",
-                }}
-              >
+                  margin: "12px auto"
+                }}>
                 <Group
                   sx={{
-                    justifyContent: "space-around",
-                  }}
-                >
+                    justifyContent: "space-around"
+                  }}>
                   <div
                     style={{
                       display: "flex",
-                      flexDirection: "column",
-                    }}
-                  ></div>
+                      flexDirection: "column"
+                    }}></div>
                 </Group>
 
                 <Container
                   style={{
                     display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
+                    flexDirection: "column"
+                  }}>
                   <MultiSelect
+                    searchable
                     error={
                       !!checkboxError.find((optionError) => {
                         return optionError.key === option.key;
@@ -549,24 +479,25 @@ const Product: React.FC<ProductProps> = ({}) => {
                     description={
                       <Text>{`${t(
                         `Select up to ${option.maximumNumberOfOptionsForUserToSelect}`
-                      )} ${t("and")} ${
-                        option.isRequired &&
-                        t(
-                          `at least  ${option.minimumNumberOfOptionsForUserToSelect}`
-                        )
+                      )}  ${
+                        option.isRequired
+                          ? t("and") +
+                            t(
+                              `at least  ${option.minimumNumberOfOptionsForUserToSelect}`
+                            )
+                          : ""
                       }`}</Text>
                     }
                     label={<Text size={24}>{option.optionName}</Text>}
                     required={option?.isRequired as boolean}
                     dropdownPosition="top"
-                    // selectOnBlur
                     value={convertProductOrderOptionsValuesToSelectValueArray({
                       optionValues: productOrder?.options?.find(
                         (productOption) => option.key === productOption.key
-                      )?.optionValues,
+                      )?.optionValues
                     })}
                     data={convertProductOrderOptionsValuesToSelectArray({
-                      optionValues: option?.optionValues,
+                      optionValues: option?.optionValues
                     })}
                     onChange={(e) => {
                       const newValues = e.map((newValue) => {
@@ -575,7 +506,7 @@ const Product: React.FC<ProductProps> = ({}) => {
                         return {
                           value: valueArray[0],
                           key: valueArray[1],
-                          price: valueArray[2],
+                          price: valueArray[2]
                         };
                       });
 
@@ -595,9 +526,9 @@ const Product: React.FC<ProductProps> = ({}) => {
                               {
                                 key: option.key,
                                 optionName: option.optionName,
-                                optionValues: newValues,
-                              },
-                            ],
+                                optionValues: newValues
+                              }
+                            ]
                           };
                         }
                         const isOptionAlreadySelected = prevState.options.find(
@@ -615,9 +546,9 @@ const Product: React.FC<ProductProps> = ({}) => {
                               {
                                 key: option.key,
                                 optionName: option.optionName,
-                                optionValues: newValues,
-                              },
-                            ],
+                                optionValues: newValues
+                              }
+                            ]
                           };
                         }
                         if (isOptionAlreadySelected) {
@@ -639,21 +570,17 @@ const Product: React.FC<ProductProps> = ({}) => {
                                 return {
                                   key: option.key,
                                   optionName: option.optionName,
-                                  optionValues: newValues,
+                                  optionValues: newValues
                                 };
                               }
                               return oldOptions;
                             }
                           );
-                          console.log(
-                            "🚀 ~ file: Product.tsx:458 ~ newOptions ~ newOptions:",
-                            newOptions
-                          );
 
                           return {
                             ...prevState,
                             instructions: prevState.instructions,
-                            options: newOptions,
+                            options: newOptions
                           };
                         }
                       });
@@ -661,7 +588,6 @@ const Product: React.FC<ProductProps> = ({}) => {
                   />
                 </Container>
               </Box>
-              <Divider />
             </Paper>
           );
         })}
@@ -682,19 +608,19 @@ const Product: React.FC<ProductProps> = ({}) => {
 export default Product;
 
 const convertProductOrderOptionsValuesToSelectArray = ({
-  optionValues,
+  optionValues
 }: {
   optionValues: any;
 }) => {
   return optionValues?.map((value) => {
     return {
       label: value?.value,
-      value: `${value.value},${value.key},${value.price}`,
+      value: `${value.value},${value.key},${value.price}`
     };
   });
 };
 const convertProductOrderOptionsValuesToSelectValueArray = ({
-  optionValues,
+  optionValues
 }: {
   optionValues: any;
 }) => {

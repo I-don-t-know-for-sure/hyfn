@@ -174,12 +174,6 @@ export function customerApiStack({ stack }: StackContext) {
           handler: pathToLambdas + "getBalance.handler"
         }
       },
-      "POST /getDriverInfo": {
-        function: {
-          functionName: "getDriverInfo" + stack.stage,
-          handler: pathToLambdas + "getDriverInfo.handler"
-        }
-      },
 
       "POST /cancelOrder": {
         function: {
@@ -221,11 +215,6 @@ export function customerApiStack({ stack }: StackContext) {
       [customerUrl({ method: "POST", url: "getSearchHits" })]: {
         function: {
           handler: pathToLambdas + "getSearchHits.handler"
-        }
-      },
-      [customerUrl({ method: "POST", url: "getDriverManagements" })]: {
-        function: {
-          handler: pathToLambdas + "getDriverManagements.handler"
         }
       },
 

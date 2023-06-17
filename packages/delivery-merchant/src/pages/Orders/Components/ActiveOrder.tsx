@@ -10,13 +10,12 @@ import {
   Image,
   LoadingOverlay,
   Table,
-  Text,
+  Text
 } from "@mantine/core";
 import { useRefreshOrderDocument } from "../hooks/useRefreshOrderDocument";
-import TransactionModal from "./TransactionModal";
-import DriverInfoModal from "./DriverInfoModal";
+
 import OptionsModal from "./OptionsModal";
-import { orderTypesObject, storeAppText, storeStatusObject } from "hyfn-types";
+import { storeAppText, storeStatusObject } from "hyfn-types";
 import { t } from "utils/i18nextFix";
 import InstructionsModal from "./InstructionsModak";
 
@@ -31,7 +30,7 @@ export function ActiveOrder({
   order,
   validateTransaction,
   storeOrder,
-  driver,
+  // driver,
   userDocument,
   updateProductState,
   rejectOrder,
@@ -39,13 +38,13 @@ export function ActiveOrder({
   setOrderAsReady,
   setOrderAsDelivered,
   setOrderAsAccepted,
-  status,
+  status
 }: {
   isLoading: boolean;
   order: any;
   validateTransaction;
   storeOrder: any;
-  driver: any;
+  // driver: any;
   userDocument: any;
   setOrderAsDelivered: ({ orderId }: { orderId: string }) => void;
   updateProductState;
@@ -68,7 +67,7 @@ export function ActiveOrder({
           visible={isLoading}
           sx={{
             width: "100%",
-            height: "100%",
+            height: "100%"
           }}
         />
         <Group position="right">
@@ -81,8 +80,7 @@ export function ActiveOrder({
           <ActionIcon
             onClick={() => {
               refetch();
-            }}
-          >
+            }}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="icon icon-tabler icon-tabler-refresh"
@@ -93,8 +91,7 @@ export function ActiveOrder({
               stroke="currentColor"
               fill="none"
               strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+              strokeLinejoin="round">
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
               <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
@@ -119,7 +116,7 @@ export function ActiveOrder({
               storeProducts={storeOrder.addedProducts}
             />
           )} */}
-          {order.orderType === orderTypesObject.Delivery &&
+          {/* {order.orderType === orderTypesObject.Delivery &&
             driver?.id !== "" &&
             driver !== undefined && (
               <DriverInfoModal
@@ -128,20 +125,18 @@ export function ActiveOrder({
                 balancedByDriver={order?.balancedByDriver}
                 storeId={userDocument?.id}
               />
-            )}
+            )} */}
         </Group>
         <Box
           sx={(theme) => ({
             [theme.fn.smallerThan("sm")]: {
-              overflowX: "scroll",
-            },
-          })}
-        >
+              overflowX: "scroll"
+            }
+          })}>
           <Table
             sx={{
-              overflowX: "scroll",
-            }}
-          >
+              overflowX: "scroll"
+            }}>
             <thead>
               <tr>
                 <th>{t("Name")}</th>
@@ -154,9 +149,8 @@ export function ActiveOrder({
                     style={{
                       margin: "0px auto",
                       justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
+                      alignItems: "center"
+                    }}>
                     {t("Control")}
                   </th>
                 )}
@@ -168,14 +162,14 @@ export function ActiveOrder({
                   setProductAsPickedUp({
                     orderId: order.id,
                     productId: product.id,
-                    QTYFound: pickupCount,
+                    QTYFound: pickupCount
                   });
                 };
 
                 const notFound = () => {
                   setProductAsNotFound({
                     orderId: order.id,
-                    productId: product.id,
+                    productId: product.id
                   });
                 };
                 return (
@@ -223,7 +217,7 @@ export function ActiveOrder({
                           width: "45px",
                           height: "45px",
                           maxWidth: "45px",
-                          maxHeight: "45px",
+                          maxHeight: "45px"
                         }}
                         src={`${import.meta.env.VITE_APP_BUCKET_URL}/tablet/${
                           product.images[0]
@@ -273,8 +267,7 @@ export function ActiveOrder({
               <Button
                 onClick={() => {
                   rejectOrder(order.id);
-                }}
-              >
+                }}>
                 {t("Reject Order")}
               </Button>
             )
@@ -298,10 +291,9 @@ export function ActiveOrder({
                     onClick={() => {
                       setOrderAsAccepted({
                         orderId: order.id,
-                        storeId: order.stores[0].id,
+                        storeId: order.stores[0].id
                       });
-                    }}
-                  >
+                    }}>
                     {t(storeAppText["Accept Order"])}
                   </Button>
                 </>
@@ -312,10 +304,9 @@ export function ActiveOrder({
                   onClick={() => {
                     setOrderAsReady({
                       orderId: order.id,
-                      storeId: order.stores[0].id,
+                      storeId: order.stores[0].id
                     });
-                  }}
-                >
+                  }}>
                   {t("Order is ready")}
                 </Button>
               )}

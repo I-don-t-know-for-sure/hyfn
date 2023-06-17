@@ -1,24 +1,23 @@
-import { MainFunctionProps } from 'hyfn-server';
+import { MainFunctionProps } from "hyfn-server";
 import {
-
   baseServiceFee,
   storeAndCustomerServiceFee,
-  storeServiceFee,
-} from 'hyfn-types';
-import { calculateOrderCost } from './utils';
-import { add, largerEq, multiply, smallerEq } from 'mathjs';
-import { MongoClient, ObjectId } from 'mongodb';
-import { returnsObj } from 'hyfn-types';
+  storeServiceFee
+} from "hyfn-types";
+import { calculateOrderCost } from "./utils";
+import { add, largerEq, multiply, smallerEq } from "mathjs";
+import { MongoClient, ObjectId } from "mongodb";
+import { returnsObj } from "hyfn-types";
 export const updateAllOrder = async ({
   arg,
-  client,
+
   customerDoc,
-  db,
+  db
 }: {
   arg: any;
   client: MongoClient;
   customerDoc: any;
-  db: MainFunctionProps['db'];
+  db: MainFunctionProps["db"];
 }) => {
   await db.transaction().execute(async (trx) => {
     const orderCart = arg[0];
@@ -27,9 +26,9 @@ export const updateAllOrder = async ({
     const metchesOrder = orderCart[0];
     const { country, city } = metchesOrder;
     const coordinates: any[] = [];
-    var storeId = '';
+    var storeId = "";
     if (orderCart?.length !== 1) {
-      throw new Error('Can`t have more than 1 stores in an order');
+      throw new Error("Can`t have more than 1 stores in an order");
     }
 
     var storesArray: any[] = [];
@@ -38,20 +37,26 @@ export const updateAllOrder = async ({
       const store = orderCart[i];
 
       const storeDoc = await trx
-        .selectFrom('stores')
+        .selectFrom("stores")
         .selectAll()
-        .where('id', '=', store.id)
+        .where("id", "=", store.id)
         .executeTakeFirstOrThrow();
-      if (!storeDoc.acceptingOrders) throw new Error(returnsObj['store is not accepting orders']);
+      if (!storeDoc.acceptingOrders)
+        throw new Error(returnsObj["store is not accepting orders"]);
       storeId = storeDoc.id;
 
       // we will remove this or add another condition when we start allowing stores to have their own drivers
-      if (store.orderType === 'Delivery' && storeDoc.storeType.includes('restaurant')) {
-        throw new Error(returnsObj['Restaurants can  not take delivery orders yet']);
+      if (
+        store.orderType === "Delivery" &&
+        storeDoc.storeType.includes("restaurant")
+      ) {
+        throw new Error(
+          returnsObj["Restaurants can  not take delivery orders yet"]
+        );
       }
       var addedProductsDocs: any[] = [];
       if (storeDoc.expirationDate < new Date()) {
-        throw new Error(returnsObj['expired subscription']);
+        throw new Error(returnsObj["expired subscription"]);
       }
 
       for (let x = 0; x < store.addedProducts.length; x++) {
@@ -59,9 +64,9 @@ export const updateAllOrder = async ({
         const product = store.addedProducts[x];
 
         const productDoc = await trx
-          .selectFrom('products')
+          .selectFrom("products")
           .selectAll()
-          .where('id', '=', product.id)
+          .where("id", "=", product.id)
           .executeTakeFirstOrThrow();
         let validOptions = [];
         if (Array.isArray(product.options)) {
@@ -72,15 +77,24 @@ export const updateAllOrder = async ({
             // if (option.optionValues.length === 0) {
             //   throw new Error(returnsObj["option does not have values"]);
             // }
-            if (option.optionValues.length > validOption.maximumNumberOfOptionsForUserToSelect) {
-              throw new Error(returnsObj['option does not meet option conditions']);
+            if (
+              option.optionValues.length >
+              validOption.maximumNumberOfOptionsForUserToSelect
+            ) {
+              throw new Error(
+                returnsObj["option does not meet option conditions"]
+              );
             }
             if (validOption.isRequired) {
               if (
-                option.optionValues.length > validOption.minimumNumberOfOptionsForUserToSelect ||
-                option.optionValues.length < validOption.minimumNumberOfOptionsForUserToSelect
+                option.optionValues.length >
+                  validOption.minimumNumberOfOptionsForUserToSelect ||
+                option.optionValues.length <
+                  validOption.minimumNumberOfOptionsForUserToSelect
               ) {
-                throw new Error(returnsObj['option does not meet option conditions']);
+                throw new Error(
+                  returnsObj["option does not meet option conditions"]
+                );
               }
             }
             const validValues = option.optionValues.map((customerValue) => {
@@ -97,21 +111,26 @@ export const updateAllOrder = async ({
           key: new ObjectId().toString(),
           options: validOptions,
           qty: product.qty,
-          instructions: product?.instructions,
+          instructions: product?.instructions
         });
       }
       storesArray.push({
         ...storeDoc,
         pickupConfirmation: new ObjectId().toString(),
         addedProducts: addedProductsDocs,
-        orderType: storeDoc.storeType.includes('restaurant') ? store.orderType : 'Delivery',
-        orderStatus: 'pending',
+        orderType: storeDoc.storeType.includes("restaurant")
+          ? store.orderType
+          : "Delivery",
+        orderStatus: "pending"
       });
     }
     const orderCost = calculateOrderCost(storesArray);
-    console.log('🚀 ~ file: utils.js:195 ~ updateAllOrder ~ orderCost', orderCost);
+    console.log(
+      "🚀 ~ file: utils.js:195 ~ updateAllOrder ~ orderCost",
+      orderCost
+    );
     if (orderCost < 50) {
-      throw new Error(returnsObj['can not create order with less than 50']);
+      throw new Error(returnsObj["can not create order with less than 50"]);
     }
     console.log(coordinates.length);
     console.log(orderCart[0].orderType);
@@ -141,7 +160,10 @@ export const updateAllOrder = async ({
 
     const orderCostAfterFee = orderCost - orderCost * storeServiceFee;
 
-    const serviceFee = add(baseServiceFee, multiply(orderCost, storeAndCustomerServiceFee));
+    const serviceFee = add(
+      baseServiceFee,
+      multiply(orderCost, storeAndCustomerServiceFee)
+    );
 
     const totalCost = add(orderCostAfterFee, serviceFee);
     console.log({
@@ -155,17 +177,13 @@ export const updateAllOrder = async ({
       customerLong: parseFloat(buyerInfo.customerCoords[1]),
       totalCost: parseFloat(totalCost as any),
       serviceFee: parseFloat(serviceFee as any),
-      storeStatus: ['pending'],
-      customerStatus: ['initial'],
+      storeStatus: ["pending"],
+      customerStatus: ["initial"],
       customerId: customerDoc.id,
-      storeId: storeId,
-
-      ...(orderCart[0].orderType === 'Delivery'
-        ? { driverStatus: ['initial'], proposals: [], proposalsIds: [], deliveryFeePaid: false }
-        : {}),
+      storeId: storeId
     });
     const order = await trx
-      .insertInto('orders')
+      .insertInto("orders")
       .values({
         orderType: orderCart[0].orderType,
         customerAddress: buyerInfo.customerAddress,
@@ -177,23 +195,19 @@ export const updateAllOrder = async ({
         customerLong: parseFloat(buyerInfo.customerCoords[1]),
         totalCost: parseFloat(totalCost as any),
         serviceFee: parseFloat(serviceFee as any),
-        orderStatus: ['active'],
-        storeStatus: ['pending'],
-        customerStatus: ['initial'],
+        orderStatus: ["active"],
+        storeStatus: ["pending"],
+        customerStatus: ["initial"],
         customerId: customerDoc.id,
         storeId: storeId,
         deliveryFee: 0,
-        reportsIds: [],
-
-        ...(orderCart[0].orderType === 'Delivery'
-          ? { driverStatus: ['initial'], proposals: [], proposalsIds: [], deliveryFeePaid: false }
-          : { driverStatus: [], proposals: [], proposalsIds: [] }),
+        reportsIds: []
       })
-      .returning('id')
+      .returning("id")
       .executeTakeFirst();
 
     await trx
-      .insertInto('orderProducts')
+      .insertInto("orderProducts")
       .values(
         addedProductsDocs.map((product) => ({
           title: product.title,
@@ -207,11 +221,11 @@ export const updateAllOrder = async ({
           instructions: product.instructions,
           storeId: storeId,
           orderId: order.id,
-          pickupStatus: ['initial'],
-          qtyFound: 0,
+          pickupStatus: ["initial"],
+          qtyFound: 0
         }))
       )
       .execute();
   });
-  return returnsObj['seccess'];
+  return returnsObj["seccess"];
 };

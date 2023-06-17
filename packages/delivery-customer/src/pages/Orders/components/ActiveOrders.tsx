@@ -18,7 +18,7 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = () => {
     isLoading,
     isError,
     error,
-    fetchNextPage,
+    fetchNextPage
   } = useGetActiveOrders();
   console.log("🚀 ~ file: ActiveOrders.tsx:22 ~ orders", orders);
 
@@ -37,14 +37,12 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = () => {
         orders?.pages.map((page) => {
           return page?.map((order, index) => {
             const serviceFeePaid = order?.serviceFeePaid;
-            const driver = { status: order.driverStatus, id: order.driverId };
 
             return (
               <DeliveryActiveOrder
                 serviceFeePaid={serviceFeePaid}
                 index={index}
                 order={order}
-                driver={driver}
                 cancelOrder={cancelOrder}
                 balance={userDocument.balance}
                 serviceFee={order.serviceFee}
@@ -57,17 +55,16 @@ const ActiveOrders: React.FC<ActiveOrdersProps> = () => {
         <Button
           sx={{
             width: "100%",
-            maxWidth: "450px",
+            maxWidth: "450px"
           }}
           onClick={() =>
             fetchNextPage({
               pageParam:
                 orders?.pages[orders?.pages?.length - 1][
                   orders?.pages[orders.pages?.length - 1]?.length - 1
-                ]?.id,
+                ]?.id
             })
-          }
-        >
+          }>
           {t("Load more")}
         </Button>
       </Center>

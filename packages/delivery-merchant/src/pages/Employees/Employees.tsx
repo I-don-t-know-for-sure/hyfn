@@ -4,18 +4,12 @@ import {
   Checkbox,
   Container,
   Stack,
-  TextInput,
+  TextInput
 } from "@mantine/core";
 import { t } from "utils/i18nextFix";
 import React, { useState } from "react";
 import { useAddEmployee } from "./hooks/useAddEmployee";
-import { DriversManagement as Managment } from "hyfn-client";
 
-import { useAddDriverToManagementDrivers } from "../Employees/managementHooks/useAddDriverToStoreDrivers";
-import { useGetStoreDrivers } from "../Employees/managementHooks/useGetStoreDrivers";
-import { useRemoveDriverFromManagementDrivers } from "../Employees/managementHooks/useRemoveDriverFromStoreDrivers";
-import { useSearchDriverByID } from "../Employees/managementHooks/useSearchDriverByID";
-import { useUpdateDriverBalance } from "../Employees/managementHooks/useUpdateDriverBalance";
 import { customerAppText } from "hyfn-types";
 
 interface EmployeesProps {}
@@ -38,8 +32,7 @@ const Employees: React.FC<EmployeesProps> = ({}) => {
             <Button
               onClick={() => {
                 addEmployee({ employeeId });
-              }}
-            >
+              }}>
               {t("Add employee")}
             </Button>
           </Stack>
@@ -55,15 +48,6 @@ const Employees: React.FC<EmployeesProps> = ({}) => {
             onChange={(e) => setOnlyStoreDriversCanTakeOrders(e.target.checked)}
           />
         </Card>
-        <Managment
-          useAddDriverToManagementDrivers={useAddDriverToManagementDrivers}
-          useGetStoreDrivers={useGetStoreDrivers}
-          useRemoveDriverFromManagementDrivers={
-            useRemoveDriverFromManagementDrivers
-          }
-          useSearchDriverByID={useSearchDriverByID}
-          useUpdateDriverBalance={useUpdateDriverBalance}
-        />
       </Stack>
     </Container>
   );

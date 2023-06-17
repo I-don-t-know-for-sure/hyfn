@@ -4,17 +4,13 @@ import { randomId } from "@mantine/hooks";
 import {
   errorNotification,
   loadingNotification,
-  successNotification,
+  successNotification
 } from "hyfn-client";
 import { LocalCard, GetOrder, LambdaHandlers } from "store-backend";
 import { TransactionsHandler } from "customer-backend";
-import { DriverManagementHandlers } from "driver-management-backend";
+
 import { t } from "utils/i18nextFix";
-type Handlers = LambdaHandlers &
-  DriverManagementHandlers &
-  LocalCard &
-  GetOrder &
-  TransactionsHandler;
+type Handlers = LambdaHandlers & LocalCard & GetOrder & TransactionsHandler;
 type Function<T extends keyof Handlers> = (
   arg: Handlers[T]["arg"]
 ) => Handlers[T]["return"];
@@ -22,7 +18,7 @@ export const fetchApi = async <T extends keyof Handlers>({
   arg: reqData,
   url,
   method = "POST",
-  notifi = true,
+  notifi = true
 }: {
   url: T;
   arg: Parameters<Function<T>>["0"];
@@ -39,14 +35,14 @@ export const fetchApi = async <T extends keyof Handlers>({
     notGet &&
     showNotification({
       ...loadingNotification,
-      id,
+      id
     });
   const data = await fetch(`${import.meta.env.VITE_APP_BASE_URL}/${url}`, {
     method,
     headers: {
-      "content-type": "application/json",
+      "content-type": "application/json"
     },
-    body: JSON.stringify([...reqData, accessTokenObject]),
+    body: JSON.stringify([...reqData, accessTokenObject])
   });
   if (data.status !== 200) {
     const message = await data.json();
@@ -55,7 +51,7 @@ export const fetchApi = async <T extends keyof Handlers>({
       updateNotification({
         ...errorNotification,
         message: t(message),
-        id,
+        id
       });
     throw new Error(data.statusText);
   }
@@ -63,7 +59,7 @@ export const fetchApi = async <T extends keyof Handlers>({
     notGet &&
     updateNotification({
       ...successNotification,
-      id,
+      id
     });
   const result = await data.json();
   return result;

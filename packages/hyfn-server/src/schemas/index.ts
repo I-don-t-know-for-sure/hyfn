@@ -2,7 +2,7 @@
 
 import { zCollection, collections } from "./collections";
 import { zDriverManagement, driverManagements } from "./driverManagements";
-import { zDriver, drivers } from "./drivers";
+// import { zDriver, drivers } from "./drivers";
 import { zLocalCardKeys } from "./localCardKeys";
 import { zOrder, orders } from "./orders";
 import { zProduct, products } from "./products";
@@ -348,7 +348,7 @@ export const bulkUpdate = (
 }; */
 
 export type tCollection = z.infer<typeof zCollection>;
-export type tDriver = z.infer<typeof zDriver>;
+// export type tDriver = z.infer<typeof zDriver>;
 export type tDriverManagement = z.infer<typeof zDriverManagement>;
 export type tLocalCardKey = z.infer<typeof zLocalCardKeys>;
 export type tOrder = z.infer<typeof zOrder>;
@@ -368,7 +368,7 @@ export type tOrderProduct = z.infer<typeof zOrderProducts>;
 export type Database = {
   reports: tReport;
   collections: tCollection;
-  drivers: tDriver;
+  // drivers: tDriver;
   driverManagements: tDriverManagement;
   localCardKeys: tLocalCardKey;
   orders: tOrder;
@@ -385,53 +385,53 @@ export type Database = {
 
 export const tProductDescriptions = {
   _: "product_description",
-  ...zodSchemaToObject(zProductDescriptions),
+  ...zodSchemaToObject(zProductDescriptions)
 };
 
 export const tCollections = {
   _: "collections" as const,
-  ...zodSchemaToObject(zCollection),
+  ...zodSchemaToObject(zCollection)
 };
-export const tDrivers = {
-  _: "drivers" as const,
-  ...zodSchemaToObject(zDriver),
-};
+// export const tDrivers = {
+//   _: "drivers" as const,
+//   ...zodSchemaToObject(zDriver),
+// };
 export const tDriverManagements = {
   _: toSnakeCase("driverManagements"),
-  ...zodSchemaToObject(zDriverManagement),
+  ...zodSchemaToObject(zDriverManagement)
 };
 export const tLocalCardKeys = {
   _: toSnakeCase("localCardKeys"),
-  ...zodSchemaToObject(zLocalCardKeys),
+  ...zodSchemaToObject(zLocalCardKeys)
 };
 export const tOrders = {
   _: "orders" as const,
-  ...zodSchemaToObject(zOrder),
+  ...zodSchemaToObject(zOrder)
 };
 export const tOrderProducts = {
   _: "order_products",
-  ...zodSchemaToObject(zOrderProducts),
+  ...zodSchemaToObject(zOrderProducts)
 };
 export const tProducts = {
   _: "products" as const,
-  ...zodSchemaToObject(zProduct),
+  ...zodSchemaToObject(zProduct)
 };
 export const tStores = {
   _: "stores" as const,
-  ...zodSchemaToObject(zStore),
+  ...zodSchemaToObject(zStore)
 };
 export const tTransactions = {
   _: "transactions" as const,
-  ...zodSchemaToObject(zTransaction),
+  ...zodSchemaToObject(zTransaction)
 };
 export const tCustomers = {
   _: "customers" as const,
-  ...zodSchemaToObject(zCustomer),
+  ...zodSchemaToObject(zCustomer)
 };
 
 export const tCollections_products = {
   _: toSnakeCase("collectionsProducts"),
-  ...zodSchemaToObject(zCollectionsProducts),
+  ...zodSchemaToObject(zCollectionsProducts)
 };
 
 ////////////////////

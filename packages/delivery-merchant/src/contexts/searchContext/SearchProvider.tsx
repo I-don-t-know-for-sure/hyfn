@@ -5,7 +5,9 @@ import { createContext, useContext } from "react";
 
 export const SearchContext = createContext(undefined);
 
-const SearchProvider: React.FC = ({ children }) => {
+const SearchProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   return <SearchContext.Provider value={""}>{children}</SearchContext.Provider>;
 };
 

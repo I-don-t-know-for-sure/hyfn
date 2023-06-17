@@ -12,7 +12,7 @@ export const isLocalCardTransactionValidated = async ({
   TerminalId,
   secretKey,
   includeLocalCardTransactionFeeToPrice = false,
-  amount: amountFromTransaction,
+  amount: amountFromTransaction
 }: {
   transactionId: string;
   MerchantId: string;
@@ -49,7 +49,7 @@ export const isLocalCardTransactionValidated = async ({
       method: "post",
 
       headers: {
-        "content-type": "application/json",
+        "content-type": "application/json"
       },
 
       data: {
@@ -59,8 +59,8 @@ export const isLocalCardTransactionValidated = async ({
         DisplayLength: 1,
         DisplayStart: 0,
         DateTimeLocalTrxn: `${now.getTime()}`,
-        SecureHash: hashed,
-      },
+        SecureHash: hashed
+      }
     });
   } catch (error) {
     console.log(

@@ -1,7 +1,7 @@
 import {
   ColorScheme,
   ColorSchemeProvider,
-  MantineProvider,
+  MantineProvider
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
@@ -17,18 +17,18 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import {
   DatesProvider,
   MonthPickerInput,
-  DatePickerInput,
+  DatePickerInput
 } from "@mantine/dates";
 import "dayjs/locale/ar-ly";
 import { useGetUserDocument } from "hooks/useGetUserDocument";
 import { Auth } from "aws-amplify";
-const Providers: React.FC = ({ children }) => {
+const Providers: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const queryClient = new QueryClient();
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
     defaultValue: "light",
-    getInitialValueInEffect: true,
+    getInitialValueInEffect: true
   });
 
   const toggleColorScheme = (value?: ColorScheme) =>
@@ -39,14 +39,12 @@ const Providers: React.FC = ({ children }) => {
       <UserProvider
         Auth={Auth}
         useGetUserDocument={useGetUserDocument}
-        queryClient={queryClient}
-      >
+        queryClient={queryClient}>
         <FixedComponentProvider>
           <CartProvider>
             <ColorSchemeProvider
               colorScheme={colorScheme}
-              toggleColorScheme={toggleColorScheme}
-            >
+              toggleColorScheme={toggleColorScheme}>
               <MantineProvider
                 theme={{
                   colorScheme,
@@ -55,10 +53,10 @@ const Providers: React.FC = ({ children }) => {
                     sm: "576",
                     md: "870",
                     lg: "980",
-                    xl: "1200",
+                    xl: "1200"
                   },
 
-                  primaryColor: "green",
+                  primaryColor: "green"
                 }}
                 // styles={{
                 //   Button: (theme, ButtonParams) => ({
@@ -69,8 +67,7 @@ const Providers: React.FC = ({ children }) => {
                 //   }),
                 // }}
                 withGlobalStyles
-                withNormalizeCSS
-              >
+                withNormalizeCSS>
                 <Notifications />
                 <ImageProvider>
                   <LocationProvider>
@@ -80,9 +77,8 @@ const Providers: React.FC = ({ children }) => {
                           settings={{
                             locale: "ar-ly",
                             firstDayOfWeek: 0,
-                            weekendDays: [0],
-                          }}
-                        >
+                            weekendDays: [0]
+                          }}>
                           {children}
                         </DatesProvider>
                       </CustomerDataProvider>

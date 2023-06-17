@@ -47,55 +47,9 @@ export const updateProductHandler = async ({
       .selectAll()
       .where("id", "=", productId)
       .executeTakeFirstOrThrow();
-    // const oldCollections = await db
-    //   .selectFrom("collectionsProducts")
-    //   .selectAll()
-    //   .where("productId", "=", productId)
-    //   .execute();
+
     const collectionsIds =
       collections?.map((collection) => collection.value) || [];
-    // const addedCollections = collections.filter((collection) => {
-    //   const oldCollectionExist = oldCollections.find((oldCollection) => {
-    //     return oldCollection.collectionId === collection.value;
-    //   });
-
-    //   if (oldCollectionExist) {
-    //     return false;
-    //   }
-    //   return true;
-    // });
-
-    // const removedCollections = oldCollections.filter((newCollection) => {
-    //   const oldCollectionExist = collections.find(
-    //     (oldCollection) => oldCollection.value === newCollection.collectionId
-    //   );
-
-    //   if (oldCollectionExist) {
-    //     return false;
-    //   }
-    //   return true;
-    // });
-
-    // if (addedCollections.length > 0) {
-    //   const newCollections = addedCollections.map((collection) => ({
-    //     collectionId: collection.value,
-    //     productId
-    //   }));
-    //   await trx
-    //     .insertInto("collectionsProducts")
-    //     .values(newCollections)
-    //     .execute();
-    // }
-    // if (removedCollections.length > 0) {
-    //   const removedRelationsRowsIds = removedCollections.map(
-    //     (relation) => relation.id
-    //   );
-
-    //   await trx
-    //     .deleteFrom("collectionsProducts")
-    //     .where(sql`id in (${sql.join(removedRelationsRowsIds)})`)
-    //     .execute();
-    // }
 
     const updatedImages = oldProductDoc?.images?.filter(
       (image) => !deletedImages?.some((deletedImage) => deletedImage === image)
@@ -106,9 +60,6 @@ export const updateProductHandler = async ({
     if (deletedImages?.length > 0) {
       await deleteImages(deletedImages);
     }
-    // if (removeBackgroundImages?.length > 0) {
-    //   removeBackgrounds({ keys: removeBackgroundImages, storeId: id });
-    // }
 
     const images =
       Array.isArray(updatedImages) && Array.isArray(urls)

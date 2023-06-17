@@ -5,7 +5,9 @@ import { createContext, useContext } from "react";
 
 export const ImageContext = createContext(undefined);
 
-const ImageProvider: React.FC = ({ children }) => {
+const ImageProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   // make this type safe
   // const updateUserInfo = useCallback(
   //   (newInfo: any) => {
@@ -21,9 +23,8 @@ const ImageProvider: React.FC = ({ children }) => {
     <ImageContext.Provider
       value={{
         url: `${import.meta.env.VITE_APP_BUCKET_URL}/`,
-        screenSizes: ["mobile", "tablet"],
-      }}
-    >
+        screenSizes: ["mobile", "tablet"]
+      }}>
       {children}
     </ImageContext.Provider>
   );

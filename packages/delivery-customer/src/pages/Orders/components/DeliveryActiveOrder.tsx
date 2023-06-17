@@ -7,7 +7,7 @@ import {
   Image,
   LoadingOverlay,
   Table,
-  Text,
+  Text
 } from "@mantine/core";
 import React from "react";
 
@@ -18,8 +18,6 @@ import OrderActionMenu from "./OrderActionMenu";
 
 import { useRefreshOrderDocument } from "../hooks/useRefreshOrderDocument";
 
-import ProposalsModal from "./ProposalsModal";
-
 import PayModal from "components/PayModal";
 import DeliveredModal from "components/DeliveredModal";
 import { CopyTextButton } from "hyfn-client";
@@ -28,7 +26,6 @@ import { orderTypesObject, storeStatusObject } from "hyfn-types";
 interface DeliveryActiveOrderProps {
   index: any;
   order: any;
-  driver: any;
 
   cancelOrder: any;
   balance: number;
@@ -38,15 +35,15 @@ interface DeliveryActiveOrderProps {
 
 const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
   cancelOrder,
-  driver,
+
   index,
   order,
 
   serviceFee,
-  serviceFeePaid,
+  serviceFeePaid
 }) => {
   const { refetch, isLoading } = useRefreshOrderDocument({
-    orderId: order.id,
+    orderId: order.id
   });
   return (
     <Card key={index} mt={8}>
@@ -54,7 +51,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
         visible={isLoading}
         sx={{
           width: "100%",
-          height: "100%",
+          height: "100%"
         }}
       />
       {
@@ -65,8 +62,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
               storeStatusObject.pending
                 ? "red"
                 : "green"
-            }
-          >
+            }>
             {order?.storeStatus[order?.storeStatus.length - 1]}
           </Badge>
 
@@ -74,8 +70,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
             <ActionIcon
               onClick={() => {
                 refetch();
-              }}
-            >
+              }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="icon icon-tabler icon-tabler-refresh"
@@ -86,8 +81,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
                 stroke="currentColor"
                 fill="none"
                 strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+                strokeLinejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                 <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
                 <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
@@ -95,85 +89,29 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
             </ActionIcon>
             <OrderActionMenu
               orderType={order.orderType}
-              isOrderTakenByDriver={driver?.id !== ""}
+              isOrderTakenByDriver={order.storeStatus.includes("paid")}
               orderId={order.id}
             />
           </Group>
         </Group>
       }
-      <Group
-        position={driver?.id !== "" && !serviceFeePaid ? "apart" : "right"}
-      >
-        {/* {order.orders[0].orderStatus === ORDER_STATUS_ACCEPTED &&
-          !serviceFeePaid && (
-            <PayServiceFeeModal
-              orderId={order.id}
-              balance={balance}
-              serviceFee={serviceFee}
-              customerBalanceIsSufficient={
-                !!largerEq(parseFloat(balance as any), parseFloat(serviceFee))
-              }
-            />
-          )} */}
-
-        {/* <Group position="right">
-          <>
-            <ActionIcon
-              onClick={() => {
-                refetch();
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon icon-tabler icon-tabler-refresh"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
-                <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
-              </svg>
-            </ActionIcon>
-            <OrderActionMenu
-              orderType={order.orderType}
-              isOrderTakenByDriver={driver?.id !== ""}
-              orderId={order.id}
-            />
-          </>
-        </Group> */}
-      </Group>
+      <Group position={"right"}></Group>
       <Group
         mt={8}
         mb={8}
         // sx={{
         //   verticalAlign: "baseline",
         // }}
-        position="apart"
-      >
+        position="apart">
         <Box
           sx={(theme) => ({
             [theme.fn.smallerThan("sm")]: {
               maxWidth: "180px",
-              overflow: "hidden",
-            },
-          })}
-        >
+              overflow: "hidden"
+            }
+          })}>
           <CopyTextButton justText value={order.id} />
         </Box>
-
-        {order.orderType === orderTypesObject.Delivery &&
-          !order.acceptedProposal && (
-            <ProposalsModal
-              orderId={order.id}
-              proposals={order?.proposals || []}
-            />
-          )}
       </Group>
 
       {order.stores.map((store) => {
@@ -184,29 +122,19 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
+              alignItems: "center"
+            }}>
             <Group position="apart">
               <Text
                 variant="text"
                 weight={600}
                 sx={{
                   fontSize: "24px",
-                  margin: "4px auto",
-                }}
-              >
+                  margin: "4px auto"
+                }}>
                 {store.storeName || store.businessName}
               </Text>
-              {/* {order.orders[0].orderStatus === ORDER_STATUS_ACCEPTED && (
-                <PayStoreForPickupOrder
-                  order={order}
-                  orderId={order.id}
-                  storeId={store.id}
-                  storeProducts={store.addedProducts}
-                  store={store}
-                />
-              )} */}
+
               {true && (
                 <PayModal
                   order={order}
@@ -216,33 +144,17 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
                   store={store}
                 />
               )}
-              {/* {Array.isArray(store.transactions) && (
-                <TransactionModal
-                  validateTransaction={validateTransaction}
-                  transactions={store.transactions}
-                />
-              )} */}
             </Group>
             <Box
               sx={(theme) => ({
                 [theme.fn.smallerThan("sm")]: {
-                  overflowX: "scroll",
+                  overflowX: "scroll"
                 },
-                width: "100%",
-              })}
-            >
+                width: "100%"
+              })}>
               <Table>
                 <thead>
                   <tr>
-                    {/* <th
-                    style={{
-                      margin: '0px auto',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                    >
-                    <Text sx={{}}>{t('Index')}</Text>
-                  </th> */}
                     <th>{t("Name")}</th>
                     <th>{t("Quantity")}</th>
                     <th>{t("Image")}</th>
@@ -267,7 +179,7 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
                               width: "45px",
                               height: "45px",
                               maxWidth: "45px",
-                              maxHeight: "45px",
+                              maxHeight: "45px"
                             }}
                             src={`${
                               import.meta.env.VITE_APP_BUCKET_URL
@@ -287,29 +199,6 @@ const DeliveryActiveOrder: React.FC<DeliveryActiveOrderProps> = ({
                 </tbody>
               </Table>
             </Box>
-            {/* we can uncomment this when we start allowing orders to have more than one store in them */}
-            {/* <Box sx={{}}>
-              {true && (
-                <Group mb={8}>
-                <Button
-                onClick={() => {
-                  console.log({
-                    orderId: order.id,
-                    storeId: store.id,
-                  });
-
-                      cancelOrder({
-                        orderId: order.id,
-                        storeId: store.id,
-                      });
-                    }}
-                  >
-                    {t('cancel')}
-                  </Button>
-                
-                </Group>
-              )}
-            </Box> */}
           </Box>
         );
       })}

@@ -5,7 +5,9 @@ import { createContext, ReactNode, useContext, useState } from "react";
 
 export const FixedComponentContext = createContext(undefined);
 
-const FixedComponentProvider: React.FC = ({ children }) => {
+const FixedComponentProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   const [fixedComponent, setFixedComponent] = useState<JSX.Element[]>([]);
 
   return (

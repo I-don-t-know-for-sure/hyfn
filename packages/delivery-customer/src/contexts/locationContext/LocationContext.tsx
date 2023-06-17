@@ -23,7 +23,9 @@ export const LocationContext =
     ]
   >(undefined);
 
-const LocationProvider: React.FC = ({ children }) => {
+const LocationProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => {
   // make this type safe
   // const updateUserInfo = useCallback(
   //   (newInfo: any) => {
@@ -39,7 +41,7 @@ const LocationProvider: React.FC = ({ children }) => {
     defaultValue: {
       city: "Tripoli",
       country: "Libya",
-      coords: [3.33, 3.33],
+      coords: [3.33, 3.33]
     },
     deserialize(value) {
       const parsedValue = JSON.parse(value);
@@ -47,10 +49,10 @@ const LocationProvider: React.FC = ({ children }) => {
         ...parsedValue,
         coords: [
           parseFloat(parsedValue.coords[0]),
-          parseFloat(parsedValue.coords[1]),
-        ],
+          parseFloat(parsedValue.coords[1])
+        ]
       };
-    },
+    }
   });
   return (
     <LocationContext.Provider value={[location, setLocation]}>

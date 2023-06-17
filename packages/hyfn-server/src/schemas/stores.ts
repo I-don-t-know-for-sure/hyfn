@@ -64,7 +64,7 @@ export const stores = pgTable(
     monthlySubscriptionPaid: boolean("monthly_subscription_paid").default(
       false
     ),
-    // subscriptionInfo: jsonb("subscriptionInfo"),
+
     localCardApiKeyId: uuid("local_card_api_key_id"),
     transactionId: uuid("transaction_id"),
 
@@ -72,14 +72,10 @@ export const stores = pgTable(
     includeLocalCardFeeToPrice: boolean(
       "include_local_card_fee_to_price"
     ).default(true),
-    onlyStoreDriversCanTakeOrders: boolean(
-      "only_store_drivers_can_take_orders"
-    ).default(false),
-    includeDeliveryFee: boolean("include_delivery_fee").default(false),
+
     deliverTo: varchar("deliver_to", { enum: citiesArray }).array(),
-    deliverWithStoreDrivers: boolean("deliver_with_store_drivers").default(
-      false
-    )
+    acceptDeliveryOrders: boolean("accept_delivery_orders").default(true),
+    acceptPickupOrders: boolean("accept_pickup_orders").default(true)
   },
   (table) => {
     return {
