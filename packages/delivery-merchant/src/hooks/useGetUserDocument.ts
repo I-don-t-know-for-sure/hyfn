@@ -20,7 +20,7 @@ export const useGetUserDocument = ({ userId }: { userId: string }) => {
 
         const userDoc = await fetchApi({
           url: "getStoreDocument",
-          arg: [{ userId: userId }],
+          arg: [{ userId: userId }]
         });
 
         return userDoc;
@@ -31,6 +31,7 @@ export const useGetUserDocument = ({ userId }: { userId: string }) => {
     {
       staleTime: 300000,
       cacheTime: 350000,
+      retry: false
     }
   );
 };

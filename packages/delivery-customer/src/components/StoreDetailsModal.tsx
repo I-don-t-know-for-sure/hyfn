@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
   TextInput,
-  Tooltip,
+  Tooltip
 } from "@mantine/core";
 
 import { t } from "util/i18nextFix";
@@ -23,7 +23,7 @@ interface StoreDetailsModalProps {
 }
 
 const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
-  storeDetails,
+  storeDetails
 }) => {
   console.log(
     "🚀 ~ file: StoreDetailsModal.tsx:13 ~ storeDetails",
@@ -47,8 +47,7 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
                 <Tooltip
                   label={copied ? "Copied" : "Copy"}
                   withArrow
-                  position="right"
-                >
+                  position="right">
                   <ActionIcon color={copied ? "teal" : "gray"} onClick={copy}>
                     {copied ? (
                       <svg
@@ -61,19 +60,16 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
                         stroke="currentColor"
                         fill="none"
                         strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
+                        strokeLinejoin="round">
                         <path
                           stroke="none"
                           d="M0 0h24v24H0z"
-                          fill="none"
-                        ></path>
+                          fill="none"></path>
                         <path
                           d="M5 12l5 5l10 -10"
                           style={{
-                            fontSize: 16,
-                          }}
-                        ></path>
+                            fontSize: 16
+                          }}></path>
                       </svg>
                     ) : (
                       <svg
@@ -86,20 +82,17 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
                         stroke="currentColor"
                         fill="none"
                         strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
+                        strokeLinejoin="round">
                         <path
                           stroke="none"
                           d="M0 0h24v24H0z"
-                          fill="none"
-                        ></path>
+                          fill="none"></path>
                         <path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"></path>
                         <path
                           d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"
                           style={{
-                            fontSize: 16,
-                          }}
-                        ></path>
+                            fontSize: 16
+                          }}></path>
                       </svg>
                     )}
                   </ActionIcon>
@@ -107,8 +100,7 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
               )}
             </CopyButton>
           </Group>
-        }
-      >
+        }>
         <Stack>
           <Group grow>
             <TextInput
@@ -125,8 +117,9 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
 
           <MultiSelect
             sx={{
-              width: "100%",
+              width: "100%"
             }}
+            label={t("Store type")}
             data={storeTypesArray.map((type) => {
               return { label: t(type), value: type };
             })}
@@ -139,13 +132,12 @@ const StoreDetailsModal: React.FC<StoreDetailsModalProps> = ({
         onClick={() => setOpened(true)}
         sx={{
           width: "fit-content",
-          hight: "fit-content",
-        }}
-      >
+          hight: "fit-content"
+        }}>
         {t("More info")}
         <BsInfoCircle
           style={{
-            marginLeft: "4px",
+            marginLeft: "4px"
           }}
         />
       </ActionIcon>

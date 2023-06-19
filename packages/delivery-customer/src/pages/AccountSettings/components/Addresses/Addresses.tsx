@@ -82,14 +82,16 @@ const ManageAddresses: React.FC<ManageAddressesProps> = ({}) => {
           }>
           {t("Add address")}
         </Button>
-        <Button
-          sx={{
-            width: "100%",
-            marginBottom: "24px"
-          }}
-          onClick={() => mutate({ addresses })}>
-          {t("Update")}
-        </Button>
+        {addresses?.length > 0 && (
+          <Button
+            sx={{
+              width: "100%",
+              marginBottom: "24px"
+            }}
+            onClick={() => mutate({ addresses })}>
+            {t("Update")}
+          </Button>
+        )}
       </Center>
     </Card>
   );

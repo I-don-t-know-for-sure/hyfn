@@ -18,13 +18,7 @@ export const getCollectionProducts = async ({
   client,
   db
 }: GetCollectionProductsProps) => {
-  const {
-    country,
-    storefront,
-    collectionid,
-    documents = 25,
-    lastDocNumber
-  } = arg[0];
+  const { collectionid, documents = 25, lastDocNumber } = arg[0];
 
   /* const collectionProductRelations = await db
     .selectFrom('collectionsProducts')

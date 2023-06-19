@@ -9,7 +9,7 @@ import {
   Image,
   Loader,
   Table,
-  Text,
+  Text
 } from "@mantine/core";
 
 import OrderCard from "../../../pages/Orders/components/OrderCard";
@@ -26,7 +26,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
     isLoading,
     isError,
     error,
-    fetchNextPage,
+    fetchNextPage
   } = useGetOrderHistory();
   console.log("🚀 ~ file: OrderHistory.tsx:13 ~ orders", orders);
 
@@ -51,17 +51,16 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({}) => {
         <Button
           sx={{
             width: "100%",
-            maxWidth: "450px",
+            maxWidth: "450px"
           }}
           onClick={() =>
             fetchNextPage({
               pageParam:
                 orders?.pages[orders?.pages?.length - 1][
                   orders?.pages[orders.pages?.length - 1]?.length - 1
-                ]?.id,
+                ]?.id
             })
-          }
-        >
+          }>
           {t("Load more")}
         </Button>
       </Center>

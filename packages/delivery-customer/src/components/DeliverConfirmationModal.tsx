@@ -13,7 +13,7 @@ interface DeliveryConfirmationModalProps {
 
 const DeliveryConfirmationModal: React.FC<DeliveryConfirmationModalProps> = ({
   orderId,
-  confirmationCode,
+  confirmationCode
 }) => {
   const [opened, setOpened] = useState(false);
   const { mutate } = useConfirmOrderDelivery();
@@ -23,8 +23,7 @@ const DeliveryConfirmationModal: React.FC<DeliveryConfirmationModalProps> = ({
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={t("Confirm")}
-      >
+        title={t("Confirm")}>
         <Container>
           {/* <StarRating onRate={(newRating: number) => setRating(newRating)} />
 
@@ -47,9 +46,8 @@ const DeliveryConfirmationModal: React.FC<DeliveryConfirmationModalProps> = ({
         m={"24px  auto 0px auto"}
         onClick={() => setOpened(true)}
         sx={{
-          maxWidth: "450px",
-        }}
-      >
+          maxWidth: "450px"
+        }}>
         {t("Confirm Delivery")}
       </Button>
     </>

@@ -59,6 +59,7 @@
   "dependencies": {
     "//": "test end",
     "@aws-sdk/client-kms": "^3.271.0",
+    "workbox-build":"^6.5.4",
     "@emotion/react": "^11.11.0",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.8.1",

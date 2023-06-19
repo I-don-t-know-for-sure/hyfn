@@ -3,12 +3,13 @@ import { fetchApi } from "utils/fetch";
 
 export const useUpdateOrderSettings = () => {
  return useMutation(async ({acceptPickupOrders,acceptDeliveryOrders}:{acceptDeliveryOrders: boolean, acceptPickupOrders: boolean}) => {
-    const result = await fetchApi({
+   await fetchApi({
 url:'updateOrderSettings',
-      arg: [{
+      arg:[{
 acceptDeliveryOrders,
         acceptPickupOrders
       }]
     })
   });
 };
+

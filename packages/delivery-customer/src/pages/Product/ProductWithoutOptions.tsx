@@ -2,6 +2,7 @@ import {
   ActionIcon,
   AspectRatio,
   Box,
+  Breadcrumbs,
   Button,
   Container,
   Divider,
@@ -10,6 +11,7 @@ import {
   NumberInput,
   NumberInputHandlers,
   Space,
+  Stack,
   Text
 } from "@mantine/core";
 import { useCart } from "../../contexts/cartContext/Provider";
@@ -19,7 +21,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 import Image from "../../components/Image";
-import { Image as CoreImage } from "hyfn-client";
+import { Image as CoreImage, crumbs, useURLParams } from "hyfn-client";
 import { useFixedComponent } from "../../contexts/fixedComponentContext/FixedComponentProvider";
 
 import { randomId } from "@mantine/hooks";
@@ -29,7 +31,11 @@ import { storeServiceFee } from "hyfn-types";
 import { ImageModal } from "hyfn-client";
 import { useImage } from "contexts/imageContext/ImageProvider";
 import HtmlRenderer from "components/HtmlReader";
-import { calculatePrecision, calculateStep } from "./functions";
+import {
+  calculatePrecision,
+  calculateStep,
+  productCrumbsArray
+} from "./functions";
 import { Carousel } from "@mantine/carousel";
 
 interface ProductWithoutOptionsProps {}
@@ -37,12 +43,15 @@ interface ProductWithoutOptionsProps {}
 const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
   const { url, screenSizes } = useImage();
 
-  const { storefront, country, city, productId } = useParams<{
-    storefront: string;
-    country: string;
-    city: string;
-    productId: string;
-  }>();
+  // const { storefront, country, city, productId } = useParams<{
+  //   storefront: string;
+  //   country: string;
+  //   city: string;
+  //   productId: string;
+  // }>();
+  const { params, crumbsMaker } = useURLParams();
+  const storefront = params.get("storeId");
+  const productId = params.get("productId");
   // const { state } = useLocation();
   // const { orderType } = state as { orderType: string };
   const [product, setProduct] = useState<any>();
@@ -54,7 +63,7 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
     isFetched,
     isError,
     error
-  } = useGetProduct({ storefront, city, country, productId }, true);
+  } = useGetProduct({ storefront, productId }, true);
   const [, setFixedComponent] = useFixedComponent();
   const handlers = useRef<NumberInputHandlers>();
   const { addProductWithNoOptionsToCart, setCartInfo, cart } = useCart();
@@ -157,8 +166,8 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
                   storeDoc,
                   { ...product, qty, key: randomId() },
                   setCartInfo,
-                  city,
-                  country,
+                  // city,
+                  // country,
                   orderType
                 );
               }}>
@@ -180,9 +189,9 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
     setFixedComponent,
     addProductWithNoOptionsToCart,
     storeDoc,
-    product,
-    city,
-    country
+    product
+    // city,
+    // country
   ]);
 
   if (isError) {
@@ -191,105 +200,111 @@ const ProductWithoutOptions: React.FC<ProductWithoutOptionsProps> = ({}) => {
   if (isLoading) {
     return <Loader />;
   }
+
   return (
     product && (
       <Container
         sx={{
           marginBottom: "56px"
         }}>
-        <Box>
-          <Carousel>
-            {product.images.map((image) => {
-              return (
-                <Carousel.Slide>
-                  <ImageModal
-                    sx={(theme) => ({
-                      maxWidth: 500,
-                      borderRadius: "6px",
-                      maxHeight: 500,
-                      [theme.fn.largerThan("sm")]: {
-                        maxWidth: 300,
-                        maxHeight: 300
+        <Stack>
+          <Breadcrumbs>
+            {crumbs({ items: productCrumbsArray({ params, crumbsMaker }) })}
+          </Breadcrumbs>
+          <Box>
+            <Carousel>
+              {product.images.map((image) => {
+                return (
+                  <Carousel.Slide>
+                    <ImageModal
+                      sx={(theme) => ({
+                        maxWidth: 500,
+                        borderRadius: "6px",
+                        maxHeight: 500,
+                        [theme.fn.largerThan("sm")]: {
+                          maxWidth: 300,
+                          maxHeight: 300
+                        }
+                      })}
+                      ImageComponent={
+                        <AspectRatio
+                          ratio={500 / 500}
+                          sx={(theme) => ({
+                            maxWidth: 500,
+                            borderRadius: "6px",
+                            maxHeight: 500,
+                            [theme.fn.largerThan("sm")]: {
+                              maxWidth: 300,
+                              maxHeight: 300
+                            }
+                          })}
+                          mx="auto">
+                          <Image
+                            radius={6}
+                            sx={{
+                              width: "100%",
+
+                              height: "100px"
+                            }}
+                            imageName={
+                              product?.images?.length > 0
+                                ? image
+                                : "c72e349a9bc184cbdcfb1386060d4b5b"
+                            }
+                          />
+                        </AspectRatio>
                       }
-                    })}
-                    ImageComponent={
-                      <AspectRatio
-                        ratio={500 / 500}
-                        sx={(theme) => ({
-                          maxWidth: 500,
-                          borderRadius: "6px",
-                          maxHeight: 500,
-                          [theme.fn.largerThan("sm")]: {
-                            maxWidth: 300,
-                            maxHeight: 300
-                          }
-                        })}
-                        mx="auto">
-                        <Image
-                          radius={6}
-                          sx={{
-                            width: "100%",
+                      src={`${url}preview/${image}`}
+                    />
+                  </Carousel.Slide>
+                );
+              })}
+            </Carousel>
 
-                            height: "100px"
-                          }}
-                          imageName={
-                            product?.images?.length > 0
-                              ? image
-                              : "c72e349a9bc184cbdcfb1386060d4b5b"
-                          }
-                        />
-                      </AspectRatio>
-                    }
-                    src={`${url}preview/${image}`}
-                  />
-                </Carousel.Slide>
-              );
-            })}
-          </Carousel>
-
-          {/* <Container> */}
-          <Text
-            sx={{
-              fontSize: "28px"
-            }}>
-            {product.title}
-          </Text>
-          <Group spacing={3}>
-            <Text>{storeDoc?.currency || "LYD"}</Text>
+            {/* <Container> */}
             <Text
-              sx={(theme) => ({
-                fontSize: "24px",
-                fontWeight: "bold"
-              })}>
-              {` ${product.price - product.price * storeServiceFee} `}
+              sx={{
+                fontSize: "28px"
+              }}>
+              {product.title}
             </Text>
-            <Text>{t("Per")}</Text>
-            <Text>{t(product?.measurementSystem)}</Text>
-          </Group>
-          {/* </Container> */}
-          <Space h={12} />
-        </Box>
+            <Group spacing={3}>
+              <Text>{storeDoc?.currency || "LYD"}</Text>
+              <Text
+                sx={(theme) => ({
+                  fontSize: "24px",
+                  fontWeight: "bold"
+                })}>
+                {` ${product.price - product.price * storeServiceFee} `}
+              </Text>
+              <Text>{t("Per")}</Text>
+              <Text>{t(product?.measurementSystem)}</Text>
+            </Group>
+            {/* </Container> */}
+            <Space h={12} />
+          </Box>
 
-        <Divider
-          labelPosition="center"
-          label={
-            <Text weight={700} size={16}>
-              {t("Description")}
-            </Text>
-          }
-        />
+          <Divider
+            labelPosition="center"
+            label={
+              <Text weight={700} size={16}>
+                {t("Description")}
+              </Text>
+            }
+          />
 
-        <Box
-          sx={{
-            width: "100%",
-            // overflowX: "auto",
-            display: "flex",
-            flexWrap: "wrap",
-            whiteSpace: "normal"
-          }}>
-          <HtmlRenderer htmlString={product.description} />
-          {/* <Text>{product.description}</Text> */}
-        </Box>
+          <Box
+            sx={{
+              width: "100%",
+              // overflowX: "auto",
+              display: "flex",
+              flexWrap: "wrap",
+              whiteSpace: "normal"
+            }}>
+            <HtmlRenderer htmlString={product.description} />
+            {/* <Text>{product.description}</Text> */}
+          </Box>
+        </Stack>
       </Container>
     )
   );

@@ -9,7 +9,7 @@ interface CancelTransactionModalProps {
 }
 
 const CancelTransactionModal: React.FC<CancelTransactionModalProps> = ({
-  transactionId,
+  transactionId
 }) => {
   const [opened, setOpened] = useState(false);
   const { mutate: cancelTransaction } = useCancelTransaction();
@@ -23,8 +23,7 @@ const CancelTransactionModal: React.FC<CancelTransactionModalProps> = ({
             onClick={() => {
               cancelTransaction({ transactionId });
             }}
-            fullWidth
-          >
+            fullWidth>
             {t("Cancel")}
           </Button>
         </Stack>

@@ -1,6 +1,6 @@
 import Menu from "components/Menu/Menu";
 // import RequireAuth from 'components/RequireAuth'
-import WithoutAuth from "components/WithoutAuth";
+
 import BulkUpdateTable from "pages/BulkUpdateTable/BulkUpdateTable";
 import CreateCollection from "pages/Collections/components/CreateCollection";
 import UpdateCollection from "pages/Collections/components/UpdateCollection";
@@ -15,20 +15,16 @@ import ManageProducts from "pages/Manage/Manage";
 import OptionsTable from "pages/OptionsTable/OptionsTable";
 import ActiveOrders from "pages/Orders/Components/ActiveOrders";
 import OrderHistory from "pages/Orders/Components/OrderHistory";
-import OrderHisto from "pages/Orders/Components/OrderHistory";
-import Orders from "pages/Orders/Orders";
-import Payments from "pages/Payments/Payment";
-import ResetPassword from "pages/ResetPassword/ResetPassword";
-import PageNotFound from "components/PageNotFound";
 
-import StoreInfo from "pages/StoreInfo/StoreInfo";
+import ResetPassword from "pages/ResetPassword/ResetPassword";
+
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home/Home";
 // import { Helmet } from "react-helmet-async";
 import { useLocalStorage } from "@mantine/hooks";
-import { useUserCheck } from "hooks/useUserCheck";
+
 import CreateStore from "pages/CreateStore/CreateStore";
 
 import { Amplify } from "aws-amplify";
@@ -36,8 +32,9 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
 import { fetchApi } from "utils/fetch";
 import Page from "components/Page";
-import { log } from "console";
+
 import { useUser } from "contexts/userContext/User";
+import Settings from "pages/Settings/Settings";
 
 function App() {
   Amplify.configure({
@@ -46,19 +43,19 @@ function App() {
       region: import.meta.env.VITE_APP_COGNITO_REGION,
       userPoolId: import.meta.env.VITE_APP_USER_POOL_ID,
       identityPoolId: import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID,
-      userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID,
+      userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID
     },
     Storage: {
       region: import.meta.env.VITE_APP_COGNITO_REGION,
       bucket: import.meta.env.VITE_APP_BUCKET,
-      identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
-    },
+      identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID
+    }
   });
 
   const { loggedIn } = useUser();
   const [notificationTokenSent, setNotificationTokenSent] = useLocalStorage({
     key: "notificationTokenSent",
-    defaultValue: false,
+    defaultValue: false
   });
   useEffect(() => {
     console.log("update");
@@ -81,7 +78,7 @@ function App() {
                 storageBucket: import.meta.env.VITE_APP_FIREBASE_STORAGE_BUCKET,
                 messagingSenderId: import.meta.env
                   .VITE_APP_FIREBASE_MESSAGING_SENDER_ID,
-                appId: import.meta.env.VITE_APP_FIREBASE_APP_ID,
+                appId: import.meta.env.VITE_APP_FIREBASE_APP_ID
               };
 
               // Initialize Firebase
@@ -90,7 +87,7 @@ function App() {
               const messaging = getMessaging(app);
 
               getToken(messaging, {
-                vapidKey: import.meta.env.VITE_APP_VAPID_KEY,
+                vapidKey: import.meta.env.VITE_APP_VAPID_KEY
               })
                 .then((currentToken) => {
                   if (currentToken) {
@@ -98,7 +95,7 @@ function App() {
                     // send the token to your server to associate it with the user
                     fetchApi({
                       arg: [{ notificationToken: currentToken }],
-                      url: `updateNotificationTokens`,
+                      url: `updateNotificationTokens`
                     })
                       .then((res: any) => {
                         if (res === "success") setNotificationTokenSent(true);
@@ -176,6 +173,14 @@ function App() {
                 </Page>
               }
             />
+            <Route
+              path="settings"
+              element={
+                <Page>
+                  <Settings />
+                </Page>
+              }
+            />
 
             <Route
               path="orderhistory"
@@ -210,14 +215,7 @@ function App() {
                 </Page>
               }
             />
-            <Route
-              path="storeinfo"
-              element={
-                <Page>
-                  <StoreInfo />
-                </Page>
-              }
-            />
+
             <Route
               path="createstore"
               element={
@@ -244,14 +242,6 @@ function App() {
                 </Page>
               }
             />
-            <Route
-              path={"/payments"}
-              element={
-                <Page>
-                  <Payments />
-                </Page>
-              }
-            />
           </Route>
 
           <Route
@@ -263,7 +253,6 @@ function App() {
             }
           />
 
-          <Route path="/login/:firstlogin" element={<LogIn />} />
           <Route path="/login" element={<LogIn />} />
 
           <Route

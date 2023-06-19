@@ -14,7 +14,7 @@ interface PayWithSadadProps {
 
 const PayWithSadad: React.FC<PayWithSadadProps> = ({
   serviceFee,
-  balanceNumber,
+  balanceNumber
 }) => {
   const { mutate: makePaymentWithSadad } = useIncreaseBalanceWithSadad();
   const { mutate: sendOTP } = useSendOTP();
@@ -26,8 +26,8 @@ const PayWithSadad: React.FC<PayWithSadadProps> = ({
       amountToBeAdded: serviceFee,
       OTP: "",
       customerPhone: "",
-      birthYear: "",
-    },
+      birthYear: ""
+    }
   });
   useEffect(() => {
     paymentForm.setFieldValue(
@@ -44,10 +44,9 @@ const PayWithSadad: React.FC<PayWithSadadProps> = ({
           justifyContent: "center",
           alignItems: "baseline",
           [theme.fn.smallerThan("md")]: {
-            marginTop: 12,
-          },
-        })}
-      >
+            marginTop: 12
+          }
+        })}>
         <Group grow m={"8px auto"}>
           <NumberInput
             formatter={(value) =>
@@ -82,10 +81,9 @@ const PayWithSadad: React.FC<PayWithSadadProps> = ({
                     customerPhone: paymentForm.values.customerPhone,
                     birthYear: paymentForm.values.birthYear,
                     OTPSent: setOtpSent,
-                    amount: paymentForm.values.amountToBeAdded,
+                    amount: paymentForm.values.amountToBeAdded
                   });
-            }}
-          >
+            }}>
             {otpSent ? t("Resend OTP") : t("Send OTP")}
           </Button>
         </Group>
@@ -98,10 +96,9 @@ const PayWithSadad: React.FC<PayWithSadadProps> = ({
           justifyContent: "center",
           alignItems: "baseline",
           [theme.fn.smallerThan("md")]: {
-            marginTop: 12,
-          },
-        })}
-      >
+            marginTop: 12
+          }
+        })}>
         <TextInput
           {...paymentForm.getInputProps("OTP")}
           placeholder={t("write the OTP here")}
@@ -109,10 +106,9 @@ const PayWithSadad: React.FC<PayWithSadadProps> = ({
         <Button
           onClick={() => {
             makePaymentWithSadad({
-              OTP: paymentForm.values.OTP,
+              OTP: paymentForm.values.OTP
             });
-          }}
-        >
+          }}>
           {t("Make payment")}
         </Button>
       </Group>

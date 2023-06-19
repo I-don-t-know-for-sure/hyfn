@@ -1,38 +1,50 @@
-interface GetStoreFrontProps extends Omit<MainFunctionProps, 'arg'> {}
-('use strict');
-import { ObjectId } from 'mongodb';
-import { MainFunctionProps, tCollection, tCollections } from 'hyfn-server';
-import { mainWrapper } from 'hyfn-server';
-import { sql } from 'kysely';
-interface GetStoreFrontProps extends Omit<MainFunctionProps, 'arg'> {
+interface GetStoreFrontProps extends Omit<MainFunctionProps, "arg"> {}
+("use strict");
+import { ObjectId } from "mongodb";
+import { MainFunctionProps, tCollection, tCollections } from "hyfn-server";
+import { mainWrapper } from "hyfn-server";
+import { sql } from "kysely";
+interface GetStoreFrontProps extends Omit<MainFunctionProps, "arg"> {
   arg: any[];
 }
-export const getStoreFront = async ({ arg, client, db }: GetStoreFrontProps) => {
+export const getStoreFront = async ({
+  arg,
+  client,
+  db
+}: GetStoreFrontProps) => {
   const storeFrontId = arg[1];
 
   const storeFrontDoc = await db
-    .selectFrom('stores')
-    .innerJoin('collections', (join) =>
-      join.onRef('collections.storeId', '=', 'stores.id').on('collections.isActive', '=', true)
+    .selectFrom("stores")
+    .innerJoin("collections", (join) =>
+      join
+        .onRef("collections.storeId", "=", "stores.id")
+        .on("collections.isActive", "=", true)
     )
-    .select(sql.raw<tCollection[]>(`jsonb_agg(${tCollections._}.*)`).as(tCollections._))
+    .select(
+      sql
+        .raw<tCollection[]>(`jsonb_agg(${tCollections._}.*)`)
+        .as(tCollections._)
+    )
     .select([
-      'stores.id',
-      'acceptingOrders',
-      'address',
-      'city',
-      'country',
-      'lat',
-      'long',
-      'image',
-      'opened',
-      'storeName',
-      'storePhone',
-      'stores.description',
-      'storeType',
+      "stores.id",
+      "acceptingOrders",
+      "address",
+      "city",
+      "country",
+      "lat",
+      "long",
+      "image",
+      "opened",
+      "storeName",
+      "storePhone",
+      "stores.description",
+      "storeType",
+      "stores.acceptDeliveryOrders",
+      "stores.acceptPickupOrders"
     ])
-    .groupBy('stores.id')
-    .where('stores.id', '=', storeFrontId)
+    .groupBy("stores.id")
+    .where("stores.id", "=", storeFrontId)
     .executeTakeFirstOrThrow();
 
   return storeFrontDoc;

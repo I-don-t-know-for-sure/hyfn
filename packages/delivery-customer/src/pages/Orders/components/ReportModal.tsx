@@ -5,7 +5,7 @@ import {
   Stack,
   TextInput,
   Textarea,
-  UnstyledButton,
+  UnstyledButton
 } from "@mantine/core";
 
 import { t } from "util/i18nextFix";
@@ -26,8 +26,7 @@ const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
         opened={opened}
         onClose={() => {
           setOpened(false);
-        }}
-      >
+        }}>
         <Stack>
           <Textarea
             label={t("Your Report")}
@@ -40,8 +39,7 @@ const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
             fullWidth
             onClick={() => {
               submitReport({ orderId, report: { report } });
-            }}
-          >
+            }}>
             {t("Submit")}
           </Button>
         </Stack>
@@ -55,9 +53,8 @@ const ReportModal: React.FC<ReportModalProps> = ({ orderId }) => {
           setOpened(true);
         }}
         sx={{
-          color: "red",
-        }}
-      >
+          color: "red"
+        }}>
         {t("Report")}
       </Button>
       {/* <Menu.Item

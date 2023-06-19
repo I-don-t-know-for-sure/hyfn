@@ -1,4 +1,6 @@
 export const returnsObj = {
+  "You must accept at least one order type":
+    "You must accept at least one order type",
   "amount can not be zero": "amount can not be zero",
   "you are not subscribed": "you are not subscribed",
   "store not paid": "store not paid",
@@ -149,12 +151,19 @@ export const returnsObj = {
     "driver was removed from trusted list",
   "this driver is not in your list": "this driver is not in your list",
   "not enough balance": "not enough balance",
-  "balance was updated": "balance was updated"
+  "balance was updated": "balance was updated",
+  //////////// sign up notification //////////
+  "Sign up successful": "Sign up successful"
+  //////////// sign up notification //////////
 } as const;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const returnsObjArabic = {
+  "You must accept at least one order type": "",
+  //////////// sign up notification //////////
+  "Sign up successful": "",
+  //////////// sign up notification //////////
   "amount can not be zero": "",
   "you are not subscribed": "",
   "store not paid": "",

@@ -5,7 +5,7 @@ import {
   Card,
   Container,
   Group,
-  TextInput,
+  TextInput
 } from "@mantine/core";
 import { randomId, useLocalStorage } from "@mantine/hooks";
 import React from "react";
@@ -33,19 +33,19 @@ export const SignUp: React.FC = () => {
   const [exception, setException] = useState({
     exception: false,
     message: "",
-    code: "",
+    code: ""
   });
 
   const navigate = useNavigate();
   const [customerInfo, setCustomerInfo] = useLocalStorage<any>({
-    key: "customerInfo",
+    key: "customerInfo"
   });
 
   const form = useForm({
     initialValues: {
       email: "",
-      password: "",
-    },
+      password: ""
+    }
   });
 
   useEffect(() => {
@@ -61,10 +61,9 @@ export const SignUp: React.FC = () => {
         // width: '100%',
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "center"
         // alignItems: 'center',
-      }}
-    >
+      }}>
       {exception.exception && (
         <Alert title={t("User Already Exists") as any} color={"red"}>
           {t("An account with this information already exists") as any}
@@ -74,19 +73,17 @@ export const SignUp: React.FC = () => {
         shadow={"md"}
         m={" auto"}
         sx={{
-          width: "380px",
+          width: "380px"
           // alignSelf: 'center',
           // justifySelf: 'center',
-        }}
-      >
+        }}>
         {signUpSuccess ? (
           <Container
             sx={{
               flexDirection: "column",
-              width: "100%",
+              width: "100%"
             }}
-            mb={16}
-          >
+            mb={16}>
             <TextInput
               mb={16}
               sx={{ width: "100%" }}
@@ -102,8 +99,14 @@ export const SignUp: React.FC = () => {
                 try {
                   await confirmSignUp({
                     email: form.values.email,
-                    code: verificationCode,
-                    // navigate,
+                    code: verificationCode
+                  });
+                  navigate("/login", { replace: true });
+                  showNotification({
+                    message: t("You can sign in now"),
+                    color: "green",
+                    autoClose: true,
+                    title: t("Sign up successful")
                   });
                 } catch (error) {
                   const { status, message, name, code } = error as {
@@ -116,8 +119,7 @@ export const SignUp: React.FC = () => {
 
                   console.error(error);
                 }
-              }}
-            >
+              }}>
               {t("Confirm account") as any}
             </Button>
           </Container>
@@ -133,13 +135,13 @@ export const SignUp: React.FC = () => {
                   message: "",
                   loading: true,
                   autoClose: false,
-                  id,
+                  id
                 });
                 const { email, password, ...rest } = values;
                 const trimmedEmail = values.email.trim();
                 await signUp({
                   email: trimmedEmail,
-                  password: values.password,
+                  password: values.password
                 });
                 setSignUpSuccess(true);
                 setCustomerInfo({ email, ...rest });
@@ -149,7 +151,7 @@ export const SignUp: React.FC = () => {
                   color: "green",
                   loading: false,
                   autoClose: false,
-                  id,
+                  id
                 });
               } catch (e) {
                 const { status, message, name, code } = e as {
@@ -168,12 +170,11 @@ export const SignUp: React.FC = () => {
                   color: "red",
                   loading: false,
                   autoClose: true,
-                  id,
+                  id
                 });
                 console.error(e);
               }
-            })}
-          >
+            })}>
             <TextInput
               type="email"
               required
@@ -195,9 +196,8 @@ export const SignUp: React.FC = () => {
             margin: "16px auto 6px auto",
             display: "flex",
             justifyContent: "space-around",
-            alignItems: "baseline",
-          }}
-        >
+            alignItems: "baseline"
+          }}>
           <Box>
             {t("have an account?") as any} <Link to="/login">{t("Login")}</Link>
           </Box>

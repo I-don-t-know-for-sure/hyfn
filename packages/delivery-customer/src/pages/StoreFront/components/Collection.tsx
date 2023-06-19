@@ -8,7 +8,7 @@ import { useGetCollectionProducts } from "pages/Collection/hooks/useGetCollectio
 import React, { useEffect, useRef, useState } from "react";
 
 import { Link } from "react-router-dom";
-import { getPagesLength } from "hyfn-client";
+import { getPagesLength, useURLParams } from "hyfn-client";
 
 interface CollectionProps {
   collectionName: string;
@@ -16,8 +16,8 @@ interface CollectionProps {
   responsive: any;
   orderType: string;
   storefront: any;
-  country: string;
-  city: string;
+  // country: string;
+  // city: string;
   addedProducts: any;
 }
 
@@ -26,10 +26,10 @@ const Collection: React.FC<CollectionProps> = ({
   orderType,
   responsive,
   storefront,
-  country,
-  city,
+  // country,
+  // city,
   collectionId,
-  addedProducts,
+  addedProducts
 }) => {
   const { setCartInfo, addProductToCart, reduceOrRemoveProductFromCart } =
     useCart();
@@ -41,15 +41,16 @@ const Collection: React.FC<CollectionProps> = ({
     fetchNextPage,
     isLoading,
     isFetched,
-    isFetchingNextPage,
+    isFetchingNextPage
   } = useGetCollectionProducts({
     collectionid: collectionId,
-    country: country,
-    storefront: storefront.id,
+    storeId: storefront.id,
+    // country: country,
+    // storefront: storefront.id,
     documents: 5,
-    isOnScreen,
+    isOnScreen
   });
-  console.log("🚀 ~ file: Collection.tsx:67 ~ products:", products);
+
   const [slideIndex, setSlideIndex] = useState(0);
   const [slideIndexChanged, setSlideIndexChanged] = useState(false);
   useEffect(() => {
@@ -64,28 +65,30 @@ const Collection: React.FC<CollectionProps> = ({
       slideIndexChanged
     ) {
       fetchNextPage({
-        pageParam: getPagesLength(products),
+        pageParam: getPagesLength(products)
       });
       setSlideIndexChanged(false);
     }
   }, [slideIndex, products]);
+  const { params } = useURLParams();
+  params.append("collectionName", collectionName);
+  params.append("collectionId", collectionId);
+
   return (
     <Box ref={elementRef} mb={63}>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
+          justifyContent: "space-between"
+        }}>
         <Text weight={700} sx={{ fontSize: "24px" }}>
           {collectionName}
         </Text>
         <Button
           variant="subtle"
           component={Link}
-          to={`/collection/${storefront.id}/${collectionId}/${country}`}
-          state={{ city, country, storeInfo: storefront }}
-        >
+          to={`/collection?${params.toString()}`}
+          state={{ storeInfo: storefront }}>
           {t("show all")}
         </Button>
       </Box>
@@ -100,16 +103,10 @@ const Collection: React.FC<CollectionProps> = ({
             slideSize={"45%"}
             withIndicators={false}
             align={"start"}
-            // slideSize={'10%'}
             onSlideChange={(index) => {
               setSlideIndex(index);
               setSlideIndexChanged(true);
-            }}
-            // autoPlay={false}
-            // autoPlaySpeed={-999999999999}
-            // draggable={false}
-            // responsive={responsive}
-          >
+            }}>
             {products?.pages?.map((page) => {
               return page?.map((product) => {
                 const addProduct = () => {
@@ -117,8 +114,8 @@ const Collection: React.FC<CollectionProps> = ({
                     storefront,
                     product,
                     setCartInfo,
-                    city,
-                    country,
+                    // city,
+                    // country,
                     orderType
                   );
                 };
@@ -129,16 +126,19 @@ const Collection: React.FC<CollectionProps> = ({
                     setCartInfo
                   );
                 };
+                const productParams = new URLSearchParams(params.toString());
+                productParams.append("productId", product?.id);
+                productParams.append("productName", product?.title);
+
                 const productUrl = product?.hasOptions
-                  ? `/product/${storefront?.id}/${country}/${city}/${product?.id}`
-                  : `/product/withnotoptions/${storefront?.id}/${country}/${city}/${product?.id}`;
+                  ? `/product?${productParams.toString()}`
+                  : `/product/withnotoptions?${productParams.toString()}`;
                 return (
                   <Carousel.Slide
                     sx={{
-                      width: "fit-content",
+                      width: "fit-content"
                     }}
-                    key={product?.id}
-                  >
+                    key={product?.id}>
                     <Product
                       currency={storefront.currency}
                       product={product}
@@ -147,8 +147,8 @@ const Collection: React.FC<CollectionProps> = ({
                       addProduct={addProduct}
                       addedProducts={addedProducts}
                       reduceOrRemoveProduct={reduceOrRemoveProduct}
-                      city={city}
-                      country={country}
+                      // city={city}
+                      // country={country}
                       storefront={storefront}
                     />
                   </Carousel.Slide>
@@ -165,9 +165,8 @@ const Collection: React.FC<CollectionProps> = ({
 
                     display: "flex",
                     justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
+                    alignItems: "center"
+                  }}>
                   <Loader />
                 </Box>
                 {/* <Center></Center> */}

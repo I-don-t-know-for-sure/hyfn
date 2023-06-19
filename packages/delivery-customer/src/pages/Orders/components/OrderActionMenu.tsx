@@ -18,7 +18,7 @@ interface OrderActionMenuProps {
 const OrderActionMenu: React.FC<OrderActionMenuProps> = ({
   orderId,
   orderType,
-  isOrderTakenByDriver,
+  isOrderTakenByDriver
 }) => {
   const [opened, setOpened] = useState(false);
   const { mutate: cancelOrder } = useCancelOrder();
@@ -34,13 +34,12 @@ const OrderActionMenu: React.FC<OrderActionMenuProps> = ({
       <Menu.Dropdown>
         <Menu.Item
           sx={{
-            textAlign: "center",
+            textAlign: "center"
           }}
           color={"orange"}
           onClick={() => {
             cancelOrder({ orderId });
-          }}
-        >
+          }}>
           {t("Cancel")}
         </Menu.Item>
         {/* <Menu.Item

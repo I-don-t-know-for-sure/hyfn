@@ -4,7 +4,7 @@ import Image from "components/Image";
 
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 interface StoreCardProps {
   storeName?: string;
@@ -18,11 +18,15 @@ const StoreCard: React.FC<any> = ({
   city,
   country,
   ratingCount,
-  currentRating,
+  currentRating
 }) => {
+  const params = new URLSearchParams();
+  params.append("storeName", storeName);
+  params.append("storeId", id);
+
   return (
     <Card
-      to={`/${id}/${country}/${city}`}
+      to={`/storefront?${params.toString()}`}
       component={Link}
       shadow={"lg"}
       sx={(theme) => ({
@@ -30,9 +34,8 @@ const StoreCard: React.FC<any> = ({
         width: "100%",
         minWidth: "290px",
         display: "flex",
-        flexDirection: "row",
-      })}
-    >
+        flexDirection: "row"
+      })}>
       <Image
         imageName={image[0]}
         // sx={(theme) => ({
@@ -44,12 +47,12 @@ const StoreCard: React.FC<any> = ({
             maxWidth: "33%",
             minWidth: "33%",
             maxHeight: "33%",
-            minHeight: "33%",
+            minHeight: "33%"
           },
           maxWidth: "66%",
           minWidth: "66%",
           maxHeight: "66%",
-          minHeight: "66%",
+          minHeight: "66%"
         })}
         radius={25}
         withPlaceholder

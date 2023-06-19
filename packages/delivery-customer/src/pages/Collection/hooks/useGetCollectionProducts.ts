@@ -4,16 +4,19 @@ import { fetchApi } from "../../../util/fetch";
 
 export const useGetCollectionProducts = ({
   collectionid,
-  country,
-  storefront,
+  // country,
+  storeId,
+  enabled,
   documents,
-  isOnScreen,
+  isOnScreen
 }: {
   documents?: number;
-  country: string;
-  storefront: string;
+  // country: string;
+  storeId: string;
+
   collectionid: string;
   isOnScreen?: boolean;
+  enabled?: boolean;
 }) => {
   console.log("query running ffffffffffffffffffffffffffffffffffffffff");
 
@@ -29,22 +32,23 @@ export const useGetCollectionProducts = ({
       const result = await fetchApi({
         arg: [
           {
-            country,
-            storefront,
+            // country,
+            storeId,
+
             collectionid,
             documents,
-            lastDocNumber: pageParam,
-          },
+            lastDocNumber: pageParam
+          }
         ],
-        url: `getCollectionProducts`,
+        url: `getCollectionProducts`
       });
       return result;
     },
     {
       keepPreviousData: true,
       // getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
-      enabled: isOnScreen,
-      staleTime: 300000,
+      enabled: enabled,
+      staleTime: 300000
     }
   );
 };

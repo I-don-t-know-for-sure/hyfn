@@ -12,7 +12,7 @@ import {
   MdReceipt,
   MdSearch,
   MdSettings,
-  MdSupportAgent,
+  MdSupportAgent
 } from "react-icons/md";
 
 import { t } from "util/i18nextFix";
@@ -38,48 +38,48 @@ export const useConfigurationData = () => {
     {
       label: t("Home"),
       link: "/home",
-      svg: AiFillHome,
+      svg: AiFillHome
     },
     {
       label: t("Orders"),
       link: "/orders/activeorders",
-      svg: MdReceipt,
+      svg: MdReceipt
     },
     {
       label: t("account settings"),
       link: "/accountsettings",
-      svg: MdSettings,
+      svg: MdSettings
     },
     {
       label: t("how the app works"),
       type: "a",
       link: "https://www.facebook.com/109389375211277/posts/pfbid027T9saJqTApHKSDF7c4fPxQbR6JUxZz4Ld28TXA1aVYfxeaNo8hJdc5iuF5SsFTSVl/",
-      svg: AiFillBulb,
+      svg: AiFillBulb
     },
     {
       label: t("help"),
       type: "a",
       link: "https://www.facebook.com/109389375211277/posts/pfbid027T9saJqTApHKSDF7c4fPxQbR6JUxZz4Ld28TXA1aVYfxeaNo8hJdc5iuF5SsFTSVl/",
-      svg: MdSupportAgent,
+      svg: MdSupportAgent
     },
-    {
-      label: t("addresses"),
-      link: "/addresses",
-      svg: MdLocationOn,
-    },
+    // {
+    //   label: t("addresses"),
+    //   link: "/addresses",
+    //   svg: MdLocationOn,
+    // },
 
     {
       label: t("Become a partner store"),
       type: "a",
       link: "https://store.hyfn.xyz",
-      svg: FaStore,
+      svg: FaStore
     },
     {
       label: t("LogOut"),
       svg: MdLogout,
       type: "unstyledButton",
-      function: signOut,
-    },
+      function: signOut
+    }
     // {
     //   label: t('SignUp'),
     //   svg: MdAppRegistration,
@@ -96,7 +96,7 @@ export const useConfigurationData = () => {
     {
       label: t("Home"),
       link: "/home",
-      svg: AiFillHome,
+      svg: AiFillHome
     },
     // {
     //   label: t('Pickup'),
@@ -106,13 +106,13 @@ export const useConfigurationData = () => {
     {
       label: t("Explore"),
       link: "/explore",
-      svg: MdSearch,
+      svg: MdSearch
     },
     {
       label: t("Orders"),
       link: "/orders/activeorders",
-      svg: MdReceipt,
-    },
+      svg: MdReceipt
+    }
   ];
 
   return [links, bottomNavLinks];
@@ -120,7 +120,7 @@ export const useConfigurationData = () => {
 
 export const lngs = {
   en: { nativeName: "English" },
-  ar: { nativeName: "عربي" },
+  ar: { nativeName: "عربي" }
 };
 export const getCountryInfo = () => {
   const countries = [{ label: "Libya", value: "Libya" }];
@@ -167,7 +167,7 @@ export const getCountryInfo = () => {
     { label: t("Farzougha"), value: "Farzougha" },
     { label: t("Sorman"), value: "Sorman" },
     { label: t("Msallata"), value: "Msallata" },
-    { label: t("Kikla"), value: "Kikla" },
+    { label: t("Kikla"), value: "Kikla" }
   ];
   return { countries, cities };
 };

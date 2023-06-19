@@ -15,16 +15,16 @@ export const useAddLocalCardAPIKeys = () => {
           {
             merchantId: localCardAPIKey.MerchantId,
             terminalId: localCardAPIKey.TerminalId,
-            secretKey: localCardAPIKey.secretKey,
-          },
+            secretKey: localCardAPIKey.secretKey
+          }
         ],
-        url: `addLocalCardPaymentAPIKey`,
+        url: `addLocalCardPaymentAPIKey`
       });
     },
     {
       async onSuccess(data, variables, context) {
         await queryClient.invalidateQueries(["USER_DOCUMENT"]);
-      },
+      }
     }
   );
 };

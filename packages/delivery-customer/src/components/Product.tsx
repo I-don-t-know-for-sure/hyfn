@@ -26,8 +26,8 @@ interface ProductProps {
   reduceOrRemoveProduct: () => void;
   productUrl: string;
   product: ProductType;
-  city: string;
-  country: string;
+  // city: string;
+  // country: string;
   orderType: string;
   storefront: string;
   addedProducts: any;
@@ -55,7 +55,7 @@ const Product: React.FC<ProductProps> = ({
 
   addedProducts,
 
-  currency,
+  currency
 }) => {
   if (!product) return;
   return (
@@ -64,18 +64,16 @@ const Product: React.FC<ProductProps> = ({
         minWidth: "100%",
 
         minHeight: "100%",
-        position: "relative",
-      }}
-    >
+        position: "relative"
+      }}>
       {!product?.hasOptions && (
         <Box
           sx={{
             zIndex: 999,
             position: "absolute",
             top: 10,
-            right: 30,
-          }}
-        >
+            right: 30
+          }}>
           <ProductControler
             addproduct={addProduct}
             reduceOrRemoveProduct={reduceOrRemoveProduct}
@@ -89,9 +87,8 @@ const Product: React.FC<ProductProps> = ({
         to={productUrl}
         state={{ orderType: orderType }}
         style={{
-          textDecoration: "none",
-        }}
-      >
+          textDecoration: "none"
+        }}>
         <Box m={12} style={{}}>
           <AspectRatio ratio={150 / 150} sx={{ maxWidth: 300 }} mx="auto">
             <Image
@@ -99,7 +96,7 @@ const Product: React.FC<ProductProps> = ({
               sx={{
                 width: "100%",
 
-                height: "100px",
+                height: "100px"
               }}
               imageName={
                 product?.images?.length > 0

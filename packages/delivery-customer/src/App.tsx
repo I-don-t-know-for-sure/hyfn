@@ -12,10 +12,9 @@ import Product from "./pages/Product/Product";
 import Cart from "./pages/Cart/Cart";
 import CheckOut from "./pages/CheckOut/CheckOut";
 import Explore from "./pages/Explore/Explore";
-// import LogIn from "./pages/Login/LogIn";
+
 import { LogIn } from "hyfn-client";
 import { SignUp } from "hyfn-client";
-// import SignUp from "./pages/Signup/SignUp";
 
 import ProductWithoutOptions from "./pages/Product/ProductWithoutOptions";
 
@@ -32,7 +31,6 @@ import CreateCustomer from "./pages/CreateCustomer/CreateCustomer";
 import { Amplify } from "aws-amplify";
 import LandingPage from "pages/LandingPage/LandingPage";
 
-// import { useUser } from "contexts/userContext/User";
 import { useUser } from "hyfn-client";
 import { useLocalStorage } from "@mantine/hooks";
 import { fetchApi } from "util/fetch";
@@ -46,9 +44,7 @@ function App() {
       identityPoolId: import.meta.env.VITE_APP_COGNITO_IDENTITY_POOL_ID,
       userPoolWebClientId: import.meta.env.VITE_APP_USER_POOL_CLIENT_ID
     },
-    // oauth: {
 
-    // },
     Storage: {
       region: import.meta.env.VITE_APP_COGNITO_REGION,
       bucket: import.meta.env.VITE_APP_BUCKET,
@@ -147,7 +143,8 @@ function App() {
               }
             />
             <Route
-              path=":storefront/:country/:city"
+              path="storefront"
+              // path=":storefront/:country/:city"
               element={
                 <Page>
                   <StoreFront />
@@ -155,7 +152,8 @@ function App() {
               }
             />
             <Route
-              path="product/:storefront/:country/:city/:productId"
+              path="product"
+              // path="product/:storefront/:country/:city/:productId"
               element={
                 <Page>
                   <Product />
@@ -163,7 +161,7 @@ function App() {
               }
             />
             <Route
-              path="product/withnotoptions/:storefront/:country/:city/:productId"
+              path="product/withnotoptions"
               element={
                 <Page>
                   <ProductWithoutOptions />
@@ -217,7 +215,8 @@ function App() {
               }
             />
             <Route
-              path="collection/:storefront/:collectionid/:country"
+              path="collection"
+              // path="collection/:storefront/:collectionid/:country"
               element={
                 <Page>
                   <Collection />

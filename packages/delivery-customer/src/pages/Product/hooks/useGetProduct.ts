@@ -5,8 +5,7 @@ import { fetchApi } from "util/fetch";
 export const useGetProduct = (
   locationInfo: {
     storefront: string;
-    city: string;
-    country: string;
+
     productId: string;
   },
   withStoreDoc: boolean
@@ -17,7 +16,7 @@ export const useGetProduct = (
       try {
         return await fetchApi({
           url: `getProduct`,
-          arg: [locationInfo, withStoreDoc],
+          arg: [locationInfo, withStoreDoc]
         });
       } catch (e) {
         console.error(e);

@@ -13,7 +13,7 @@ const DeliveredModal: React.FC<DeliveredModalProps> = ({ orderId }) => {
   const [opened, setOpened] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState<string | null>(null);
   const { initializeCamera, stopCamera } = useQRCodeReader({
-    setConfirmationCode,
+    setConfirmationCode
   });
   const { mutate: confirmPickup } = useConfirmPickup();
   return (
@@ -23,8 +23,7 @@ const DeliveredModal: React.FC<DeliveredModalProps> = ({ orderId }) => {
         onClose={() => {
           stopCamera();
           setOpened(false);
-        }}
-      >
+        }}>
         <div id="reader"></div>
         <Group position="apart">
           <Button onClick={initializeCamera}>{t("Scan QR code")}</Button>
@@ -33,10 +32,9 @@ const DeliveredModal: React.FC<DeliveredModalProps> = ({ orderId }) => {
               onClick={() => {
                 confirmPickup({
                   pickupConfirmation: confirmationCode,
-                  orderId,
+                  orderId
                 });
-              }}
-            >
+              }}>
               {t("Confirm pickup")}
             </Button>
           )}

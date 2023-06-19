@@ -8,7 +8,7 @@ import {
   Paper,
   Text,
   TextInput,
-  UnstyledButton,
+  UnstyledButton
 } from "@mantine/core";
 import { useGetTransactions } from "hooks/useGetTransactions";
 
@@ -28,7 +28,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
   const {
     data: transactions,
     isLoading,
-    fetchNextPage,
+    fetchNextPage
   } = useGetTransactions({ enabled: opened });
   // const { mutate: validateTransaction } = useValidateLocalCardTransaction();
   // const { mutate: validateStoreLocalCardTransaction } =
@@ -58,9 +58,8 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                       sx={{
                         maxWidth: 500,
                         width: "80%",
-                        margin: "0px auto",
-                      }}
-                    >
+                        margin: "0px auto"
+                      }}>
                       <TextInput
                         label={t("Store")}
                         value={transaction.storeId}
@@ -85,18 +84,16 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                     <Group
                       grow
                       sx={{
-                        alignItems: "baseline",
-                      }}
-                    >
+                        alignItems: "baseline"
+                      }}>
                       {!transaction.status.includes("validated") && (
                         <Button
                           onClick={() => {
                             validateTransaction({
-                              transactionId: transaction.id,
+                              transactionId: transaction.id
                             });
                           }}
-                          mt={16}
-                        >
+                          mt={16}>
                           {t("Validate")}
                         </Button>
                       )}
@@ -118,7 +115,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
           <Button
             sx={{
               width: "100%",
-              maxWidth: "450px",
+              maxWidth: "450px"
             }}
             onClick={() =>
               fetchNextPage({
@@ -126,10 +123,9 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
                   transactions?.pages[transactions?.pages?.length - 1][
                     transactions?.pages[transactions.pages?.length - 1]
                       ?.length - 1
-                  ]?.id,
+                  ]?.id
               })
-            }
-          >
+            }>
             {t("Load more")}
           </Button>
         </Center>
@@ -149,11 +145,10 @@ const TransactionList: React.FC<TransactionListProps> = ({ menu }) => {
               backgroundColor:
                 theme.colorScheme === "light"
                   ? theme.colors.gray[2]
-                  : theme.colors.gray[9],
+                  : theme.colors.gray[9]
             },
-            borderRadius: "8px",
-          })}
-        >
+            borderRadius: "8px"
+          })}>
           {t("Transactions")}
         </UnstyledButton>
       ) : (

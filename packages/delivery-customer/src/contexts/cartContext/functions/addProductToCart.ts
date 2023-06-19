@@ -1,3 +1,5 @@
+import { orderTypesObject } from "hyfn-types";
+
 export const addProductToCart = (
   data: any,
   product: any,
@@ -6,33 +8,23 @@ export const addProductToCart = (
   country?: string,
   orderType?: string
 ) => {
-  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ data", data);
-  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ product", product);
-  console.log(
-    "🚀 ~ file: addProductToCart.ts ~ line 9 ~ setCartInfo",
-    setCartInfo
-  );
-  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ city", city);
-  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ country", country);
-  console.log("🚀 ~ file: addProductToCart.ts ~ line 9 ~ orderType", orderType);
-
   setCartInfo((state) => {
     const prevState = state;
     const proto = {
       storeName: data?.storeName,
       image: data?.image,
       id: data.id,
-      city,
-      country,
+      city: data.city,
+      country: data.country,
       storeType: data.storeType,
       coords: data.coords,
-      orderType: orderType || "Delivery",
+      orderType: orderType || orderTypesObject.Delivery,
       addedProducts: {
         [product.id]: {
           ...product,
-          qty: 1,
-        },
-      },
+          qty: 1
+        }
+      }
     };
 
     if (Object.keys(prevState)?.length === 0) {
@@ -55,7 +47,7 @@ export const addProductToCart = (
       if (oldProduct) {
         const newProduct = {
           ...oldProduct,
-          qty: oldProduct.qty + 1,
+          qty: oldProduct.qty + 1
         };
 
         const newState = {
@@ -64,9 +56,9 @@ export const addProductToCart = (
             ...prevState[targetedStore.id],
             addedProducts: {
               ...prevState[targetedStore.id].addedProducts,
-              [newProduct.id]: newProduct,
-            },
-          },
+              [newProduct.id]: newProduct
+            }
+          }
         };
 
         return newState;
@@ -78,9 +70,9 @@ export const addProductToCart = (
             ...targetedStore.addedProducts,
             [product.id]: {
               ...product,
-              qty: 1,
-            },
-          },
+              qty: 1
+            }
+          }
         };
 
         const newState = { ...prevState, [newStore.id]: newStore };

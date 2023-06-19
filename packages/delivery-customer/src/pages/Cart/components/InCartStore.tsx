@@ -10,7 +10,7 @@ import {
   Paper,
   Stack,
   Text,
-  UnstyledButton,
+  UnstyledButton
 } from "@mantine/core";
 import Image from "components/Image";
 import InstructionsModal from "components/InstructionsModal";
@@ -24,7 +24,7 @@ import { add, multiply, subtract } from "mathjs";
 import {
   MINIMUM_AMOUNT_TO_CHECKOUT,
   orderTypesObject,
-  storeServiceFee,
+  storeServiceFee
 } from "hyfn-types";
 
 interface InCartStoreProps {
@@ -39,7 +39,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
     addProductToCart,
     reduceOrRemoveProductFromCart,
     updateInstructions,
-    changeStoreOrderType,
+    changeStoreOrderType
   } = useCart();
 
   const storeTotal = Object.keys(inCartStore.addedProducts)?.reduce(
@@ -84,9 +84,8 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
       <Center
         sx={{
           width: "100%",
-          height: "40px",
-        }}
-      >
+          height: "40px"
+        }}>
         {/* <Group grow sx={{ width: '100%' }}> */}
         <Chip
           size="lg"
@@ -100,12 +99,11 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
             changeStoreOrderType({
               orderType: orderTypesObject.Delivery,
               setCartInfo,
-              storeId: inCartStore.id,
+              storeId: inCartStore.id
             });
             // setOrderType('Delivery');
           }}
-          mr={2}
-        >
+          mr={2}>
           {t("Delivery")}
         </Chip>
         <Chip
@@ -115,12 +113,11 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
             changeStoreOrderType({
               orderType: orderTypesObject.Pickup,
               setCartInfo,
-              storeId: inCartStore.id,
+              storeId: inCartStore.id
             });
             // setOrderType('Pickup');
           }}
-          checked={inCartStore.orderType === orderTypesObject.Pickup}
-        >
+          checked={inCartStore.orderType === orderTypesObject.Pickup}>
           {t("Pickup")}
         </Chip>
         {/* </Group> */}
@@ -133,18 +130,16 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
           margin: "6px 6px ",
           borderBottom: "1px solid ",
           minHeight: "60px",
-          maxHeight: "120px",
-        }}
-      >
+          maxHeight: "120px"
+        }}>
         <UnstyledButton
           component={Link}
           to={`/${inCartStore?.id}/${inCartStore?.country}/${inCartStore?.city}`}
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
+            justifyContent: "center"
+          }}>
           <Group>
             <Image
               width={44}
@@ -182,7 +177,7 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
               storeId: inCartStore.id,
               productId: product.id,
               instructions,
-              setCartInfo,
+              setCartInfo
             });
           };
           const checkProduct = Array.isArray(product) ? product[0] : product;
@@ -200,9 +195,8 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                 <Container
                   key={productId}
                   style={{
-                    margin: "12px auto",
-                  }}
-                >
+                    margin: "12px auto"
+                  }}>
                   <UnstyledButton
                     component={Link}
                     to={productUrl}
@@ -213,17 +207,15 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                       flexDirection: "row",
                       justifyContent: "space-between",
 
-                      height: "54px",
-                    }}
-                  >
+                      height: "54px"
+                    }}>
                     <Box
                       style={{
                         display: "flex",
                         flexDirection: "row",
 
-                        width: "150px",
-                      }}
-                    >
+                        width: "150px"
+                      }}>
                       <Box>
                         <Image
                           radius={6}
@@ -237,9 +229,8 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                       </Box>
                       <Box
                         style={{
-                          marginLeft: "6px",
-                        }}
-                      >
+                          marginLeft: "6px"
+                        }}>
                         <Text>{product.title}</Text>
                         {/* <Text size="sm">{t('weight')}</Text> */}
                       </Box>
@@ -271,13 +262,12 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                   <Box>
                     <Button
                       style={{
-                        marginRight: "8px",
+                        marginRight: "8px"
                       }}
                       variant="subtle"
                       onClick={() => {
                         removeFromCart(inCartStore, product, setCartInfo);
-                      }}
-                    >
+                      }}>
                       {t("Remove")}
                     </Button>
 
@@ -294,9 +284,8 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
             <Container
               key={productId}
               style={{
-                margin: "12px auto",
-              }}
-            >
+                margin: "12px auto"
+              }}>
               <Box
                 style={{
                   marginTop: "4px",
@@ -305,9 +294,8 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                   flexDirection: "row",
                   justifyContent: "space-between",
 
-                  height: "54px",
-                }}
-              >
+                  height: "54px"
+                }}>
                 <UnstyledButton
                   component={Link}
                   to={productUrl}
@@ -315,9 +303,8 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                     display: "flex",
                     flexDirection: "row",
 
-                    width: "150px",
-                  }}
-                >
+                    width: "150px"
+                  }}>
                   <Box>
                     <Image
                       radius={6}
@@ -331,9 +318,8 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                   </Box>
                   <Box
                     style={{
-                      marginLeft: "6px",
-                    }}
-                  >
+                      marginLeft: "6px"
+                    }}>
                     <Text>{product.title}</Text>
                     {/* <Text size="sm">{t('weight')}</Text> */}
                   </Box>
@@ -359,13 +345,12 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
               <Box>
                 <Button
                   style={{
-                    marginRight: "8px",
+                    marginRight: "8px"
                   }}
                   variant="subtle"
                   onClick={() => {
                     removeFromCart(inCartStore, product, setCartInfo);
-                  }}
-                >
+                  }}>
                   {t("Remove")}
                 </Button>
 
@@ -385,17 +370,15 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
               <Button
                 disabled={storeTotal < 50}
                 style={{
-                  width: "100%",
-                }}
-              >
+                  width: "100%"
+                }}>
                 <Text
                   sx={{
                     fontWeight: 700,
-                    fontSize: 18,
-                  }}
-                >
+                    fontSize: 18
+                  }}>
                   {` ${t(
-                    "Minmum to checkout is"
+                    "Minimum to checkout is"
                   )} ${MINIMUM_AMOUNT_TO_CHECKOUT} ${
                     inCartStore?.currency || "LYD"
                   }`}
@@ -406,12 +389,11 @@ const InCartStore: React.FC<InCartStoreProps> = ({ inCartStore }) => {
                 component={Link}
                 to={"/checkout"}
                 state={{
-                  storeId: inCartStore.id,
+                  storeId: inCartStore.id
                 }}
                 style={{
-                  width: "100%",
-                }}
-              >
+                  width: "100%"
+                }}>
                 {t("Place Order")}
               </Button>
             )}

@@ -16,7 +16,7 @@ import {
 } from "@mantine/core";
 
 import { t } from "../../util/i18nextFix";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import useUpdateUSerDocument from "./hooks/useUpdateUserDocument";
 import { useForm } from "@mantine/form";
@@ -28,16 +28,19 @@ import ManageAddresses from "./components/Addresses/Addresses";
 interface AccountSettingsProps {}
 
 const AccountSettings: React.FC<AccountSettingsProps> = ({}) => {
+  const { userDocument } = useUser();
   const form = useForm({
     initialValues: {
       name: ""
     }
   });
+  useEffect(() => {
+    form.setFieldValue("name", userDocument.name);
+  }, [userDocument]);
   const [value, setValue] = useState<number>(0);
   const handlers = useRef<NumberInputHandlers>();
   const { mutate } = useUpdateUSerDocument();
   const { mutate: subscribeToHyfnPlus } = useSubscribeToHyfnPlus();
-  const { userDocument } = useUser();
 
   return (
     <Container mt={8}>

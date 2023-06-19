@@ -5,7 +5,7 @@ import {
   Group,
   Text,
   UnstyledButton,
-  useMantineTheme,
+  useMantineTheme
 } from "@mantine/core";
 import Image from "../../../components/Image";
 import ProductControler from "../../../components/ProductControler";
@@ -35,9 +35,7 @@ interface ProductProps {
   reduceOrRemoveProduct: () => void;
   productUrl: string;
   product: any;
-  city: string;
-  country: string;
-  storefront: string;
+
   addedProducts: any[];
   // likeMutation: UseMutateFunction<
   //   any,
@@ -57,10 +55,8 @@ const Product: React.FC<ProductProps> = ({
   reduceOrRemoveProduct,
   productUrl,
   product,
-  city,
-  country,
-  storefront,
-  addedProducts,
+
+  addedProducts
   // likeMutation,
 }) => {
   return (
@@ -69,18 +65,16 @@ const Product: React.FC<ProductProps> = ({
         width: "320px",
         margin: "auto",
         height: "400px",
-        position: "relative",
-      }}
-    >
+        position: "relative"
+      }}>
       {!product?.hasOptions && (
         <Box
           sx={{
             zIndex: 999,
             position: "absolute",
             top: 20,
-            right: 30,
-          }}
-        >
+            right: 30
+          }}>
           <ProductControler
             addproduct={addProduct}
             reduceOrRemoveProduct={reduceOrRemoveProduct}
@@ -126,9 +120,8 @@ const Product: React.FC<ProductProps> = ({
         component={Link}
         to={productUrl}
         style={{
-          textDecoration: "none",
-        }}
-      >
+          textDecoration: "none"
+        }}>
         <Box m={12} style={{}}>
           <Image radius={6} imageName={product.images[0]} />
 
@@ -141,9 +134,8 @@ const Product: React.FC<ProductProps> = ({
               <Text
                 sx={(theme) => ({
                   fontSize: "24px",
-                  color: theme.primaryColor,
-                })}
-              >
+                  color: theme.primaryColor
+                })}>
                 {` ${product.price - product.price * storeServiceFee} `}
               </Text>
               <Text>{t("Per")}</Text>
